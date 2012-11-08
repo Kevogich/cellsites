@@ -1,0 +1,12 @@
+.project
+.idea
+Gemfile.lock
+.bundle
+.tmp_*
+*.swp
+db/*.sqlite3
+log/*.log
+log/calculation_logs/*.*
+tmp/
+public/projects/
+public/clients/
