@@ -1,0 +1,62 @@
+<% title 'Generic' %>
+
+<h2>Generic</h2>
+
+<%= form_for @generic, :url => save_generic_admin_relief_rate_calculation_views_path,
+						 :html => {
+							 :method => :post,
+							 :style => "width: 100%;"
+						 } do |f| %>
+
+	<%= f.hidden_field :id %>
+
+	<table>
+		<tr>
+			<td colspan="2">
+				<span class="sub_title">Relief Rate</span>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Relief Rate
+			</td>
+			<td>
+				<%= f.text_field :relief_rate, :class => "mass_flow_rate_general" %>
+				<span class="mass_flow_rate_general_unit"></span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<span class="sub_title">Calculation Comment</span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<%= f.text_area :comments, :style => "width:99%;", :rows => 5 %>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<%= f.submit "Save" %>
+			</td>
+		</tr>
+	</table>
+<% end %>
+
+<% unless @generic.new_record? %>
+	<fieldset class="project" style="margin-top:15px;">
+		<legend>Attachments</legend>
+		<%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+		<%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+	</fieldset>
+	<fieldset class="project" style="margin-top:15px;">
+		<legend>Comments</legend>
+		<%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+		<%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+	</fieldset>
+<% end %>
+
+
+<script type="text/javascript">
+	set_project_unit_and_decimals();
+</script>

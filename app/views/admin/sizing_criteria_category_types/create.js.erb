@@ -1,0 +1,9 @@
+<% if @sizing_criteria_category_type.errors.any?%>
+	$(".error_messages").remove();	
+	$("#new_sizing_criteria_category_type").prepend("<%= escape_javascript(error_messages_for(@sizing_criteria_category_type))%>");
+	$.colorbox.resize();
+<% else%>    
+	$.colorbox.close();
+	alert("New Sizing criteria category type created successfully.");
+	window.location.reload();
+<% end%>

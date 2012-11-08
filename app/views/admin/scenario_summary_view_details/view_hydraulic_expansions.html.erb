@@ -1,0 +1,161 @@
+<style type="text/css">
+	img.ui-datepicker-trigger {
+		margin-left: 5px;
+	}
+</style>
+
+
+<h3>Hydraulic Expansion</h3>
+
+<%=  form_for @scenario_hydraulic_expansion,
+							:url => save_hydraulic_expansions_admin_scenario_summary_view_details_path,
+							:remote => true,
+							:html => {:class => "view_hydraulic_expansion_form", :style => "width:100%;", :method => :post} do |f| %>
+	<%= f.hidden_field :id %>
+	<table>
+		<tr>
+			<td colspan="3">
+				<span style="font-size: 18px;text-decoration: underline;">System Sketch</span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<div style="border: 1px solid #000000;height: 200px;width: 100%;"></div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<span style="font-size: 18px;text-decoration: underline;">Scenario Rationale</span>
+			</td>
+			<td>Yes</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>
+				1) Is the system liquid full?
+			</td>
+			<td>
+				<%= f.radio_button :sr_1, "yes", :class => "scenario_rationale" %>
+			</td>
+			<td>
+				<%= f.radio_button :sr_1, "no", :class => "scenario_rationale" %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				2) Are there mechanisms (block valves, control valve, check valves etc.,) upstream and downstream
+				that can isolate the cold side against continued hot side flow?
+			</td>
+			<td>
+				<%= f.radio_button :sr_2, "yes", :class => "scenario_rationale" %>
+			</td>
+			<td>
+				<%= f.radio_button :sr_2, "no", :class => "scenario_rationale" %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				3) Are there administrative controls (carseal open, lock open, instruction signs etc.,) in place
+				to prevent the isolations of the system?
+			</td>
+			<td>
+				<%= f.radio_button :sr_3, "yes", :class => "scenario_rationale" %>
+			</td>
+			<td>
+				<%= f.radio_button :sr_3, "no", :class => "scenario_rationale" %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				4) Is the equipment an exchanger or a system of exchangers?
+			</td>
+			<td>
+				<%= f.radio_button :sr_4, "yes", :class => "scenario_rationale" %>
+			</td>
+			<td>
+				<%= f.radio_button :sr_4, "no", :class => "scenario_rationale" %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				5) Is the equipment the cold side of an exchanger?
+			</td>
+			<td>
+				<%= f.radio_button :sr_5, "yes", :class => "scenario_rationale" %>
+			</td>
+			<td>
+				<%= f.radio_button :sr_5, "no", :class => "scenario_rationale" %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				6) Is the exchanger a process-process exchanger with the same fluid stream going through the hot
+				side and the cold side, such that the blocking in of the cold side will also result in the loss
+				of hot side flow?
+			</td>
+			<td>
+				<%= f.radio_button :sr_6, "yes", :class => "scenario_rationale" %>
+			</td>
+			<td>
+				<%= f.radio_button :sr_6, "no", :class => "scenario_rationale" %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				7) Is the equipment piping or vessel that can be heated by heat tracing, heating coil, ambient heat
+				gains of fire?
+			</td>
+			<td>
+				<%= f.radio_button :sr_7, "yes", :class => "scenario_rationale" %>
+			</td>
+			<td>
+				<%= f.radio_button :sr_7, "no", :class => "scenario_rationale" %>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<p style="text-align: right;margin: 0;">
+					<%= link_to "Analyze", "#", :class => "btn analyze_btn" %>&nbsp;&nbsp;&nbsp;&nbsp;
+					<%= f.submit "Save" %>
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				Applicability <%= f.select :applicability, options_for_select(StaticData.yes_no, f.object.applicability), :prompt => "" %>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				Determined By <%= f.select :determined_by, options_for_select(StaticData.documentation_by, f.object.determined_by), :prompt => "" %>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				Initial <%= f.text_field :initial %>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				Date <%= f.text_field :date1, :value => f.object.display_date1, :class => "input-small" %>&nbsp;&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<span style="font-size: 18px;text-decoration: underline;">Comments</span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<%= f.text_area :comments, :style => "width:99%;", :rows => 5 %>
+			</td>
+		</tr>
+	</table>
+<% end %>
+
+<script type="text/javascript">
+	$('#scenario_hydraulic_expansion_date1').datepicker({
+		showOn: "button",
+		buttonImage: "/images/calendar_icon.png",
+		buttonImageOnly: true
+	});
+
+	//validation for question checked
+	$('.analyze_btn').click(function(){
+		if($('.scenario_rationale:checked').length < 7) {
+			alert('Please answer all questions for Scenario Rationale, before you click the analyze.');
+		}
+		return false;
+	});
+</script>

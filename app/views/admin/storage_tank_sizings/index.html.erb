@@ -1,0 +1,35 @@
+<% title 'Storage Tank Sizing' %>
+
+<%= render :partial => '/admin/user_project_settings/project_filter' %>
+
+<br>
+<%= link_to 'Add Storage Tank sizing', new_admin_storage_tank_sizing_path %>&nbsp;|&nbsp;
+<%= link_to 'Storage Tank Sizing Summary', store_tank_sizing_summary_admin_storage_tank_sizings_path %>
+<br>
+
+<table width="auto">
+  <tr>
+    <th>Storage Tank tag</th>
+    <th>By</th>
+    <th>Reviewer</th>
+    <th>Approver</th>
+    <th>Created at</th>
+    <th>Updated at</th>
+    <th>Edit</th>
+    <th>Delete</th>
+    <th>Clone</th>
+  </tr>
+  <% for storage_tank_sizing in @storage_tank_sizings %>
+    <tr>
+      <td><%= storage_tank_sizing.storage_tank_tag %></td>
+      <td><%= storage_tank_sizing.sizing_status_activities.created_by %></td>
+      <td><%= storage_tank_sizing.sizing_status_activities.reviewer %></td>
+      <td><%= storage_tank_sizing.sizing_status_activities.approver %></td>
+      <td><%= storage_tank_sizing.created_at.strftime("%d-%m-%Y") %></td>
+      <td><%= storage_tank_sizing.updated_at.strftime("%d-%m-%Y") %></td>
+      <td><%= link_to "Edit", edit_admin_storage_tank_sizing_path(storage_tank_sizing) %></td>
+      <td><%= link_to "Delete", admin_storage_tank_sizing_path(storage_tank_sizing), :method => "delete", :confirm => "Are you sure?" %></td>
+      <td><%= link_to "Clone", clone_admin_storage_tank_sizing_path(storage_tank_sizing), :class => "clone_sizing" %></td>
+    </tr>
+  <% end %>
+</table>

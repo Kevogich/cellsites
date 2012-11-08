@@ -1,0 +1,105 @@
+<% title 'Pump Sizing Summary' %>Download: <%= link_to "Pdf", admin_sizing_summary_pdf_path("pump_sizing") %>
+<% stylesheet("/javascripts/tablecloth/tablecloth.css")%>
+
+<style>
+	.tab-header {
+		font-size: 14px;
+		font-weight: bold;
+		text-align: center;
+	}
+	
+	.column-header {
+		font-weight: bold;
+	}
+</style>
+
+<div style="margin-top:10px;">
+	<table class="pump_sizing_summary">
+		<tr>
+			<td></td>
+			<td></td>
+			<td colspan="4"></td>
+			<td class="tab-header" colspan="5">SUCTION SIDE</td>
+			<td class="tab-header" colspan="5">DISCHARGE SIDE</td>
+			<td class="tab-header" colspan="5">CENTRIFUGAL PUMP DIFFERENTIALS</td>
+		</tr>		
+		<tr>
+			<td class="column-header">Calc Count</td>
+			<td class="column-header">Preliminary Tag</td>
+			<td class="column-header">Source Stream No.</td>
+			<td class="column-header">Discharge Stream No.</td>
+			<td class="column-header">Normal Volume Flow</td>
+			<td class="column-header">S.G.</td>		
+			<td class="column-header">Proposed Pipe Size</td>
+			<td class="column-header">Proposed Pipe Sch</td>
+			<td class="column-header">Source Pressure</td>
+			<td class="column-header">Pressure @ Suction Nozzle</td>
+			<td class="column-header">Pressure Loss</td>
+			<td class="column-header">Proposed Pipe Size</td>
+			<td class="column-header">Proposed Pipe Sch</td>
+			<td class="column-header">Destination Pressure</td>
+			<td class="column-header">Pressure @ Disch. Nozzle</td>
+			<td class="column-header">Pressure Loss</td>
+			<td class="column-header">Differential Pressure</td>
+			<td class="column-header">Differential Head</td>
+			<td class="column-header">NPSHA</td>
+			<td class="column-header">Hydraulic HP</td>
+			<td class="column-header">Brake HP</td>
+		</tr>
+		<tr>
+			<td class="unit-header"></td>
+			<td class="unit-header"></td>
+			<td class="unit-header"></td>
+			<td class="unit-header"></td>
+			<td class="unit-header">m&sup3;/hr</td>
+			<td class="unit-header"></td>
+			<td class="unit-header">inches</td>
+			<td class="unit-header"></td>
+			<td class="unit-header">barg</td>
+			<td class="unit-header">barg</td>
+			<td class="unit-header">bar</td>
+			<td class="unit-header">inches</td>
+			<td class="unit-header"></td>
+			<td class="unit-header">barg</td>
+			<td class="unit-header">barg</td>
+			<td class="unit-header">bar</td>
+			<td class="unit-header">bar</td>
+			<td class="unit-header">m</td>
+			<td class="unit-header">m</td>
+			<td class="unit-header">kW</td>
+			<td class="unit-header">kW</td>
+		</tr>
+		<% @pump_sizings.each_with_index do |pump_sizing, i|%>
+		<tr>
+			<td><%= i+1%></td>
+			<td><%= pump_sizing.centrifugal_pump_tag%></td>
+			<td><%= pump_sizing.su_stream_no.split('.').first rescue ""%></td>
+			<% pump_sizing_discharge = pump_sizing.pump_sizing_discharges.where(:design_circuit=>1).first %>
+			<td><%= pump_sizing_discharge.destination_stream_no.split('.').first rescue "" if !pump_sizing_discharge.nil?%></td>
+			<td><%= pump_sizing.cd_flow_rate%></td>
+			<td><%= pump_sizing.cd_s_g%></td>			
+			<% suction_piping = pump_sizing.suction_pipings.where(:tab=>"suction").first%>
+			<td><%= suction_piping.pipe_size if !suction_piping.nil?%></td>
+			<td><%= suction_piping.pipe_schedule if !suction_piping.nil?%></td>
+			<td><%= suction_piping.outlet_pressure if !suction_piping.nil?%></td>
+			<td></td>
+			<td><%= suction_piping.delta_p if !suction_piping.nil?%></td>
+			<% discharge_circuit_piping = pump_sizing_discharge.discharge_circuit_piping.first if !pump_sizing_discharge.nil?%>
+			<td><%= discharge_circuit_piping.pipe_size if !discharge_circuit_piping.nil?%></td>
+			<td><%= discharge_circuit_piping.pipe_schedule if !discharge_circuit_piping.nil?%></td>
+			<td><%= pump_sizing_discharge.destination_pressure if !pump_sizing_discharge.nil?%></td>
+			<td><%= pump_sizing_discharge.pressure_at_discharge_nozzle_dp if !pump_sizing_discharge.nil?%></td>
+			<td><%= pump_sizing_discharge.total_system_dp if !pump_sizing_discharge.nil?%></td>
+			<td><%= pump_sizing.cd_differential_pressure%></td>
+			<td><%= pump_sizing.cd_differential_head%></td>
+			<td><%= pump_sizing.cd_npsha%></td>
+			<td><%= pump_sizing.cd_hydraulic_hp%></td>
+			<td><%= pump_sizing.cd_brake_horsepower%></td>			
+		</tr>
+		<% end%>
+	</table>	
+</div>
+
+<script type="text/javascript">
+
+</script>

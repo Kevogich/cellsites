@@ -1,0 +1,17 @@
+<% title 'Projects' %>
+<table id="projects_list" class="list">
+  <tr>
+    <th>Client Name</th>
+    <th>Project</th>
+    <th>Client Project Number</th>
+	<th>Project Details</th>
+  </tr>
+  <% for project in @projects %>
+    <tr id="project_<%= project.id %>">
+      <td><%= project.client.try(:name) %></td>
+	  <td><%= link_to project.project_num, "#{process_units_admin_dashboard_path}?id=#{project.id}" %></td>
+      <td><%= project.document_num %></td>
+      <td><%= link_to "details", admin_project_path(project) %></td>
+   </tr>
+  <% end %>
+</table>

@@ -1,0 +1,50 @@
+<div id="process_units">
+<% if project.process_units.empty?%>
+	<div class="form-element">
+		<label>Process Unit 1</label><br>
+		<%= text_field_tag 'project[process_units][1][name]', "", :id => "process_unit_name_1"%>
+		<%= hidden_field_tag 'project[process_units][1][id]', "", :id => "process_unit_id_1" %>
+		<span style="float:right;"><%= link_to 'X', '#', :class => 'process_unit_delete'%></span>
+	</div>
+<% else%>
+	<% unit_count = 1 %>
+	<% project.process_units.each_with_index do |u, i|%>
+	<div class="form-element" id="process_unit_field_<%= i+1%>">
+		<label><%= "Process Unit #{i+1}"%></label><br>
+		<%= text_field_tag "project[process_units][#{i+1}][name]", u.name, :id => "process_unit_name_#{i+1}"%>
+		<%= hidden_field_tag "project[process_units][#{i+1}][id]", u.id, :id => "process_unit_id_#{i+1}"%>
+		<span style="float:right;"><%= link_to 'X', '#', :class => 'process_unit_delete'%></span>	
+	</div>
+	<% unit_count = i+1 %>
+	<% end%>	
+<% end%>
+</div>
+
+<br>
+<%= link_to "Add More", "#", :onclick => "add_process_unit(); return false;"%>
+
+<!-- New Process Unit Field -->
+<div id="new_process_unit_form" class="hidden">
+	<div class="form-element" id="process_unit_field_#x#">
+		 <label><%= "Process Unit #x#" %></label><br>
+		 <%= text_field_tag "project[process_units][#x#][name]", "", :id => "process_unit_name_#x#"%>
+		 <%= hidden_field_tag "project[process_units][#x#][id]", "", :id => "process_unit_id_#x#"%>
+		 <span style="float:right;"><%= link_to 'X', '#', :class => 'process_unit_delete'%></span>
+	</div>
+</div>
+
+<script type="text/javascript">	
+	$('.form-element').css('width', '300px');
+	$('input"[id^=process_unit_name_]"').css('width', '270px');
+	var unit_count = '<%= unit_count.to_i+1%>';	
+	function add_process_unit() {		
+		var new_process_unit_field = $('#new_process_unit_form').html().replace(/#x#/g, unit_count);		
+		$('#process_units').append($(new_process_unit_field));
+		unit_count++;	
+	}
+	
+	$('.process_unit_delete').live('click', function(e){		
+		$(this).parents('div.form-element').hide().find('input"[type=text]"').val('');
+		return false;
+	});
+</script>

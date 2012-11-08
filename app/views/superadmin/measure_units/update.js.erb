@@ -1,0 +1,8 @@
+<% if @measure_unit.errors.any? %>
+  $('.error_messages').remove();
+  var errors = "<%= escape_javascript error_messages_for(@measure_unit) %>";
+  $('.measure_unit_form').prepend(errors);
+  $.colorbox.resize();
+<% else %>
+  window.location.reload();
+<% end %>

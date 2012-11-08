@@ -1,0 +1,35 @@
+<% title @client.name << " Details" %>
+<%= stylesheet("/javascripts/tablecloth/tablecloth.css") %>
+
+<div class="client-details">
+  <table style="width:auto;">
+    <tr>
+      <td>Name</td>
+      <td><%= @client.name %></td>
+    </tr>
+    <tr>
+      <td>Type</td>
+      <td><%= @client.client_type %></td>
+    </tr>
+    <tr>
+      <td>Address</td>
+      <td><%= @client.address %></td>
+    </tr>
+    <tr>
+      <td>Email</td>
+      <td><%= @client.email %></td>
+    </tr>
+    <tr>
+      <td>Phone</td>
+      <td><%= @client.phone %></td>
+    </tr>
+    <tr>
+      <td colspan=2>
+        <%= image_tag @client.logo.url %>
+      </td>
+    </tr>
+  </table>
+  <% if user_access_type == 1 %>
+    <%= link_to 'Edit', edit_admin_client_path(@client) %>
+  <% end %>
+</div>

@@ -1,0 +1,97 @@
+<% title 'Vessel Sizing Summary' %>
+<% stylesheet("/javascripts/tablecloth/tablecloth.css")%>
+<% javascript("jquery.fixer")%>
+
+<style>
+	.tab-header {
+		font-size: 14px;
+		font-weight: bold;
+		text-align: center;
+	}
+	
+	.column-header {
+		font-weight: bold;
+	}
+</style>
+
+<div style="margin-top:10px;">
+	<table class="vessel_sizing_summary">
+		<tr>
+			<td class="column-header">Calc Count</td>
+			<td class="column-header">Preliminary Tag</td>
+			<td class="column-header">Feed Stream No</td>
+			<td class="column-header">Top/Vapor Stream</td>
+			<td class="column-header">Bottom/Liquid Stream</td>
+			<td class="column-header">Free Water Stream</td>
+			<td class="column-header">Min. Liquid Surge Time</td>
+			<td class="column-header">Type</td>
+			<td class="column-header">Orientation</td>			
+			<td class="column-header">Shell Diameter</td>
+			<td class="column-header">Shell Length</td>
+			<td class="column-header">Head Type</td>
+			<td class="column-header">Material of Construction</td>			
+			<td class="column-header">Operating Pressure</td>
+			<td class="column-header">Design Pressure</td>
+			<td class="column-header">Design Vacuum</td>			
+			<td class="column-header">Test Pressure</td>
+			<td class="column-header">Operating Temperature</td>
+			<td class="column-header">Design Temperature</td>
+			<td class="column-header">Minimum Temperature</td>
+			<td class="column-header">Shell Thickness</td>			
+			<td class="column-header">Head Thickness</td>
+			<td class="column-header">Corrosion Allowance</td>
+		</tr>		
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>min</td>
+			<td></td>			
+			<td>m</td>
+			<td>m</td>
+			<td>m</td>
+			<td></td>
+			<td></td>
+			<td>barg</td>
+			<td>barg</td>
+			<td>barg</td>
+			<td>barg</td>
+			<td>&deg;C</td>
+			<td>&deg;C</td>
+			<td>&deg;C</td>
+			<td>mm</td>
+			<td>mm</td>
+			<td>mm</td>
+		</tr>
+		<% @vessel_sizings.each_with_index do |vessel_sizing, i|%>
+		<tr>
+			<td><%= i+1%></td>
+			<td><%= vessel_sizing.name%></td>
+			<td><%= vessel_sizing.feed_stream_stream_no.split('.').first rescue ""%></td>
+			<td><%= vessel_sizing.top_outlet_stream_stream_no.split('.').first rescue ""%></td>
+			<td><%= vessel_sizing.bottom_outlet_stream_stream_no.split('.').first rescue ""%></td>
+			<td></td>
+			<td><%= vessel_sizing.vs_liquid_surge_time%></td>
+			<td><%= vessel_sizing.md_vessel_type%></td>
+			<td><%= vessel_sizing.md_vessel_orientation%></td>
+			<td><%= vessel_sizing.md_shell_diameter%></td>			
+			<td><%= vessel_sizing.md_shell_length%></td>
+			<td><%= vessel_sizing.md_head_type%></td>
+			<td><%= vessel_sizing.md_material_of_construction%></td>
+			<td><%= vessel_sizing.dc_normal_operating_pressure%></td>
+			<td><%= vessel_sizing.dc_design_pressure%></td>
+			<td><%= vessel_sizing.dc_design_vacuum%></td>
+			<td><%= vessel_sizing.dc_test_pressure%></td>
+			<td><%= vessel_sizing.dc_normal_operating_temperature%></td>
+			<td><%= vessel_sizing.dc_design_temperature%></td>
+			<td><%= vessel_sizing.dc_minimum_design_temperature%></td>
+			<td><%= vessel_sizing.dc_minimum_design_temperature%></td>
+			<td><%= vessel_sizing.md_shell_thickness%></td>
+			<td><%= vessel_sizing.md_head_corrosion_allowance%></td>
+		</tr>
+		<% end%>	
+	</table>
+</div>		

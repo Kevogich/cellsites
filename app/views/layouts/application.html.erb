@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for?(:title) ? yield(:title) : "Untitled" %></title>
+    <%= stylesheet_link_tag "bootstrap" %>
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_include_tag "jquery", "jquery_ujs", "bootstrap", "application" %>
+    <%= csrf_meta_tag %>
+    <%= yield(:head) %>
+  </head>
+  <body>
+  	<%= render :partial => 'shared/header'%>
+	<div style="margin: 0 auto;width:75%;border-bottom: 1px solid #CCCAAA"></div>
+    <div id="container">
+      <% flash.each do |name, msg| %>
+        <%= content_tag :div, msg, :id => "flash_#{name}" %>
+      <% end %>
+      <%= content_tag :h1, yield(:title) if show_title? %>
+      <%= yield %>
+    </div>
+	<%= render :partial => "shared/footer"%>
+  </body>
+</html>

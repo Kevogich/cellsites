@@ -1,0 +1,121 @@
+<% title 'Line sizing'%>
+<% stylesheet("/javascripts/tablecloth/tablecloth")%>
+
+<fieldset class="line_sizing">
+	<legend style="border-bottom: 1px solid #CCDDFF;">Basic Information</legend>
+	<table style="width:auto;">
+		<tr>
+			<td>Line Number</td><td><%= @line_sizing.line_number%></td>
+		</tr>
+		<tr>
+			<td>Project</td><td><%= @line_sizing.project.project_num%></td>
+		</tr>
+		<tr>
+			<td>Process unit</td><td><%= @line_sizing.project.process_units.find(@line_sizing.process_unit_id).name%></td>
+		</tr>
+	</table>
+</fieldset>
+
+<fieldset class="line_sizing">
+	<legend style="border-bottom: 1px solid #CCDDFF;">Stream Properties</legend>
+		<table>
+			<tr>
+				<td><u><b>Process Basis</b></u></td>
+				<% if @company.heat_and_material_balances.empty? %>
+				<td>&nbsp;&nbsp;</td>
+				<% else %>
+				<td><%= @company.heat_and_material_balances.find(@line_sizing.process_basis_id).case %></td>
+				<% end %>
+				<td colspan="2"></td>
+			</tr>
+			<tr>
+				<td>Stream no</td>
+				<td><%= @line_sizing.stream_no%></td>
+				<td>Description</td>
+				<td><%= @line_sizing.description%></td>
+			</tr>
+			<tr>
+				<td>Pressure</td>
+				<td><%= @line_sizing.pressure%>&nbsp;</td>
+				<td>Vapour fraction</td>
+				<td><%= @line_sizing.vapour_fraction%></td>
+			</tr>
+			<tr>
+				<td>Temperature</td>				
+				<td><%= @line_sizing.temperature%>&nbsp;</td>
+				<td>Flowrate</td>
+				<td><%= @line_sizing.flowrate%>&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="2"><u><b>Upstream Vapor Properties</b></u></td>
+				<td colspan="2"><u><b>Upstream Liquid Properties</b></u></td>
+			</tr>
+			<tr>
+				<td>Density</td>
+				<td><%= @line_sizing.vapor_density%>&nbsp;</td>
+				<td>Density</td>
+				<td><%= @line_sizing.liquid_density%>&nbsp;</td>
+			</tr>			
+			<tr>
+				<td>Viscosity</td>
+				<td><%= @line_sizing.vapor_viscosity%>&nbsp;</td>
+				<td>Viscosity</td>
+				<td><%= @line_sizing.liquid_viscosity%>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>MW</td>
+				<td><%= @line_sizing.vapor_mw%></td>
+				<td>Surface Tension</td>
+				<td><%= @line_sizing.liquid_surface_tension%>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>Cp/Cv</td>
+				<td><%= @line_sizing.vapor_cp_cv%></td>
+				<td colspan="2"><b><u>Downstream Vaporization</u></b></td>				
+			</tr>
+			<tr>
+				<td>Z</td>
+				<td><%= @line_sizing.vapor_z%></td>
+				<td colspan="2">Significant(HEM Two Phase Modeling)</td>
+			</tr>				
+		</table>	
+</fieldset>
+
+<fieldset>
+	<legend style="border-bottom: 1px solid #CCDDFF;">SIZING CRITERIA</legend>
+	<table style="width:auto;">		
+		<tr>
+			<td>Category</td>						
+			<td width="50%"><%= @line_sizing.sizing_criteria_category.name rescue nil%></td>
+		</tr>	
+		<tr>
+			<td>General Service Type</td>
+			<td><%= @line_sizing.sizing_criteria_category_type.name rescue nil%></td>
+		</tr>
+		<tr>
+			<td>Specific Service Type</td>
+			<td><%= @line_sizing.sizing_criteria.name rescue nil%></td>
+		</tr>
+		<tr>
+			<td>System Equivalent Length</td>
+			<td><%= @line_sizing.system_equivalent_length%></td>
+		</tr>
+		<tr>
+			<td>System Maximum deltaP</td>
+			<td><%= @line_sizing.system_maximum_deltaP%>&nbsp;bar&nbsp;per</td>
+		</tr>
+		<tr>
+			<td>Pipe Material</td>
+			<td><%= @line_sizing.pipe.material_conditions rescue nil%></td>
+		</tr>
+		<tr>
+			<td>Pipe Roughness</td>
+			<td><%= @line_sizing.pipe_roughness%>&nbsp;mm</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<%= check_box_tag :include_design_factor, "", @line_sizing.include_design_factor%>&nbsp;<label>Include Design Factor</label>				
+			</td>
+		</tr>
+	</table>
+</fieldset>

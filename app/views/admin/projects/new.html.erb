@@ -1,0 +1,7 @@
+<% title 'New Project', false%>
+<% stylesheet("validationEngine.jquery")%>
+<% javascript("jquery.form", "languages/jquery.validationEngine-en", "jquery.validationEngine")%>
+
+<div>
+	<%= render :partial => 'admin/projects/form', :locals => {:project => @project}%>
+</div>

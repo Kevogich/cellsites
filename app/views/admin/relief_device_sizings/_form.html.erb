@@ -1,0 +1,504 @@
+<style type="text/css" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+  #tab1 input[type="text"], #tab5 input[type="text"] {
+    width: 150px;
+  }
+</style>
+
+<%= form_for relief_device_sizing, :url => relief_device_sizing.new_record? ? admin_relief_device_sizings_path : admin_relief_device_sizing_path(relief_device_sizing), :html => {:class => "relief_device_sizing_form", :style => 'width:auto;'} do |f| %>
+  <%= f.error_messages %>
+  <% if relief_device_sizing.new_record? %>
+    <%= f.hidden_field :company_id %>
+    <%= f.hidden_field :client_id, :value => @user_project_settings.client_id %>
+    <%= f.hidden_field :project_id, :value => @user_project_settings.project_id %>
+    <%= f.hidden_field :process_unit_id, :value => @user_project_settings.process_unit_id %>
+  <% end %>
+  <div class="form-element-last">
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :client_id %><br>
+      <%= f.label :client_id, (relief_device_sizing.client.name rescue @user_project_settings.client.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :project_id %><br>
+      <%= f.label :project_id,(relief_device_sizing.project.project_num rescue @user_project_settings.project.project_num), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :process_unit_id %><br>
+      <%= f.label :process_unit_id,(relief_device_sizing.process_unit.name rescue @user_project_settings.process_unit.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :system_description %><br>
+      <%= f.text_field :system_description %>
+		</span>
+    <% unless relief_device_sizing.new_record? %>
+      <span style="float:left;margin-right:40px;">
+        <%= label_tag :status %><br>
+        <strong><%= sizing_status(relief_device_sizing) %></strong>
+      </span>
+      <span style="float:left;margin-right:40px;">
+        <br>
+        <%= sizing_status_request_button(relief_device_sizing) %>
+      </span>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+	<div class="hidden">
+		<%= hidden_field_tag :tab %>
+		<%= hidden_field_tag :calculate_btn %>
+		<%= hidden_field_tag :redirect_to %>
+	</div>
+  <div class="form-buttons">
+    <%= f.submit relief_device_sizing.new_record? ? 'Create' : 'Update' %>
+  </div>
+
+
+    <!-- tabs -->
+    <div>
+    <ul class="simple-tabs">
+      <li><a href="#tab1">System Summary</a></li>
+      <li><a href="#scenario_summary" tab="scenario_summary">Scenario Summary</a></li>
+      <li><a href="#system_design">Relief System Design</a></li>
+      <li><a href="#tab4">Design Summary</a></li>
+    </ul>
+    <div class="tab_container">
+    <div id="tab1" class="tab_content">
+     <!-- System Summary -->
+      <table width='100%' style="border: 0;">
+        <tr>
+          <td style="background: #ffffff;border: 0;">
+            <div style="padding-top:10px;"><b><u>System Summary</u></b></div>
+            <div>
+              <table width='100%'>
+                <tr>
+                  <td>System design pressure is</td>
+                  <td><%= f.text_field :system_design_pressure, :style => "width:80px;"%>
+                    <label style="color:red" class="pressure_general_unit"></label>
+                    &nbsp;&nbsp;and is limited
+                    by <%= f.text_field :limiting_device_pressure, :style => "width:100px;" %>
+                  <td rowspan="2">&nbsp;&nbsp;<input type="button" id="analyze_btn" value="Analyze"></td>
+                  </td>
+                </tr>
+                <tr>
+                  <td>System design Temperature is</td>
+                  <td><%= f.text_field :system_design_temperature, :style => "width:80px;" %>
+                    <label style="color:red" class="temperature_general_unit"></label>
+                    &nbsp;&nbsp;and is limited
+                  by <%= f.text_field :limiting_device_temperature, :style => "width:100px;" %>
+                </td>
+                </tr>
+                <tr>
+                  <td>System H&MB Basis</td>
+                  <td colspan="2"> <%= f.collection_select :system_hmb_basis, (relief_device_sizing.project.heat_and_material_balances rescue @user_project_settings.project.heat_and_material_balances), :id, :case, :prompt => true %> </td>
+                </tr>
+              </table>
+            </div>
+        </td>
+        <td style="background: #ffffff;border: 0;" valign="top">
+      <div style="padding-top:10px;"><b><u>Relief Device Type</u></b></div>
+      <div>
+        <table width='100%'>
+          <tr>
+            <td>
+              <%= f.radio_button :relief_device_type, 'Pressure Relief Valve' %>  Pressure Relief Valve <br>
+              <%= f.radio_button :relief_device_type, 'Rupture Disk' %>  Rupture Disk <br>
+              <%= f.radio_button :relief_device_type, 'Open Vent' %>  Open Vent <br>
+              <%= f.radio_button :relief_device_type, 'Low Pressure Vent' %>  Low Pressure Vent<br>
+            </td>
+          </tr>
+        </table>
+      </div>
+        </td>
+       </tr>
+      </table>
+
+      <div style="padding-top:10px;"><b><u>System Equipment</u></b></div>
+
+      <div style="padding-top:10px;">&nbsp;&nbsp;&nbsp;<a href="#" id="add_equipments">Add Equipment</a><span style="padding-left:190px;color:#CA6307;">(Please enter equipment below in process order, with the upstream equipment first)</span></div>
+
+      <div id="form-element-last">
+        <table width=100% id="equipments_table">
+          <tr>
+            <th>No.</th>
+            <th>Equipment Type</th>
+            <th>Equipment Tag</th>
+            <th>Section</th>
+            <th>Description</th>
+            <th>Design Pressure </th>
+            <th>Design Temperature </th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+          </tr>
+          <tr>
+            <th colspan="5"></th>
+            <th><span class="pressure_general_unit"></span></th>
+            <th><span class="temperature_general_unit"></span></th>
+            <th colspan="2"></th>
+          </tr>
+          <% if @relief_device_sizing.relief_device_equipments.empty? %>
+              <% @unique_id = Time.now.to_i %>
+              <% @equipment = @relief_device_sizing.relief_device_equipments.new %>
+              <%= render :partial => 'equipments' %>
+          <% else %>
+              <% @relief_device_sizing.relief_device_equipments.each_with_index do |equipment| %>
+                  <% @unique_id = Time.now.to_i+equipment.id %>
+                  <% @equipment = equipment %>
+                  <%= render :partial => 'equipments' %>
+              <% end %>
+          <% end %>
+        </table>
+      </div>
+
+
+
+      <table width=100%>
+        <tr>
+          <td><b><u>System Notes</u></b></td>
+        </tr>
+        <tr>
+          <td><%= f.text_area :equipments_note, :cols =>150, :rows => 6 %></td>
+        </tr>
+      </table>
+      </div>
+      <div id="scenario_summary" class="tab_content" style="overflow-x:auto;">
+        <!-- Scenario Summary -->
+				<%= render :partial => 'form_scenario_summary', :locals => {:f => f} %>
+      </div>
+
+      <div id="system_design" class="tab_content">
+        <!-- Relief System Design -->
+        <div style="padding-top:10px;"><b><u>Relief Device Summary</u></b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="design_button" value="Design"></div>
+        <div>
+          <table width=100% id="relief_device_table">
+            <tr>
+              <th>No.</th>
+              <th>Relief Device Tag</th>
+              <th>Relief Device Location</th>
+              <th>Set Pressure </th>
+              <th>Set Vacuum </th>
+              <th>Relief Device Type</th>
+            </tr>
+            <tr>
+              <th colspan="3"></th>
+              <th><span class="pressure_general_unit"></span></th>
+              <th><span class="pressure_general_unit"></span></th>
+              <th></th>
+            </tr>
+            <!-- Display all Relief Devices -->
+            <% if !@relief_device_sizing.relief_devices.empty? %>
+              <% @relief_device_sizing.relief_devices.each_with_index do |relief_device| %>
+                  <% @relief_device = relief_device %>
+                  <tr>
+                      <td id=<%= "sequence_relief_system_design_1" %>>1</td>
+                      <td><%= @relief_device.psvtag %></td>
+                      <td><%= @relief_device_sizing.pressure_relief_valve_location %></td>
+                      <td><%= @relief_device.pressure %></td>
+                      <td></td>
+                      <td>Pressure Relief Valve</td>
+                  </tr>
+              <% end %>
+            <% end %>
+            <% if !@relief_device_sizing.relief_device_rupture_disks.empty? %>
+                <% @relief_device_sizing.relief_device_rupture_disks.each_with_index do |relief_device| %>
+                    <% @relief_device = relief_device %>
+                    <tr>
+                      <td id=<%= "sequence_relief_system_design_1"%>>1</td>
+                      <td><%= @relief_device.rdtag %></td>
+                      <td><%= @relief_device_sizing.rupture_disk_location %></td>
+                      <td><%= @relief_device.burstpressure %></td>
+                      <td></td>
+                      <td>Rupture Disk </td>
+                    </tr>
+                <% end %>
+            <% end %>
+            <% if !@relief_device_sizing.relief_device_open_vent_relief_devices.empty? %>
+                <% @relief_device_sizing.relief_device_open_vent_relief_devices.each_with_index do |relief_device| %>
+                    <% @relief_device = relief_device %>
+                    <tr>
+                      <td id=<%= "sequence_relief_system_design_1"%>>1</td>
+                      <td><%= @relief_device.optag %></td>
+                      <td><%= @relief_device_sizing.open_vent_location %></td>
+                      <td></td>
+                      <td></td>
+                      <td>Open Vent </td>
+                    </tr>
+                <% end %>
+            <% end %>
+            <% if !@relief_device_sizing.relief_device_low_pressure_vent_relief_devices.empty? %>
+                <% @relief_device_sizing.relief_device_low_pressure_vent_relief_devices.each_with_index do |relief_device| %>
+                    <% @relief_device = relief_device %>
+                    <tr>
+                      <td id=<%= "sequence_relief_system_design_1"%>>1</td>
+                      <td><%= @relief_device.venttag %></td>
+                      <td></td>
+                      <td><%= @relief_device.setpressure %></td>
+                      <td><%= @relief_device.setvacumm %></td>
+                      <td>Low Pressure Vent</td>
+                    </tr>
+                <% end %>
+            <% end %>
+          </table>
+        </div>
+        <%= render :partial => 'form_system_design', :locals => {:f => f} %>
+        <%= render :partial => 'form_rupturedisk_design', :locals => {:f => f} %>
+        <%= render :partial => 'form_open_vent_relief_devices_design', :locals => {:f => f} %>
+        <%= render :partial => 'form_low_pressure_vent_relief_devices_design', :locals => {:f => f} %>
+      </div>
+
+      <div id="tab4" class="tab_content">
+        <!-- System Summary -->
+      </div>
+
+   </div>
+   <div class="clear"></div>
+   </div>
+
+<% end %>
+
+<% unless @relief_device_sizing.new_record? %>
+    <fieldset class="project" style="margin-top:15px;">
+      <legend>Attachments</legend>
+      <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+      <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+    </fieldset>
+    <fieldset class="project" style="margin-top:15px;">
+      <legend>Comments</legend>
+      <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+      <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+    </fieldset>
+<% end %>
+
+
+
+
+
+
+<script type='text/javascript'>
+
+	set_project_unit_and_decimals();
+	$('form.relief_device_sizing_form').dirtyForms();
+
+  <% if @relief_device_sizing.new_record? %>
+  var relief_device_id = 0;
+  <% else %>
+  var relief_device_id = <%= @relief_device_sizing.id %>;
+  <% end %>
+
+  function form_saved() {
+    if (relief_device_id == 0) {
+      alert("Please Create Relief Device first!")
+      return false
+    }
+    else {
+      return true
+    }
+  }
+
+  //update sequence when page loads
+  $(document).ready(function(){
+      update_sequence();
+      update_sequence_relief();
+      update_sequence_location();
+      update_sequence_rupture();
+      update_sequence_rupture_location();
+      update_sequence_open_vent();
+      update_sequence_open_vent_location();
+      update_sequence_low_pressure_vent();
+  });
+
+  //update sequence of all equipments
+  function update_sequence() {
+    $("td[id^='sequence_equipment']").each(function (index, value) {
+      //sequence should not start with zero, but array starts with 0 index
+      index = index + 1;
+      $(this).empty().append(index);
+    });
+  }
+  $("#add_equipments").click(function () {
+    $.get("<%= relief_device_sizing_equipments_path(1)%>", function (data) {
+      $("#equipments_table").append(data);
+      update_sequence();
+    });
+  });
+  $("a.delete_equipment").live('click', function () {
+    var id = $(this).attr('id');
+    if ($("td#sequence_equipment_" + id).text() > 1) {
+      $("tr#row_" + id).hide();
+      //remove id "sequence" from hidden rows
+      //otherwise this interfers with sequence updater
+      $("td#sequence_equipment_" + id).attr('id', "");
+      $("input#destroy_" + id).attr('value', 1);
+      update_sequence();
+    }
+  });
+  //update sequence of Relief System design table
+  function update_sequence_open_vent_location() {
+      $("td[id^='sequence_relief_system_design_']").each(function (index, value) {
+          //sequence should not start with zero, but array starts with 0 index
+          index = index + 1;
+          $(this).empty().append(index);
+      });
+  }
+  //set unit decimals
+  unit_decimals = {
+    ".relief_device_system_design_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    ".relief_device_design_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"}
+  }
+  set_project_unit_labels(unit_decimals);
+  //equipment type change
+  $(".equipment_type").live("change", function () {
+    if (form_saved()) {
+      var type = $(this).val();
+      var id = $(this).attr("id");
+      var section = $("#equipment_section_" + id).val();
+      $.ajax({
+        url:"/admin/relief_device_sizings/" + relief_device_id + "/equipment_section",
+        type:"GET",
+        dataType:"json",
+        data:{"equipment_type":type},
+        success:function (data) {
+          $("#equipment_section_" + id).empty();
+          $.each(data.section, function (index, value) {
+            $("#equipment_section_" + id).append($('<option></option>').val(value).html(value));
+          });
+
+          $("#equipment_tag_" + id).empty();
+          $.each(data.tags, function (index, value) {
+            $("#equipment_tag_" + id).append($('<option></option>').val(value[0]).html(value[1]));
+          });
+
+            $("#equipment_link_" + id).hide();
+
+          /*var link_location="/admin/" + data.links[0][1] + "/" + data.links[0][0] +"/edit";
+          $("#equipment_link_" + id).attr('href',link_location);*/
+
+            if(type == "User Specified"){
+                $("#equipment_tag_text_" + id).val("");
+                $("#equipment_section_text_" + id).val("");
+                $("#equipment_tag_text_" + id).show();
+                $("#equipment_section_text_" + id).show();
+                $("#equipment_tag_" + id).hide();
+                $("#equipment_section_" + id).hide();
+            }else{
+                $("#equipment_tag_text_" + id).hide();
+                $("#equipment_section_text_" + id).hide();
+                $("#equipment_tag_" + id).show();
+                $("#equipment_section_" + id).show();
+            }
+
+        }
+      });
+    }
+  });
+  //equipment tag change
+  $(".equipment_tag").live("change", function () {
+    if (form_saved()) {
+      var tag = $(this).val();
+      if (tag != "select") {
+        var id = $(this).attr("id").slice(14);
+        var type = $("#" + id).val();
+        var tag_id = $(this).val();
+        var section = $("#equipment_section_" + id).val();
+        $.ajax({
+          url:"/admin/relief_device_sizings/" + relief_device_id + "/design_pressure",
+          type:"GET",
+          dataType:"json",
+          data:{"equipment_type":type, "equipment_section":section, "tag_id":tag_id},
+          success:function (data) {
+            $("#design_pressure_" + id).val(data.design_pressure);
+
+            // show view link only when selects equipment tag
+            $("#equipment_link_" + id).show();
+            var link_location="/admin/" + data.links[0][1] + "/" + tag_id +"/edit";
+            $("#equipment_link_" + id).attr('href',link_location);
+          }
+        });
+      }
+    }
+  });
+
+
+  // Analyse click find the minimum pressure and temperature and corresponding equipment tag values
+  $("#analyze_btn").click(function () {
+      var min_pressure=10000;
+      var min_temperature=10000;
+      var min_pressure_tag = '';
+      var min_temperature_tag = '';
+      var id=0;
+      //iterate through each textboxes and add the values
+      $("input[id^='design_pressure_']").each(function() {
+          id= this.id.substring(16);
+          //add only if the value is number
+          if(!isNaN(this.value) && this.value.length!=0) {
+               if(min_pressure>parseFloat(this.value)) {
+                  min_pressure=parseFloat(this.value);
+                   if($("#" + id).val() == "User Specified"){
+                       min_pressure_tag = $("#equipment_tag_text_" + id).val();
+                   }else{
+                       min_pressure_tag = $("#equipment_tag_" + id + " option:selected").text();
+                   }
+               }
+          }
+      });
+         $("input[id^='design_temperature_']").each(function() {
+          id= this.id.substring(19);
+          //add only if the value is number
+          if(!isNaN(this.value) && this.value.length!=0) {
+              if(min_temperature>parseFloat(this.value)) {
+                  min_temperature=parseFloat(this.value);
+                  if($("#" + id).val() == "User Specified"){
+                      min_temperature_tag = $("#equipment_tag_text_" + id).val();
+                  }else{
+                      min_temperature_tag = $("#equipment_tag_" + id + " option:selected").text();
+                  }
+              }
+          }
+      });
+      /*min_temperature=Math.min.apply(Math, arr);*/
+      $("input#relief_device_sizing_system_design_pressure").attr('value', min_pressure);
+      $("input#system_design_pressure").attr('value', min_pressure);
+      $("input#rupture_design_pressure").attr('value', min_pressure);
+      $("input#relief_device_sizing_system_design_temperature").attr('value', min_temperature);
+      $("input#relief_device_sizing_limiting_device_pressure").attr('value', min_pressure_tag);
+      $("input#relief_device_sizing_limiting_device_temperature").attr('value', min_temperature_tag);
+  });
+
+
+
+ /*   //analyze button
+  $("#analyze_btn").click(function () {
+    if (form_saved()) {
+      $.ajax({
+        url:"/admin/relief_device_sizings/" + relief_device_id + "/analyze",
+        type:"GET",
+        dataType:"json",
+        success:function (data) {
+          $("#relief_device_sizing_system_design_pressure").val(data.pressure);
+          $("#relief_device_sizing_limiting_device").val(data.tag);
+        }
+      });
+    }
+  });  */
+
+    //relief system design click , open popup based on relief device type selected in system summary
+    $('#design_button').click(function (e) {
+			design_button_click();
+			return false;
+    });
+
+	function design_button_click() {
+		console.log('aaa');
+		var relief_device_type=$("input[name='relief_device_sizing[relief_device_type]']:checked").val();
+		if(relief_device_type=='Pressure Relief Valve'){
+			$.colorbox({href:'#relief_design_box', inline:true, width:'100%', height:'100%',onOpen:function() { $("body").css("overflow", "hidden"); }, onClosed:function() { $("body").css("overflow", "auto"); }});
+		}else if(relief_device_type=='Rupture Disk'){
+			$.colorbox({href:'#rupture_disk_box', inline:true, width:'100%', height:'100%',onOpen:function() { $("body").css("overflow", "hidden"); }, onClosed:function() { $("body").css("overflow", "auto"); }});
+		}else if(relief_device_type=='Open Vent'){
+			$.colorbox({href:'#open_vent_relief_device_design_box', inline:true, width:'100%', height:'100%',onOpen:function() { $("body").css("overflow", "hidden"); }, onClosed:function() { $("body").css("overflow", "auto"); }});
+		}else if(relief_device_type=='Low Pressure Vent'){
+			$.colorbox({href:'#low_pressure_vent_relief_device_design_box', inline:true, width:'100%', height:'100%',onOpen:function() { $("body").css("overflow", "hidden"); }, onClosed:function() { $("body").css("overflow", "auto"); }});
+		}else{
+			alert("Select Relief Device type in system summary")
+		}
+		$('#cboxClose').remove();
+	}
+
+</script>

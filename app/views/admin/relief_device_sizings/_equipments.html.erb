@@ -1,0 +1,40 @@
+<%= fields_for @equipment do |f| %>
+<tr id=<%= "row_#{@unique_id}"%> >
+	<td id=<%= "sequence_equipment_#{@unique_id}"%>>1</td>
+	<%= f.hidden_field :id, :name =>  "equipment_attributes[#{@unique_id}][id]" %>
+	<%= f.hidden_field :_destroy, :name =>  "equipment_attributes[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_#{@unique_id}" %>
+	<td><%= select_tag "equipment_attributes[#{@unique_id}][equipment_type]", options_for_select(@equipment_type, @equipment.equipment_type), :class => "equipment_type", :id => "#{@unique_id}" %></td>
+
+	<% if @equipment.equipment_type.nil? %>
+      <td> <%= select_tag "equipment_attributes[#{@unique_id}][equipment_tag]", options_for_select([]), :style => "width:100px;", :id => "equipment_tag_#{@unique_id}", :class => "equipment_tag" %>
+            <%= f.text_field :equipment_tag, :name => "equipment_attributes[#{@unique_id}][equipment_tag]", :style => "width:100px;display:none;", :id => "equipment_tag_text_#{@unique_id}" %></td>
+      <td><%= select_tag "equipment_attributes[#{@unique_id}][equipment_section]", options_for_select([]), :id => "equipment_section_#{@unique_id}" %>
+        <%= f.text_field :equipment_section, :name => "equipment_attributes[#{@unique_id}][equipment_section]", :style => "width:100px;display:none;", :id => "equipment_section_text_#{@unique_id}" %></td>
+	<% else %>
+      <!--If user specified hide dropdown and show textbox -->
+      <% if @equipment.equipment_type == "User Specified" %>
+          <td><%= select_tag "equipment_attributes[#{@unique_id}][equipment_tag]", options_for_select(@equipment_tags[@equipment.equipment_type],@equipment.equipment_tag), :style => "width:100px;display:none;", :id => "equipment_tag_#{@unique_id}", :class => "equipment_tag" %>
+          <%= f.text_field :equipment_tag, :name => "equipment_attributes[#{@unique_id}][equipment_tag]", :style => "width:100px;", :id => "equipment_tag_text_#{@unique_id}" %></td>
+          <td><%= select_tag "equipment_attributes[#{@unique_id}][equipment_section]", options_for_select(@equipment_section[@equipment.equipment_type],@equipment.equipment_section), :id => "equipment_section_#{@unique_id}", :style => "width:100px;display:none;" %>
+          <%= f.text_field :equipment_section, :name => "equipment_attributes[#{@unique_id}][equipment_section]", :style => "width:100px;", :id => "equipment_section_text_#{@unique_id}" %></td>
+      <% else %>
+          <td><%= select_tag "equipment_attributes[#{@unique_id}][equipment_tag]", options_for_select(@equipment_tags[@equipment.equipment_type],@equipment.equipment_tag), :style => "width:100px;", :id => "equipment_tag_#{@unique_id}", :class => "equipment_tag" %>
+            <%= f.text_field :equipment_tag, :name => "equipment_attributes[#{@unique_id}][equipment_tag]", :style => "width:100px;display:none;", :id => "equipment_tag_text_#{@unique_id}" %></td>
+          <td><%= select_tag "equipment_attributes[#{@unique_id}][equipment_section]", options_for_select(@equipment_section[@equipment.equipment_type],@equipment.equipment_section), :id => "equipment_section_#{@unique_id}", :style => "width:100px;" %>
+            <%= f.text_field :equipment_section, :name => "equipment_attributes[#{@unique_id}][equipment_section]", :style => "width:100px;display:none;", :id => "equipment_section_text_#{@unique_id}" %></td>
+      <% end %>
+	<% end %>
+
+	<td><%= f.text_field :equipment_description, :name =>  "equipment_attributes[#{@unique_id}][equipment_description]" , :style => "width:100px;", :id => "design_description_#{@unique_id}" %></td>
+    <td><%= f.text_field :design_pressure, :name => "equipment_attributes[#{@unique_id}][design_pressure]", :style => "width:100px;", :id => "design_pressure_#{@unique_id}" %></td>
+    <td><%= f.text_field :design_temperature, :name => "equipment_attributes[#{@unique_id}][design_temperature]", :style => "width:100px;", :id => "design_temperature_#{@unique_id}" %></td>
+
+    <% if @equipment.equipment_tag.nil? || @equipment.equipment_type == "User Specified" %>
+        <td><%= link_to "View", "#", :id => "equipment_link_#{@unique_id}", :class => "view_equipment", :style => "display: none;" %></td>
+    <% else %>
+        <td><%= link_to "View", "/admin/#{@equipment_links[@equipment.equipment_type][0][0]}/#{@equipment.equipment_tag}/edit", :id => "equipment_link_#{@unique_id}", :class => "view_equipment" %></td>
+    <% end %>
+
+	<td><%= link_to "Delete", "#", :id => "#{@unique_id}", :class => "delete_equipment" %></td>
+</tr>
+<% end %>

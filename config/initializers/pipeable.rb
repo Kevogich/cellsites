@@ -1,0 +1,2 @@
+require "pipeable"
+include Pipeable

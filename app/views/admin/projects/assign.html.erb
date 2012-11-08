@@ -1,0 +1,19 @@
+<b>Project:</b> <%= @project.project_num %>
+<table>
+	<tr>
+		<th colspan=2>Select users to assign this project</th>
+	</tr>
+	<%= form_tag(team_assignment_admin_project_path(@project)) %>
+	<% for company_user in @company_users%>
+		<tr>
+			<td width="30px">
+				<%= check_box_tag "users[]", company_user.user_id, @project_users.include?(company_user.user_id) %>
+			</td>
+			<td><%= company_user.name %></td>
+		</tr>
+	<% end %>
+	<tr>
+		<td>&nbsp;</td>
+		<td><input type="submit" value="Assign"></td>
+	</tr>
+</table>

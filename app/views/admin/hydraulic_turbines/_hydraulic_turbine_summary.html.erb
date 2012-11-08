@@ -1,0 +1,89 @@
+<style>
+	.tab-header td {
+		font-size: 16px;
+		font-weight: bold;
+		text-align: center;
+	}
+	
+	.column-header td {
+		font-weight: bold;
+	}
+</style>
+
+<%= render :partial => "shared/summary_client_header", :locals => {:client => client} %>
+<div style="margin-top:10px;">
+	<table class="hydraulic_turbine_summary" style="width:auto;">
+		<tr class="tab-header">
+			<td colspan="4"></td>
+			<td colspan="4">ASSOCIATED ROTATING EQUIPMENT</td>
+			<td colspan="3">SUCTION SIDE</td>
+			<td colspan="3">DISCHARGE SIDE</td>
+			<td colspan="5">HYDRAULIC TURBINE RATING</td>
+		</tr>
+		<tr class="column-header">
+			<td>Count</td>
+			<td>Preliminary Tag</td>
+			<td>Normal Volume Flow</td>
+			<td>S.G.</td>
+			<td>Equipment Type</td>
+			<td>Equipment Tag</td>
+			<td>Horsepower</td>
+			<td>Speed</td>
+			<td>Source Pressure</td>
+			<td>Pressure @ Suction Nozzle</td>
+			<td>Pressure Loss</td>
+			<td>Destination Pressure</td>
+			<td>Pressure @ Discharge Nozzle</td>
+			<td>Pressure Loss</td>
+			<td>Differential Pressure</td>
+			<td>Differential Head</td>
+			<td>Available Hydraulic HP</td>
+			<td>Efficiency</td>
+			<td>Available Brake HP</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td>gpm</td>
+			<td></td>			
+			<td></td>
+			<td></td>
+			<td>kW</td>
+			<td>RPM</td>
+			<td>psig</td>
+			<td>psig</td>
+			<td>psi</td>
+			<td>psig</td>
+			<td>psig</td>
+			<td>psi</td>
+			<td>psi</td>
+			<td>ft</td>
+			<td>HP</td>
+			<td>%</td>
+			<td>HP</td>			
+		</tr>
+		<% hydraulic_turbines.each_with_index do |hydraulic_turbine, i|%>
+		<tr>
+			<td><%= i+1%></td>
+			<td><%= hydraulic_turbine.hydraulic_turbine_tag%></td>
+			<td></td>
+			<td><%= hydraulic_turbine.htd_tap_sg%></td>
+			<td><%= hydraulic_turbine.htd_red_equipment_type%></td>
+			<td><%= hydraulic_turbine.htd_red_equipment_tag%></td>
+			<td><%= hydraulic_turbine.htd_red_horsepower%></td>
+			<td><%= hydraulic_turbine.htd_red_speed%></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td><%= hydraulic_turbine.htd_td_differential_pressure%></td>
+			<td><%= hydraulic_turbine.htd_td_differential_head%></td>
+			<td><%= hydraulic_turbine.htd_tap_hydraulic_hp%></td>
+			<td><%= hydraulic_turbine.htd_tap_efficiency%></td>
+			<td><%= hydraulic_turbine.htd_tap_brake_horsepower%></td>			
+		</tr>
+		<% end%>
+	</table>
+</div>			

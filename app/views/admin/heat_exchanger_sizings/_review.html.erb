@@ -1,0 +1,170 @@
+<div id="review" class="tab_content">
+  <! -- Review -->
+  <table>
+    <tr>
+      <td colspan="3"><label class="sub_title">SIZING REVIEW</label></td>
+    </tr>
+    <tr>
+      <td><b>1</b></td>
+      <td>
+        For conservative estimate sef F = 0.9 for shell and tube exchangers with no phase change, q =
+        UADTlm. When DT at exchanger ends differ greatly then check F, reconfigure if F is less than 0.85
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_1, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_1, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_1, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>2</b></td>
+      <td>Take tru concurrent flow in a shell and trbe exchanger as a basis</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_2, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_2, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_2, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>3</b></td>
+      <td>
+        Standard are 19.0 mm (3/4 in.) outlet diameter (OD), 25.4 mm (1 in.) triangular spacing,
+        4.9 m (16 ft) long.<br><br>
+        A shell of 300 mm (1 ft) diameter accommodates 9.3 m2 (100 ft2);<br><br>
+        600 mm (2 ft) diameter accommodates 37.2 m2 (400 ft2);<br><br>
+        900 mm (3 ft) diameter accommodates 102 m2 (1100 ft2);<br><br>
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_3, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_3, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_3, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>4</b></td>
+      <td>Tube side is for corrosive, fouling, scaling, and high pressure fluids.</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_4, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_4, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_4, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>5</b></td>
+      <td>Shell side is for viscous and condensing fluids</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_5, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_5, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_5, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>6</b></td>
+      <td>Pressure drops are 0.1 bar (1.5 psi) for boiling and 0.2-0.62 bar (3-9 psi) for other services.</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_6, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_6, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_6, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>7</b></td>
+      <td>Minimum temperature approach is 10 C (20 F) for fluids and 5 C (10 F) for refrigerants.</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_7, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_7, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_7, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>8</b></td>
+      <td>Cooling water inlet temperature if 30 F (90 F), maximum outlet temperature 49 C (120 F)</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_8, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_8, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_8, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>9</b></td>
+      <td>
+        Heat transfer coefficients for estimating purposes, W/m2C (Btu/hr-ft2 F); water to liquid, 850
+        (150); condenser, 850 (150); liquid to liquid, 280 (50); liquid to gas, 60 (10); gas to gas, 30 (5);
+         and reboiler 1140 (200). Maximum flux in reboiler is 31.5 kW/m2 (10,000 Btu/hr-ft2). When
+        phase changes occur, use a zoned analysis with appropriate coefficients for each zone.
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_9, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_9, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_9, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>10</b></td>
+      <td>Double pipe exchangers is competitive at duties requiring 9.3-18.6 m2 (100-200 ft2)</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_10, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_10, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_10, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>11</b></td>
+      <td>
+        Compact (plate and fin) exchangers have 1150 m2/m3 (350 ft2/ft), and about 4 times the heat
+        transfer per cut of shell and tube units
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_11, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_11, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_11, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>12</b></td>
+      <td>Plate and frame exchangers are suited to high sanitations services an are 25-50% cheaper in
+        stainless steel construction than shell and tube units.</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_12, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_12, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_12, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>13</b></td>
+      <td>
+        Air coolers: Tubes are 0.75-1.00 in. OD., total finnted surface 15-20 ft2/ft2 base surface, U =
+        450-570 W/m2C (80-100 Btu/hr ft2 (bare surface) F). Minimum approach temperature = 22C
+        (40F). Fan input power = 1.4-3.6 kW/Mj/hr [2-5 hp/(1000 Btu/hr)].
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_13, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_13, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_13, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>14</b></td>
+      <td>
+        Fired heaters: radiant rate, 37.6 kW/m2 (12000 Btu/h ft2). convection rate, 12.5 kW/m2 (4000
+        Btu/hr-ft2); cold oil tube velocity = 1.8 m/s (6 ft/s); approximately equal heat transfer in the
+        two sections; thermal efficiency, 70-75%;flue gas temperature, 140-195 C (250-350 F) above
+        feed inlet and stack gas temperature 345-510 C (650-950F)
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_14, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_14, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_14, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <td><label class="sub_title">NOTES</label></td>
+    </tr>
+    <tr>
+      <td><%= f.text_area :review_notes, :size => "158x6" %></td>
+    </tr>
+  </table>
+</div>

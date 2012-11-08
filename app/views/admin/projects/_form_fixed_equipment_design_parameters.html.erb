@@ -1,0 +1,51 @@
+<div>
+	<div class="form-element">
+		<%= f.label :default_optimal_reflux_ratio_factor%><br>
+		<%= f.text_field :default_optimal_reflux_ratio_factor%>&nbsp;
+	</div>
+	<div class="form-element">
+		<%= f.label :k_factor_for_wire_mesh_design%><br>
+		<%= f.text_field :k_factor_for_wire_mesh_design%>&nbsp;
+	</div>
+	<div class="form-element">
+		<%= f.label :default_vessel_design_g_lq_ratio, "Default Vessel Design L/D Ratio for Gas-Liquid Separator"%><br>
+		<%= f.text_field :default_vessel_design_g_lq_ratio%>&nbsp;
+	</div>
+	<div class="form-element">
+		<%= f.label :vertical_seperator%><br>
+		<%= f.text_field :vertical_seperator%>&nbsp;
+	</div>
+	<div class="form-element">
+		<%= f.label :max_liquid_level%><br>
+		<%= f.text_field :max_liquid_level%>&nbsp;
+	</div>
+	<div class="form-element">
+		<%= f.label :default_vessel_design_ld_ratio, "Default Vessel Design L/D Ratio for Liquid-Liquid Separator"%><br>
+		<%= f.text_field :default_vessel_design_ld_ratio%>&nbsp;%
+	</div>
+	<div class="form-element">
+		<%= f.label :min_pressure_vessel_design_pressure, "Minimum Pressure Vessel Design Pressure"%><br>
+		<%= f.text_field :min_pressure_vessel_design_pressure%>&nbsp;<%= @project.unit("Pressure", "General").to_s%>
+	</div>	
+	<div class="form-element">
+		<%= f.label :minimum_exchanger_design_pressure%><br>
+		<%= f.text_field :minimum_exchanger_design_pressure%>&nbsp;<%= @project.unit("Pressure", "General").to_s%>
+	</div>
+	<div class="form-element">
+		<%= f.label :maximum_collection_header_back_pressure%><br>
+		<%= f.text_field :maximum_collection_header_back_pressure%>&nbsp;<%= @project.unit("Pressure", "General").to_s%>
+	</div>
+	<div class="form-element">
+		<%= f.label :minimum_ambient_design_temperature%><br>
+		<%= f.text_field :minimum_ambient_design_temperature%>&nbsp;<%= @project.unit("Temperature", "General").to_s%>
+	</div>	
+	<div class="form-element-last">
+		<%= f.label :test_pressure_factor%><br>
+		<%= f.text_field :test_pressure_factor%>&nbsp;
+	</div>
+	<div class="form-element-last">
+		<%= f.label :storage_tank_vapor_space_capacity_above_maximum_level %><br>
+		<%= f.text_field :storage_tank_vapor_space_capacity_above_maximum_level%>&nbsp;
+	</div>
+
+</div>	

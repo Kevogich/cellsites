@@ -1,0 +1,338 @@
+<%= form_for electric_motor, :url => electric_motor.new_record? ? admin_electric_motors_path : admin_electric_motor_path(electric_motor), :html => {:style => 'width:auto;'} do |f| %>
+	<%= f.error_messages %>
+  <% if electric_motor.new_record? %>
+    <%= f.hidden_field :company_id %>
+    <%= f.hidden_field :client_id, :value => @user_project_settings.client_id %>
+    <%= f.hidden_field :project_id, :value => @user_project_settings.project_id %>
+    <%= f.hidden_field :process_unit_id, :value => @user_project_settings.process_unit_id %>
+    <%= f.hidden_field :driver_type, :value => "electric_motor"%>
+  <% end %>
+
+	
+	<div class="form-element-last">		
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :client_id%><br>
+			<%= f.label :client_id,(electric_motor.client.name rescue @user_project_settings.client.name), :style=>"font-weight:bold"%>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :project_id%><br>
+			<%= f.label :project_id,(electric_motor.project.project_num rescue @user_project_settings.project.project_num), :style=>"font-weight:bold"%>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :process_unit_id%><br>
+			<%= f.label :process_unit_id,(electric_motor.process_unit.names rescue @user_project_settings.process_unit.name), :style=>"font-weight:bold"%>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :electric_motor_tag%><br>
+			<%= f.text_field :electric_motor_tag%>
+		</span>
+    <% unless electric_motor.new_record? %>
+      <span style="float:left;margin-right:40px;">
+        <%= label_tag :status%><br>
+        <strong><%= sizing_status(electric_motor) %></strong>
+      </span>
+      <span style="float:left;margin-right:40px;">
+        <br>
+        <%= sizing_status_request_button(electric_motor) %>
+      </span>
+    <% end %>
+		<div class="clear"></div>
+	</div>
+  <div class="hidden">
+    	<%= hidden_field_tag :tab%>
+		  <%= hidden_field_tag :calculate_btn%>
+  </div>
+	<div class="form-buttons">
+		<%= f.submit electric_motor.new_record? ? 'Create' : 'Update'%>		
+  </div>
+	
+	<!-- tabs -->
+	<div>
+		<ul class="simple-tabs">
+			<li><a href="#tab1">Electric Motor</a></li>
+			<li><a href="#tab2">Review</a></li>									
+		</ul>
+		<div class="tab_container">
+			<div id="tab1" class="tab_content">
+				<!-- electric motor -->
+				<table>
+					<tr>
+						<td colspan=2><b><u>Rotating Equipment Details</u></b></td>
+					</tr>
+					<tr>
+						<td>Equipment Type</td>
+						<td><%= f.select :equipment_type, options_for_select(StaticData.equipment_type, electric_motor.equipment_type), :include_blank=>true%></td>
+					</tr>
+					<tr>
+						<td>Equipment Tag</td>
+						<td><%= f.select :equipment_tag, options_for_select(@equipment_tags.collect {|h| [raw(h[:tag]), h[:id]]}, electric_motor.equipment_tag), :include_blank=>true%></td>
+					</tr>
+					<tr>
+						<td>Capacity</td>
+						<td><%= f.text_field :capacity, :class=>"volumetric_flow_rate_liquid"%>&nbsp;<label class="volumetric_flow_rate_liquid_unit"></label> </td>
+					</tr>
+					<tr>
+						<td>Differential Pressure</td>
+						<td><%= f.text_field :differential_pressure, :class=>"pressure_differential"%>&nbsp;<label class="pressure_differential_unit"></label></td>
+					</tr>
+					<tr>
+						<td>Horsepower</td>
+						<td><%= f.text_field :horsepower, :class=>"power_general"%>&nbsp;<label class="power_general_unit"></label></td>
+					</tr>
+					<tr>
+						<td>Speed</td>
+						<td><%= f.text_field :speed, :class=>"revolution_speed_general"%>&nbsp;<label class="revolution_speed_general_unit"></label></td>
+					</tr>
+				</table>
+				
+				<table>
+					<tr>
+						<td colspan="4"><b><u>Motor Design Details</u></b></td>
+					</tr>
+					<tr>
+						<td>Motor Type</td>
+						<td><%= f.select :motor_type, options_for_select(StaticData.motor_type, electric_motor.motor_type), :include_blank=>true%></td>
+						<td colspan="2"></td>
+					</tr>
+					<tr>
+						<td>Enclosure</td>
+						<td><%= f.select :enclosure, options_for_select(StaticData.enclosure, electric_motor.enclosure), :include_blank=>true%></td>
+						<td colspan="2"></td>
+					</tr>
+					<tr>
+						<td>HP</td>
+						<td><%= f.select :hp, options_for_select(StaticData.hp.collect {|h| [raw(h[:name]), h[:value]]}, electric_motor.hp), :include_blank=>true%>&nbsp;<%= @project.unit("Power", "General")%></td>
+						<td>Bearing Type</td>
+						<td><%= f.text_field :bearing_type%>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>RPM</td>
+						<td><%= f.text_field :rpm, :class=>"revolution_speed_general" %>&nbsp;<label class="revolution_speed_general_unit"></label></td>
+						<td>Lubrication Type</td>
+						<td><%= f.text_field :lubrication_type%>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>Frame</td>
+						<td><%= f.text_field :frame%>&nbsp;</td>
+						<td>Insulation Type</td>
+						<td><%= f.text_field :insulation_type%>&nbsp;</td>
+					</tr>
+					<tr>
+						<td>Volt</td>
+						<td><%= f.text_field :volt, :class=>"electric_potential_general"%>&nbsp;<label class="electric_potential_general_unit"></label></td>
+						<td>Time Rating</td>
+						<td><%= f.select :time_rating, options_for_select(StaticData.time_rating, electric_motor.time_rating), :include_blank=>true%></td>
+					</tr>
+					<tr>
+						<td>Phase</td>
+						<td><%= f.text_field :phase%>&nbsp;</td>
+						<td>Mounting</td>
+						<td><%= f.select :mounting, options_for_select(StaticData.mounting, electric_motor.mounting), :include_blank=>true%></td>
+					</tr>
+					<tr>
+						<td>Cycle</td>
+						<td><%= f.text_field :cycle%>&nbsp;</td>
+						<td>Full Load Current</td>
+						<td><%= f.text_field :full_load_current, :class=>"current_general"%>&nbsp;<label id="current_general_unit"></label></td>
+					</tr>
+					<tr>
+						<td>Ambient Temperature</td>
+						<td><%= f.text_field :ambient_temperature, :class=>"temperature_general"%>&nbsp;<label class="temperature_general_unit"></label></td>
+						<td>Service Factor</td>
+						<td><%= f.text_field :service_factor, :class=>"power_general"%>&nbsp;<label class="power_general_unit">%</label></td>
+					</tr>
+					<tr>
+						<td>Temperature Rise</td>
+						<td><%= f.text_field :temperature_rise, :class=>"temperature_general"%>&nbsp;<label id="temperature_general_unit"></label></td>
+						<td>Locked Rotor Current</td>
+						<td><%= f.text_field :locked_rotor_current%>&nbsp;A</td>
+					</tr>
+				</table>
+			</div>
+			<div id="tab2" class="tab_content">
+				<!-- Heuristics Review-->
+				<table>
+					<tr>
+						<td> <b>1.</b> </td>
+						<td>Efficiency is greater for larger machines. Motors, 85-95%; steam turbines, 42-78%; gas 
+							engines and turbines, 28-38%.
+						</td>
+						<td width="150px">
+							<%= f.radio_button :ec_sizing_review_1, "yes"%>&nbsp;Yes&nbsp;
+							<%= f.radio_button :ec_sizing_review_1, "no"%>&nbsp;No&nbsp;
+							<%= f.radio_button :ec_sizing_review_1, "na"%>&nbsp;N/A&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td> <b>2.</b> </td>
+						<td>
+							 For under 74.6 kW(100 hp), electric motors are used almost exclusively. They are made for up
+							to 14,900 kW (20,000 hp).	
+						</td>
+						<td width="150px">
+							<%= f.radio_button :ec_sizing_review_2, "yes"%>&nbsp;Yes&nbsp;
+							<%= f.radio_button :ec_sizing_review_2, "no"%>&nbsp;No&nbsp;
+							<%= f.radio_button :ec_sizing_review_2, "na"%>&nbsp;N/A&nbsp;
+						</td>						
+					</tr>
+					<tr>
+						<td> <b>3.</b> </td>
+						<td>Induction motors are most popular. Synchronous motors are made for speeds as low as 150
+							rpm and are thus suited, for example, for low speed reciprocating compressors, but are not
+							made smaller than 50 hp. A variety of enclosures are available from weather-proof to 
+							explosion-proof.
+						</td>
+						<td width="150px">
+							<%= f.radio_button :ec_sizing_review_3, "yes"%>&nbsp;Yes&nbsp;
+							<%= f.radio_button :ec_sizing_review_3, "no"%>&nbsp;No&nbsp;
+							<%= f.radio_button :ec_sizing_review_3, "na"%>&nbsp;N/A&nbsp;
+						</td>
+					</tr>
+<!--
+					<tr>
+						<td> <b>4. </b> </td>
+						<td>
+							Steam turbines are competitive above 76.6 kW (100 hp). They are speed-controllable. They 
+							are frequently used as spares in case of power failure.
+						</td>
+						<td width="150px">
+							<%= f.radio_button :ec_sizing_review_4, "yes"%>&nbsp;Yes&nbsp;
+							<%= f.radio_button :ec_sizing_review_4, "no"%>&nbsp;No&nbsp;
+							<%= f.radio_button :ec_sizing_review_4, "na"%>&nbsp;N/A&nbsp;
+						</td>
+					</tr>
+					<tr>
+
+						<td> <b>5. </b> </td>
+						<td>
+							Combustion engines and turbines are restricted to mobile and remote locations.
+						</td>
+						<td width="150px">
+							<%= f.radio_button :ec_sizing_review_5, "yes"%>&nbsp;Yes&nbsp;
+							<%= f.radio_button :ec_sizing_review_5, "no"%>&nbsp;No&nbsp;
+							<%= f.radio_button :ec_sizing_review_5, "na"%>&nbsp;N/A&nbsp;
+						</td>
+					</tr>
+					<tr>
+
+						<td> <b>6. </b> </td>
+						<td>
+							Gas expanders for power recovery may be justified at capacities of several hundred hp;
+							otherwise any pressure reduction in a process is done with throttling valves.
+						</td>
+						<td width="150px">
+							<%= f.radio_button :ec_sizing_review_6, "yes"%>&nbsp;Yes&nbsp;
+							<%= f.radio_button :ec_sizing_review_6, "no"%>&nbsp;No&nbsp;
+							<%= f.radio_button :ec_sizing_review_6, "na"%>&nbsp;N/A&nbsp;
+						</td>
+					</tr>
+					<tr>
+
+						<td> <b>7. </b> </td>
+						<td>
+							The following useful definition are give:<br><br>
+							<div style="margin-bottom:15px;">
+								<span style="float:left;margin-right:5px;padding-top:25px;">
+									shaft power = 	
+								</span>
+								<span style="float:left;">
+									<span>theoretical power to pump fluid (liquid or gas)</span><br>
+									<span>____________________________________</span><br><br>
+									<span>efficiency of pump or compressor, e sh</span>
+								</span>
+								<div class="clear"></div>								 
+							</div>			
+							<div>
+								<span style="float:left;margin-right:5px;padding-top:25px;">
+									shaft power = 	
+								</span>
+								<span style="float:left;">
+									<span>theoretical power to pump fluid (liquid or gas)</span><br>
+									<span>____________________________________</span><br><br>
+									<span>efficiency of pump or compressor, e dr</span>
+								</span>
+								<div class="clear"></div>								 
+							</div><br>
+							Overall efficiency = eiv = esh * edr											
+						</td>
+						<td width="150px">
+							<%= f.radio_button :ec_sizing_review_7, "yes"%>&nbsp;Yes&nbsp;
+							<%= f.radio_button :ec_sizing_review_7, "no"%>&nbsp;No&nbsp;
+							<%= f.radio_button :ec_sizing_review_7, "na"%>&nbsp;N/A&nbsp;
+						</td>
+					</tr>    
+					-->
+
+					<tr>
+
+						<td> &nbsp; </td>
+						<td colspan="2"><b><u>NOTES</u></b></td>
+					</tr>
+					<tr>
+						<td> &nbsp; </td>
+						<td colspan="2"><%= f.text_area :ec_notes, :size=>"140x8"%></td>
+					</tr>
+				</table>				
+			</div>
+		</div>
+		<div class="clear"></div>				
+	</div>	
+<% end%>
+
+<% unless electric_motor.new_record? %>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Attachments</legend>
+    <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+    <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+  </fieldset>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Comments</legend>
+    <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+    <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+  </fieldset>
+<% end %>
+
+<script type='text/javascript'>
+
+  set_project_unit_and_decimals();
+//getting pump sizing and compressor sizing values in equipment tag 
+$('#electric_motor_equipment_type').change(function(e){
+		$('#electric_motor_equipment_tag >option').remove();
+		$('#electric_motor_equipment_tag').append($('<option></option>').val('').html(''));
+		if($(this).val() == "") {
+			return false;
+		}	
+		$.get('/admin/electric_motors/get_equiment_tag_by_equiment_type',		
+			{project_id:$('#electric_motor_project_id').val(), 
+			 equipment_type:$(this).val()},
+			function(data) {
+				$.each(data, function(k, v){
+					$('#electric_motor_equipment_tag').append(
+						$('<option></option>').val(v.id).html(v.tag)
+					);										
+				});
+			},
+			'json'
+		);
+});
+	
+$('#electric_motor_equipment_tag').change(function(e){
+		if($('#electric_motor_equipment_type').val() == "" || $(this).val() == "") {
+			alert('Select equipment type and equipment tag');
+			return false;
+		}
+		
+		$.get('/admin/electric_motors/get_rotating_equipment_details',		
+			{equipment_type:$('#electric_motor_equipment_type').val(), 
+			 equipment_tag:$(this).val()},
+			function(data) {
+				$('#electric_motor_capacity').val(data['capacity']);
+				$('#electric_motor_differential_pressure').val(data['differential_pressure']);
+				$('#electric_motor_horsepower').val(data['horsepower']);
+				$('#electric_motor_speed').val(data['speed']);
+			},
+			'json'
+		);
+});
+
+</script>

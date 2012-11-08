@@ -1,0 +1,73 @@
+<style>
+	.tab-header td {
+		font-size: 16px;
+		font-weight: bold;
+		text-align: center;
+	}
+	
+	.column-header td {
+		font-weight: bold;
+	}
+</style>
+
+<%= render :partial => "shared/summary_client_header", :locals => {:client => client} %>
+<div style="margin-top:10px;">
+	<table class="electric_motor_summary" style="width:auto;">
+		<tr class="tab-header">
+			<td></td>
+			<td></td>			
+			<td colspan="4">ASSOCIATED ROTATING EQUIPMENT</td>
+			<td colspan="8">MOTOR SELECTION</td>
+		</tr>	
+		<tr class="column-header">
+			<td>Calc Count</td>
+			<td>Preliminary Tag</td>
+			<td>Equipment Type</td>
+			<td>Equipment Tag</td>
+			<td>Horsepower</td>
+			<td>Speed</td>
+			<td>Type</td>
+			<td>Enclosure</td>
+			<td>HP</td>
+			<td>RPM</td>
+			<td>Volt</td>
+			<td>Phase</td>
+			<td>Cycle</td>
+			<td>Full Load Current</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>			
+			<td></td>
+			<td>kW</td>
+			<td>RPM</td>
+			<td>inches</td>
+			<td></td>
+			<td>barg</td>
+			<td></td>
+			<td></td>
+			<td>kW</td>
+			<td>%</td>
+			<td>kW</td>
+		</tr>	
+		<% electric_motors.each_with_index do |electric_motor, i|%>
+		<tr>
+			<td><%= i+1%></td>
+			<td><%= electric_motor.electric_motor_tag%></td>
+			<td><%= electric_motor.equipment_type%></td>
+			<td><%= electric_motor.equipment_tag%></td>
+			<td><%= electric_motor.horsepower%></td>			
+			<td><%= electric_motor.speed%></td>
+			<td><%= electric_motor.motor_type%></td>
+			<td><%= electric_motor.enclosure%></td>
+			<td><%= electric_motor.hp%></td>
+			<td><%= electric_motor.rpm%></td>
+			<td><%= electric_motor.volt%></td>
+			<td><%= electric_motor.phase%></td>
+			<td><%= electric_motor.cycle%></td>
+			<td><%= electric_motor.full_load_current%></td>
+		</tr>
+		<% end%>	
+	</table>
+</div>		

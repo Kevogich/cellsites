@@ -1,0 +1,226 @@
+<style type="text/css">
+	.piping_table input[type="text"] {
+		width: 100px;
+	}
+
+	.error_piping_field {
+		border:1px solid red;
+	}
+</style>
+
+<div>
+	<h3>Piping</h3>
+	<%= form_for @pipeable_obj, :url => admin_piping_path(@pipeable_type), :remote => true, :html => {:style => "width:100%;", :class => "piping_form"} do |f| %>
+		<%= hidden_field_tag :pipeable_id, @pipeable_id %>
+		<%= hidden_field_tag :pipeable_type, @pipeable_type %>
+		<%= f.hidden_field :id %>
+		<table class="piping_table">
+			<tr>
+				<th rowspan="2">No</th>
+				<th rowspan="2">Fitting(s)</th>
+				<th rowspan="2">Fitting Tag</th>
+				<th>Pipe Size</th>
+				<th rowspan="2">Pipe Sch.</th>
+				<th>Pipe ID</th>
+				<th rowspan="2">% Flow</th>
+				<th rowspan="2">DS/DL or Cv, Dorifice</th>
+				<th>Length</th>
+				<th>Elevation</th>
+				<th>&Delta;P</th>
+				<% if pressure_type(@pipeable_type) == "outlet" %>
+					<th>Outlet Pressure</th>
+				<% else %>
+					<th>Inlet Pressure</th>
+				<% end %>
+				<th rowspan="2"></th>
+			</tr>
+			<tr>
+				<th>
+					<span class="length_small_dimension_length_unit"></span>
+				</th>
+				<th>
+					<span class="length_small_dimension_length_unit"></span>
+				</th>
+				<th><span class="length_large_dimension_length_unit"></span></th>
+				<th><span class="length_large_dimension_length_unit"></span></th>
+				<th><span class="pressure_differential_unit"></span></th>
+				<th><span class="pressure_general_unit"></span></th>
+			</tr>
+			<%= f.fields_for :pipings do |p| %>
+				<%= render 'piping_fields', :p => p %>
+			<% end %>
+			<% if @pipings.size == 0 %>
+				<%= f.fields_for(:pipings, @piping, :child_index => "0") do |p| %>
+					<%= render "piping_fields", :p => p %>
+				<% end %>
+			<% end %>
+		</table>
+
+		<%= new_piping_row(f) %>
+
+		<div>
+			<%= link_to "Add More", "#", :class => "btn btn_add_piping" %>
+			<%#= link_to "Save", "#", :class => "btn btn_save_piping" %>
+			<%= link_to "Close", "#", :class => "btn btn_close_piping" %>
+		</div>
+	<% end %>
+</div>
+
+<%= javascript_tag do %>
+	var pipe_size_schedules = <%= raw PipeSizing.pipe_size_schedules.to_json %>;
+	var pipe_size_pipe_ods = <%= raw PipeSizing.pipe_size_pipe_od.to_json %>;
+	var pipe_id_conversion_factor = <%= user_project_setting.project.conversion_factor("Length", "Pipe Tube Diameter") %>;
+	var pipe_size_wall_thinkness = <%= raw PipeSizing.pipe_size_wall_thinkness.to_json %>;
+<% end %>
+
+<script type="text/javascript">
+	set_project_unit_and_decimals();
+
+	$('.btn_add_piping').on('click', function () {
+
+		//last row before add
+		var prev_row_tr = $('.piping_table tr:last');
+
+		var piping_sequence_no = $('.piping_table .piping_sequence_no:last').val();
+		if (piping_sequence_no == undefined) {
+			piping_sequence_no = 0;
+		}
+		piping_sequence_no = parseInt(piping_sequence_no) + 1;
+		var new_piping_tr = $('.new_piping_tr tbody').html().replace(/new_piping/g, piping_sequence_no);
+		$('.piping_table tr:last').after(new_piping_tr);
+
+		//reorder sequence
+		$('.piping_table span.sequence_no:visible').each(function (index) {
+			$(this).text(index + 1);
+			$(this).nextAll('.piping_sequence_no').val(index + 1);
+		});
+
+		//assigning previous row values to new row
+		var last_row_tr = $('.piping_table tr:last');
+		$(last_row_tr).find('.pipe_size').val($(prev_row_tr).find('.pipe_size').val());
+		$(last_row_tr).find('.pipe_schedule').html($(prev_row_tr).find('.pipe_schedule').html());
+		$(last_row_tr).find('.pipe_schedule').val($(prev_row_tr).find('.pipe_schedule').val());
+		$(last_row_tr).find('.pipe_id').val($(prev_row_tr).find('.pipe_id').val());
+		$(last_row_tr).find('.per_flow').val($(prev_row_tr).find('.per_flow').val());
+
+		return false;
+	});
+
+	$('form.piping_form select.pipe_size').live('change', function () {
+		var value = $("option:selected", this).attr('data-value');
+		var $pipe_schedule = $(this).parents('tr').find('.pipe_schedule');
+		$pipe_schedule.html('');
+		$pipe_schedule.append($('<option></option>').val("").html(""));
+		$(pipe_size_schedules[value]).each(function (k, v) {
+			$pipe_schedule.append($('<option></option>').val(v).html(v));
+		});
+		return false;
+	});
+
+	$('form.piping_form select.pipe_schedule').live('change', function () {
+		if ($(this).val() == '') {
+			return false;
+		}
+		var pipe_size = $(this).parents('tr').find('.pipe_size').val();
+		var pipe_od = pipe_size_pipe_ods[pipe_size] / pipe_id_conversion_factor;
+		var wall_thickness = pipe_size_wall_thinkness[pipe_size][$(this).val()] / pipe_id_conversion_factor;
+		var pipe_id = pipe_od - (2 * wall_thickness);
+		$(this).parents('tr').find('.pipe_id').val(get_project_field_value1('length_small_dimension_length', pipe_id));
+	});
+
+	var valid = true;
+	function validate_piping_form() {
+		valid = true;
+		$(".piping_table :input").removeClass('error_piping_field');
+
+		$(".piping_table select[name$='[fitting]']:visible").each(function () {
+				var $tr = $(this).parents('tr');
+				var selected_fitting = $(this).val();
+
+				var fitting_tag = $tr.find('.fitting_tag');
+				var pipe_size = $tr.find('.pipe_size');
+				var pipe_schedule = $tr.find('.pipe_schedule');
+				var pipe_id = $tr.find('.pipe_id');
+				var per_flow = $tr.find('.per_flow');
+				var length = $tr.find('.length');
+				var elevation = $tr.find('.elevation');
+				var ds_cv = $tr.find('.ds_cv');
+				var delta_p = $tr.find('.delta_p');
+
+				if (selected_fitting == 'Pipe') {
+					validate_items([pipe_id, per_flow, length, elevation])
+
+				} else if (selected_fitting == 'Sudden Expansion' || selected_fitting == 'Sudden Contraction' || selected_fitting == 'Expansion' || selected_fitting == 'Contraction') {
+					var last_fitting = $(".piping_table select[name$='[fitting]']:visible").last().children('option:selected').text();
+					if (selected_fitting == last_fitting) {
+						if (last_fitting == 'Sudden Expansion' || last_fitting == 'Sudden Contraction' || last_fitting == 'Expansion' || last_fitting == 'Contraction') {
+							validate_items([pipe_id, per_flow, ds_cv]);
+						}
+					} else {
+						validate_items([pipe_id, per_flow]);
+					}
+				} else if (selected_fitting == 'Control Valve') {
+					validate_fitting_tag(fitting_tag);
+					if (!$.isNumeric(delta_p.val())) {
+						validate_items([pipe_id, per_flow, ds_cv]);
+					}
+					if (!$.isNumeric(pipe_id.val()) || !$.isNumeric(per_flow.val()) || !$.isNumeric(ds_cv.val())) {
+						validate_items([delta_p]);
+					}
+				} else if (selected_fitting == 'Equipment') {
+					validate_fitting_tag(fitting_tag);
+					validate_items([delta_p]);
+				} else if (selected_fitting == 'Line Segment') {
+					validate_fitting_tag(fitting_tag);
+					if (!$.isNumeric(delta_p.val())) {
+						validate_items([pipe_id, per_flow, length, elevation]);
+					}
+					if (!$.isNumeric(pipe_id.val()) || !$.isNumeric(per_flow.val()) || !$.isNumeric(length.val()) || !$.isNumeric(elevation.val())) {
+						validate_items([delta_p]);
+					}
+				} else if (selected_fitting == 'Equivalent Length') {
+					validate_items([pipe_id, per_flow, length, elevation]);
+				} else if (selected_fitting.slice(0, 4) == 'Flow' || selected_fitting == 'Orifice') {
+					validate_fitting_tag(fitting_tag);
+					validate_items([pipe_size]);
+					if (!$.isNumeric(delta_p.val())) {
+						validate_items([pipe_id, per_flow, ds_cv]);
+					}
+					if (!$.isNumeric(pipe_id.val()) || !$.isNumeric(per_flow.val()) || !$.isNumeric(ds_cv.val())) {
+						validate_items([delta_p]);
+					}
+				} else if (selected_fitting == 'Change Properties to Stream') {
+
+				} else if (selected_fitting == 'Rupture Disk') {
+					validate_fitting_tag(fitting_tag);
+					validate_items([pipe_id, per_flow]);
+				} else if (selected_fitting == 'User Entered') {
+					validate_items([delta_p]);
+				}	else if ($.trim(selected_fitting).length > 0) {
+					validate_items([pipe_id, per_flow]);
+				}
+		});
+
+		if(!valid){
+			alert('Please enter required values!!')
+		}
+		return valid
+	}
+
+	function validate_items(items) {
+		$.each(items, function () {
+			if (!$.isNumeric($(this).val())) {
+				$(this).addClass('error_piping_field');
+				valid = false
+			}
+		})
+	}
+
+	function validate_fitting_tag(tag) {
+		if ($.trim(tag.val()).length == 0) {
+			tag.addClass('error_piping_field');
+			valid = false;
+		}
+	}
+
+</script>

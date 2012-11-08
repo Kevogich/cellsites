@@ -1,0 +1,523 @@
+<div id="system_definition" class="tab_content">
+  <!-- System Definition -->
+  <div style="border: 1px solid #000000;">
+    <div id="system_definition_image">
+      <div id="process_basis_div">
+        <ul class="unstyled">
+          <li>
+            <label style="font-weight: bold;text-decoration: underline;">Process Basis</label>
+          </li>
+          <li>
+            <%= f.collection_select :sd_process_basis_id, @company.heat_and_material_balances, :id, :case, :prompt => true %>
+          </li>
+        </ul>
+      </div>
+
+      <div id="streams_1" class="streams">
+        <ul class="unstyled">
+          <li><%= f.collection_select :sd_stream_no_1, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => 1} %></li>
+          <li><%= f.text_field :sd_pressure_1, :class => "pressure_general", :style => "width:60px;" %>&nbsp;<label class="pressure_general_unit"></label>
+          </li>
+          <li><%= f.text_field :sd_temperature_1, :class => "temperature_general", :style => "width:60px;" %>&nbsp;<label class="temperature_general_unit"></label>
+          </li>
+        </ul>
+      </div>
+
+      <div id="streams_2" class="streams">
+        <ul class="unstyled">
+          <li><%= f.collection_select :sd_stream_no_2, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => 2} %></li>
+          <li><%= f.text_field :sd_pressure_2, :class => "pressure_general required", :style => "width:60px;" %>&nbsp;<label class="pressure_general_unit"></label>
+          </li>
+          <li><%= f.text_field :sd_temperature_2, :class => "temperature_general", :style => "width:60px;" %>&nbsp;<label class="temperature_general_unit"></label>
+          </li>
+        </ul>
+      </div>
+
+      <div id="streams_3" class="streams">
+        <ul class="unstyled">
+          <li><%= f.collection_select :sd_stream_no_3, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => 3} %></li>
+          <li><%= f.text_field :sd_pressure_3, :class => "pressure_general", :style => "width:60px;" %>&nbsp;<label class="pressure_general_unit"></label>
+          </li>
+          <li><%= f.text_field :sd_temperature_3, :class => "temperature_general", :style => "width:60px;" %>&nbsp;<label class="temperature_general_unit"></label>
+          </li>
+        </ul>
+      </div>
+
+      <div id="streams_4" class="streams">
+        <ul class="unstyled">
+          <li><%= f.collection_select :sd_stream_no_4, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => 4} %></li>
+          <li><%= f.text_field :sd_pressure_4, :class => "pressure_general required", :style => "width:60px;" %>&nbsp;<label class="pressure_general_unit"></label>
+          </li>
+          <li><%= f.text_field :sd_temperature_4, :class => "temperature_general", :style => "width:60px;" %>&nbsp;<label class="temperature_general_unit"></label>
+          </li>
+        </ul>
+      </div>
+
+      <div id="streams_5" class="streams">
+        <ul class="unstyled">
+          <li><%= f.collection_select :sd_stream_no_5, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => 5} %></li>
+          <li><%= f.text_field :sd_pressure_5, :class => "pressure_general", :style => "width:60px;" %>&nbsp;<label class="pressure_general_unit"></label>
+          </li>
+          <li><%= f.text_field :sd_temperature_5, :class => "temperature_general", :style => "width:60px;" %>&nbsp;<label class="temperature_general_unit"></label>
+          </li>
+        </ul>
+      </div>
+
+      <div id="streams_6" class="streams">
+        <ul class="unstyled">
+          <li><%= f.collection_select :sd_stream_no_6, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => 6} %></li>
+          <li><%= f.text_field :sd_pressure_6, :class => "pressure_general", :style => "width:60px;" %>&nbsp;<label class="pressure_general_unit"></label>
+          </li>
+          <li><%= f.text_field :sd_temperature_6, :class => "temperature_general", :style => "width:60px;" %>&nbsp;<label class="temperature_general_unit"></label>
+          </li>
+        </ul>
+      </div>
+
+      <div id="btn_condenser_type" style="position:absolute;top:5px;left:420px;">
+        <input type="button" value="&nbsp;" style="background:#30FF10;">&nbsp;
+        <strong>Condenser
+          Type:<label id="sd_condenser_type"><%= f.label column_sizing.sd_cont_main_condenser_type %></label></strong>
+      </div>
+
+      <div id="btn_column_type" style="position:absolute;top:180px;left:225px;">
+        <input type="button" value="&nbsp;" style="background:#30FF10;">&nbsp;
+        <strong>Column Type:<label id="sd_column_type"><%= column_sizing.sd_column_type %></label></strong>
+        <%= f.hidden_field :sd_column_type %>
+      </div>
+
+      <div id="btn_reboiler_type" style="position:absolute;top:455px;left:225px;">
+        <input type="button" value="&nbsp;" style="background:#30FF10;">&nbsp;
+        <strong>Reboiler
+          Type:<label id="sd_reboiler_type"><%= f.label column_sizing.sd_rt_available_reboiler_types %></label></strong>
+      </div>
+    </div>
+  </div>
+
+  <table>
+    <tr>
+      <td colspan="4"><label class="sub_title">COLUMN SPECIFICATIONS</label></td>
+    </tr>
+    <tr>
+      <td>Minimum Column Stages</td>
+      <td><%= f.text_field :sd_minimum_column_stages %></td>
+      <td>No. of Trays Above Feed</td>
+      <td><%= f.text_field :sd_no_of_trays_above_feed %></td>
+    </tr>
+    <tr>
+      <td>Minimum Reflux Ratio</td>
+      <td><%= f.text_field :sd_minimum_reflux_ratio %></td>
+      <td>No. of Trays Below Feed</td>
+      <td><%= f.text_field :sd_no_of_trays_below_feed %></td>
+    </tr>
+    <tr>
+      <td>Optimal Reflux Ratio Factor</td>
+      <td><%= f.text_field :sd_optimal_reflux_ratio_factor %></td>
+      <td>Overall Tray Efficiency</td>
+      <td><%= f.text_field :sd_overall_tray_efficiency %>&nbsp;%</td>
+    </tr>
+    <tr>
+      <td>Actual Reflux Ratio</td>
+      <td><%= f.text_field :sd_actual_reflux_ratio %></td>
+      <td>Total Actual Tray</td>
+      <td><%= f.text_field :sd_total_actual_tray %></td>
+    </tr>
+    <tr>
+      <td>Optimal Stage Ratio</td>
+      <td><%= f.text_field :sd_optimal_stage_ratio %></td>
+      <td>Foaming Service</td>
+      <td><%= f.select :sd_foaming_service, StaticData.foaming_service.collect{|p| [raw(p), p]}, :include_blank => true%></td>
+    </tr>
+    <tr>
+      <td>No of Theoretical Column Trays</td>
+      <td><%= f.text_field :sd_no_of_theoretical_column_trays %></td>
+      <td>System Factor</td>
+      <td><%= f.text_field :sd_system_factor %></td>
+    </tr>
+  </table>
+
+  <!-- reboiler_type_div -->
+  <div class="hidden">
+    <div id="reboiler_type_div">
+      <table>
+        <tr>
+          <td colspan="2" align="center">
+            <fieldset class="form_fieldset">
+              <legend>Fluid Characteristics</legend>
+              <ul class="unstyled">
+                <li><%= f.radio_button :sd_rt_fluid_characteristics, "fouling_service" %>&nbsp;Fouling Service</li>
+                <li><%= f.radio_button :sd_rt_fluid_characteristics, "clean_service" %>&nbsp;Clean Service</li>
+              </ul>
+            </fieldset>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <fieldset class="form_fieldset">
+              <legend>Extent of Fouling</legend>
+              <ul class="unstyled">
+                <li><%= f.radio_button :sd_rt_extent_of_fouling, "heavy_fouling" %>&nbsp;Heavy Fouling</li>
+                <li><%= f.radio_button :sd_rt_extent_of_fouling, "moderate_fouling" %>&nbsp;Moderate Fouling</li>
+              </ul>
+            </fieldset>
+          </td>
+          <td>
+            <fieldset class="form_fieldset">
+              <legend>Viscosity</legend>
+              <ul class="unstyled">
+                <li><%= f.radio_button :sd_rt_viscosity, "high_viscosity" %>&nbsp;Heavy Viscosity</li>
+                <li><%= f.radio_button :sd_rt_viscosity, "moderate_viscosity" %>&nbsp;Moderate Viscosity</li>
+              </ul>
+            </fieldset>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <fieldset class="form_fieldset">
+              <legend>Pressure</legend>
+              <ul class="unstyled">
+                <li><%= f.radio_button :sd_rt_pressure, "less_than_atmospheric" %>&nbsp;Less Than Atmospheric</li>
+                <li><%= f.radio_button :sd_rt_pressure, "more_than_atmospheric" %>&nbsp;More Than Atmospheric</li>
+              </ul>
+            </fieldset>
+          </td>
+          <td>
+            <fieldset class="form_fieldset">
+              <legend>Area Required</legend>
+              <ul class="unstyled">
+                <li><%= f.radio_button :sd_rt_area_required, "large" %>&nbsp;Large</li>
+                <li><%= f.radio_button :sd_rt_area_required, "moderate" %>&nbsp;Moderate</li>
+              </ul>
+            </fieldset>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <fieldset class="form_fieldset">
+              <legend>Available Reboiler Types</legend>
+              <ul class="unstyled">
+                <li><%= f.radio_button :sd_rt_available_reboiler_types, "pump_through_reboiler" %>&nbsp;Pump Through
+                  Reboiler
+                </li>
+                <li><%= f.radio_button :sd_rt_available_reboiler_types, "kettle_reboiler" %>&nbsp;Kettle Reboiler</li>
+                <li><%= f.radio_button :sd_rt_available_reboiler_types, "horizontal_thermosiphon" %>&nbsp;Horizontal
+                  Thermosiphon
+                </li>
+                <li><%= f.radio_button :sd_rt_available_reboiler_types, "vertical_thermosiphon" %>&nbsp;Vertical
+                  Thermosiphon
+                </li>
+                <li><%= f.radio_button :sd_rt_available_reboiler_types, "internal_reboiler" %>&nbsp;Internal Reboiler</li>
+              </ul>
+            </fieldset>
+          </td>
+          <td style="text-align: center;vertical-align: middle;">
+            <input type="button" value="Enable All" id="reboiler_type_enable_all"><br><br>
+            <input type="button" value="Close" onclick="$.colorbox.close();">
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="column_type_div">
+      <table>
+        <tr>
+          <td><label class="sub_title">CONSIDERATION FOR TRAY TOWER DESIGN SELECTION</label></td>
+          <td rowspan="15" style="padding: 10px;">
+            <fieldset class="form_fieldset">
+              <legend>Column Type Selected</legend>
+              <ul class="unstyled">
+                <li><%= f.radio_button :sd_ct_column_type_selected, "tray" %>Tray</li>
+                <li><%= f.radio_button :sd_ct_column_type_selected, "packed_bed" %>Packed Bed</li>
+                <li><%= f.radio_button :sd_ct_column_type_selected, "tray_n_packing_combo" %>Tray & Packing Combo</li>
+              </ul>
+            </fieldset>
+          </td>
+        </tr>
+        <tr>
+          <td><%= f.check_box :sd_ct_chk_box_1 %>&nbsp;Components consists of solids & foulants</td>
+        </tr>
+        <tr>
+          <td><%= f.check_box :sd_ct_chk_box_2 %>&nbsp;There are many internal transitions</td>
+        </tr>
+        <tr>
+          <td><%= f.check_box :sd_ct_chk_box_3 %>&nbsp;Liquid load is high</td>
+        </tr>
+        <tr>
+          <td><%= f.check_box :sd_ct_chk_box_4 %>&nbsp;Lack of experience with the service</td>
+        </tr>
+        <tr>
+          <td><%= f.check_box :sd_ct_chk_box_5 %>&nbsp;Vessel wall need periodic inspection</td>
+        </tr>
+        <tr>
+          <td><%= f.check_box :sd_ct_chk_box_6 %>&nbsp;There are multiple liquid phases</td>
+        </tr>
+        <tr>
+          <td><label class="sub_title">CONSIDERATION FOR PACKED BED TOWER DESIGN SELECTION</label></td>
+        </tr>
+        <tr>
+          <td><%= f.check_box :sd_ct_chk_box_7 %>&nbsp;The compounds are temperature sensitive</td>
+        </tr>
+        <tr>
+          <td><%= f.check_box :sd_ct_chk_box_8 %>&nbsp;Pressure drop is important (Vacuum Services)</td>
+        </tr>
+        <tr>
+          <td><%= f.check_box :sd_ct_chk_box_9 %>&nbsp;Liquid load is low</td>
+        </tr>
+        <tr>
+          <td><%= f.check_box :sd_ct_chk_box_10 %>&nbsp;Towers are small in diameter</td>
+        </tr>
+        <tr>
+          <td><%= f.check_box :sd_ct_chk_box_11 %>&nbsp;Highly corrosive services (Use plastics or carbon)</td>
+        </tr>
+        <tr>
+          <td><%= f.check_box :sd_ct_chk_box_12 %>&nbsp;The system is foaming</td>
+        </tr>
+        <tr>
+          <td><%= f.check_box :sd_ct_chk_box_13 %>&nbsp;The ratio of tower diameter to random packing is greater than 10
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="condenser_type_div">
+      <table>
+        <tr>
+          <td><label style="font-weight: bold;">Condenser Outlet Temperature</label></td>
+          <td><label id="condenser_outlet_temperature" style="font-weight: bold;"></label></td>
+        </tr>
+        <tr>
+          <td>
+            <fieldset class="form_fieldset">
+              <legend>Cooling Medium</legend>
+              <ul class="unstyled">
+                <li><%= f.radio_button :sd_cont_cooling_medium, "air" %>&nbsp;Air</li>
+                <li><%= f.radio_button :sd_cont_cooling_medium, "cooling_water" %>&nbsp;Cooling Water</li>
+                <li><%= f.radio_button :sd_cont_cooling_medium, "refrigerant" %>&nbsp;Refrigerant</li>
+              </ul>
+            </fieldset>
+          </td>
+          <td rowspan="3">
+            <input type="button" value="Enable All"><br><br>
+            <input type="button" value="Close" onclick="$.colorbox.close();">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <fieldset class="form_fieldset">
+              <legend>Main Condenser Type</legend>
+              <ul class="unstyled">
+                <li><%= f.radio_button :sd_cont_main_condenser_type, "aerial_condenser" %>&nbsp;Aerial Condenser</li>
+                <li><%= f.radio_button :sd_cont_main_condenser_type, "shell_n_tube_exchanger" %>&nbsp;Shell & Tube
+                  Exchanger
+                </li>
+              </ul>
+            </fieldset>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <fieldset class="form_fieldset">
+              <legend>Trim Condensing</legend>
+              <ul class="unstyled">
+                <li><%= f.radio_button :sd_cont_trim_condensing, "yes" %>&nbsp;Yes</li>
+                <li><%= f.radio_button :sd_cont_trim_condensing, "no" %>&nbsp;No</li>
+              </ul>
+            </fieldset>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+
+    <% if column_sizing.new_record?%>
+    $("input[name='column_sizing[sd_rt_available_reboiler_types]']").attr('disabled', 'disabled');
+    <% else%>
+    <% end%>
+
+    $('#btn_reboiler_type').click(function () {
+      $.colorbox({
+        href:"#reboiler_type_div",
+        inline:true,
+        onClosed:function () {
+          var reboiler_type = $("input[name='column_sizing[sd_rt_available_reboiler_types]']:checked").parent('li').text();
+          $('label#sd_reboiler_type').text(reboiler_type);
+        }
+      });
+    });
+
+    $('#btn_column_type').click(function () {
+      $.colorbox({
+        href:"#column_type_div",
+        inline:true,
+        onClosed:function () {
+          var column_type = $("input[name='column_sizing[sd_ct_column_type_selected]']:checked").parent('li').text();
+          $('label#sd_column_type').text(column_type);
+          $('#column_sizing_sd_column_type').val(column_type);
+        }
+      });
+    });
+
+    $('#btn_condenser_type').click(function () {
+      $.colorbox({
+        href:"#condenser_type_div",
+        inline:true,
+        onOpen:function () {
+          var outlet_temp = $('#column_sizing_sd_temperature_5').val();
+          if (outlet_temp != '') {
+            $('#condenser_outlet_temperature').text(outlet_temp);
+
+            if (outlet_temp >= 125) {
+              $('#column_sizing_sd_cont_cooling_medium_air').attr("checked", "checked");
+              $('#column_sizing_sd_cont_main_condenser_type_aerial_condenser').attr("checked", "checked");
+              $('#sd_condenser_type').text("Aerial Condenser");
+            } else if (outlet_temp >= 95 && outlet_temp < 125) {
+              $('#column_sizing_sd_cont_cooling_medium_cooling_water').attr("checked", "checked");
+              $('#column_sizing_sd_cont_main_condenser_type_shell_n_tube_exchanger').attr("checked", "checked");
+              $('#sd_condenser_type').text("Shell & Tube Exchanger");
+            } else if (outlet_temp < 95) {
+              $('#column_sizing_sd_cont_cooling_medium_refrigerant').attr("checked", "checked");
+              $('#column_sizing_sd_cont_main_condenser_type_shell_n_tube_exchanger').attr("checked", "checked");
+              $('#sd_condenser_type').text("Shell & Tube Exchanger");
+            }
+          } else {
+            alert('No condensate temperature is entered for the column system.  Please enter a condensate temperature.');
+            $.colorbox.close();
+            return false;
+          }
+        },
+        onClosed:function () {
+          var condenser_type = $("input[name='column_sizing[sd_cont_main_condenser_type]']:checked").parent('li').text();
+          $('label#sd_condenser_type').text(condenser_type);
+        }
+      });
+    });
+
+    $("input[name='column_sizing[sd_cont_cooling_medium]']").change(function () {
+      if ($(this).val() == "air") {
+        $("#column_sizing_sd_cont_main_condenser_type_aerial_condenser").attr('checked', "checked");
+        $("#column_sizing_sd_cont_trim_condensing_yes").attr('checked', "checked");
+      } else if ($(this).val() == "cooling_water") {
+        $("#column_sizing_sd_cont_main_condenser_type_shell_n_tube_exchanger").attr('checked', "checked");
+        $("#column_sizing_sd_cont_trim_condensing_yes").attr('checked', false);
+      } else if ($(this).val() == "refrigerant") {
+        $("#column_sizing_sd_cont_main_condenser_type_shell_n_tube_exchanger").attr('checked', "checked");
+        $("#column_sizing_sd_cont_trim_condensing_yes").attr('checked', false);
+      } else {
+        $("#column_sizing_sd_cont_main_condenser_type_aerial_condenser").attr('checked', false);
+        $("#column_sizing_sd_cont_main_condenser_type_shell_n_tube_exchanger").attr('checked', false);
+        $("#column_sizing_sd_cont_trim_condensing_yes").attr('checked', false);
+      }
+    });
+
+    $('#reboiler_type_enable_all').click(function () {
+      $("input[name='column_sizing[sd_rt_available_reboiler_types]']").attr('disabled', false);
+    });
+
+    $("#column_sizing_sd_rt_fluid_characteristics_clean_service").change(function () {
+      if ($(this).is(':checked')) {
+        $("#column_sizing_sd_rt_extent_of_fouling_heavy_fouling").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_extent_of_fouling_moderate_fouling").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_pressure_less_than_atmospheric").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_pressure_more_than_atmospheric").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_viscosity_high_viscosity").attr('disabled', false);
+        $("#column_sizing_sd_rt_viscosity_moderate_viscosity").attr('disabled', false);
+        $("#column_sizing_sd_rt_area_required_large").attr('disabled', false);
+        $("#column_sizing_sd_rt_area_required_moderate").attr('disabled', false);
+      }
+    });
+
+    $("#column_sizing_sd_rt_fluid_characteristics_fouling_service").change(function () {
+      if ($(this).is(':checked')) {
+        $("#column_sizing_sd_rt_extent_of_fouling_heavy_fouling").attr('disabled', false);
+        $("#column_sizing_sd_rt_extent_of_fouling_moderate_fouling").attr('disabled', false);
+        $("#column_sizing_sd_rt_pressure_less_than_atmospheric").attr('disabled', false);
+        $("#column_sizing_sd_rt_pressure_more_than_atmospheric").attr('disabled', false);
+        $("#column_sizing_sd_rt_viscosity_high_viscosity").attr('disabled', false);
+        $("#column_sizing_sd_rt_viscosity_moderate_viscosity").attr('disabled', false);
+        $("#column_sizing_sd_rt_area_required_large").attr('disabled', false);
+        $("#column_sizing_sd_rt_area_required_moderate").attr('disabled', false);
+      }
+    });
+
+    $("#column_sizing_sd_rt_extent_of_fouling_heavy_fouling").change(function () {
+      if ($(this).is(':checked')) {
+        $("#column_sizing_sd_rt_available_reboiler_types_pump_through_reboiler").attr('disabled', false);
+        $("#column_sizing_sd_rt_available_reboiler_types_kettle_reboiler").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_vertical_thermosiphon").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_horizontal_thermosiphon").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_internal_reboiler").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_viscosity_moderate_viscosity").attr('disabled', false);
+        $("#column_sizing_sd_rt_pressure_less_than_atmospheric").attr('disabled', false);
+        $("#column_sizing_sd_rt_pressure_more_than_atmospheric").attr('disabled', false);
+      }
+    });
+
+    $("#column_sizing_sd_rt_viscosity_high_viscosity").change(function () {
+      if ($(this).is(':checked')) {
+        $("#column_sizing_sd_rt_area_required_large").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_area_required_moderate").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_pump_through_reboiler").attr('disabled', false);
+        $("#column_sizing_sd_rt_available_reboiler_types_kettle_reboiler").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_vertical_thermosiphon").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_horizontal_thermosiphon").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_internal_reboiler").attr('disabled', 'disabled');
+      }
+    });
+
+    $("#column_sizing_sd_rt_area_required_large").change(function () {
+      if ($(this).is(':checked')) {
+        $("#column_sizing_sd_rt_available_reboiler_types_pump_through_reboiler").attr('disabled', false);
+        $("#column_sizing_sd_rt_available_reboiler_types_kettle_reboiler").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_vertical_thermosiphon").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_horizontal_thermosiphon").attr('disabled', false);
+        $("#column_sizing_sd_rt_available_reboiler_types_internal_reboiler").attr('disabled', 'disabled');
+      }
+    });
+
+    $("#column_sizing_sd_rt_pressure_less_than_atmospheric").change(function () {
+      if ($(this).is(':checked')) {
+        $("#column_sizing_sd_rt_available_reboiler_types_pump_through_reboiler").attr('disabled', false);
+        $("#column_sizing_sd_rt_available_reboiler_types_kettle_reboiler").attr('disabled', false);
+        $("#column_sizing_sd_rt_available_reboiler_types_vertical_thermosiphon").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_horizontal_thermosiphon").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_internal_reboiler").attr('disabled', 'disabled');
+      }
+    });
+
+    $("#column_sizing_sd_rt_pressure_more_than_atmospheric").change(function () {
+      if ($(this).is(':checked')) {
+        $("#column_sizing_sd_rt_available_reboiler_types_pump_through_reboiler").attr('disabled', false);
+        $("#column_sizing_sd_rt_available_reboiler_types_kettle_reboiler").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_vertical_thermosiphon").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_horizontal_thermosiphon").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_internal_reboiler").attr('disabled', false);
+      }
+    });
+
+    $("#column_sizing_sd_rt_area_required_moderate").change(function () {
+      if ($(this).is(':checked')) {
+        $("#column_sizing_sd_rt_available_reboiler_types_pump_through_reboiler").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_kettle_reboiler").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_vertical_thermosiphon").attr('disabled', false);
+        $("#column_sizing_sd_rt_available_reboiler_types_horizontal_thermosiphon").attr('disabled', 'disabled');
+        $("#column_sizing_sd_rt_available_reboiler_types_internal_reboiler").attr('disabled', 'disabled');
+      }
+    });
+
+    $("#column_sizing_sd_rt_extent_of_fouling_moderate_fouling").change(function () {
+      if ($(this).is(':checked')) {
+        $("#column_sizing_sd_rt_pressure_less_than_atmospheric").attr('disabled', false);
+        $("#column_sizing_sd_rt_pressure_more_than_atmospheric").attr('disabled', false);
+      }
+    });
+
+    $("#column_sizing_sd_rt_viscosity_moderate_viscosity").change(function () {
+      if ($(this).is(':checked')) {
+        $("#column_sizing_sd_rt_area_required_large").attr('disabled', false);
+        $("#column_sizing_sd_rt_area_required_moderate").attr('disabled', false);
+      }
+    });
+  </script>
+</div>
+

@@ -1,0 +1,72 @@
+<%#= link_to "Add Sizing criteria", show_sizing_criterias_admin_sizing_criterias_path(:project_id => params[:id]), {:id => "show_sizing_criterias_link"}%>
+
+<p>Default Recommendation based on Carbon Steel Piping Only, Update Accordingly</p>
+
+<table class="sizing_criteria">
+	<tr>
+		<th rowspan="2"></th>
+		<th colspan=3 style="text-align:center;">Velocity</th>
+		<th colspan=3 style="text-align:center;">Maximum &Delta;P/100ft</th>
+		<th rowspan="2">User Notes</th>		
+  	</tr>
+  	<tr>
+  		<th>Min (<%= @project.unit('Velocity', 'General')%>)</th>
+		<th>Max (<%= @project.unit('Velocity', 'General')%>)</th>
+    	<th>Selected (<%= @project.unit('Velocity', 'General')%>)</th>
+    	<th>Min (<%= @project.unit('Pressure', 'Differential')%>)</th>
+    	<th>Max (<%= @project.unit('Pressure', 'Differential')%>)</th>
+    	<th>Selected (<%= @project.unit('Pressure', 'Differential')%>)</th>
+  	</tr>
+	<% if project.project_sizing_criterias.length == 0%>
+	<tr>		
+		<td colspan="8" style="text-align:center;">Their is no Sizing Criterias added.</td>
+	</tr>
+	<% end%>
+	<% i = 1%>
+	<% for sizing_criteria_category in project.sizing_criteria_categories.uniq%>	
+	<tr>
+		<td colspan="8"><b><%= sizing_criteria_category.name%></b></td>
+	</tr>
+	<% for sizing_criteria_category_type in sizing_criteria_category.sizing_criteria_category_types%>
+	<% next if sizing_criteria_category_type.sizing_criterias.length == 0 %>
+	<tr>
+		<td colspan="8">
+			<%= image_tag "gnome_go_next.png", :border=>0, :size=>"12x12"%><b><%= sizing_criteria_category_type.name%></b>
+		</td>
+	</tr>
+	<% for psc in project.project_sizing_criterias.where(:sizing_criteria_category_type_id => sizing_criteria_category_type.id)%>
+	<%= f.fields_for :project_sizing_criterias do |p|%>
+	<tr>
+		<td width="25%" style="padding-left:50px;">			
+			<%= psc.sizing_criteria.name %>
+			<%= p.hidden_field :id, :value => psc.id, :index => i%>
+			<%= p.hidden_field :sizing_criteria_category_id, :value => psc.sizing_criteria_category_id, :index => i%>
+			<%= p.hidden_field :sizing_criteria_id, :value => psc.sizing_criteria_id, :index => i%>
+		</td>
+		<td width="10%"><%= p.text_field :velocity_min, :value => psc.velocity_min, :index => i, :class => "small-text-40", :disabled => "disabled" %></td>
+		<td width="10%"><%= p.text_field :velocity_max, :value => psc.velocity_max, :index => i, :class => "small-text-40", :disabled => "disabled" %></td>
+		<td width="10%"><%= p.text_field :velocity_sel, :value => psc.velocity_sel, :index => i, :class => "small-text-40"%></td>
+		<td width="10%">
+			<%= p.text_field :delta_per_100ft_min, :value => psc.delta_per_100ft_min, :index => i, :class => "small-text-40", :disabled => "disabled"%>
+		</td>
+		<td width="10%">
+			<%= p.text_field :delta_per_100ft_max, :value => psc.delta_per_100ft_max, :index => i, :class => "small-text-40", :disabled => "disabled"%>
+		</td>
+		<td width="10%"><%= p.text_field :delta_per_100ft_sel, :value => psc.delta_per_100ft_sel, :index => i, :class => "small-text-40"%></td>
+		<td width="15%"><%= p.text_field :user_notes, :value => psc.user_notes, :index => i%></td>
+	</tr>
+	<% i += 1%>
+	<% end%>
+	<% end%>
+	<% end%>
+	<% end%>		
+</table>
+
+<script type="text/javascript">
+	$('#show_sizing_criterias_link').colorbox({
+		onClosed: function() {			
+			window.location.reload();
+		}
+	});
+	var project_id = "<%= params[:id]%>";
+</script>

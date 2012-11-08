@@ -1,0 +1,67 @@
+<tr>
+	<td>
+		<span class="sequence_no">
+			<%= p.object.sequence_no || 1 %>
+		</span>
+		<%= p.hidden_field :id, :class => "piping_id" %>
+		<%= p.hidden_field :sequence_no, :class => "piping_sequence_no" %>
+	</td>
+	<td>
+		<%= p.select :fitting, options_for_select(PipeSizing.fitting.collect { |f| [raw(f[:value]), f[:value], "data-id" => f[:id]] }, p.object.fitting), {:include_blank => true}, :style => "width:200px;" %>
+	</td>
+	<td>
+		<%= p.text_field :fitting_tag, :class => "fitting_tag" %>
+	</td>
+	<td>
+		<%= p.select :pipe_size,
+								 options_for_select(
+									 PipeSizing.pipe_sizes(@pipe_size_unit).collect { |ps| [raw(ps[:name]), (@pipe_size_unit == "in" ? ps[:value] : ps[:value].to_f), "data-value" => ps[:value]] },
+									 p.object.pipe_size),
+								 {:include_blank => true},
+								:class => "pipe_size"
+		%>
+	</td>
+	<td>
+		<%= p.select :pipe_schedule,
+								 options_for_select(
+									 PipeSizing.pipe_size_schedules[p.object.pipe_size.to_s],
+									 p.object.pipe_schedule
+								 ),
+								 {:include_blank => true},
+								 :class => "pipe_schedule"
+		%>
+	</td>
+	<td>
+		<%= p.text_field :pipe_id, :class => "pipe_id length_small_dimension_length" %>
+	</td>
+	<td>
+		<%= p.text_field :per_flow, :class => "per_flow" %>
+	</td>
+	<td>
+		<%= p.text_field :ds_cv, :class => "ds_cv" %>
+	</td>
+	<td>
+		<%= p.text_field :length, :class => "length length_large_dimension_length" %>
+	</td>
+	<td>
+		<%= p.text_field :elevation, :class => "elevation length_large_dimension_length" %>
+	</td>
+	<td>
+		<%= p.text_field :delta_p, :class => "delta_p pressure_differential" %>
+	</td>
+	<% if pressure_type(@pipeable_type) == "outlet" %>
+		<td>
+			<%= p.text_field :outlet_pressure, :class => "outlet_pressure pressure_general" %>
+		</td>
+	<% else %>
+		<td>
+			<%= p.text_field :inlet_pressure, :class => "inlet_pressure pressure_general" %>
+		</td>
+	<% end %>
+	<td>
+		<%= link_to "#", :class => "remove_piping_row" do %>
+			<strong>&times;</strong>
+		<% end %>
+		<%= p.hidden_field '_destroy' %>
+	</td>
+</tr>

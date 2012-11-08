@@ -1,0 +1,17 @@
+
+= display_field user, :name
+= display_field user, :username
+= display_field user, :group
+= display_field user, :title
+= display_field user, :official_title
+= display_field user, :location
+= display_field user, :address
+= display_field user, :official_tel
+= display_field user, :cell
+= display_field user, :fax
+= display_field user, :email
+= display_field user, :access_type_id
+= display_field user, :roles, :value => user.role_names
+= display_field user, :units, :value => user.unit_names
+= link_to 'Edit', edit_admin_user_path( user )
+

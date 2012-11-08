@@ -1,0 +1,52 @@
+<% title 'Measure Units'%>
+<br>
+<%= link_to 'Add New Measure Unit', new_superadmin_measure_unit_path, :class => 'new_measure_unit' %>
+<br>
+
+<table id="measure_units">
+  <tr>
+    <th>&nbsp;</th>
+    <th>Unit Type</th>
+    <th>Unit Name</th>
+    <th>Unit</th>
+    <th>Conversion Factor</th>
+    <th>Base Unit</th>
+	<!-- <th>Decimal Places</th> -->
+    <th>Options</th>
+  </tr>
+  <% @measurements.each do |measurement|%>
+    <tr>
+      <td><h4><%= measurement[0].capitalize %></h4></td>
+      <td colspan="7">&nbsp;</td>
+    </tr>
+    <% measurement[1].each do |ms| %>
+      <tr>
+        <td><span style="margin-left: 10px;">&nbsp;</span><strong><%= ms.name.capitalize%></strong></td>
+        <td colspan="7">&nbsp;</td>
+      </tr>
+      <% if @measure_units[ms.id].nil? %>
+        <tr>
+          <td colspan="8"><p style="font-size: 12px;color: #b94a48;text-align: center;margin: 0;">No measure units listed</p></td>
+        </tr>
+      <% else %>
+        <% @measure_units[ms.id].each do |mu| %>
+          <tr>
+            <td>&nbsp;</td>
+            <td><%= mu.unit_type %></td>
+            <td><%= mu.unit_name %></td>
+            <td><%= mu.unit %></td>
+            <td><%= mu.conversion_factor %></td>
+            <td><%= mu.base_unit %></td>
+			<!--<td><%= mu.decimal_places %></td>-->
+            <td><%= link_to 'Edit', edit_superadmin_measure_unit_path(mu.id), :class => 'edit_measure_unit' %>&nbsp;|&nbsp;<%= link_to 'Delete', superadmin_measure_unit_path(mu.id), :method => :delete, :confirm => 'Are your sure?' %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</table>
+
+<script type="text/javascript">
+  $('.new_measure_unit').colorbox();
+  $('.edit_measure_unit').colorbox();
+</script>

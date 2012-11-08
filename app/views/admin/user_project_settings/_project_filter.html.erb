@@ -1,0 +1,54 @@
+<div id="user_project_setting">
+	<%= form_for user_project_setting, :url=>admin_user_project_setting_path(user_project_setting), :html => {:class => 'well form-inline user_project_setting', :style => 'width: auto;'} do |f| %>
+		<h5>Project settings</h5>
+		<br>
+		<%= f.label :client_id%>
+		<% if current_user.role == "project_execution" || current_user.role == 'project_setup' %>
+			<%= f.collection_select :client_id, user_clients(current_user), :id, :name, :prompt => true %>
+		<% else %>
+			<%= f.collection_select :client_id, clients, :id, :name, :prompt => true %>
+		<% end %>
+		<span class="margin-right:10px;">&nbsp;</span>
+		<%= f.label :project_id%>
+		<%= f.collection_select :project_id, projects(f.object.client_id), :id, :project_num, :prompt => true %>
+		<span class="margin-right:10px;">&nbsp;</span>
+    <%= f.label :process_unit_id%>
+		<%= f.collection_select :process_unit_id, process_units(f.object.project_id), :id, :name, :prompt => true %>
+		<span class="margin-right:10px;">&nbsp;</span>
+    <%= f.submit "Update My Project Settings"%>
+	<% end%>
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		$('#user_project_setting_client_id').live('change', function(){
+      $.get('/admin/client_projects',
+        {client_id: $(this).val()},
+        function(data){
+          $('#user_project_setting_project_id >option, #user_project_setting_process_unit_id >option').remove();
+          $('#user_project_setting_project_id,#user_project_setting_process_unit_id').append($('<option></option>').val("").html("Please select"));
+          $.each(data['projects'], function(k, v){
+            $('#user_project_setting_project_id').append(
+              $('<option></option>').val(v.id).html(v.project_num)
+            );
+          });
+        }
+			);
+		});
+
+    $('#user_project_setting_project_id').live('change', function(){
+      $.get('/admin/project_process_units',
+        {project_id: $(this).val()},
+        function(data){
+          $('#user_project_setting_process_unit_id >option').remove();
+          $('#user_project_setting_process_unit_id').append($('<option></option>').val("").html("Please select"));
+          $.each(data['process_units'], function(k, v){
+            $('#user_project_setting_process_unit_id').append(
+              $('<option></option>').val(v.id).html(v.name)
+            );
+          });
+        }
+      );
+    });
+	});
+</script>

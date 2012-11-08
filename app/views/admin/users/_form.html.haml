@@ -1,0 +1,19 @@
+- semantic_form_for user, :url => user.new_record? ? admin_users_path : admin_user_path( user ) do |f|
+  = f.input :group
+  = f.input :name
+  = f.input :title
+  = f.input :official_title
+  = f.input :location
+  = f.input :address
+  = f.input :official_tel
+  = f.input :cell
+  = f.input :fax
+  = f.input :email
+  = f.input :access_type_id, :collection => [ "read only", "read/write" ]
+  = f.input :roles
+  = f.input :units
+  = f.input :username
+  = f.input :password if user.new_record?
+  = f.input :password_confirmation if user.new_record?
+  = f.buttons
+

@@ -1,0 +1,37 @@
+<% title 'Heat Exchanger Sizing'%>
+
+<%= render :partial => '/admin/user_project_settings/project_filter' %>
+
+<br>
+<% if user_access_type == 1 %>
+	<%= link_to 'Add Heat Exchanger Sizings', new_admin_heat_exchanger_sizing_path%>&nbsp;|&nbsp;
+<% end %>
+<%= link_to 'Heat Exchanger Sizing Summary', heat_exchanger_sizing_summary_admin_heat_exchanger_sizings_path%>
+<br><br>
+
+<table width="auto">
+	<tr>
+		<th>Exchanger Tag</th>
+		<th>By</th>
+		<th>Reviewer</th>
+		<th>Approver</th>
+		<th>Created at</th>
+		<th>Updated at</th>
+		<th>Edit</th>
+		<th>Delete</th>
+		<th>Clone</th>
+	</tr>
+	<% for heat_exchanger_sizing in @heat_exchanger_sizings%>
+		<tr>
+			<td><%= heat_exchanger_sizing.exchanger_tag%></td>
+			<td><%= heat_exchanger_sizing.sizing_status_activities.created_by %></td>
+			<td><%= heat_exchanger_sizing.sizing_status_activities.reviewer%></td>
+			<td><%= heat_exchanger_sizing.sizing_status_activities.approver%></td>
+			<td><%= heat_exchanger_sizing.created_at.strftime("%d-%m-%Y")%></td>
+			<td><%= heat_exchanger_sizing.updated_at.strftime("%d-%m-%Y")%></td>
+			<td><%= link_to "Edit", edit_admin_heat_exchanger_sizing_path(heat_exchanger_sizing)%></td>
+			<td><%= link_to "Delete", admin_heat_exchanger_sizing_path(heat_exchanger_sizing), :method=>"delete", :confirm => "Are you sure?"%></td>
+			<td><%= link_to "Clone", clone_admin_heat_exchanger_sizing_path(heat_exchanger_sizing), :class => "clone_sizing" %></td>
+		</tr>
+	<% end%>
+</table>

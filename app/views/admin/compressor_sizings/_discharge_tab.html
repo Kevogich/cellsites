@@ -1,0 +1,48 @@
+
+<div>
+	<input type="button" value="Clone Circuit Piping" id="show_clone_circuit_piping">
+</div>
+
+<table id="compressor_sizing_discharges" style="width:100%;">
+	<tr>
+		<th rowspan="2">S.No</th>
+		<th rowspan="2">Design Circuit</th>
+		<th rowspan="2">Process Basis</th>
+		<th rowspan="2">Destination Stream</th>
+		<th rowspan="2">Circuit Piping</th>							
+		<th>Destination Pressure</th>
+		<th>Fitting &Delta;P</th>
+		<th>Equipment &Delta;P</th>
+		<th>Control Valve &Delta;P</th>
+		<th>Orifice &Delta;P</th>
+		<th>Total System &Delta;P</th>
+		<th>Press @ Discharge Nozzle</th>
+		<th rowspan="2"></th>
+	</tr>
+	<tr>							
+		<th><label class="pressure_general_unit"></label></th>
+		<th><label class="pressure_differential_unit"></label></th>
+		<th><label class="pressure_differential_unit"></label></th>
+		<th><label class="pressure_differential_unit"></label></th>
+		<th><label class="pressure_differential_unit"></label>r</th>
+		<th><label class="pressure_general_unit"></label></th>
+		<th><label class="pressure_general_unit"></label></th>
+	</tr>
+	<% if compressor_sizing.compressor_sizing_discharges.empty?%>
+	<% @discharge = compressor_sizing.compressor_sizing_discharges.new %>
+	<% @unique_id = Time.now.to_i %>
+	<% @dc_list = [] << {:discharge => @discharge, :unique_id => @unique_id} %>
+	<%= render :partial => "discharge" %>
+	<% else %>
+	<% @dc_list = [] %>
+	<% compressor_sizing.compressor_sizing_discharges.each_with_index do |dc, i|%>
+	<% @discharge = dc %>
+	<% @unique_id = Time.now.to_i+i %>
+	<% @index = i+1 %>
+	<% @dc_list  << {:discharge => @discharge, :unique_id => @unique_id} %>
+	<%= render :partial => "discharge" %>
+	<% end%>
+	<% end%>
+</table>
+<%= link_to "Add More", "#", :id => "add_new_discharge_row"%>
+<input type='button' id='discharge_calculate' value="Calculate">

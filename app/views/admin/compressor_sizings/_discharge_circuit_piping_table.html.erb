@@ -1,0 +1,30 @@
+<div id="<%= "discharge_circuit_piping_box_#{@unique_id}"%>">
+		<table id="<%= "discharge_circuit_piping_table_#{@unique_id1}"%>" class="discharge_circuit_piping_table">
+			<tr>
+				<th rowspan="2">No.</th>
+				<th rowspan="2">Fitting(s)</th>
+				<th rowspan="2">Fitting Tag</th>
+				<th>Pipe Size</th>
+				<th rowspan="2">Pipe Sch.</th>
+				<th>Pipe ID</th>
+				<th rowspan="2">% Flow</th>
+				<th rowspan="2">Ds/Dl<br>or Cv</th>
+				<th>Length</th>
+				<th>Elev.</th>
+				<th>&Delta;P</th>
+				<th>Inlet Pressure</th>
+				<th rowspan="2"></th>
+			</tr>
+			<tr>
+				<th>inches</th>
+				<th><label class="discharge_circuit_piping_pipe_id_unit"></label></th>
+				<th><label class="discharge_circuit_piping_length_unit"></label></th>
+				<th><label class="discharge_circuit_piping_elev_unit"></label></th>
+				<th><label class="discharge_circuit_piping_delta_p_unit"></label></th>
+				<th><label class="discharge_circuit_piping_inlet_pressure_unit"></label></th>
+			</tr>
+				<%= render :partial => "discharge_circuit_piping_row" %>
+		</table>
+		<a id="<%= "#{@unique_id1}"%>" class="discharge_circuit_piping_add_more" href='#/'>Add more</a>&nbsp;|&nbsp;
+		<%= link_to "Close", "#", :class => "discharge_circuit_piping_close" %>
+	</div>

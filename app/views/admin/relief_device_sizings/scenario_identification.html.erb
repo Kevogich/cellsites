@@ -1,0 +1,1058 @@
+<% title @scenario_summary.scenario + " " + @scenario_summary.identifier, false %>
+
+<%= form_for @scenario_identification, :url => update_scenario_identification_admin_relief_device_sizings_path, :html => {:method => "post", :style => 'width:auto;', :class => "scenario_identification_form"} do |f| %>
+	<%= f.hidden_field :id, :value => f.object.id %>
+	<div>
+		<table style="width: auto;" class="pull-left">
+			<tr>
+				<td>System Description</td>
+				<td><%= @relief_device_sizing.system_description %></td>
+			</tr>
+			<tr>
+				<td>Scenario No</td>
+				<td><%= @scenario_summary.scenario_no %></td>
+			</tr>
+			<tr>
+				<td>Scenario Type</td>
+				<td><%= @scenario_summary.scenario %></td>
+			</tr>
+			<tr>
+				<td>Scenario Identifier</td>
+				<td><%= @scenario_summary.identifier %></td>
+			</tr>
+		</table>
+		<div class="pull-left" style="margin-left: 20px;">
+			<div style="display: table-cell;height: 140px;text-align: center;vertical-align: bottom;">
+				<%= f.submit "Update", :class => "btn" %>
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+
+	<div>
+	<ul class="simple-tabs">
+		<li><a href="#scenario_identification">Scenario Identification</a></li>
+		<li><a href="#scenario_calculation">Scenario Calculation</a></li>
+		<li><a href="#required_capacity">Required Capacity</a></li>
+	</ul>
+	<div class="tab_container">
+	<div id="scenario_identification" class="tab_content">
+		<table>
+			<tr>
+				<td>
+					Scenario Analysis Method &nbsp;&nbsp;&nbsp;
+					<%= f.select :scenario_analysis_method, options_for_select(StaticData.scenario, f.object.scenario_analysis_method) %>&nbsp;&nbsp;&nbsp;&nbsp;
+					<%= link_to "Display", "#", :class => "btn display_scenario_analysis" %>
+				</td>
+				<td>
+					Applicability: &nbsp;&nbsp;&nbsp;
+					<%= f.select :applicability, options_for_select(StaticData.yes_no, f.object.applicability), :prompt => "Select" %>
+				</td>
+				<td>
+					by &nbsp;&nbsp;&nbsp;
+					<%= f.select :documentation_by, options_for_select(StaticData.documentation_by, f.object.documentation_by), :prompt => "Select" %>
+				</td>
+			</tr>
+		</table>
+
+		<table>
+			<tr>
+				<td>Comments</td>
+			</tr>
+			<tr>
+				<td>
+					<%= f.text_area :comments, :style => "width:99%;", :rows => "5" %>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="scenario_calculation" class="tab_content">
+	<table style="width: auto;">
+		<tr>
+			<td colspan="2">
+				Relief Rate Calculation Method&nbsp;&nbsp;&nbsp;
+				<%= f.select :relief_rate_calculation_method, options_for_select(StaticData.calculation_method, f.object.relief_rate_calculation_method), :include_blank => true %>&nbsp;&nbsp;&nbsp;
+				<%= link_to "Display", "#", :class => "btn display_relief_rate_calculation" %>
+			</td>
+		</tr>
+		<tr>
+			<td>Set Pressure</td>
+			<td>
+				<%= f.text_field :sc_set_pressure, :class => "pressure_general" %>
+				<span class="pressure_general_unit"></span>
+			</td>
+		</tr>
+		<tr>
+			<td>Over Pressure</td>
+			<td>
+				<%= f.text_field :sc_over_pressure, :class => "pressure_differential" %>
+				<span class="pressure_differential_unit"></span>
+			</td>
+		</tr>
+		<tr>
+			<td>Relief Pressure</td>
+			<td>
+				<%= f.text_field :sc_relief_pressure, :class => "pressure_general" %>
+				<span class="pressure_general_unit"></span>
+			</td>
+		</tr>
+		<tr>
+			<td>Relief Rate</td>
+			<td>
+				<%= f.text_field :sc_relief_rate, :class => "mass_flow_rate_general" %>
+				<span class="mass_flow_rate_general_unit"></span>
+			</td>
+		</tr>
+	</table>
+
+	<table>
+	<tr>
+		<td colspan="2">
+							<span class="sub_title">
+								Relief Conditions
+							</span>
+		</td>
+		<td colspan="2">
+							<span class="sub_title">
+								Discharge Conditions
+							</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Case
+		</td>
+		<td>
+			<%= f.collection_select :rc_case, @project.heat_and_material_balances, :id, :case, :include_blank => true %>
+		</td>
+		<td>
+			Case
+		</td>
+		<td>
+			<%= f.collection_select :dc_case, @project.heat_and_material_balances, :id, :case, :include_blank => true %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Stream
+		</td>
+		<td>
+			<%= f.collection_select :rc_stream, @rc_streams, :stream_no, :display_stream_no, :include_blank => true %>
+		</td>
+		<td>
+			Stream
+		</td>
+		<td>
+			<%= f.collection_select :dc_stream, @dc_streams, :stream_no, :display_stream_no, :include_blank => true %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Pressure
+		</td>
+		<td>
+			<%= f.text_field :rc_pressure, :class => "pressure_general" %>
+			<span class="pressure_general_unit"></span>
+		</td>
+		<td>
+			Pressure
+		</td>
+		<td>
+			<%= f.text_field :dc_pressure, :class => "pressure_general" %>
+			<span class="pressure_general_unit"></span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Temperature
+		</td>
+		<td>
+			<%= f.text_field :rc_temperature, :class => "temperature_general" %>
+			<span class="temperature_general_unit"></span>
+		</td>
+		<td>
+			Temperature
+		</td>
+		<td>
+			<%= f.text_field :dc_temperature, :class => "temperature_general" %>
+			<span class="temperature_general_unit"></span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Mass Vapor Fraction
+		</td>
+		<td>
+			<%= f.text_field :rc_mass_vapor_fraction, :class => "mass_vapor_fraction_dimensionless" %>
+		</td>
+		<td>
+			Mass Vapor Fraction
+		</td>
+		<td>
+			<%= f.text_field :dc_mass_vapor_fraction, :class => "mass_vapor_fraction_dimensionless" %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Vapor Density
+		</td>
+		<td>
+			<%= f.text_field :rc_vapor_density, :class => "density_general" %>
+			<span class="density_general_unit"></span>
+		</td>
+		<td>
+			Vapor Density
+		</td>
+		<td>
+			<%= f.text_field :dc_vapor_density, :class => "density_general" %>
+			<span class="density_general_unit"></span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Vapor Viscosity
+		</td>
+		<td>
+			<%= f.text_field :rc_vapor_viscosity, :class => "viscosity_dynamic" %>
+			<span class="viscosity_dynamic_unit"></span>
+		</td>
+		<td>
+			Vapor Viscosity
+		</td>
+		<td>
+			<%= f.text_field :dc_vapor_viscosity, :class => "viscosity_dynamic" %>
+			<span class="viscosity_dynamic_unit"></span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Vapor K
+		</td>
+		<td>
+			<%= f.text_field :rc_vapor_k, :class => "specific_heat_capacity_ratio_dimensionless" %>
+		</td>
+		<td>
+			Vapor K
+		</td>
+		<td>
+			<%= f.text_field :dc_vapor_k, :class => "specific_heat_capacity_ratio_dimensionless" %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Vapor MW
+		</td>
+		<td>
+			<%= f.text_field :rc_vapor_mw, :class => "molecular_weight_dimensionless" %>
+		</td>
+		<td>
+			Vapor MW
+		</td>
+		<td>
+			<%= f.text_field :dc_vapor_mw, :class => "molecular_weight_dimensionless" %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Vapor Z
+		</td>
+		<td>
+			<%= f.text_field :rc_vapor_z, :class => "vapor_compressibility_dimensionless" %>
+		</td>
+		<td>
+			Vapor Z
+		</td>
+		<td>
+			<%= f.text_field :dc_vapor_z, :class => "vapor_compressibility_dimensionless" %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Liquid Density
+		</td>
+		<td>
+			<%= f.text_field :rc_liquid_density, :class => "density_general" %>
+			<span class="density_general_unit"></span>
+		</td>
+		<td>
+			Liquid Density
+		</td>
+		<td>
+			<%= f.text_field :dc_liquid_density, :class => "density_general" %>
+			<span class="density_general_unit"></span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Liquid Viscosity
+		</td>
+		<td>
+			<%= f.text_field :rc_liquid_viscosity, :class => "viscosity_dynamic" %>
+			<span class="viscosity_dynamic_unit"></span>
+		</td>
+		<td>
+			Liquid Viscosity
+		</td>
+		<td>
+			<%= f.text_field :dc_liquid_viscosity, :class => "viscosity_dynamic" %>
+			<span class="viscosity_dynamic_unit"></span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Liquid Vapor Pressure
+		</td>
+		<td>
+			<%= f.text_field :rc_liquid_vapor_pressure, :class => "pressure_general" %>
+			<span class="pressure_general_unit"></span>
+		</td>
+		<td>
+			Liquid Vapor Pressure
+		</td>
+		<td>
+			<%= f.text_field :dc_liquid_vapor_pressure, :class => "pressure_general" %>
+			<span class="pressure_general_unit"></span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Liquid Surface Tension
+		</td>
+		<td>
+			<%= f.text_field :rc_liquid_surface_tension, :class => "surface_tension_general" %>
+			<span class="surface_tension_general_unit"></span>
+		</td>
+		<td>
+			Liquid Surface Tension
+		</td>
+		<td>
+			<%= f.text_field :dc_liquid_surface_tension, :class => "surface_tension_general" %>
+			<span class="surface_tension_general_unit"></span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Liquid Latent Heat
+		</td>
+		<td>
+			<%= f.text_field :rc_liquid_latent_heat, :class => "enthalpy_general" %>
+			<span class="enthalpy_general_unit"></span>
+		</td>
+		<td>
+			Liquid Latent Heat
+		</td>
+		<td>
+			<%= f.text_field :dc_liquid_latent_heat, :class => "enthalpy_general" %>
+			<span class="enthalpy_general_unit"></span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Liquid MW
+		</td>
+		<td>
+			<%= f.text_field :rc_liquid_mw, :class => "molecular_weight_dimensionless" %>
+		</td>
+		<td>
+			Liquid MW
+		</td>
+		<td>
+			<%= f.text_field :dc_liquid_mw, :class => "molecular_weight_dimensionless" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="4">
+			<span class="sub_title">Comments</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="4">
+			<%= f.text_area :sc_comments, :rows => 5, :style => "width:99%;" %>
+		</td>
+	</tr>
+	</table>
+	</div>
+	<div id="required_capacity" class="tab_content">
+	<table>
+		<tr>
+			<td colspan="4">
+				Relief Capacity Calculation Method&nbsp;&nbsp;&nbsp;&nbsp;
+				<%= f.select :relief_capacity_calculation_method, options_for_select(ScenarioIdentification.relief_capacity_calculation_method_list(@relief_device_type), f.object.relief_capacity_calculation_method), :include_blank => true %><%#= @relief_device_type %>
+			</td>
+		</tr>
+	</table>
+	<table class="required_capacity_table" id="required_capacity_table">
+	<tr class="two_phase_hem line_capacity">
+		<td colspan="4">
+			<span class="sub_title">HEM 3 Point Model</span>
+		</td>
+	</tr>
+	<tr class="two_phase_hem line_capacity">
+		<td colspan="4">
+			<table style="margin: 0;width: auto;border: 0;">
+				<tr class="two_phase_hem line_capacity">
+					<td></td>
+					<td style="width: 200px;">Point A</td>
+					<td style="width: 200px;">Point B</td>
+					<td style="width: 200px;">Point C</td>
+					<td></td>
+				</tr>
+				<tr class="two_phase_hem line_capacity">
+					<td>Process Basis</td>
+					<td><%= f.collection_select :hem_process_basis_a, @project.heat_and_material_balances, :id, :case, :include_blank => true, :class => "input-small" %></td>
+					<td><%= f.collection_select :hem_process_basis_b, @project.heat_and_material_balances, :id, :case, :include_blank => true, :class => "input-small" %></td>
+					<td><%= f.collection_select :hem_process_basis_c, @project.heat_and_material_balances, :id, :case, :include_blank => true, :class => "input-small" %></td>
+					<td></td>
+				</tr>
+				<tr class="two_phase_hem line_capacity">
+					<td>Stream</td>
+					<td><%= f.collection_select :hem_stream_a, @hem_streams_a, :stream_no, :display_stream_no, :include_blank => true, :class => "input-small" %></td>
+					<td><%= f.collection_select :hem_stream_b, @hem_streams_b, :stream_no, :display_stream_no, :include_blank => true, :class => "input-small" %></td>
+					<td><%= f.collection_select :hem_stream_c, @hem_streams_c, :stream_no, :display_stream_no, :include_blank => true, :class => "input-small" %></td>
+					<td></td>
+				</tr>
+				<tr class="two_phase_hem line_capacity">
+					<td>Pressure</td>
+					<td><%= f.text_field :hem_pressure_a, :class => "input-small pressure_absolute" %></td>
+					<td><%= f.text_field :hem_pressure_b, :class => "input-small pressure_absolute" %></td>
+					<td><%= f.text_field :hem_pressure_c, :class => "input-small pressure_absolute" %></td>
+					<td><span class=" pressure_absolute_unit"></span></td>
+				</tr>
+				<tr class="two_phase_hem line_capacity">
+					<td>Mass Vapor Fraction</td>
+					<td><%= f.text_field :hem_mass_vapor_fraction_a, :class => "input-small mass_vapor_fraction_dimensionless" %></td>
+					<td><%= f.text_field :hem_mass_vapor_fraction_b, :class => "input-small mass_vapor_fraction_dimensionless" %></td>
+					<td><%= f.text_field :hem_mass_vapor_fraction_c, :class => "input-small mass_vapor_fraction_dimensionless" %></td>
+					<td></td>
+				</tr>
+				<tr class="two_phase_hem line_capacity">
+					<td>Liquid Density</td>
+					<td><%= f.text_field :hem_liquid_density_a, :class => "input-small density_general" %></td>
+					<td><%= f.text_field :hem_liquid_density_b, :class => "input-small density_general" %></td>
+					<td><%= f.text_field :hem_liquid_density_c, :class => "input-small density_general" %></td>
+					<td><span class="density_general_unit"></span></td>
+				</tr>
+				<tr class="two_phase_hem line_capacity">
+					<td>Vapor Density</td>
+					<td><%= f.text_field :hem_vapor_density_a, :class => "input-small density_general" %></td>
+					<td><%= f.text_field :hem_vapor_density_b, :class => "input-small density_general" %></td>
+					<td><%= f.text_field :hem_vapor_density_c, :class => "input-small density_general" %></td>
+					<td><span class="density_general_unit"></span></td>
+				</tr>
+				<tr class="two_phase_hem line_capacity">
+					<td>Liquid Viscosity</td>
+					<td><%= f.text_field :hem_liquid_viscosity_a, :class => "input-small viscosity_dynamic" %></td>
+					<td><%= f.text_field :hem_liquid_viscosity_b, :class => "input-small viscosity_dynamic" %></td>
+					<td><%= f.text_field :hem_liquid_viscosity_c, :class => "input-small viscosity_dynamic" %></td>
+					<td><span class="viscosity_dynamic_unit"></span></td>
+				</tr>
+				<tr class="two_phase_hem line_capacity">
+					<td>Vapor Viscosity</td>
+					<td><%= f.text_field :hem_vapor_viscosity_a, :class => "input-small viscosity_dynamic" %></td>
+					<td><%= f.text_field :hem_vapor_viscosity_b, :class => "input-small viscosity_dynamic" %></td>
+					<td><%= f.text_field :hem_vapor_viscosity_c, :class => "input-small viscosity_dynamic" %></td>
+					<td><span class="viscosity_dynamic_unit"></span></td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified two_phase_hem">
+		<td>
+			<span class="sub_title">Valve Sizing</span>
+		</td>
+		<td>
+			<%= f.check_box :rc_consider_rupture_disk_on_inlet_side %>&nbsp;&nbsp;
+			Consider Rupture Disk On Inlet Side
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified two_phase_hem low_pressure_vent generic">
+		<td style="width: 25%;">
+			Flow Rate (W)
+		</td>
+		<td style="width: 27%;">
+			<%= f.text_field :rc_flow_rate, :class => "mass_flow_rate_general" %>
+			<span class="mass_flow_rate_general_unit"></span>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified two_phase_hem low_pressure_vent">
+		<td>
+			Relieving Pressure (P1)
+		</td>
+		<td>
+			<%= f.text_field :rc_relieving_pressure, :class => "pressure_absolute" %>
+			<span class="pressure_absolute_unit"></span>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified two_phase_hem low_pressure_vent">
+		<td>
+			Total Back Pressure (P2)
+		</td>
+		<td>
+			<%= f.text_field :rc_total_back_pressure, :class => "pressure_absolute" %>
+			<span class="pressure_absolute_unit"></span>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified two_phase_hem low_pressure_vent">
+		<td>
+			Relieving Temperature (T)
+		</td>
+		<td>
+			<%= f.text_field :rc_relieving_temperature, :class => "temperature_general" %>
+			<span class="temperature_general_unit"></span>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr>
+		<td>
+			Specific Gravity (G)
+		</td>
+		<td>
+			<%= f.text_field :rc_specific_gravity %>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr>
+		<td>
+			Viscosity (V)
+		</td>
+		<td>
+			<%= f.text_field :rc_viscosity %>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="liquid_certified liquid_non_certified">
+		<td>
+			Reynold's Number (Re)
+		</td>
+		<td>
+			<%= f.text_field :rc_reynolds_number %>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="vapor_critical">
+		<td>
+			Coefficient (C)
+		</td>
+		<td>
+			<%= f.text_field :rc_coefficient %>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="vapor_subcritical">
+		<td>
+			Coefficient of Subcritical Flow (F2)
+		</td>
+		<td>
+			<%= f.text_field :rc_coefficient_of_subcritical_flow %>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="two_phase_hem">
+		<td>
+			Maximum Mass Flux (G)
+		</td>
+		<td>
+			<%= f.text_field :rc_maximum_mass_flux, :class => "mass_flux_general" %>
+			<span class="mass_flux_general_unit"></span>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="vapor_critical vapor_steam two_phase_hem">
+		<td>
+			Back Pressure Correction Factor (Kb)
+		</td>
+		<td>
+			<%= f.text_field :rc_back_pressure_correction_factor %>
+		</td>
+		<td colspan="2">
+			<%= f.select :rc_back_pressure_correction_factor_list, options_for_select(StaticData.kb_option, f.object.rc_back_pressure_correction_factor_list), :include_blank => true %>
+		</td>
+	</tr>
+	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified two_phase_hem">
+		<td>
+			Combination Correction Factor (Kc)
+		</td>
+		<td>
+			<%= f.text_field :rc_combination_correction_factor %>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified two_phase_hem low_pressure_vent">
+		<td>
+			Discharge Coefficient (Kd)
+		</td>
+		<td>
+			<%= f.text_field :rc_discharge_coefficient %>
+		</td>
+		<td colspan="2">
+			<% if @relief_device_type == "Low Pressure Vent" %>
+				<%= f.select :rc_discharge_coefficient_list, options_for_select(StaticData.kd_option, f.object.rc_discharge_coefficient_list), :include_blank => true %>
+			<% end %>
+		</td>
+	</tr>
+	<tr class="vapor_steam">
+		<td>
+			Napier Correction Factor (Kn)
+		</td>
+		<td>
+			<%= f.text_field :rc_napier_correction_factor %>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="vapor_steam">
+		<td>
+			Superheat Correction Factor (Ksh)
+		</td>
+		<td>
+			<%= f.text_field :rc_superheat_correction_factor %>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="liquid_non_certified">
+		<td>
+			Overpressure Correction Factor (Kp)
+		</td>
+		<td>
+			<%= f.text_field :rc_overpressure_correction_factor %>
+		</td>
+		<td colspan="2">
+			<%= f.select :rc_overpressure_correction_factor_list, options_for_select(StaticData.kp_option, f.object.rc_overpressure_correction_factor_list), :include_blank => true %>
+		</td>
+	</tr>
+	<tr class="liquid_certified liquid_non_certified">
+		<td>
+			Viscosity Correction Factor (Kv)
+		</td>
+		<td>
+			<%= f.text_field :rc_viscosity_correction_factor %>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="liquid_certified liquid_non_certified">
+		<td>
+			Liquid Back Pressure Correction Factor (Kw)
+		</td>
+		<td>
+			<%= f.text_field :rc_liquid_back_pressure_correction_factor %>
+		</td>
+		<td colspan="2">
+			<%= f.select :rc_liquid_back_pressure_correction_factor_list, options_for_select(StaticData.kw_option, f.object.rc_liquid_back_pressure_correction_factor_list), :include_blank => true %>
+		</td>
+	</tr>
+	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified low_pressure_vent two_phase_hem">
+		<td>
+			Effective Discharge Area (A)
+		</td>
+		<td>
+			<%= f.text_field :rc_effective_discharge_area, :class => "area_orifice" %>
+			<span class="area_orifice_unit"></span>
+		</td>
+		<td colspan="2">
+			<%= link_to "Calculate", "#", :class => "btn" %>
+		</td>
+	</tr>
+	<tr class="low_pressure_vent">
+		<td>
+			Effective Diameter (D)
+		</td>
+		<td>
+			<%= f.text_field :rc_effective_diameter, :class => "length_small_dimension_length" %>
+			<span class="length_small_dimension_length_unit"></span>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="generic low_pressure_vent">
+		<td>
+			Available Valve Capacity
+		</td>
+		<td>
+			<%= f.text_field :rc_available_valve_capacity, :class => "mass_flow_rate_general" %>
+			<span class="mass_flow_rate_general_unit"> </span>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="line_capacity">
+		<td colspan="4"><span class="sub_title">Line Sizing</span></td>
+	</tr>
+	<tr class="line_capacity">
+		<td>
+			Piping Material
+		</td>
+		<td>
+			<%= f.select :rc_piping_material, options_for_select(@pipes.collect{|p| ["#{p["material"]} - #{p["conditions"]}", p["id"]]}, f.object.rc_piping_material), :include_blank => true %>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="line_capacity">
+		<td>
+			Pipe Roughness
+		</td>
+		<td>
+			<%= f.text_field :rc_pipe_roughness, :class => "length_small_dimension_length" %>
+			<span class="length_small_dimension_length_unit"></span>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="line_capacity">
+		<td>
+			Proposed Relief Path Routing
+		</td>
+		<td>
+			<%= link_to "Piping", "#",
+									:class => "btn proposed_relief_path_routing_btn",
+									"data-url" => "/admin/pipings?pipeable_id=#{@scenario_identification.id}&pipeable_type=scenario_identification" %>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="line_capacity">
+		<td>
+			Minimum Required Pipe ID
+		</td>
+		<td>
+			<%= f.text_field :rc_minimum_required_pipe_id, :class => "length_small_dimension_length" %>
+			<span class="length_small_dimension_length_unit"></span>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="line_capacity">
+		<td>
+			Minimum Required Net Flow Area
+		</td>
+		<td>
+			<%= f.text_field :rc_minimum_required_net_flow_area, :class => "area_orifice" %>
+			<span class="area_orifice_unit"></span>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="line_capacity">
+		<td>
+			Nominal Pipe Diameter
+		</td>
+		<td>
+			<%= f.select :rc_nominal_pipe_diameter,
+									 options_for_select(
+										 PipeSizing.pipe_sizes(@nominal_pipe_diameter_unit).collect { |ps| [raw(ps[:name]), (@nominal_pipe_diameter_unit == "in" ? ps[:value]:ps[:name].to_f), "data-value" => ps[:value]] },
+										 f.object.rc_nominal_pipe_diameter),
+									 :include_blank => true
+			%>
+			<span class="length_small_dimension_length_unit"></span>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="line_capacity">
+		<td>
+			Pipe Schedule
+		</td>
+		<td>
+			<%= f.select :rc_pipe_schedule, options_for_select([]) %>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	<tr class="line_capacity">
+		<td>
+			Nominal Pipe Relief Area
+		</td>
+		<td>
+			<%= f.text_field :rc_nominal_pipe_relief_area, :class => "area_orifice" %>
+			<span class="area_orifice_unit"></span>
+		</td>
+		<td colspan="2">
+			<%= link_to "Calculate", "#", :class => "btn" %>
+		</td>
+	</tr>
+	<tr class="line_capacity">
+		<td>
+			Available Relief Path Capacity
+		</td>
+		<td>
+			<%= f.text_field :rc_available_relief_path_capacity, :class => "mass_flow_rate_general" %>
+			<span class="mass_flow_rate_general_unit"></span>
+		</td>
+		<td colspan="2"></td>
+	</tr>
+	</table>
+
+
+	<table>
+		<tr>
+			<td colspan="4">
+				<span class="sub_title">Comments</span>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4">
+				<%= f.text_area :rc_comments, :style => "width:99%;", :rows => 8 %>
+			</td>
+		</tr>
+	</table>
+	</div>
+	</div>
+	<div class="clear"></div>
+	</div>
+<% end %>
+
+<% unless @scenario_identification.new_record? %>
+	<fieldset class="project" style="margin-top:15px;">
+		<legend>Attachments</legend>
+		<%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+		<%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+	</fieldset>
+	<fieldset class="project" style="margin-top:15px;">
+		<legend>Comments</legend>
+		<%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+		<%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+	</fieldset>
+<% end %>
+
+<%= javascript_tag do %>
+	var pipe_size_schedules = <%= raw PipeSizing.pipe_size_schedules.to_json %>;
+	var pipes = <%= raw @pipes.to_json %>;
+	var pipes_json = {};
+	$(pipes).each(function(k, v){
+		pipes_json[v.id] = v;
+	});
+	var uncertainty_factor = '<%= @uncertainty_factor %>';
+<% end %>
+<script type="text/javascript">
+
+	set_project_unit_and_decimals();
+	$('form.scenario_identification_form').dirtyForms();
+
+	$('#scenario_identification_applicability').change(function () {
+		if ($(this).val() == "Yes") {
+			$('.simple-tabs li:nth(1)').removeAttr('disabled');
+			$('.simple-tabs li:nth(2)').removeAttr('disabled');
+		} else if ($(this).val() == "No") {
+			$('.simple-tabs li:nth(1)').attr('disabled', 'disabled');
+			$('.simple-tabs li:nth(2)').attr('disabled', 'disabled');
+		}
+	});
+
+	$(window).load(function () {
+		$('#scenario_identification_applicability').trigger('change');
+	});
+
+	$('.display_scenario_analysis').click(function () {
+		var id = $('#scenario_identification_id').val();
+		var scenario_analysis_method = $('#scenario_identification_scenario_analysis_method').val();
+
+		if (scenario_analysis_method == "Hydraulic Expansion") {
+			var url = "/admin/scenario_summary_view_details/view_hydraulic_expansions?scenario_identification_id=" + id;
+			$.colorbox({href:url});
+		}
+
+		return false;
+	});
+
+	//Scenario Calculation Tab
+
+	//case change event
+	$('#scenario_identification_rc_case, #scenario_identification_dc_case').change(function () {
+
+		if ($(this).attr('id') == 'scenario_identification_rc_case') {
+			var stream = $('#scenario_identification_rc_stream');
+		} else if ($(this).attr('id') == 'scenario_identification_dc_case') {
+			var stream = $('#scenario_identification_dc_stream');
+		}
+
+		stream.children('option').remove();
+		stream.append($('<option></option>').val("").html("Please select"));
+
+		if ($(this).val() == "") {
+			return false;
+		}
+
+		$.get('/admin/heat_and_material_balances/get_stream_nos', {process_basis_id:$(this).val()}, function (data) {
+			$(data).each(function (k, v) {
+				stream.append(
+					$('<option></option>').val(v.stream_no).html(v.display_stream_no)
+				);
+			});
+		}, 'json');
+
+	});
+
+	//stream no change
+	$('#scenario_identification_rc_stream, #scenario_identification_dc_stream').change(function () {
+		if ($(this).val() == "") {
+			return false;
+		}
+
+		var a = 'rc';
+		if ($(this).attr('id') == 'scenario_identification_rc_stream') {
+			a = 'rc'
+		} else if ($(this).attr('id') == 'scenario_identification_dc_stream') {
+			a = 'dc'
+		}
+
+		$.get('/admin/relief_device_sizings/get_stream_values',
+			{process_basis_id:$('#scenario_identification_' + a + '_case').val(), stream_no:$('#scenario_identification_' + a + '_stream').val()},
+			function (data) {
+				$('#scenario_identification_' + a + '_pressure').val(get_project_field_value1("pressure_general", data['pressure']));
+				$('#scenario_identification_' + a + '_temperature').val(get_project_field_value1("temperature_general", data['temperature']));
+				$('#scenario_identification_' + a + '_mass_vapor_fraction').val(data['mass_vapor_fraction']);
+				$('#scenario_identification_' + a + '_vapor_density').val(get_project_field_value1("density_general", data['vapor_density']));
+				$('#scenario_identification_' + a + '_vapor_viscosity').val(get_project_field_value1("viscosity_dynamic", data['vapor_viscosity']));
+				$('#scenario_identification_' + a + '_vapor_k').val(get_project_field_value1("specific_heat_capacity_ratio_dimensionless" , data['vapor_k']));
+				$('#scenario_identification_' + a + '_vapor_mw').val(get_project_field_value1("molecular_weight_dimensionless", data['vapor_mw']));
+				$('#scenario_identification_' + a + '_vapor_z').val(get_project_field_value1("vapor_compressibility_dimensionless", data['vapor_z']));
+				$('#scenario_identification_' + a + '_liquid_density').val(get_project_field_value1("density_general", data['liquid_density']));
+				$('#scenario_identification_' + a + '_liquid_viscosity').val(get_project_field_value1("viscosity_dynamic", data['liquid_viscosity']));
+				$('#scenario_identification_' + a + '_liquid_surface_tension').val(get_project_field_value1("surface_tension_general", data['liquid_surface_tension']));
+				$('#scenario_identification_' + a + '_liquid_latent_heat').val(get_project_field_value1("enthalpy_general", data['liquid_latent_heat']));
+				$('#scenario_identification_' + a + '_liquid_mw').val(get_project_field_value1("molecular_weight_dimensionless", data['liquid_mw']));
+			},
+			'json');
+
+	});
+
+	//Relief Rate Calculation Method
+	$('.display_relief_rate_calculation').click(function () {
+		if ($('#scenario_identification_relief_rate_calculation_method').val() == "") {
+			return false;
+		}
+
+		if ($('#scenario_identification_relief_rate_calculation_method').val() == "Generic") {
+			$.colorbox({
+				href:'/admin/relief_rate_calculation_views/view_generic?id=' + $('#scenario_identification_id').val(),
+				width:'100%'
+			});
+		}
+
+		return false;
+
+	});
+
+	//Required Capacity Tab Code
+	relief_capacity_calculation_method_hide_fields();
+
+	$('#scenario_identification_relief_capacity_calculation_method').change(function(){
+		relief_capacity_calculation_method_hide_fields();
+
+		//getting kd value
+		//if($('#scenario_identification_rc_discharge_coefficient').val() == "") {
+			$.get('/admin/relief_device_sizings/get_discharge_coefficient',
+				{scenario_identification_id:$('#scenario_identification_id').val(),
+				 relief_capacity_calculation_method: $(this).val()},
+				function(data){
+					$('#scenario_identification_rc_discharge_coefficient').val(data["discharge_coefficient_kd"]);
+			});
+		//}
+	});
+
+	function relief_capacity_calculation_method_hide_fields() {
+
+		var mapping_obj = {"Liquid - Non Certified":"liquid_non_certified",
+			"Liquid - Certified":"liquid_certified",
+			"Vapor - Steam":"vapor_steam",
+			"Vapor - Subcritical":"vapor_subcritical",
+			"Vapor - Critical":"vapor_critical",
+			"Two Phase HEM":"two_phase_hem",
+			"Low Pressure Vent":"low_pressure_vent",
+			"Generic":"generic",
+			"Line Capacity":"line_capacity"};
+
+		var val = $('#scenario_identification_relief_capacity_calculation_method').val();
+    if(val == "") {
+			$('.required_capacity_table tbody').children('tr').show();
+		} else if (val != "") {
+			$('.required_capacity_table tbody').children('tr').hide();
+			$('.required_capacity_table tbody').children('tr.' + mapping_obj[val]).show();
+		}
+	}
+
+	$('#scenario_identification_rc_nominal_pipe_diameter').change(function(){
+		var val = $("option:selected", this).attr('data-value');
+		$('#scenario_identification_rc_pipe_schedule > option').remove();
+		$('#scenario_identification_rc_pipe_schedule > option').append($('<option></option>').val("").html(""));
+		$(pipe_size_schedules[val]).each(function(k, v){
+			$('#scenario_identification_rc_pipe_schedule').append($('<option></option>').val(v).html(v));
+		});
+		return false;
+	});
+
+	$('#scenario_identification_hem_process_basis_a, #scenario_identification_hem_process_basis_b, #scenario_identification_hem_process_basis_c').change(function () {
+
+		if ($(this).attr('id') == 'scenario_identification_hem_process_basis_a') {
+			var stream = $('#scenario_identification_hem_stream_a');
+		} else if ($(this).attr('id') == 'scenario_identification_hem_process_basis_b') {
+			var stream = $('#scenario_identification_hem_stream_b');
+		} else if ($(this).attr('id') == 'scenario_identification_hem_process_basis_c') {
+			var stream = $('#scenario_identification_hem_stream_c');
+		}
+
+		stream.children('option').remove();
+		stream.append($('<option></option>').val("").html("Please select"));
+
+		if ($(this).val() == "") {
+			return false;
+		}
+
+		$.get('/admin/heat_and_material_balances/get_stream_nos', {process_basis_id:$(this).val()}, function (data) {
+			$(data).each(function (k, v) {
+				stream.append(
+					$('<option></option>').val(v.stream_no).html(v.display_stream_no)
+				);
+			});
+		}, 'json');
+
+	});
+
+	//stream no change
+	$('#scenario_identification_hem_stream_a, #scenario_identification_hem_stream_b, #scenario_identification_hem_stream_c').change(function () {
+		if ($(this).val() == "") {
+			return false;
+		}
+
+		var col = 'a';
+		if ($(this).attr('id') == 'scenario_identification_hem_stream_b') {
+			col = 'b';
+		} else if ($(this).attr('id') == 'scenario_identification_hem_stream_c') {
+			col = 'c';
+		}
+
+		$.get('/admin/relief_device_sizings/get_stream_values',
+			{process_basis_id:$('#scenario_identification_hem_process_basis_' + col).val(), stream_no:$('#scenario_identification_hem_stream_' + col).val()},
+			function (data) {
+				$('#scenario_identification_hem_pressure_' + col).val(get_project_field_value1("pressure_general", data['pressure']));
+				$('#scenario_identification_hem_mass_vapor_fraction_' + col).val(get_project_field_value1("mass_vapor_fraction_dimensionless", data['mass_vapor_fraction']));
+				$('#scenario_identification_hem_liquid_density_' + col).val(get_project_field_value1("density_general", data['liquid_density']));
+				$('#scenario_identification_hem_vapor_density_' + col).val(get_project_field_value1("density_general", data['vapor_density']));
+				$('#scenario_identification_hem_liquid_viscosity_' + col).val(get_project_field_value1("viscosity_dynamic", data['liquid_viscosity']));
+				$('#scenario_identification_hem_vapor_viscosity_' + col).val(get_project_field_value1("viscosity_dynamic", data['vapor_viscosity']));
+			},
+			'json');
+
+	});
+
+	$('#scenario_identification_rc_piping_material').change(function (e) {
+		if ($(this).val() == "") {
+			$('#scenario_identification_rc_pipe_roughness').val('');
+			return false
+		}
+		$('#scenario_identification_rc_pipe_roughness').val(pipes_json[$(this).val()].roughness_recommended);
+	});
+
+	$('#scenario_identification_rc_consider_rupture_disk_on_inlet_side').change(function(e){
+		if($(this).is(':checked')) {
+			$('#scenario_identification_rc_combination_correction_factor').val(uncertainty_factor);
+		} else {
+			$('#scenario_identification_rc_combination_correction_factor').val("1.0");
+		}
+	});
+
+	$('.proposed_relief_path_routing_btn').click(function(){
+		var url = $(this).attr('data-url');
+		$.colorbox({
+			href: url,
+			width:'100%',
+			height:'100%'
+		});
+		return false;
+	});
+
+</script>

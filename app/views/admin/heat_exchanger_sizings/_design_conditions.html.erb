@@ -1,0 +1,351 @@
+<div id="design_conditions_tab" class="tab_content">
+  <!-- Design Conditions -->
+  <table style="width:auto;float:left;">
+    <tr>
+      <td width="300px;">
+        Design Code
+      </td>
+      <td width="100px;">
+        <select style="width:150px;">
+        </select>
+      </td>
+      <td width="100px;">
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Stamped?
+      </td>
+      <td>
+        <select style="width:150px;">
+        </select>
+      </td>
+      <td>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Min Pressure Vessel Design Press
+      </td>
+      <td>
+        <%= f.text_field :dc_min_pressure_vessel_design_press, :class => "small-text-100" %>
+      </td>
+      <td>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>
+          <u>
+            DESIGN INTERNAL PRESSURE
+          </u>
+        </b>
+      </td>
+      <td>
+        <b>
+          <u>
+            SHELL
+          </u>
+        </b>
+      </td>
+      <td>
+        <b>
+          <u>
+            TUBE
+          </u>
+        </b>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Normal Operating Pressure
+      </td>
+      <td>
+        <%= f.text_field :dc_normal_operating_pressure_shell, :class => "small-text-100" %>
+      </td>
+      <td>
+        <%= f.text_field :dc_normal_operating_pressure_tube, :class => "small-text-100" %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Normal Operating Temperature
+      </td>
+      <td>
+        <%= f.text_field :dc_normal_operating_temperature_shell, :class => "small-text-100" %>
+      </td>
+      <td>
+        <%= f.text_field :dc_normal_operating_temperature_tube, :class => "small-text-100" %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Maximum Operating Pressure
+      </td>
+      <td>
+        <%= f.text_field :dc_maximum_operating_pressure_shell, :class => "small-text-100" %>
+      </td>
+      <td>
+        <%= f.text_field :dc_maximum_operating_pressure_tube, :class => "small-text-100" %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Maximum Operating Temperature
+      </td>
+      <td>
+        <%= f.text_field :dc_maximum_operating_temperature_shell, :class => "small-text-100" %>
+      </td>
+      <td>
+        <%= f.text_field :dc_maximum_operating_temperature_shell, :class => "small-text-100" %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Max possible supply pressure to vessel (Pump shut off, compressor shut off, max header supply,
+        upstream vessel design pressure, settle out pressure etc.)
+      </td>
+      <td>
+        <%= f.text_field :dc_max_possible_supply_pressure_to_vessel_shell, :class => "small-text-100" %>
+      </td>
+      <td>
+        <%= f.text_field :dc_max_possible_supply_pressure_to_vessel_tube, :class => "small-text-100" %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <b>
+          <u>
+            Relief System
+          </u>
+        </b>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <%= f.check_box :dc_relief_to_collection_header_system %>&nbsp;Relief To Collection Header System
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Collection System Back Pressure
+      </td>
+      <td>
+        <%= f.text_field :dc_collection_system_back_pressure, :class => "small-text-100" %>
+      </td>
+      <td>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <fieldset style="border:1px solid #000000;padding:10px;">
+          <legend>
+            <b>Relief Device Type</b>
+          </legend>
+          <span><%= f.radio_button :dc_relief_device_type, "conventional" %>&nbsp;Conventional</span>
+          <span><%= f.radio_button :dc_relief_device_type, "balanced_bellows" %>&nbsp;Balanced Bellows</span>
+          <span><%= f.radio_button :dc_relief_device_type, "pilot_operated" %>&nbsp;Pilot Operated</span>
+        </fieldset>
+      </td>
+    </tr>
+  </table>
+  <table style="width:auto;float:left;margin-left:10px;">
+    <tr>
+      <td>
+        <b>
+          <u>
+            DESIGN EXTERNAL PRESSURE
+          </u>
+        </b>
+      </td>
+      <td>
+        <b>
+          <u>
+            SHELL
+          </u>
+        </b>
+      </td>
+      <td>
+        <b>
+          <u>
+            TUBE
+          </u>
+        </b>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Max. Vacuum Pressure
+      </td>
+      <td>
+        <%= f.text_field :dc_max_vacuum_pressure_shell, :class => "small-text-100" %>
+      </td>
+      <td>
+        <%= f.text_field :dc_max_vacuum_pressure_tube, :class => "small-text-100" %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Atmospheric Pressure
+      </td>
+      <td>
+        <%= f.text_field :dc_atmospheric_pressure_shell, :class => "small-text-100" %>
+      </td>
+      <td>
+        <%= f.text_field :dc_atmospheric_pressure_tube, :class => "small-text-100" %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>
+          <u>
+            DESIGN TEMPERATURE
+          </u>
+        </b>
+      </td>
+      <td>
+        <b>
+          <u>
+            SHELL
+          </u>
+        </b>
+      </td>
+      <td>
+        <b>
+          <u>
+            TUBE
+          </u>
+        </b>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Max Temp @ Relief Press.
+      </td>
+      <td>
+        <%= f.text_field :dc_max_temp_relief_press_shell, :class => "small-text-100" %>
+      </td>
+      <td>
+        <%= f.text_field :dc_max_temp_relief_press_tube, :class => "small-text-100" %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Minimum Operating Temp
+      </td>
+      <td>
+        <%= f.text_field :dc_minimum_operating_temp_shell, :class => "small-text-100" %>
+      </td>
+      <td>
+        <%= f.text_field :dc_minimum_operating_temp_tube, :class => "small-text-100" %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Minimum Amb. Design Temp
+      </td>
+      <td>
+        <%= f.text_field :dc_minimum_amb_design_temp_shell, :class => "small-text-100" %>
+      </td>
+      <td>
+        <%= f.text_field :dc_minimum_amb_design_temp_shell, :class => "small-text-100" %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <%= f.check_box :dc_equipment_subject_to_stream_out %>&nbsp;Equipment subject to steam out
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <%= f.check_box :dc_equipment_subject_to_dry_out %>&nbsp;Equipment subject to dry out
+      </td>
+      <td colspan="3" style="text-align:left;">
+              <input type="button" value="Calculate">
+            </td>
+    </tr>
+    <tr>
+          <td colspan="3" height="55px"></td>
+    </tr>
+    <tr>
+      <td>
+        <b>
+          <u>
+            RESULTS
+          </u>
+        </b>
+      </td>
+      <td>
+        <b>
+          <u>
+            SHELL
+          </u>
+        </b>
+      </td>
+      <td>
+        <b>
+          <u>
+            TUBE
+          </u>
+        </b>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Design Pressure
+      </td>
+      <td>
+        <%= heat_exchanger_sizing.dc_design_pressure_shell %>
+      </td>
+      <td>
+        <%= heat_exchanger_sizing.dc_design_pressure_tube %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Design Temperature
+      </td>
+      <td>
+        <%= heat_exchanger_sizing.dc_design_temperature_shell %>
+      </td>
+      <td>
+        <%= heat_exchanger_sizing.dc_design_temperature_tube %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Design Vacuum
+      </td>
+      <td>
+        <%= heat_exchanger_sizing.dc_design_vacuum_shell %>
+      </td>
+      <td>
+        <%= heat_exchanger_sizing.dc_design_vacuum_tube %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Minmum Design Temperature
+      </td>
+      <td>
+        <%= heat_exchanger_sizing.dc_minimum_design_temp_shell %>
+      </td>
+      <td>
+        <%= heat_exchanger_sizing.dc_minimum_design_temp_tube %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Test Pressure
+      </td>
+      <td>
+        <%= heat_exchanger_sizing.dc_test_pressure_shell %>
+      </td>
+      <td>
+        <%= heat_exchanger_sizing.dc_test_pressure_tube %>
+      </td>
+    </tr>
+  </table>
+  <div class="clear">
+  </div>
+  </div>

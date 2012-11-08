@@ -1,0 +1,11 @@
+<strong><%= "Step #{project.current_step[:no]} - #{project.current_step[:name]}" %></strong>
+
+<%= form_for project, :url => project.new_record? ? admin_projects_path : admin_project_path(project), :html => {:style => "width:auto;"} do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field :current_step, :value => project.current_step[:id] %>
+  <%= render "form_#{project.current_step[:id]}", :f => f, :project => project %>
+  <div class="form-buttons">
+    <%= f.submit "Save" %>&nbsp;
+    <%= f.submit project.next_step ? "Save & Next" : "Done" %>
+  </div>
+<% end %>

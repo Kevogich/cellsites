@@ -1,0 +1,75 @@
+<style>
+	.tab-header {
+		font-size: 16px;
+		font-weight: bold;
+		text-align: center;
+	}
+
+	.column-header {
+		font-size: 14px;
+		font-weight: bold;
+	}
+</style>
+
+
+<%= render :partial => "shared/summary_client_header", :locals => {:client => client} %>
+
+<div style="margin-top:10px;">
+	<table class="line_sizing_summary" style="width:auto;">
+		<tr>
+			<td class="tab-header" colspan="23">&nbsp;</td>						
+		</tr>	
+		<tr>
+			<td class="column-header">Calc Count</td>
+			<td class="column-header">Line Number</td>
+			<td class="column-header">To</td>
+			<td class="column-header">From</td>
+			<td class="column-header">Material</td>
+			<td class="column-header">Stream</td>
+			<td class="column-header">Phase</td>
+			<td class="column-header">Flowrate</td>
+			<td class="column-header">Operating Pressure</td>
+			<td class="column-header">Operating Temperature</td>
+			<td class="column-header">Pipe Size</td>
+			<td class="column-header">Pipe Schedule</td>
+			<td class="column-header">Design Pressure</td>
+			<td class="column-header">Design Temperature</td>
+			<td class="column-header">Velocity</td>
+			<td class="column-header">&Delta;P</td>
+			<td class="column-header">Equivalent Length</td>
+			<td class="column-header">Flow Regime</td>
+			<td class="column-header">Flow Momemtum</td>
+			<td class="column-header">Flange Rating</td>
+			<td class="column-header">Flange Facing</td>
+			<td class="column-header">Insulation Type</td>
+			<td class="column-header">Tracing Type</td>
+		</tr>
+		<% line_sizings.each_with_index do |line_sizing, i|%>
+			<tr>
+				<td><%= i+1%></td>
+				<td><%= line_sizing.line_number%></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td><%= line_sizing.stream_no.split('.').first rescue ""%></td>			
+				<td></td>
+				<td><%= line_sizing.flowrate%></td>
+				<td><%= line_sizing.dc_maximum_operating_pressure%></td>
+				<td><%= line_sizing.dc_maximum_operating_temperature%></td>
+				<td><%= line_sizing.sc_pipe_size%></td>
+				<td><%= line_sizing.sc_pipe_schedule%></td>
+				<td><%= line_sizing.dc_design_pressure%></td>
+				<td><%= line_sizing.dc_design_temperature%></td>
+				<td><%= line_sizing.sc_calculated_velocity%></td>
+				<td><%= line_sizing.sc_calculated_system_dp%></td>
+				<td><%= line_sizing.system_equivalent_length%></td>
+				<td><%= line_sizing.sc_flow_regime%></td>
+				<td><%= line_sizing.sc_fluid_momentum%></td>
+				<td><%= line_sizing.dc_pc_flange_pressure_rating%></td>
+				<td><%= line_sizing.dc_pc_flange_facing%></td>
+				<td><%= line_sizing.dc_pc_insulation_type%></td>
+				<td></td>
+			</tr>
+		<% end%>	
+	</table>
+</div>		

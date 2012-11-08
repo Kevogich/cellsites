@@ -1,0 +1,102 @@
+<div id="column_detail" class="tab_content">
+  <!-- Column Detail -->
+  <table style="width:auto;float:left;">
+    <tr>
+      <td></td>
+      <td><b><u>TOP OF COLUMN</u></b></td>
+      <td><b><u>BOTTOM OF COLUMN</u></b></td>
+    </tr>
+    <tr>
+      <td>Design Pressure</td>
+      <td><%= column_sizing.cdt_tc_design_pressure %></td>
+      <td><%= column_sizing.cdt_tc_design_pressure %></td>
+    </tr>
+    <tr>
+      <td>Design Temperature</td>
+      <td><%= column_sizing.cdt_tc_design_temperature %></td>
+      <td><%= column_sizing.cdt_tc_design_temperature %></td>
+    </tr>
+    <tr>
+      <td>Minimum Temperature</td>
+      <td><%= column_sizing.cdt_tc_minimum_temperature %></td>
+      <td><%= column_sizing.cdt_tc_minimum_temperature %></td>
+    </tr>
+    <tr>
+      <td>Material of Construction</td>
+      <td><%= f.text_field :cdt_tc_material_of_construction, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :cdt_tc_material_of_construction, :class=>"small-text-100" %></td>
+    </tr>
+    <tr>
+      <td>Allowable Stress</td>
+      <td><%= f.text_field :cdt_tc_allowable_stress, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :cdt_tc_allowable_stress, :class=>"small-text-100" %></td>
+    </tr>
+    <tr>
+      <td>Shell Corrosion Allowance</td>
+      <td><%= f.text_field :cdt_tc_shell_corrosion_allowance, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :cdt_tc_shell_corrosion_allowance, :class=>"small-text-100" %></td>
+    </tr>
+    <tr>
+      <td>Head Type</td>
+      <td><%= f.select :cdt_tc_head_type, options_for_select(StaticData.head_type, column_sizing.cdt_tc_head_type), :include_blank=>true %></td>
+      <td><%= f.select :cdt_bc_head_type, options_for_select(StaticData.head_type, column_sizing.cdt_bc_head_type), :include_blank=>true %></td>
+    </tr>
+    <tr>
+      <td>Head Corrosion Allowance</td>
+      <td><%= f.text_field :cdt_tc_head_corrosion_allowance, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :cdt_tc_head_corrosion_allowance, :class=>"small-text-100" %>&nbsp;min</td>
+    </tr>
+    <tr>
+      <td>Shell/Head Joint Efficiency</td>
+      <td><%= f.text_field :cdt_tc_head_joint_efficiency, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :cdt_tc_head_joint_efficiency, :class=>"small-text-100" %></td>
+    </tr>
+    <tr>
+      <td>Straight Flange</td>
+      <td><%= f.text_field :cdt_tc_straight_flange, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :cdt_tc_straight_flange, :class=>"small-text-100" %></td>
+    </tr>
+    <tr>
+      <td>Shell Thickness</td>
+      <td><%= column_sizing.cdt_tc_shell_thickness %></td>
+      <td><%= column_sizing.cdt_tc_shell_thickness %></td>
+    </tr>
+    <tr>
+      <td>Head Thickness</td>
+      <td><%= column_sizing.cdt_tc_head_thickness %></td>
+      <td><%= column_sizing.cdt_tc_head_thickness %></td>
+    </tr>
+    <tr>
+      <td>Shell ID</td>
+      <td><%= column_sizing.cdt_tc_shell_id %></td>
+      <td><%= column_sizing.cdt_tc_shell_id %></td>
+    </tr>
+  </table>
+
+  <table style="width:auto;float:left;margin-left:10px;">
+    <tr>
+      <td>Vessel Material Density</td>
+      <td><%= f.text_field :cdt_vessel_material_density, :class=>"small-text-100" %>&nbsp;min</td>
+    </tr>
+    <tr>
+      <td>Vessel Weight Allowance</td>
+      <td><%= f.text_field :cdt_vessel_weight_allowance, :class=>"small-text-100" %>&nbsp;%</td>
+    </tr>
+    <tr>
+      <td>Vessel Content Density</td>
+      <td><%= f.text_field :cdt_vessel_content_density, :class=>"small-text-100" %>&nbsp;min</td>
+    </tr>
+    <tr>
+      <td>Weight Empty Vessel</td>
+      <td><%= column_sizing.cdt_weight_empty_vessel %>&nbsp;min</td>
+    </tr>
+    <tr>
+      <td>Weight Full Vessel</td>
+      <td><%= column_sizing.cdt_weight_full_vessel %>&nbsp;min</td>
+    </tr>
+    <tr>
+      <td colspan="2" style="text-align:right;"><input type="button" value="Calculate"></td>
+    </tr>
+  </table>
+  <div class="clear"></div>
+</div>

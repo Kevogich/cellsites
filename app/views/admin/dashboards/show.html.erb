@@ -1,0 +1,18 @@
+<style>
+	th,td{font-size:18px;}
+</style>
+<% if @clients.empty? %>
+	<h2 align='center'>No projects are assigned to you!</h2>
+<% else %>
+	<h2>Clients</h2>
+	<table id="clients_list">
+		<tr>
+			<th>Name</th>
+		</tr>
+		<% for client in @clients %>
+			<tr id="client_<%= client.id %>">
+				<td><%= link_to client.name, "#{projects_admin_dashboard_path}?id=#{client.id}" %></td>
+			</tr>
+		<% end %>
+	</table>
+<% end %>

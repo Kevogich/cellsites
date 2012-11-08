@@ -1,0 +1,75 @@
+<div class="colorbox-dialog">	
+	<%= form_for @hnm_new, :url => admin_heat_and_material_balances_path, :html => {:multipart => true, :style => "width:100%;"} do |f|%>
+		<%= f.hidden_field :project_id, {:value => @project_id}%>
+		<%= hidden_field_tag :id, @id%>
+		<%= hidden_field_tag :row_no, @row_no%>	
+		<%= hidden_field_tag :format, 'js'%>	
+		<div class="form-element">
+			<%= f.label :case%><br>
+			<%= f.text_field :case, {:value => (@hnm.case rescue nil)}%>
+		</div>
+		<div class="form-element">
+			<%= f.label :sheet%><br>
+			<%= f.file_field :sheet%>
+		</div>
+		<div class="form-element">
+			<%= f.label :excel_format, "Excel Format Process Simulators"%><br>			
+			<table>
+				<tr>
+					<td><%= f.radio_button :excel_format, 1%>&nbsp;<%= f.label "&nbsp;", "Hysys"%></td>
+					<td><%= f.radio_button :excel_format, 2%>&nbsp;<%= f.label "&nbsp;", "ChemCad"%></td>
+					<td><%= f.radio_button :excel_format, 3%>&nbsp;<%= f.label "&nbsp;", "Design II"%></td>
+					<td><%= f.radio_button :excel_format, 4%>&nbsp;<%= f.label "&nbsp;", "Others"%></td>
+				</tr>
+				<tr>
+					<td><%= f.radio_button :excel_format, 5%>&nbsp;<%= f.label "&nbsp;", "Aspen"%></td>
+					<td><%= f.radio_button :excel_format, 6%>&nbsp;<%= f.label "&nbsp;", "Pro II"%></td>
+					<td><%= f.radio_button :excel_format, 7%>&nbsp;<%= f.label "&nbsp;", "Unisim"%></td>
+					<td></td>
+				</tr>
+			</table>						
+		</div>
+		<div class="form-element-last">
+			<table>
+				<tr>
+					<td></td>
+					<td><span style="font-weight:bold;text-decoration:underline;">Row</span></td>
+					<td><span style="font-weight:bold;text-decoration:underline;">Column</span></td>
+				</tr>
+				<tr>
+					<td>Stream Property Starts At</td>
+					<td><%= text_field_tag "property_start_row", 3%></td>
+					<td><%= text_field_tag "property_start_column", 2%></td>
+				</tr>
+				<tr>
+					<td>Unit Starts At</td>
+					<td><%= text_field_tag "unit_start_row", 3%></td>
+					<td><%= text_field_tag "unit_start_column", 3%></td>
+				</tr>
+				<tr>
+					<td>Stream Property Data Starts At</td>
+					<td><%= text_field_tag "property_data_start_row", 3%></td>
+					<td><%= text_field_tag "property_data_start_column", 4%></td>
+				</tr>
+			</table>
+		</div>		
+		<div class="form-buttons">
+			<%= f.submit @hnm.nil? ? "Add" : "Update"%>
+		</div>
+	<% end%>
+	<% if !@hnm.nil? && !@hnm.sheet_file_name.nil?%>
+		<div class="upload-sheet" style="padding: 10px;margin-top:10px;">
+			<%= link_to @hnm.sheet_file_name, @hnm.sheet.url%>
+		</div>
+	<% end%>	
+</div>
+
+<script type="text/javascript">
+	var excel_format = "<%= @hnm.excel_format rescue nil%>";	
+	$('#heat_and_material_balance_excel_format_'+excel_format).attr("checked", "checked");
+	
+	$('#new_heat_and_material_balance').submit(function(){				
+		$(this).ajaxSubmit({dataType: 'script'});
+		return false;		
+	});
+</script>

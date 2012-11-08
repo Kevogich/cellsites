@@ -1,0 +1,80 @@
+<%= fields_for compressor_sizing do |cs|%>
+	<!-- Suction -->
+	<table width="100%">
+		<tr>
+			<td width="25%"><b><u>Process Basis</u></b></td>
+			<td width="25%"><%= cs.collection_select :process_basis_id, @project.heat_and_material_balances, :id, :case, :prompt => true%></td>
+			<td colspan="2" width="50%"></td>
+		</tr>
+		<tr>
+			<td colspan="2"><b><u>Upstream Conditions</u></b></td>
+			<td colspan="2"></td>
+		</tr>
+		<tr>
+			<td>Stream No</td>
+			<td><%= cs.collection_select :su_stream_no, @streams, :stream_no, :display_stream_no, :prompt => true  %></td>
+			<td>Vapor Density</td>
+			<td><%= cs.text_field :su_vapor_density, :class=>"small-text-100"%>&nbsp;<label class="density_general_unit"></label></td>
+		</tr>
+		<tr>
+			<td>Pressure</td>
+			<td><%= cs.text_field :su_pressure, :class=>"small-text-100"%>&nbsp;<label class="pressure_general_unit"></label></td>
+			<td>Vapor Viscosity</td>
+			<td><%= cs.text_field :su_vapor_viscosity, :class=>"small-text-100"%>&nbsp;<label class="viscosity_dynamic_unit"></label></td>
+		</tr>
+		<tr>
+			<td>Temperature</td>
+			<td><%= cs.text_field :su_temperature, :class=>"small-text-100"%>&nbsp;<label class="temperature_general_unit"></label></td>
+			<td>Vapor mw</td>
+			<td><%= cs.text_field :su_vapor_mw, :class=>"small-text-100 molecular_weight_dimensionless"%></td>
+		</tr>
+		<tr>
+			<td>Mass Vapor Fraction</td>
+			<td><%= cs.text_field :su_mass_vapor_fraction, :class=>"small-text-100 mass_vapor_fraction_dimensionless"%>&nbsp;</td>
+			<td>Vapor K</td>
+			<td><%= cs.text_field :su_vapor_k, :class=>"small-text-100 specific_heat_capacity_ratio_dimensionless"%></td>
+		</tr>						
+		<tr>
+			<td>Mass Flow Rate</td>
+			<td><%= cs.text_field :su_mass_flow_rate, :class=>"small-text-100"%>&nbsp;<label class="mass_flow_rate_general_unit"></label></td>
+			<td>Vapor Z</td>
+			<td><%= cs.text_field :su_vapor_z, :class=>"small-text-100 vapor_compressibility_dimensionless "%></td>
+		</tr>
+		<tr>
+			<td colspan="2"><b><u>Suction Pipe Configuration</u></b></td>
+				<td colspan="2" rowspan="3"></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<input type="button" value="Enter Circuit Piping" id="enter_circuit_piping"/>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><b><u>Suction Loss</u></b></td>						
+			</tr>
+			<tr>
+				<td>Fitting &Delta;P</td>
+				<td><%= cs.text_field :su_fitting_dP, :class=>"small-text-100"%>&nbsp;<label class="pressure_differential_unit"></label></td>
+				<td>Total Suction &Delta;P</td>
+				<td><%= cs.text_field :su_total_suction_dP, :class=>"small-text-100"%>&nbsp;<label class="pressure_general_unit"></label></td>
+			</tr>
+			<tr>
+				<td>Equipment &Delta;P</td>
+				<td><%= cs.text_field :su_equipment_dP, :class=>"small-text-100"%>&nbsp;<label class="pressure_differential_unit"></label></td>
+				<td>Pressure @ Suction Nozzle</td>
+				<td><%= cs.text_field :su_pressure_at_suction_nozzle, :class=>"small-text-100"%>&nbsp;<label class="pressure_general_unit"></label></td>
+			</tr>
+			<tr>
+				<td>Control Valve &Delta;P</td>
+				<td><%= cs.text_field :su_control_valve_dP, :class=>"small-text-100"%>&nbsp;<label class="pressure_differential_unit"></label></td>
+				<td colspan="2" rowspan="2"><input type="button" id="suction_calculate" value="Calculate" /></td>
+			</tr>
+			<tr>
+				<td>Orifice &Delta;P</td>
+				<td><%= cs.text_field :su_orifice_dP, :class=>"small-text-100"%>&nbsp;<label class="pressure_differential_unit"></label></td>		
+			</tr>					
+		</table>
+	<% end%>
+

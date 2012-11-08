@@ -1,0 +1,548 @@
+	<%= fields_for compressor_sizing do |cs|%>
+				<table>
+					<tr>
+						<td>
+							<fieldset style="border: 1px solid #000000;padding: 5px;width:auto;">
+								<legend>Speed</legend>
+								<%= cs.radio_button :rd_speed, :high_speed%>&nbsp;High Speed&nbsp;&nbsp;
+								<%= cs.radio_button :rd_speed, :low_speed%>&nbsp;Low Speed<br>
+								Overall Efficiency&nbsp;&nbsp;<%= cs.text_field :rd_over_efficiency, :class=>"small-text-40"%>
+							</fieldset>
+						</td>
+						<td>
+							<fieldset style="border: 1px solid #000000;padding: 5px;width:auto;">
+								<legend>Compressor Lubrication</legend>
+								<%= cs.radio_button :rd_compressor_lubrication, :lubricated%>&nbsp;Lubricated&nbsp;&nbsp;
+								<%= cs.radio_button :rd_compressor_lubrication, :non_lubricated%>&nbsp;Non-Lubricated<br>
+								Volumetric CF&nbsp;&nbsp;<%= cs.text_field :rd_volumetric_cf, :class=>"small-text-40"%>&nbsp;%
+							</fieldset>
+						</td>
+						<td>
+							<fieldset style="border: 1px solid #000000;padding: 5px;width:auto;">
+								<legend>Gas Service</legend>
+								<%= cs.radio_button :rd_gas_service, :heavy_gas%>&nbsp;Heavy Gas&nbsp;&nbsp;
+								<%= cs.radio_button :rd_gas_service, :light_gas%>&nbsp;Light Gas<br>
+								Volumetric CF&nbsp;&nbsp;<%= cs.text_field :rd_gs_volumetric_cf, :class=>"small-text-40"%>&nbsp;%
+							</fieldset>
+						</td>
+					</tr>
+				</table>
+				
+				<table style="width:auto;">					
+					<tr>
+						<td>Standard Pressure</td>
+						<td><%= cs.text_field :rd_standard_pressure, :class=>"small-text-40"%>&nbsp;<label class="pressure_general_unit"></label></td>
+					</tr>
+					<tr>
+						<td>Standard Temperature</td>
+						<td><%= cs.text_field :rd_standard_temperature, :class=>"small-text-40"%>&nbsp;<label class="temperature_general_unit"></label></td>
+					</tr>
+					<tr>
+						<td>Standard Compressibility</td>
+						<td><%= cs.text_field :rd_standard_compressibility, :class=>"small-text-40"%></td>
+					</tr>
+
+					<tr>
+						<td>Pressure @ Suction Nozzle</td>
+						<td><%= compressor_sizing.rd_press_at_suction_nozzle%>&nbsp;<label class="pressure_general_unit"></label></td>
+					</tr>
+					<tr>
+						<td>Pressure @ Discharge Nozzle</td>
+						<td><%= compressor_sizing.rd_press_at_discharge_nozzle%>&nbsp;<label class="pressure_general_unit"></label></td>
+					</tr>
+					<tr>
+						<td>Overall Differential Pressure</td>
+						<td><%= compressor_sizing.rd_overall_differential_pressure%></td>
+					</tr>
+					<tr>
+						<td>Overall Compression Ratio</td>
+						<td><%= compressor_sizing.rd_overall_compression_ratio%></td>
+					</tr>
+					<tr>
+						<td>Compression Ratio Per Section</td>
+						<td><%= cs.text_field :rd_compression_ratio_per_section, :class=>"small-text-40"%></td>
+					</tr>
+					<tr>
+						<td>Max Allowable Discharge Temperature</td>
+						<td><%= cs.text_field :rd_max_allowable_discharge_pressure, :class=>"small-text-40"%>&nbsp;<label class="temperature_general_unit"></label></td>
+					</tr>				
+				</table>
+				
+				<div class="mechanical_specification_div">
+					<div class="mechanical_specification_header" style="float:left;">
+						<table style="width:auto;">
+							<tr>
+								<td><b>Mechanical Specification</b></td>
+							</tr>
+							<tr>
+								<td>Stage Number</td>
+							</tr>	
+							<tr>
+								<td>Compression Ratio</td>
+							</tr>	
+							<tr>
+								<td>No of Cylinders</td>
+							</tr>
+							<tr>
+								<td>Type</td>
+							</tr>
+							<tr>
+								<td>Bore&nbsp;<label class="length_small_dimension_length_unit"></label></td>
+							</tr>
+							<tr>
+								<td>Stroke&nbsp;<label class="length_small_dimension_length_unit"></label></td>
+							</tr>
+							<tr>
+								<td>Rod Diameter&nbsp;<label class="length_small_dimension_length_unit"></label></td>
+							</tr>
+							<tr>
+								<td>Piston Speed&nbsp;<label class="revolution_speed_general_unit"></label></td>
+							</tr>
+							<tr>
+								<td>Clearance&nbsp;%</td>
+							</tr>
+							<tr> <td>Suction Swept Volume</td> </tr>
+							<tr> <td>Discharge Swept Volume</td> </tr>
+							<tr>
+								<td><b>Suction Conditions</b></td>
+							</tr>
+							<tr>
+								<td>Suction Stream</td>
+							</tr>
+							<tr>
+								<td>Suction Pressure&nbsp;<label class="pressure_general_unit"></label></td>
+							</tr>
+
+							<tr>
+								<td>Suction Temperature&nbsp;<label class="temperature_general_unit"></label></td>
+							</tr>
+							<tr>
+								<td>Suction Vapor MW</td>
+							</tr>
+							<tr>
+								<td>Vapor Z</td>
+							</tr>
+							<tr>
+								<td>Vapor K</td>
+							</tr>
+							<tr>
+								<td><b>Discharge Conditions</b></td>
+							</tr>	
+							<tr>
+								<td>Discharge Stream</td>
+							</tr>
+							<tr>
+								<td>Discharge Pressure&nbsp;<label class="pressure_general_unit"></label></td>
+							</tr>
+							<tr>
+								<td>Discharge Temperature&nbsp;<label class="temperature_general_unit"></label></td>
+							</tr>
+							<tr>
+								<td>Vapor Z</td>
+							</tr>
+							<tr>
+								<td>Vapor K</td>
+							</tr>
+							<tr>
+								<td><b>Interstage System</b></td>
+							</tr>	
+							<tr>
+								<td>Interstage Piping</td>
+							</tr>
+							<tr>
+								<td>Interstage &Delta;P&nbsp;<label class="pressure_differential_unit"></label></td>
+							</tr>
+							<tr>
+								<td>Suction Volume</td>
+							</tr>
+							<tr>
+								<td>Discharge Volume</td>
+							</tr>
+							<tr>
+								<td><b>Power Requirement</b></td>
+							</tr>							
+							<tr>
+								<td>Piston Displacement&nbsp;<label class="volumetric_flow_rate_vapor"></label></td>
+							</tr>
+							<tr>
+								<td>Volumetric Efficiency</td>
+							</tr>
+							<tr>
+								<td>Capacity</td>
+							</tr>
+							<tr>
+								<td>Brake Horsepower</td>							
+							</tr>
+						</table>						
+					</div>
+					<div class="mechanical_specification_fields" style="float:left;">
+						<% if compressor_sizing.compressor_reciprocation_designs.empty?%>
+						<div class="mechanical_specification_field" style="float:left;">							
+							<table style="width:auto;">
+								<tr>
+									<td style="text-align:right;"><%= link_to "x", "#", :class=>"close_mechanical_specification_field"%></td>
+								</tr>
+								<tr>
+									<td style="text-align:center;">
+										<b>1</b>
+										<%= hidden_field_tag "compressor_sizing[compressor_reciprocation_designs][1][id]", "", :id => "compressor_reciprocation_design_id_1" %>
+										<%= hidden_field_tag "compressor_sizing[compressor_reciprocation_designs][1][delete]", false, :id => "compressor_reciprocation_design_delete_1", :class=>"compressor_reciprocation_design_delete" %>
+									</td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][compression_ratio]", "", :id => "compression_ratio_1"%></td>
+								</tr>	
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][no_of_cylinders]", "", :id => "no_of_cylinders_1"%></td>
+								</tr>
+								<tr>
+									<td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][1][type]", options_for_select([['SA-TE','SA-TE'],['SA-CE','SA-CE'],['DA','DA']]), :id => "type_1", :style=>"width:100px;"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][bore]", "", :id => "bore_1"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][stroke]", "", :id => "stroke_1"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][rod_diameter]", "", :id => "rod_diameter_1"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][piston_speed]", "", :id => "piston_speed_1"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][clearance]", "", :id => "clearance_1"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][suction_swept_volume]", "", :id => "suction_swept_volume_1"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][discharge_swept_volume]", "", :id => "discharge_swept_volume_1"%></td>
+								</tr>
+
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][1][suction_stream]", options_for_select(Stream.get_stream_nos_by_process_basis(compressor_sizing.process_basis_id).collect{|p| [p.display_stream_no, p.stream_no]}.insert(0, '')), :id => "suction_stream_1", :style=>"width:100px;"%></td>
+								</tr>								
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][suction_pressure]", "", :id => "suction_pressure_1"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][suction_temperature]", "", :id => "suction_temperature_1"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][suction_vapor_mw]", "", :id => "suction_vapor_mw_1"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][suction_vapor_z]", "", :id => "suction_vapor_z_1"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][suction_vapor_k]", "", :id => "suction_vapor_k_1"%></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][1][discharge_stream]", options_for_select(Stream.get_stream_nos_by_process_basis(compressor_sizing.process_basis_id).collect{|p| [p.display_stream_no, p.stream_no]}.insert(0, '')), :id => "discharge_stream_1", :style=>"width:100px;"%></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][discharge_vapor_z]", "", :id => "discharge_vapor_z_1"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][discharge_vapor_k]", "", :id => "discharge_vapor_k_1"%></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="button" value="Piping" class="compressor_reciprocation_design_piping_btn" row_id="1">
+										<input type="button" value="Calculate" class="rd_piping_calculate" id="not_saved" row_id="1">
+									</td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][1][interstage_dp]", "", :id => "interstage_dp_1"%></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;
+										<input type="button" value="Calculate" class="rd_section_calculate" id="not_saved">
+									</td>
+								</tr>													
+							</table>							
+						</div>
+						<% end%>
+						<% compressor_sizing.compressor_reciprocation_designs.each_with_index do |crd, i|%>						
+						<div class="mechanical_specification_field" style="float:left;">							
+							<table style="width:auto;">
+								<tr>
+									<td style="text-align:right;"><%= link_to "x", "#", :class=>"close_mechanical_specification_field"%></td>
+								</tr>
+								<tr>
+									<td style="text-align:center;">
+										<b><%= i+1%></b>
+										<%= hidden_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][id]", crd.id, :id => "compressor_reciprocation_design_id_#{i+1}" %>
+										<%= hidden_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][delete]", false, :id => "compressor_reciprocation_design_delete_#{i+1}", :class=>"compressor_reciprocation_design_delete" %>
+									</td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][compression_ratio]", crd.compression_ratio, :id => "compression_ratio_#{i+1}"%></td>
+								</tr>	
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][no_of_cylinders]", crd.no_of_cylinders, :id => "no_of_cylinders_#{i+1}"%></td>
+								</tr>
+								<tr>
+									<td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][type]", options_for_select([['SA-TE','SA-TE'],['SA-CE','SA-CE'],['DA','DA']], crd.type), :id => "type_#{i+1}", :style=>"width:100px;"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][bore]", crd.bore, :id => "bore_#{i+1}"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][stroke]", crd.stroke, :id => "stroke_#{i+1}"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][rod_diameter]", crd.rod_diameter, :id => "rod_diameter_#{i+1}"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][piston_speed]", crd.piston_speed, :id => "piston_speed_#{i+1}"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][clearance]", crd.clearance, :id => "clearance_#{i+1}"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][suction_swept_volume]", crd.suction_swept_volume, :id => "suction_swept_volume_#{i+1}"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][discharge_swept_volume]", crd.suction_swept_volume, :id => "discharge_swept_volume_#{i+1}"%></td>
+								</tr>
+
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][suction_stream]", options_for_select(Stream.get_stream_nos_by_process_basis(compressor_sizing.process_basis_id).collect{|p| [p.display_stream_no, p.stream_no]}.insert(0, ''), crd.suction_stream), :id => "suction_stream_#{i+1}", :style=>"width:100px;"%></td>
+								</tr>								
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][suction_pressure]", crd.suction_pressure, :id => "suction_pressure_#{i+1}"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][suction_temperature]", crd.suction_temperature, :id => "suction_temperature_#{i+1}"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][suction_vapor_mw]", crd.suction_vapor_mw, :id => "suction_vapor_mw_#{i+1}"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][suction_vapor_z]", crd.suction_vapor_z, :id => "suction_vapor_z_#{i+1}"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][suction_vapor_k]", crd.suction_vapor_k, :id => "suction_vapor_k_#{i+1}"%></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][discharge_stream]", options_for_select(Stream.get_stream_nos_by_process_basis(compressor_sizing.process_basis_id).collect{|p| [p.display_stream_no, p.stream_no]}.insert(0, ''), crd.discharge_stream), :id => "discharge_stream_#{i+1}", :style=>"width:100px;"%></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][discharge_vapor_z]", crd.discharge_vapor_z, :id => "discharge_vapor_z_#{i+1}"%></td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][discharge_vapor_k]", crd.discharge_vapor_k, :id => "discharge_vapor_k_#{i+1}"%></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="button" value="Piping" class="compressor_reciprocation_design_piping_btn" row_id="<%= i+1%>">
+										<input type="button" value="Calculate" id="<%= crd.id %>" class="rd_piping_calculate" row_id="<%= i+1%>">
+									</td>
+								</tr>
+								<tr>
+									<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{i+1}][interstage_dp]", crd.interstage_dp, :id => "interstage_dp_#{i+1}"%></td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td>&nbsp;
+										<input type="button" value="Calculate" class="rd_section_calculate" id="<%= crd.id %>">
+									</td>
+								</tr>									
+							</table>
+						</div>
+						<% end%>						
+					</div>
+					<div class="clear"></div>
+				</div>
+				<%= link_to "Add More", "#", :id => "add_new_mechanical_specification_column"%>
+				
+				<div class="hidden" id="new_mechanical_specification_field">
+					<div class="mechanical_specification_field" style="float:left;">
+						<table style="width:auto;">
+							<tr>
+								<td style="text-align:right;"><%= link_to "x", "#", :class=>"close_mechanical_specification_field"%></td>
+							</tr>
+							<tr>
+								<td style="text-align:center;">
+									<b>#x#</b>
+									<%= hidden_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][id]", "", :id => "compressor_reciprocation_design_id_#x#" %>
+									<%= hidden_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][delete]", false, :id => "compressor_reciprocation_design_delete_#x#", :class=>"compressor_reciprocation_design_delete" %>
+								</td>
+							</tr>
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compression_ratio]", "", :id => "compression_ratio_#x#"%></td>
+							</tr>	
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][no_of_cylinders]", "", :id => "no_of_cylinders_#x#"%></td>
+							</tr>
+							<tr>
+								<td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][#x#][type]", options_for_select([['SA-TE','SA-TE'],['SA-CE','SA-CE'],['DA','DA']]), :id => "type_#x#", :style=>"width:100px;"%></td>
+							</tr>
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][bore]", "", :id => "bore_#x#"%></td>
+							</tr>
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][stroke]", "", :id => "stroke_#x#"%></td>
+							</tr>
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][rod_diameter]", "", :id => "rod_diameter_#x#"%></td>
+							</tr>
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][piston_speed]", "", :id => "piston_speed_#x#"%></td>
+							</tr>
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][clearance]", "", :id => "clearance_#x#"%></td>
+							</tr>
+
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][suction_swept_volume]", "", :id => "suction_swept_volume_#x#"%></td>
+							</tr>
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][suction_swept_volume]", "", :id => "suction_swept_volume_#x#"%></td>
+							</tr>
+
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][#x#][suction_stream]", options_for_select(Stream.get_stream_nos_by_process_basis(compressor_sizing.process_basis_id).collect{|p| [p.display_stream_no, p.stream_no]}.insert(0, '')), :id => "suction_stream_#x#", :style=>"width:100px;"%></td>
+							</tr>								
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][suction_pressure]", "", :id => "suction_pressure_#x#"%></td>
+							</tr>
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][suction_temperature]", "", :id => "suction_temperature_#x#"%></td>
+							</tr>
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][suction_vapor_mw]", "", :id => "suction_vapor_mw_#x#"%></td>
+							</tr>
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][suction_vapor_z]", "", :id => "suction_vapor_z_#x#"%></td>
+							</tr>
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][suction_vapor_k]", "", :id => "suction_vapor_k_#x#"%></td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][#x#][discharge_stream]", options_for_select(Stream.get_stream_nos_by_process_basis(compressor_sizing.process_basis_id).collect{|p| [p.display_stream_no, p.stream_no]}.insert(0, '')), :id => "discharge_stream_#x#", :style=>"width:100px;"%></td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][discharge_vapor_z]", "", :id => "discharge_vapor_z_#x#"%></td>
+							</tr>
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][discharge_vapor_k]", "", :id => "discharge_vapor_k_#x#"%></td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>
+									<input type="button" value="Piping" class="compressor_reciprocation_design_piping_btn" row_id="#x#">
+									<input type="button" value="Calculate" class="rd_piping_calculate" id="not_saved" row_id="#x#">
+								</td>
+							</tr>
+							<tr>
+								<td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][interstage_dp]", "", :id => "interstage_dp_#x#"%></td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>&nbsp;
+										<input type="button" value="Calculate" class="rd_section_calculate" id="not_saved">
+								</td>
+							</tr>													
+						</table>							
+					</div>
+				</div>				
+				<% end%>

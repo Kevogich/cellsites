@@ -1,0 +1,11 @@
+<div class="attachment">
+  <p class="name">
+    <%= attachment.name %>
+    <%= link_to attachment.attachment_file_name, get_attachment_path(attachment.attachable_type.downcase, attachment.id), :target => '_blank' %>
+  </p>
+  <blockquote>
+    <p><%= attachment.description %></p>
+    <small><%= attachment.user.name %></small>
+    <span class="help-inline created_at">Created at <%= attachment.created_at.strftime('%d-%b-%Y %I:%M:%S %p') %></span>
+  </blockquote>
+</div>

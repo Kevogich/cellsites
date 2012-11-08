@@ -1,0 +1,22 @@
+<div class="colorbox-dialog">	
+
+<table>
+	<% 0.upto(@excel.last_row) do |x|%>
+	<tr>
+		<% 0.upto(@excel.last_column) do |y|%>
+			<% if x == 0 %>
+				<td><%= y.to_s%></td>
+			<% elsif y == 0%>
+				<td><%= x.to_s%></td>
+			<% else%>
+				<td><%= @excel.cell(x , y)%></td>
+			<% end%>
+		<% end%>
+	</tr>
+	<% end%>
+</table>
+
+</div>
+<script type="text/javascript">
+
+</script>

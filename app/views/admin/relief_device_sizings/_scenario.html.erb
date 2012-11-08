@@ -1,0 +1,36 @@
+<tr>
+	<td>
+		<span class="index_counter"><%= ss.object.scenario_no%></span>
+		<%= ss.hidden_field :id, :class => "scenario_summary_id"%>
+		<%= ss.hidden_field :scenario_no, :class => "scenario_no" %>
+	</td>
+	<td style="width: 250px;">
+		<%= ss.select :scenario,
+									options_for_select(StaticData.scenario, ss.object.scenario),
+									{:prompt => "select"},
+									:class => "scenario_name"
+		%>
+	</td>
+	<td style="width: 225px;">
+		<%= ss.text_field :identifier,
+											:class => "scenario_identifier"%>
+	</td>
+	<td>
+		<%= ss.object.applicability %>
+	</td>
+	<td>
+		<%= ss.object.relief_rate %>
+	</td>
+	<td>
+		<%= ss.object.required_orifice %>
+	</td>
+	<td>
+		<%= link_to "View Details",
+								scenario_identification_admin_relief_device_sizings_path(:scenario_summary_id => ss.object.id),
+								:class => "scenario_view_details" %>
+	</td>
+	<td>
+		<%= link_to "Delete", "#", :class => "delete_scenario" %>
+		<%= ss.hidden_field '_destroy' %>
+	</td>
+</tr>

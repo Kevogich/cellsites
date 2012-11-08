@@ -1,0 +1,102 @@
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<a class="brand" href="/">EZFeed</a>
+			<div class="header-nav pull-right">
+				<ul class="nav pull-right">
+					<% if !current_user %>
+						<li><%= link_to "Sign In", user_session_path %></li>
+					<% else %>
+
+						<% if current_user.role == 'project_execution' || current_user.role == 'project_setup' %>
+						<li><%= link_to "Welcome " + current_user.name, admin_dashboard_path %></li>
+						<% else %>
+						<li><%= link_to "Welcome " + current_user.name, root_path %></li>
+					   <% end %>
+
+						<% if current_user.role != 'project_execution'  %>
+							<% if current_user.role == 'admin' %>
+							<li class="dropdown" id="user_setup">
+							<%= link_to "#", :class => "dropdown-toggle", "data-toggle" => "dropdown" do %>
+								User Setup <b class="caret"></b>
+							<% end %>
+							<ul class="dropdown-menu">
+								<li><%= link_to 'Users', admin_company_users_path %></li>
+								<li><%= link_to 'Roles', admin_roles_path %></li>
+							</ul>
+							</li>
+							<li><%= link_to 'Clients', admin_clients_path%></li>
+							<li class="dropdown" id="project_settings">
+							<%= link_to "#", :class => "dropdown-toggle", "data-toggle" => "dropdown" do %>
+								Settings <b class="caret"></b>
+							<% end %>
+							<% end %>
+
+
+							<!-- project setup  -->
+							<ul class="dropdown-menu">
+								<!-- <li>< link_to 'Measurements', admin_measurements_path ></li> -->
+								<!-- <li>< link_to 'Measure Units', admin_measure_units_path ></li> -->
+								<li><%= link_to 'Pipe Roughness', admin_pipe_roughness_path%></li>
+								<li><%= link_to 'Sizing Criteria', admin_sizing_criterias_path%></li>
+							</ul>
+							</li>
+							<li><%= link_to 'Projects', admin_projects_path%></li>
+							<!-- project setup  -->
+
+						<% end %>
+
+					
+
+						<li class="dropdown" id="sizing">
+						<%= link_to "#", :class => "dropdown-toggle", "data-toggle" => "dropdown" do %>
+							Sizing <b class="caret"></b>
+						<% end %>
+						<ul class="dropdown-menu">
+							<li><%= link_to 'Line', admin_line_sizings_path%></li>
+							<li><%= link_to 'Vessel', admin_vessel_sizings_path%></li>
+							<li><%= link_to 'Pump', admin_pump_sizings_path%></li>
+							<li><%= link_to 'Compressor', admin_compressor_sizings_path%></li>
+							<li><%= link_to 'Driver', admin_driver_sizings_path%></li>
+							<li><%= link_to 'Control Valve', admin_control_valve_sizings_path%></li>
+							<li><%= link_to 'Flow Element', admin_flow_element_sizings_path%></li>
+							<li><%= link_to 'Storage Tank', admin_storage_tank_sizings_path%></li>
+							<li><%= link_to 'Column', admin_column_sizings_path%></li>
+							<li><%= link_to 'Heat Exchanger', admin_heat_exchanger_sizings_path%></li>
+							<li><%= link_to 'Relief Device', admin_relief_device_sizings_path %></li>
+						</ul>
+						</li>
+
+						<li class="dropdown" id="sizing">
+						<%= link_to "#", :class => "dropdown-toggle", "data-toggle" => "dropdown" do %>
+							Mechanical Specification <b class="caret"></b>
+						<% end %>
+						<ul class="dropdown-menu">
+							<li><%= link_to 'Line', admin_line_sizings_path%></li>
+							<li><%= link_to 'Vessel', admin_vessel_sizings_path%></li>
+							<li><%= link_to 'Pump', admin_pump_sizings_path%></li>
+							<li><%= link_to 'Compressor', admin_compressor_sizings_path%></li>
+							<li><%= link_to 'Driver', admin_driver_sizings_path%></li>
+							<li><%= link_to 'Control Valve', admin_control_valve_sizings_path%></li>
+							<li><%= link_to 'Flow Element', admin_flow_element_sizings_path%></li>
+							<li><%= link_to 'Storage Tank', admin_storage_tank_sizings_path%></li>
+							<li><%= link_to 'Column', admin_column_sizings_path%></li>
+							<li><%= link_to 'Heat Exchanger', admin_heat_exchanger_sizings_path%></li>
+							<li><%= link_to 'Relief Device', admin_relief_device_sizings_path %></li>
+						</ul>
+						</li>
+						<li><%= link_to "Sign out", destroy_user_session_path %></li>
+					<% end %>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="header">
+	<% unless !current_user %>
+		<div class="current_user_info pull-right">
+
+		</div>
+	<% end %>
+	<div class="clear"></div>
+</div>

@@ -1,0 +1,26 @@
+<%= form_for pipe_roughness, :url => pipe_roughness.new_record? ? admin_pipe_roughness_path : admin_pipe_roughnes_path(pipe_roughness), :html => {:style => 'width:400px;'} do |f| %>
+	<%= f.error_messages %>	
+	<div class="form-element">
+		<%= f.label :material%><br>
+		<%= f.text_field :material%>
+	</div>
+	<div class="form-element">
+		<%= f.label :conditions%><br>
+		<%= f.text_field :conditions%>
+	</div>
+	<div class="form-element">
+		<%= f.label :roughness_min%>&nbsp;(<b><%= MeasureUnit.get_unit("Length", "Small Dimension Length", 2)%></b>)<br>
+		<%= f.number_field :roughness_min%>
+	</div>
+	<div class="form-element">
+		<%= f.label :roughness_max%>&nbsp;(<b><%= MeasureUnit.get_unit("Length", "Small Dimension Length", 2)%></b>)<br>
+		<%= f.number_field :roughness_max%>
+	</div>
+	<div class="form-element-last">
+		<%= f.label :roughness_recommended, "Recommended Roughness" %>&nbsp;(<b><%= MeasureUnit.get_unit("Length", "Small Dimension Length", 2)%></b>)<br>
+		<%= f.number_field :roughness_recommended%>
+	</div>
+	<div class="form-buttons">
+		<%= f.submit pipe_roughness.new_record? ? 'Create' : 'Update'%>		
+  	</div>
+<% end%>

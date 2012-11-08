@@ -1,0 +1,23 @@
+<h2><%= @measurement.name.capitalize << ' Sub Types'%></h2>
+<br>
+<%= link_to "Add Sub Type", new_superadmin_measurement_sub_type_path(:measurement_id=>@measurement.id), :class => 'new_measurement_sub_type' %>
+<br>
+<table id="measurement_sub_types">
+  <tr>
+    <th>Name</th>
+    <th>Edit</th>
+    <th>Delete</th>
+  </tr>
+  <% @measurement_sub_types.each_with_index do |measurement_sub_type, i| %>
+    <tr data-row='<%= "measurement_sub_type_#{measurement_sub_type.id}" %>'>
+      <td><%= measurement_sub_type.name.capitalize%></td>
+      <td><%= link_to 'Edit', edit_superadmin_measurement_sub_type_path(measurement_sub_type), :class => 'edit_measurement_sub_type'%></td>
+      <td><%= link_to 'Delete', superadmin_measurement_sub_type_path(measurement_sub_type), :method=>"delete", :confirm => "Are you sure?", :remote => true%></td>
+    </tr>
+  <% end%>
+</table>
+
+<script type="text/javascript">
+  $('.new_measurement_sub_type').colorbox();
+  $('.edit_measurement_sub_type').colorbox();
+</script>

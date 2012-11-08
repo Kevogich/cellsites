@@ -1,0 +1,13 @@
+<% title @measurement.name << ' - New Sub Type'%>
+
+<%= form_for @measurement_sub_type, :url => admin_measurement_sub_types_path do |f| %>
+	<%= f.error_messages %>	
+	<div class="form-element-last">
+		<%= f.label :name, "Sub Type Name"%><br>
+		<%= f.text_field :name%>
+	</div>
+	<%= f.hidden_field :measurement_id, {:value => params[:measurement_id]}%>	
+	<div class="form-buttons">
+		<%= f.submit "Create" %>
+  	</div>
+<% end%>

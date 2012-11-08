@@ -1,0 +1,190 @@
+<div id="vertical_separator" class="tab_content">
+  <!-- Vertical Separator -->
+  <table style="width: 100%;">
+    <tr>
+      <td>L/D</td>
+      <td><%= f.text_field :vs_ld, :class => "required" %></td>
+      <td><%= f.check_box :vs_include_wire_mesh %>&nbsp;Include Wire Mesh</td>
+      <td rowspan="3">
+        <fieldset class="form_fieldset">
+          <legend>Mist Extractor Type</legend>
+          <ul>
+            <li><%= f.radio_button :vs_mist_extractor_type, "wire_mesh" %>&nbsp;Wire Mesh</li>
+            <li><%= f.radio_button :vs_mist_extractor_type, "vane" %>&nbsp;Vane</li>
+            <li><%= f.radio_button :vs_mist_extractor_type, "cyclonic" %>&nbsp;Cyclonic</li>
+          </ul>
+        </fieldset>
+      </td>
+    </tr>
+    <tr>
+      <td>Liquid Hold Time</td>
+      <td><%= f.text_field :vs_liquid_hold_time, :class => "required" %>&nbsp;<label class="time_minutes_unit"></label></td>
+      <td><%= f.check_box :vs_foaming_service %>&nbsp;Foaming Service</td>
+    </tr>
+    <tr>
+      <td colspan="3">&nbsp;</td>
+    </tr>
+  </table>
+
+  <table style="width: 100%;">
+    <tr>
+      <td colspan="2"><label class="sub_title">Diameter (No Mesh)</label></td>
+      <td colspan="2"><label class="sub_title">Diameter (Mesh Design)</label></td>
+    </tr>
+    <tr>
+      <td>V-L Separation Factor</td>
+      <td>
+        <label id="vs_dnm_vl_separation_factor"><%= vessel_sizing.vs_dnm_vl_separation_factor %></label>
+        <%= f.hidden_field :vs_dnm_vl_separation_factor %>&nbsp;
+      </td>
+      <td>K Factor</td>
+      <td><%= f.text_field :vs_dmd_k_factor, :class => "required" %></td>
+    </tr>
+    <tr>
+      <td>Vapor Velocity Factor, Kv</td>
+      <td><%= f.text_field :vs_dnm_vapor_velocity_factor_kv %></td>
+      <td>Allow. Vapor Velocity</td>
+      <td>
+        <label id="vs_dmd_allow_vapor_velocity"><%= vessel_sizing.vs_dmd_allow_vapor_velocity %></label>
+        <%= f.hidden_field :vs_dmd_allow_vapor_velocity %>&nbsp;
+        <label class="velocity_general_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Kv Derating Factor</td>
+      <td><%= f.text_field :vs_dnm_kv_derating_factor %></td>
+      <td>Design Velocity</td>
+      <td>
+        <label id="vs_dmd_design_velocity"><%= vessel_sizing.vs_dmd_design_velocity %></label>
+        <%= f.hidden_field :vs_dmd_design_velocity %>&nbsp;
+        <label class="velocity_general_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Max Design Vapor Velocity, Vmax</td>
+      <td>
+        <label id="vs_dnm_max_design_vapor_velocity_vmax"><%= vessel_sizing.vs_dnm_max_design_vapor_velocity_vmax %></label>
+        <%= f.hidden_field :vs_dnm_vl_separation_factor %>&nbsp;
+        <label class="velocity_general_unit"></label>
+      </td>
+      <td>Mesh Diameter</td>
+      <td>
+        <label id="vs_dmd_mesh_diameter"><%= vessel_sizing.vs_dmd_mesh_diameter %></label>
+        <%= f.hidden_field :vs_dmd_mesh_diameter %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Dmin</td>
+      <td>
+        <label id="vs_dnm_dmin"><%= vessel_sizing.vs_dnm_dmin %></label>
+        <%= f.hidden_field :vs_dnm_dmin %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+      <td>Est. Press. drop</td>
+      <td>
+        <label id="vs_dmd_est_press_drop"><%= vessel_sizing.vs_dmd_est_press_drop %></label>
+        <%= f.hidden_field :vs_dmd_est_press_drop %>&nbsp;H2O
+      </td>
+    </tr>
+    <tr>
+      <td>Diameter</td>
+      <td>
+        <label id="vs_dnm_diameter"><%= vessel_sizing.vs_dnm_diameter %></label>
+        <%= f.hidden_field :vs_dnm_diameter %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+      <td>Diameter</td>
+      <td>
+        <label id="vs_dmd_diameter"><%= vessel_sizing.vs_dmd_diameter %></label>
+        <%= f.hidden_field :vs_dmd_diameter %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+  </table>
+
+  <table style="width: 100%;">
+    <tr>
+      <td colspan="2"><label class="sub_title">Height (No Mesh)</label></td>
+      <td colspan="2"><label class="sub_title">Height (Mesh Design)</label></td>
+    </tr>
+    <tr>
+      <td>Nozzle To Top Tangent</td>
+      <td><%= f.text_field :vs_hnm_nozzle_to_top_tangent %></td>
+      <td>Demister To Top Tangent</td>
+      <td><%= f.text_field :vs_hmd_demister_to_top_tangent %></td>
+    </tr>
+    <tr>
+      <td>Nozzle Height</td>
+      <td>
+        <label id="vs_hnm_nozzle_height"></label>
+        <%= f.hidden_field :vs_hnm_nozzle_height %>
+      </td>
+      <td>Demister Height</td>
+      <td><%= f.text_field :vs_hmd_demister_height %></td>
+    </tr>
+    <tr>
+      <td>HLL To Nozzle</td>
+      <td><%= f.text_field :vs_hnm_hll_to_nozzle %></td>
+      <td>Nozzle To Demister</td>
+      <td><%= f.text_field :vs_hmd_nozzle_to_demister %></td>
+    </tr>
+    <tr>
+      <td>Additional Liquid Hold Up</td>
+      <td><%= f.text_field :vs_hnm_additional_liquid_hold_up %></td>
+      <td>Nozzle Height</td>
+      <td><%= f.hidden_field :vs_hmd_nozzle_height %></td>
+    </tr>
+    <tr>
+      <td>Liquid Hold Up</td>
+      <td>
+        <label id="vs_hnm_liquid_hold_up"></label>
+        <%= f.hidden_field :vs_hnm_liquid_hold_up %>
+      </td>
+      <td>Hll To Nozzle</td>
+      <td><%= f.text_field :vs_hmd_hll_to_nozzle %>&nbsp;<label class="length_large_dimension_length_unit"></label></td>
+    </tr>
+    <tr>
+      <td>Bottom Tangent To LLL</td>
+      <td><%= f.text_field :vs_hnm_bottom_tangent_to_lll %></td>
+      <td>Additional Liquid Hold Up</td>
+      <td><%= f.text_field :vs_hmd_additional_liquid_hold_up %></td>
+    </tr>
+    <tr>
+      <td>Total Height</td>
+      <td>
+        <label id="vs_hnm_total_height"></label>
+        <%= f.hidden_field :vs_hnm_total_height %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+      <td>Liquid Hold Up</td>
+      <td>
+        <label id="vs_hmd_liquid_hold_up"></label>
+        <%= f.hidden_field :vs_hmd_liquid_hold_up %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="button" id="vs_calculation" value="Calculate" style="float: right;"></td>
+      <td>Bottom Tangent To LLL</td>
+      <td><%= f.text_field :vs_hmd_bottom_tangent_to_lll %></td>
+    </tr>
+    <tr>
+      <td colspan="2"></td>
+      <td>Total Height</td>
+      <td>
+        <label id="vs_hmd_total_height"></label>
+        <%= f.hidden_field :vs_hmd_total_height %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+  </table>
+
+  <table style="width: 100%">
+    <tr>
+      <td><label class="sub_title">NOTES</label></td>
+    </tr>
+    <tr>
+      <td><%= f.text_area :vs_notes, :size=>"158x6"%></td>
+    </tr>
+  </table>
+</div>

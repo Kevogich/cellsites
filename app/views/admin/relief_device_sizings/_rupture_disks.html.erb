@@ -1,0 +1,20 @@
+<%= fields_for @rupture_disk do |f| %>
+<tr id=<%= "row_#{@unique_id}"%> >
+	<td id=<%= "sequence_rupture_disk_#{@unique_id}"%>>1</td>
+	<%= f.hidden_field :id, :name =>  "rupture_disk_attributes[#{@unique_id}][id]" %>
+	<%= f.hidden_field :_destroy, :name =>  "rupture_disk_attributes[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_#{@unique_id}" %>
+    <td><%= f.text_field :rdtag, :name =>  "rupture_disk_attributes[#{@unique_id}][rdtag]" , :style => "width:50px;" , :id => "rdtag_#{@unique_id}"%></td>
+    <td><%= select_tag "rupture_disk_attributes[#{@unique_id}][bodysize]",options_for_select(PipeSizing.pipe_sizes(@fitting_pipe_size_unit).collect { |p| [raw(p[:name]), p[:value]] }.insert(0, ''),@rupture_disk.bodysize),:class => 'bodysize', :id => "bodysize_#{@unique_id}"%></td>
+    <td><%= f.text_field :enfa, :name =>  "rupture_disk_attributes[#{@unique_id}][enfa]" , :style => "width:50px;" , :id => "enfa_#{@unique_id}"%></td>
+    <td><%= select_tag "rupture_disk_attributes[#{@unique_id}][inletflange]",options_for_select(StaticData.flange_type,@rupture_disk.inletflange),:class => 'inletflange', :id => "inletflange_#{@unique_id}"%></td>
+    <td><%= select_tag "rupture_disk_attributes[#{@unique_id}][outletflange]",options_for_select(StaticData.flange_type,@rupture_disk.outletflange),:class => 'outletflange', :id => "outletflange_#{@unique_id}"%></td>
+    <td><%= f.text_field :burstpressure, :name =>  "rupture_disk_attributes[#{@unique_id}][burstpressure]" , :style => "width:50px;", :id => "rupture_burstpressure_#{@unique_id}" %></td>
+    <td><%= f.text_field :kr, :name =>  "rupture_disk_attributes[#{@unique_id}][kr]" , :style => "width:50px;" , :id => "kr_#{@unique_id}"%></td>
+    <td><%= f.text_field :uncertaintyf, :name =>  "rupture_disk_attributes[#{@unique_id}][uncertaintyf]" , :style => "width:50px;" , :id => "uncertaintyf_#{@unique_id}"%></td>
+    <td><%= select_tag "rupture_disk_attributes[#{@unique_id}][nonfdesign]",options_for_select(StaticData.yes_no,@rupture_disk.nonfdesign),:class => 'bodysize', :id => "nonfdesign_#{@unique_id}"%></td>
+    <td><%= link_to "View", "#", :id => "rupture_disk_link_#{@unique_id}", :class => "view_rupture_disk"%></td>
+	<td><%= link_to "X", "#", :id => "#{@unique_id}", :class => "delete_rupture_disk" %></td>
+</tr>
+<% end %>
+
+

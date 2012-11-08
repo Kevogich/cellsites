@@ -1,0 +1,435 @@
+<div id="review" class="tab_content">
+  <!-- Review -->
+  <table>
+    <tr>
+      <td colspan="3"><label class="sub_title">SIZING REVIEW</label></td>
+    </tr>
+    <tr>
+      <td colspan="3"><label class="sub_title">Tower</label></td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>Distillation usually is the most economical method of separating liquids, superior to extraction, adsorption, crystallization, or others.</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tower_1, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tower_1, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tower_1, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>For ideal mixtures, relative volatility is the ratio of the vapor pressure, a12 = P2/P1.</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tower_2, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tower_2, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tower_2, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>
+        Tower operating pressure is most often determined by the temperature of the available
+        condensing medium, 38-50 &deg;C (100 - 120 &deg;F) if cooling water, or by the maximum allowable
+        reboiler temperature, 10.34 barg (150 psig) steam, 186 &deg;C (366 &deg;F) to avoid chemical
+        decomposition/degradation.
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tower_3, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tower_3, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tower_3, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">4</td>
+      <td>
+        Sequencing of columns for separating multi component mixtures:<br><br>
+        a. Perform the easiest separation first, that is, the one least demanding of trays and reflux, and
+        leave the most difficult to the last.<br><br>
+        b. When neither relative volatility nor feed concentration vary widely, remove the components
+        one by one as overhead products.<br><br>
+        c. When the adjacent ordered components in the feed vary widely, sequence the splits in the
+        order of decreasing volatility.<br><br>
+        d. And when the concentrations in the feed vary widely but relative volatilities do not, remove
+        the components in the order of decreasing concentration in the feed.
+      </td>
+      <td style="width: 150px;vertical-align: top;">
+        <%= f.radio_button :sizing_review_tower_4, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tower_4, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tower_4, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>The economically optimal reflux ratio is about 1.2 - 1.5 times the minimum reflux ratio Rm.</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tower_5, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tower_5, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tower_5, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>The economically optimal number of theoretical trays in near twice the minimum value Nm.</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tower_6, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tower_6, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tower_6, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>
+        The minimum number of trays is found with the Fenske - Underwood equation<br><br>
+        <div style="text-align: center;vertical-align: middle;">
+          <span>
+            Nm =
+          </span>
+          <span>
+            log{[x/(1-x)]ovhd/[x/(1-x)]btms}<br>
+            ________________________<br>
+            log a
+          </span>
+          <div class="clear"></div>
+        </div>
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tower_7, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tower_7, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tower_7, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>
+        Minimum reflux for binary or pseudobinary mixtures is given by the following when separation is
+        essentially completed (xD = 1) and D/F is the ratio of overhead product to feed rate:<br><br>
+        when feed is at the bubble point  RmD/F = 1/(a - 1)<br><br>
+        when feed is at the dew point     [(Rm + 1)D]/F = a/(a - 1)
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tower_8, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tower_8, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tower_8, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>The safety factor of 10% of the number of trays calculated by the best means is advisable</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tower_9, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tower_9, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tower_9, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>Reflux pumps are made at least 10% oversize.</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tower_10, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tower_10, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tower_10, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td>The optimal value of the Kremser - Brown absorption factor A = (L/VK) is in the range of 1.25 - 2.0</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tower_11, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tower_11, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tower_11, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td>
+        Reflux drums are usually horizontal, with a liquid holdup of 5 min half full. A takeoff pot for a
+        second liquid phase, such as water in hydrocarbon systems, is sized for linear velocity of that
+        phase of 0.15 m/s (0.5 ft/s) minimum diameter of 406.4 mm (16 in.)
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tower_12, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tower_12, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tower_12, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td>
+        For towers about 914mm (3 ft) diameter, add 1219 mm (4ft) at the top for vapor
+        disengagement and 1829 mm (6 ft) at the bottom of liquid level and reboiler return
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tower_13, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tower_13, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tower_13, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>14</td>
+      <td>
+        Limit the tower height to about 53m (175 ft) maximum because of wind load and foundation
+        considerations. An additional criterion is that L/D be less than 30 (20 < L/D < 30 often
+        will require special design)
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tower_14, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tower_14, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tower_14, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="3"><label class="sub_title">Tray Towers</label></td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>For reason of accessibility, tray spacings are made 0.5 - 0.6 m (20-24 in.) </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tray_tower_1, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_1, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_1, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>
+        Peak efficiency of trays is at values of the vapor factor Fs = u/(Pv)^0.5 in the range of 1.2 - 1.5
+        m/s (kg/m&sup3;)^0.5 [1-1.2 ft/s (lb/ft3)^0.5]. This range of Fs establishes the diameter of the
+        tower. Roughly, linear velocities are 0.6 m/s (2 ft/s) at moderate pressures and 1.8 m/s (6 ft) in
+        vacuum.
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tray_tower_2, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_2, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_2, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Pressure drop per tray is of the order of 747Pa (3 in. water) or 689.5pa (0.1 psi).</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tray_tower_3, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_3, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_3, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Tray efficiencies for distillation of light hydrocarbons and aqueous solutions are 60-90%; for gas absorption and stripping, 10-20%</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tray_tower_4, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_4, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_4, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Sieve trays have holes of 6-7mm (0.25-0.50 in.) diameter, hole area being 10% of the active cross section</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tray_tower_5, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_5, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_5, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>
+        Valve trays have holes of 38mm (1.5 in.) diameter, each provided with a lift able cap, with
+        130-150 caps per square meter (12 - 14 caps pr square ft) of active cross section. Valve trays
+        are usually cheaper than sieve trays
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tray_tower_6, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_6, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_6, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>
+        Bubble cap trays are used only when liquid level must be maintained at low turn down ratio; they
+        can be designed for lower pressure drop than wither sieve or valve trays
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tray_tower_7, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_7, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_7, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>
+        Weir heights are 50 mm (12 in.), weir lengths are about 75% of tray diameter, and liquid rate at
+        maximum of about 1.2m&sup3;/min-m of weir (8 gpm/in. of weir); multi-pass arrangements are use
+        at higher liquid rates.
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_tray_tower_8, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_8, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_tray_tower_8, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="3"><label class="sub_title">Packed Towers</label></td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>
+        Structured and random packing are suitable for packed towers less than 0.9 m (3 ft) when low
+        pressure drop is required.
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_packed_tower_1, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_1, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_1, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Replacing trays with packing allows greater through put and separation in existing tower shells</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_packed_tower_2, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_2, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_2, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>
+        For gas rates of 14.2 m&sup3;/min (500 ft&sup3;/min), user 25.4mm (1 in.) packing; for 56.6 m&sup3;/min (2000 ft&sup3;/min)
+        or more use 50-mm (2-in.) packing
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_packed_tower_3, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_3, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_3, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Ratio of tower diameter/packing diameter should be > 15:1</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_packed_tower_4, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_4, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_4, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>
+        Because of deformablility, plastics packing is limited to 3 - 4m (10 - 15 ft) and meta packing to
+        6.0 - 7.6 m (20 -25 ft) unsupported depth.
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_packed_tower_5, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_5, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_5, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>
+        Liquid distribution are required every  5 - 10 tower diameters with pall rings and at least every
+        6.5 m (20 ft) for other types of dumped packing.
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_packed_tower_6, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_6, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_6, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>
+        Number of liquid distributions should be 32 - 55/m&sup2; (3 - 5/ft&sup2;) in towers greater than 0.9 m (3 ft)
+        diameter and more numerous in smaller columns.
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_packed_tower_7, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_7, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_7, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>Packed towers should operate near 70% of the flooding rate (evaluated from sherwood and Lobo correlation)</td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_packed_tower_8, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_8, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_8, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>
+        Height Equivalent to a Theoretical Stage (HETS) of vapor liquid contacting is 0.4 - 0.56 m (1.3 - 1.8 ft)
+        for 25 mm (1 in.) pall rings and 0.76 - 0.9 m (2.5 - 3.0 ft) for 50 mm (3 in.) pall rings.
+      </td>
+      <td style="width: 150px;">
+        <%= f.radio_button :sizing_review_packed_tower_9, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_9, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_9, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">10</td>
+      <td>
+        <table>
+          <tr>
+            <td><b>Generalize pressure drops</b></td>
+            <td><b>Design pressure drops (cm of H2O/m of packing)</b></td>
+            <td><b>Design pressure drops (in of H2O/m of packing)</b></td>
+          </tr>
+          <tr>
+            <td>Absorbers and Regenerations (non-foaming systems)</td>
+            <td>2.1 - 3.3</td>
+            <td>0.25 - 0.40</td>
+          </tr>
+          <tr>
+            <td>Absorbers and Regenerations</td>
+            <td>0.8 - 2.1</td>
+            <td>0.10 - 0.25</td>
+          </tr>
+          <tr>
+            <td>Atmospheric/Pressure Stills and Fractions</td>
+            <td>3.3 - 6.7</td>
+            <td>0.40 - 0.80</td>
+          </tr>
+          <tr>
+            <td>Vacuum Stills and Fractionators</td>
+            <td>0.8 - 3.3</td>
+            <td>0.10 - 0.40</td>
+          </tr>
+          <tr>
+            <td>Maximum Value</td>
+            <td>8.33</td>
+            <td>1.0</td>
+          </tr>
+        </table>
+      </td>
+      <td style="width: 150px;vertical-align: top;">
+        <%= f.radio_button :sizing_review_packed_tower_10, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_10, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_packed_tower_10, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <label class="sub_title">NOTES</label>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <%= f.text_area :review_notes, :size=>"158x6" %>
+      </td>
+    </tr>
+  </table>
+</div>

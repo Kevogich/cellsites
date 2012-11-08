@@ -1,0 +1,641 @@
+<% pr = @project.pressure_relief_system_design_parameter %>
+<fieldset class="project" style="margin-top:15px;" xmlns="http://www.w3.org/1999/html">
+<legend>Pressure Relief System Design
+	Parameter&nbsp;<%= link_to (image_tag 'edit.png', :border => 0, :size => '16x16'), edit_steps_admin_project_path(@project, 'pressure_relief_system_design_parameter'), :title => "Edit Pressure Relief System Design Parameter" %></legend>
+<table style="width:auto;">
+<tr>
+	<td colspan="3">
+		<h4>Workflow Mode</h4>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<%= pr.workflow_mode %>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<h4>Scenario Analysis</h4>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Check Valve Failure</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">
+		Is installation of multiple check valves on the reverse flow path considered adequate prevention against
+		overpressure ?
+	</td>
+	<td>
+		<%= pr.cvf_1 %>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Chemical Reaction</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">
+		Is evaluation of chemical reaction in the scope of this project?
+	</td>
+	<td>
+		<%= pr.cr_1 %>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Cooling Failure To Condenser</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">
+		Can credit be taken for some residual cooling in aerial coolers due to natural convection effects?
+	</td>
+	<td>
+		<%= pr.cfc_1 %>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<span style="font-size: 16px;margin: 0;text-decoration: underline;">External Fire</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">Is a relief device required to protect an exchanger that is procedurally vented and drained when
+		isolated?
+	</td>
+	<td>
+		<%= pr.ef_1 %>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">Is fire considered for tube side of a shell and tube exchanger?</td>
+	<td>
+		<%= pr.ef_2 %>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">Is fire considered for an aerial cooler?
+	<td>
+		<%= pr.ef_3 %>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">Is fire considered for a double pipe exchanger?
+	<td>
+		<%= pr.ef_4 %>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">Is the cooling water header assumed to provide adequate capacity for any vaporization from fire?
+	<td>
+		<%= pr.ef_5 %>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">Is a relief device required to protect a vapor filled equipment against external fire?</td>
+	<td>
+		<%= pr.ef_6 %>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Failure of Automatic Controls</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">
+		Is the failure open of the control valve considered credible with the bypass valve fully opened?
+	</td>
+	<td>
+		<%= pr.fac_1 %>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">
+		Is the failure open of the control valve considered credible with the bypass valve partially opened?
+	</td>
+	<td>
+		<%= pr.fac_2 %>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Heat Exchanger Tube Rupture</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">Is the high pressure side basis the high pressure side design pressure?</td>
+	<td>
+		<%= pr.hetr_1 %>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">Is the high pressure side basis the high pressure side maximum operating pressure?</td>
+	<td>
+		<%= pr.hetr_2 %>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Overfilling</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="2">Is an independent alarm required to take credit for operator response ot prevent overfilling?</td>
+	<td>
+		<%= pr.of_1 %>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<h4>Relief Rate Calculation Basis</h4>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Control valve sizing basis</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<%= pr.rrc_cvsb %>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Tube rupture sizing basis</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<%= pr.rrc_trsb %>
+	</td>
+</tr>
+<tr>
+	<td>
+		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Fill time basis</span>
+	</td>
+	<td width="200px">
+		Vessel
+	</td>
+	<td width="200px">
+		Column
+	</td>
+</tr>
+<tr>
+	<td>
+		Must have independent high level alarm
+	</td>
+	<td>
+		<%= pr.ftb_vessel_alarm %>
+	</td>
+	<td>
+		<%= pr.ftb_column_alarm %>
+	</td>
+</tr>
+<tr>
+	<td>Response time</td>
+	<td>
+		<%= pr.ffb_vessel_response_time %>&nbsp;<span class="time_minute_unit" style="color: red;"></span>
+	</td>
+	<td>
+		<%= pr.ffb_column_response_time %>&nbsp;<span class="time_minute_unit" style="color: red;"></span>
+	</td>
+</tr>
+<tr>
+	<td>
+		Level basis
+	</td>
+	<td>
+		<%= pr.ftb_vessel_level_basis %>
+	</td>
+	<td>
+		<%= pr.ftb_column_level_basis %>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Fire basis</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p>
+			<%= check_box_tag :fb_chb_1, pr.fb_chb_1, pr.fb_chb_1 %> Take credit for fire proof insulation at calculated Environmental Factor (F)
+			with specific data available on the insulation
+		</p>
+
+		<p>
+			<%= check_box_tag :fb_chb_2, pr.fb_chb_2, pr.fb_chb_2 %> Take credit for fire proof insulation at default Environmental Factor(F) of
+			<b><%= pr.fb_txt_1 %></b> with on specific data available on the insulation
+		</p>
+
+		<p>
+			Allowable fire proof insulation Environmental Factor(F) range:
+			Min <b><%= pr.fb_txt_2 %></b>
+			Max <b><%= pr.fb_txt_2 %></b>
+		</p>
+
+		<p>
+			Level basis <b><%= pr.fb_lb %></b>
+		</p>
+
+		<p>
+			If level basis is not available then <b><%= pr.fb_txt_4 %></b> % of equipment
+			height for vessels and exchanger in two phase service
+		</p>
+
+		<p>
+			For exchangers in condensing service, assume the liquid level is the level equivalent
+			to <b><%= pr.fb_txt_5 %></b> % of the exchanger volume
+		</p>
+
+		<p>
+			<b><%= pr.fb_txt_6 %></b> % additional surface area to account for connected pipe
+			<b><%= pr.fb_connected_pipe %></b>
+			<span class="length_small_dimension_length_unit" style="color:red;"></span> or greater in the fire zone
+		</p>
+
+		<p>
+			Vertical vessel bottoms head wetted surface area to be included for vessel on skirts
+			with <b><%= pr.fb_skirts %></b>
+			or more access openings
+		</p>
+
+		<p>
+			<b><%= pr.fb_access_openings %></b>&nbsp;<span class="length_small_dimension_length_unit" style="color:#ff0000;"></span>
+			per column tray to be added to the liquid level on columns
+		</p>
+
+		<p>
+			<b><%= pr.fb_liquid_level_on_columns %>&nbsp;</b>
+			<span class="length_small_dimension_length_unit" style="color:#ff0000;"></span>
+			per <span class="length_large_dimension_length_unit" style="color:red;"></span> of packed bed to be added to the
+			liquid level on columns
+		</p>
+
+		<p>
+			Wetted liquid area is considered up to <b><%= pr.fb_wetted_liquid_area %></b>
+			<span class="length_large_dimension_length_unit" style="color:red;"></span> above the source of flame
+		</p>
+
+		<p>
+			Wetted liquid area for spherical tanks/vessels is considered up
+			to <b><%= pr.fb_wetted_liquid_area_spherical %></b>
+			<span class="length_large_dimension_length_unit" style="color:red;"></span> or up to center line, which ever is
+			greater
+		</p>
+
+		<p>
+			<%= pr.fb_liquid_swell_in_wetted_surface_area_calculation%>
+		</p>
+
+		<p>
+			Assume adequate fire fighting and drainage <b><%= pr.fb_drainage%></b>
+		</p>
+
+		<p>
+			<%= pr.fb_consider_relief_device_sizing %>
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<h4>Relief Device Sizing Basis</h4>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Pressure Relief Valve Discharge Coefficient, Kd</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p style="width: 300px;">Vapor <b><%= pr.rdsb_vdc_vapor %></b></p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p style="width: 300px;">Liquid Non Certified <b><%= pr.rdsb_vdc_liquid_non_certified %></b></p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p style="width: 300px;">Liquid	Certified <b><%= pr.rdsb_vdc_liquid_certified%></b></p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p style="width: 300px;">Two Phase
+			<b><%= pr.rdsb_vdc_two_phase %></b></p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p style="width: 300px;">Rupture
+			Disk <b><%= pr.rdsb_vdc_rupture_disk %></b></p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Pressure Relief Valve Correction Factor Basis</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p style="width: 450px;">
+			Vapor Back Pressure Correction Factor <b><%= pr.prvcfb_vapor_back_pressure %></b>
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p style="width: 450px;">
+			Liquid Back Pressure Correction Factor <b><%= pr.prvcfb_liquid_back_pressure %></b>
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p style="width: 450px;">
+			Liquid Over Pressure Correction Factor <b><%= pr.prvcfb_liquid_over_pressure%></b>
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p style="width: 450px;">
+			Low Pressure Vent Correction Factor <b><%= pr.prvcfb_low_pressure_vent_pressure%></b>
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Pressure Relief Valve Liquid Sizing Default Method</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p>
+			<%= pr.prvlsd %> Certified liquid sizing
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Rupture Disk Default Parameter
+			</span>
+	</td>
+</tr>
+<tr>
+	<td>
+		Maximum Flow Resistance, Kr
+	</td>
+	<td colspan="2">
+		<%= pr.rdbp_maximum_flow_resistance %>
+	</td>
+</tr>
+<tr>
+	<td>
+		Uncertainty Factor
+	</td>
+	<td colspan="2">
+		<%= pr.rdbp_uncertainty_factor %>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<h4>Relief Device Installation Basis</h4>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Hydraulic Pressure Drop Basis
+			</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p>
+			<%= pr.rfib_hydraulic_pressure_drop_basis%>
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Compressible Flow Model For Hydraulic Calculation
+			</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p>
+			<%= pr.rfib_compressible_flow_model %>
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Inlet Pressure Drop Criteria
+			</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		Inlet Pressure Drop Not to Exceed <b><%= pr.inlet_pressure_drop_criteria %> %</b>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Outlet Pressure Drop Criteria
+			</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p>Conventional</p>
+
+		<p>
+			<%= pr.outlet_pressure_drop_criteria_conventional %>
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p>
+			Balanced Bellows
+		</p>
+
+		<p>
+			Not to exceed <b><%= pr.outlet_pressure_drop_criteria_balanced_bellows %> %</b>
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p>
+			Pilot Operated
+		</p>
+
+		<p>
+			Not to exceed <b><%= pr.outlet_pressure_drop_criteria_pilot_operated %> %</b>
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Pressure Relief Valve Count
+			</span>
+	</td>
+</tr>
+<tr>
+	<td width="30%">
+		<p>
+			<%= pr.pressure_relief_valve_count %>
+		</p>
+	</td>
+	<td colspan="2">
+		<p>
+			<%= check_box_tag "pressure_relief_valve_count_stagger_set_pressure", pr.pressure_relief_valve_count_stagger_set_pressure, pr.pressure_relief_valve_count_stagger_set_pressure %> Stagger Set Pressures
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Valve Body Size Selection Basis
+			</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p>
+			<%= pr.valve_body_size_selection_basis %>
+		</p>
+
+		<p>
+			Largest Orifice Size To Consider <b><%= pr.largest_orifice_size_to_consider%></b>
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Flare Header Pressure
+			</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		Normal Flare Header Pressure <b><%= pr.flare_header_pressure %></b>
+		&nbsp;
+		<span class="pressure_general_unit" style="color:red;"></span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Rupture Disk Selection Basis
+			</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p>
+			Largest RD Size To
+			Consider <b><%= pr.rupture_disk_selection_basis_rd_size %></b>
+			<span class="length_small_dimension_length_unit" style="color:red;"></span>
+			<b><%= pr.rupture_disk_selection_basis_rd_size1 %></b>
+		</p>
+
+		<p>
+			Estimated Net Flow Area <b><%= pr.rd_estimated_net_flow_area %></b>
+			<span class="area_orifice_unit" style="color:red;"></span>
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Vent Line Selection Basis
+			</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p>
+			Largest Vent Size To
+			Consider <b><%= pr.vent_line_selection_basis_rd_size%></b>
+			<span class="length_small_dimension_length_unit" style="color:red;">in</span>
+			<b><%= pr.vent_line_selection_basis_rd_size1 %></b>
+		</p>
+
+		<p>
+			Estimated Net Flow Area <b><%= pr.vl_estimated_net_flow_area %></b>
+			<span class="area_orifice_unit" style="color:red;"></span>
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Frangible Roof Design For Relief Protection
+			</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p>
+			<%= pr.frangible_roof_design_for_relief_protection %>
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Environmental Emission Standards
+			</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p>
+			<%= pr.environmental_emission_standards %>
+		</p>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<h4>Temperature Consideration</h4>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Consider Fire in Temperature Design
+			</span>
+	</td>
+</tr>
+<tr>
+	<td colspan="3">
+		<p>
+			<%= pr.tc_consider_fire_in_temperature_design %>
+		</p>
+	</td>
+</tr>
+</table>
+</fieldset>
+
+<script type="text/javascript">
+	set_project_unit_and_decimals();
+</script>

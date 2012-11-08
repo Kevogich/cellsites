@@ -1,0 +1,5 @@
+<%= form_for measurement, :url => measurement.new_record? ? superadmin_measurements_path : superadmin_measurement_path(measurement), :remote => true, :html => {:class => 'form-inline well measurement_form'} do |f| %>
+  <%= f.label :name, "Measurement"%>
+  <%= f.text_field :name%>
+  <%= f.submit "Create", :class => 'btn' %>
+<% end%>

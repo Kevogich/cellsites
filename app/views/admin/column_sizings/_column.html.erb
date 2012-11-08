@@ -1,0 +1,98 @@
+<div id="column" class="tab_content">
+  <!-- Column -->
+  <table style="width:100%;">
+    <tr>
+      <td width="25%">Design Code</td>
+      <td width="25%"><%= f.select :c_design_code, StaticData.design_code, :include_blank => true%></td>
+      <td width="50%" colspan="2"><label class="sub_title">DESIGN EXTERNAL PRESSURE</label></td>
+    </tr>
+    <tr>
+      <td>Stamped?</td>
+      <td><%= f.select :c_stamped, StaticData.stamped, :include_blank => true%></td>
+      <td width="25%">Max. Vacuum Pressure</td>
+      <td width="25%"><%= f.text_field :c_max_vacuum_pressure, :class=>"small-text-100" %>&nbsp;bara</td>
+    </tr>
+    <tr>
+      <td>Min Pressure Vessel Design Press</td>
+      <td><%= f.text_field :c_min_pressure_vessel_design_press, :class=>"small-text-100" %>&nbsp;barg</td>
+      <td>Atmospheric Pressure</td>
+      <td><%= f.text_field :c_atmospheric_pressure, :class=>"small-text-100" %>&nbsp;bara</td>
+    </tr>
+    <tr>
+      <td colspan="2"><b><u>DESIGN INTERNAL PRESSURE</u></b></td>
+      <td colspan="2"><b><u>DESIGN TEMPERATURE</u></b></td>
+    </tr>
+    <tr>
+      <td>Normal Operating Pressure</td>
+      <td><%= f.text_field :c_normal_operating_pressure, :class=>"small-text-100" %>&nbsp;barg</td>
+      <td>Max Temp @ Relief Press.</td>
+      <td><%= f.text_field :c_max_temp_relief_press, :class=>"small-text-100" %>&nbsp;&deg;C</td>
+    </tr>
+    <tr>
+      <td>Normal Operating Temperature</td>
+      <td><%= f.text_field :c_normal_operating_temperature, :class=>"small-text-100" %>&nbsp;&deg;C</td>
+      <td>Minimum Operating Temp</td>
+      <td><%= f.text_field :c_minimum_operating_temp, :class=>"small-text-100" %>&nbsp;&deg;C</td>
+    </tr>
+    <tr>
+      <td>Maximum Operating Pressure</td>
+      <td><%= f.text_field :c_maximum_operating_pressure, :class=>"small-text-100" %>&nbsp;barg</td>
+      <td>Minimum Amb. Design Temp</td>
+      <td><%= f.text_field :c_minimum_amb_design_temp, :class=>"small-text-100" %>&nbsp;&deg;C</td>
+    </tr>
+    <tr>
+      <td>Maximum Operating Temperature</td>
+      <td><%= f.text_field :c_maximum_operating_temperature, :class=>"small-text-100" %>&nbsp;&deg;C</td>
+      <td colspan="2"><%= f.check_box :c_equipment_subject_to_steam_out %>&nbsp;Equipment subject to steam out</td>
+    </tr>
+    <tr>
+      <td>Max possible supply pressure to vessel (Pump shut off, compressor shut off, max header supply,
+        upstream vessel design pressure, settle out pressure etc.)
+      </td>
+      <td><%= f.text_field :c_max_possible_supply_pressure_to_vessel, :class=>"small-text-100" %>&nbsp;barg</td>
+      <td colspan="2"><%= f.check_box :c_equipment_subject_to_dry_out %>&nbsp;Equipment subject to dry out</td>
+    </tr>
+    <tr>
+      <td colspan="2"><b><u>Relief System</u></b></td>
+      <td colspan="2"><b><u>RESULTS</u></b>&nbsp;&nbsp;&nbsp;<input type="button" value="Calculate"></td>
+    </tr>
+    <tr>
+      <td colspan="2"><%= f.check_box :c_relief_to_collection_header_system %>&nbsp;Relief To Collection Header System
+      </td>
+      <td>Design Pressure</td>
+      <td><%= column_sizing.c_design_pressure %>&nbsp;barg</td>
+    </tr>
+    <tr>
+      <td>Collection System Back Pressure</td>
+      <td><%= f.text_field :c_collection_system_back_pressure, :class=>"small-text-100" %>&nbsp;barg</td>
+      <td>Design Temperature</td>
+      <td><%= column_sizing.c_design_temperature %>&nbsp;&deg;C</td>
+    </tr>
+    <tr>
+      <td colspan="2" rowspan="3">
+        <fieldset style="border:1px solid #000000;padding:10px;">
+          <legend><b>Relief Device Type</b></legend>
+								<span>
+									<%= f.radio_button :c_relief_device_type, "conventional" %>&nbsp;Conventional
+								</span>
+								<span>
+									<%= f.radio_button :c_relief_device_type, "balanced_bellows" %>&nbsp;Balanced Bellows
+								</span>
+								<span>
+									<%= f.radio_button :c_relief_device_type, "pilot_operated" %>&nbsp;Pilot Operated
+								</span>
+        </fieldset>
+      </td>
+      <td>Design Vacuum</td>
+      <td><%= column_sizing.c_design_vacuum %>&nbsp;bara</td>
+    </tr>
+    <tr>
+      <td>Minimum Design Temperature</td>
+      <td><%= column_sizing.c_minimum_design_temperature %>&nbsp;&deg;C</td>
+    </tr>
+    <tr>
+      <td>Test Pressure</td>
+      <td><%= column_sizing.c_test_pressure %>&nbsp;barg</td>
+    </tr>
+  </table>
+</div>

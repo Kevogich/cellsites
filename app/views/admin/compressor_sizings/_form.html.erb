@@ -1,0 +1,1364 @@
+<style type="text/css">
+  #discharge_table td {
+    height: 40px;
+  }
+
+  #suction_piping_table input[type="text"] {
+    width: 100px;
+  }
+
+  #compressor_sizing_discharges input[type="text"] {
+    width: 50px;
+  }
+
+  .discharge_circuit_piping_table input[type="text"], .centrifugal_design_piping_table input[type="text"], .reciprocation_design_piping_table input[type="text"] {
+    width: 100px;
+  }
+
+  .mechanical_specification_field input[type="text"], .centrifugal_design_field input[type="text"] {
+    width: 100px;
+  }
+
+  .mechanical_specification_header td, .mechanical_specification_field td, .centrifugal_design_header td, .centrifugal_design_field td {
+    height: 40px;
+  }
+
+  .deleted_column td {
+    background-color: #E9E9E8;
+  }
+</style>
+
+<%= form_for compressor_sizing_tag, :url => compressor_sizing_tag.new_record? ? admin_compressor_sizings_path : admin_compressor_sizing_path(compressor_sizing_tag), :html => {:style => 'width:auto;'} do |f| %>
+  <%= f.error_messages %>
+  <% if compressor_sizing_tag.new_record? %>
+    <%= f.hidden_field :company_id %>
+    <%= f.hidden_field :client_id, :value => @user_project_settings.client_id %>
+    <%= f.hidden_field :project_id, :value => @user_project_settings.project_id %>
+    <%= f.hidden_field :process_unit_id, :value => @user_project_settings.process_unit_id %>
+  <% end %>
+  <div class="hidden">
+    <%= hidden_field_tag :tab %>
+    <%= hidden_field_tag :calculate_btn %>
+  </div>
+
+  <div class="form-element">
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :client_id %><br>
+      <%= f.label :client_id, (compressor_sizing_tag.client.name rescue @user_project_settings.client.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :project_id %><br>
+      <%= f.label :project_id, (compressor_sizing_tag.project.project_num rescue @user_project_settings.project.project_num), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :process_unit_id %><br>
+      <%= f.label :process_unit_id, (compressor_sizing_tag.process_unit.name rescue @user_project_settings.process_unit.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :compressor_sizing_tag %><br>
+      <%= f.text_field :compressor_sizing_tag %>
+		</span>
+    <% unless compressor_sizing_tag.new_record? %>
+      <span style="float:left;margin-right:40px;">
+        <%= label_tag :status %><br>
+        <strong><%= sizing_status(compressor_sizing_tag) %></strong>
+      </span>
+      <span style="float:left;margin-right:40px;">
+        <br>
+        <%= sizing_status_request_button(compressor_sizing_tag) %>
+      </span>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+  <div id="compressor_modes_div" class="form-element-last">
+    <%= hidden_field_tag "compressor_sizing[compressor_sizing_tag_id]", compressor_sizing_tag.id %>
+    <span style="float:left;margin-right:40px;">
+			Select Mode
+      <%= select_tag "compressor_sizing[compressor_sizing_mode_id]", options_for_select(compressor_sizing_tag.compressor_sizing_modes.collect { |p| [p[:mode_name], p[:id]] }.insert(0, ''), compressor_sizing.compressor_sizing_mode_id), :id => "compressor_sizing_mode_sel", :style => "min-width:200px;" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= link_to "List Compressor Sizing Modes", "#", :id => "list_compressor_sizing_modes" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= link_to "Add Compressor Sizing Mode", "#", :id => "add_compressor_sizing_mode" %>
+		</span>
+
+    <div class="clear"></div>
+  </div>
+  <div class="form-buttons">
+    <%= f.submit compressor_sizing_tag.new_record? ? 'Create' : 'Update' %>
+  </div>
+  <div>
+    <table>
+      <tr>
+        <td>Associated Driver Tag</td>
+        <td><input type="button" value="Size Driver"/></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- tabs -->
+  <div id="compressor_tabs">
+    <ul class="simple-tabs">
+      <li><a href="#tab1">Suction</a></li>
+      <li><a href="#tab2">Discharge</a></li>
+      <li><a href="#tab3">Centrifugal Design</a></li>
+      <li><a href="#tab4">Reciprocation Design</a></li>
+      <!--	<li><a href="#tab5">Settle Out</a></li> -->
+      <li><a href="#tab6">CV Summary</a></li>
+      <li><a href="#tab7">FE Summary</a></li>
+      <li><a href="#tab8">Review</a></li>
+    </ul>
+    <div class="tab_container">
+      <!-- Suction -->
+      <div id="tab1" class="tab_content">
+        <%= render :partial => "suction_tab", :locals => {:compressor_sizing => compressor_sizing} %>
+      </div>
+      <!-- Discharge -->
+      <div id="tab2" class="tab_content" style="overflow: auto;">
+        <%= render :partial => "discharge_tab", :locals => {:compressor_sizing => compressor_sizing} %>
+      </div>
+
+      <!-- centrifugal design -->
+      <div id="tab3" class="tab_content">
+        <%= render :partial => "centrifugal_design_tab", :locals => {:compressor_sizing => compressor_sizing} %>
+      </div>
+
+      <!-- Reciprocation Design -->
+      <div id="tab4" class="tab_content">
+        <%= render :partial => "reciprocation_design_tab", :locals => {:compressor_sizing => compressor_sizing} %>
+      </div>
+
+      <div id="tab6" class="tab_content">
+        <!-- CV Summary -->
+        <table>
+          <tr>
+            <td><b><u>No.</u></b></td>
+            <td><b><u>Circuit</u></b></td>
+            <td><b><u>Control Value Tag</u></b></td>
+            <td><b><u>Inlet<br/>Pressure</u></b></td>
+            <td><b><u>Outlet<br/>Pressure</u></b></td>
+            <td><b><u>CV Delta P</u></b></td>
+            <td><b><u>Density</u></b></td>
+            <td><b><u>CV</u></b></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><label class="pressure_general_unit"></label></td>
+            <td><label class="pressure_general_unit"></label></td>
+            <td><label class="pressure_differential_unit"></label></td>
+            <td><label class="density_general_unit"></label></td>
+            <td></td>
+          </tr>
+        </table>
+      </div>
+      <div id="tab7" class="tab_content">
+        <!-- FE Summary -->
+        <table>
+          <tr>
+            <td><b><u>No.</u></b></td>
+            <td><b><u>Circuit</u></b></td>
+            <td><b><u>Flow Element Tag</u></b></td>
+            <td><b><u>Inlet<br/>Pressure</u></b></td>
+            <td><b><u>Outlet<br/>Pressure</u></b></td>
+            <td><b><u>FE Delta P</u></b></td>
+            <td><b><u>Density</u></b></td>
+            <td><b><u>Diameter</u></b></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><label class="pressure_general_unit"></label></td>
+            <td><label class="pressure_general_unit"></label></td>
+            <td><label class="pressure_differential_unit"></label></td>
+            <td><label class="density_general_unit"></label></td>
+            <td>mm</td>
+          </tr>
+        </table>
+      </div>
+      <div id="tab8" class="tab_content">
+        <!-- Review -->
+        <%= render :partial => "review_tab", :locals => {:compressor_sizing => compressor_sizing} %>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+
+
+  <!-- SUCTION PIPING -->
+  <div style="display:none;">
+    <div id="suction_piping_box">
+      <table id="suction_piping_table">
+        <tr>
+          <th rowspan="2">No.</th>
+          <th rowspan="2">Fitting(s)</th>
+          <th rowspan="2">Fitting Tag</th>
+          <th>Pipe Size</th>
+          <th rowspan="2">Pipe Sch.</th>
+          <th>Pipe ID</th>
+          <th rowspan="2">% Flow</th>
+          <th rowspan="2">Ds/Dl<br>or Cv</th>
+          <th>Length</th>
+          <th>Elev.</th>
+          <th>&Delta;P</th>
+          <th>Outlet Pressure</th>
+          <th rowspan="2"></th>
+        </tr>
+        <tr>
+          <th>inches</th>
+          <th><label class="suction_pipings_pipe_id_unit"></label></th>
+          <th><label class="suction_pipings_length_unit"></label></th>
+          <th><label class="suction_pipings_elev_unit"></label></th>
+          <th><label class="suction_pipings_delta_p_unit"></label></th>
+          <th><label class="pressure_general_unit"></label></th>
+        </tr>
+        <% if compressor_sizing.suction_pipings.empty? %>
+          <% @suction_piping = compressor_sizing.suction_pipings.new %>
+          <% @unique_id = @suction_piping.object_id %>
+          <%= render :partial => "suction_piping" %>
+        <% else %>
+          <% compressor_sizing.suction_pipings.each_with_index do |sp, index| %>
+            <% @unique_id = sp.object_id %>
+            <% @index = index %>
+            <% @suction_piping = sp %>
+            <%= render :partial => "suction_piping" %>
+          <% end %>
+        <% end %>
+      </table>
+      <br>
+      <%= link_to "Add", "#", :id => "add_new_suction_piping" %>&nbsp;|&nbsp;<%= link_to "Close", "#", :id => "close_suction_piping" %>
+    </div>
+  </div>
+  <!-- DISCHARGE CIRCUIT PIPING -->
+
+  <div style="display:none;" id="discharge_circuit_piping_ddimensionlessiv">
+    <% @dc_list.each_with_index do |item, index| %>
+      <% @index = index+1 %>
+      <% @unique_id = item[:unique_id] %>
+      <% @unique_id1 = item[:unique_id].object_id %>
+      <div id="<%= "discharge_circuit_piping_box_#{@unique_id}" %>">
+        <table id="<%= "discharge_circuit_piping_table_#{@unique_id1}" %>" class="discharge_circuit_piping_table">
+          <tr>
+            <th rowspan="2">No.</th>
+            <th rowspan="2">Fitting(s)</th>
+            <th rowspan="2">Fitting Tag</th>
+            <th>Pipe Size</th>
+            <th rowspan="2">Pipe Sch.</th>
+            <th>Pipe ID</th>
+            <th rowspan="2">% Flow</th>
+            <th rowspan="2">Ds/Dl<br>or Cv</th>
+            <th>Length</th>
+            <th>Elev.</th>
+            <th>&Delta;P</th>
+            <th>Inlet Pressure</th>
+            <th rowspan="2"></th>
+          </tr>
+          <tr>
+            <th>inches</th>
+            <th><label class="discharge_circuit_piping_pipe_id_unit"></label></th>
+            <th><label class="discharge_circuit_piping_length_unit"></label></th>
+            <th><label class="discharge_circuit_piping_elev_unit"></label></th>
+            <th><label class="discharge_circuit_piping_delta_p_unit"></label></th>
+            <th><label class="discharge_circuit_piping_inlet_pressure_unit"></label></th>
+          </tr>
+          <% if item[:discharge].discharge_circuit_piping.empty? %>
+            <% @discharge_circuit_piping = item[:discharge].discharge_circuit_piping.new %>
+            <%= render :partial => "discharge_circuit_piping_row" %>
+          <% else %>
+            <% item[:discharge].discharge_circuit_piping.each_with_index do |dc, index| %>
+              <% @discharge_circuit_piping = dc %>
+              <%= render :partial => "discharge_circuit_piping_row" %>
+            <% end %>
+          <% end %>
+        </table>
+        <a href="#/" id="<%= @unique_id1 %>" class="discharge_circuit_piping_add_more">Add more</a>&nbsp;|
+        <%= link_to "Close", "#", :class => "discharge_circuit_piping_close" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- compressor centrifugal design pipings -->
+  <div style="display:none;" id="centrifugal_design_piping_div">
+    <div id="centrifugal_design_piping_box_#x#">
+      <table class="centrifugal_design_piping_table">
+        <tr>
+          <th rowspan="2">No.</th>
+          <th rowspan="2">Fitting(s)</th>
+          <th rowspan="2">Fitting Tag</th>
+          <th>Pipe Size</th>
+          <th rowspan="2">Pipe Sch.</th>
+          <th>Pipe ID</th>
+          <th rowspan="2">% Flow</th>
+          <th rowspan="2">Ds/Dl<br>or Cv</th>
+          <th>Length</th>
+          <th>Elev.</th>
+          <th>&Delta;P</th>
+          <th>Inlet Pressure</th>
+          <th rowspan="2"></th>
+        </tr>
+        <tr>
+          <th>inches</th>
+          <th><label class="compressor_centrifugal_design_piping_pipe_id_unit"></label></th>
+          <th><label class="compressor_centrifugal_design_piping_length_unit"></label></th>
+          <th><label class="compressor_centrifugal_design_piping_elev_unit"></label></th>
+          <th><label class="compressor_centrifugal_design_piping_delta_p_unit"></label></th>
+          <th><label class="compressor_centrifugal_design_piping_inlet_pressure_unit"></label></th>
+        </tr>
+        <tr>
+          <td>
+            1
+            <%= hidden_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][1][id]", "", :id => "compressor_centrifugal_design_piping_id_1" %>
+          </td>
+          <td><%= select_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][1][fitting]", options_for_select(PipeSizing.fitting.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, '')), :id => "compressor_centrifugal_design_piping_fitting_1", :style => "width:200px;" %></td>
+          <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][1][fitting_tag]", "", :id => "compressor_centrifugal_design_piping_fitting_tag_1" %></td>
+          <td><%= select_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][1][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }.insert(0, '')), :id => "compressor_centrifugal_design_piping_pipe_size_1", :class => "compressor_centrifugal_design_piping_pipe_size", :row_id => "1" %></td>
+          <td><%= select_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][1][pipe_schedule]", options_for_select([]), :id => "compressor_centrifugal_design_piping_pipe_schedule_1", :class => "compressor_centrifugal_design_piping_pipe_schedule", :row_id => "1" %></td>
+          <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][1][pipe_id]", "", :id => "compressor_centrifugal_design_piping_pipe_id_1", :class => "compressor_centrifugal_design_piping_pipe_id", :row_id => "1" %></td>
+          <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][1][per_flow]", "", :id => "compressor_centrifugal_design_piping_per_flow_1" %></td>
+          <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][1][ds_cv]", "", :id => "compressor_centrifugal_design_piping_ds_cv_1" %></td>
+          <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][1][length]", "", :id => "compressor_centrifugal_design_piping_length_1", :class => "compressor_centrifugal_design_piping_length", :row_id => "1" %></td>
+          <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][1][elev]", "", :id => "compressor_centrifugal_design_piping_elev_1", :class => "compressor_centrifugal_design_piping_elev", :row_id => "1" %></td>
+          <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][1][delta_p]", "", :id => "compressor_centrifugal_design_piping_delta_p_1", :class => "compressor_centrifugal_design_piping_delta_p", :row_id => "1" %></td>
+          <td><%= label_tag "inlet_pressure", "", :class => "compressor_centrifugal_design_piping_inlet_pressure" %></td>
+          <td><%= link_to "X", "#", :class => "centrifugal_design_piping_close_tr", :row_id => 1 %></td>
+        </tr>
+      </table>
+
+      <%= link_to "Add More", "#", :class => "centrifugal_design_piping_box_add_more", :table_id => "#x#" %>&nbsp;|&nbsp;<%= link_to "Close", "#", :class => "centrifugal_design_piping_close" %>
+    </div>
+
+    <table id="compressor_centrifugal_design_piping_tr">
+      <tr>
+        <td>
+          #y#
+          <%= hidden_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][#y#][id]", "", :id => "compressor_centrifugal_design_piping_id_#y#" %>
+        </td>
+        <td><%= select_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][#y#][fitting]", options_for_select(PipeSizing.fitting.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, '')), :id => "compressor_centrifugal_design_piping_fitting_#y#", :style => "width:200px;" %></td>
+        <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][#y#][fitting_tag]", "", :id => "compressor_centrifugal_design_piping_fitting_tag_#y#" %></td>
+        <td><%= select_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][#y#][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }.insert(0, '')), :id => "compressor_centrifugal_design_piping_pipe_size_#y#", :class => "compressor_centrifugal_design_piping_pipe_size", :row_id => "#y#" %></td>
+        <td><%= select_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][#y#][pipe_schedule]", options_for_select([]), :id => "compressor_centrifugal_design_piping_pipe_schedule_#y#", :class => "compressor_centrifugal_design_piping_pipe_schedule", :row_id => "#y#" %></td>
+        <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][#y#][pipe_id]", "", :id => "compressor_centrifugal_design_piping_pipe_id_#y#", :class => "compressor_centrifugal_design_piping_pipe_id", :row_id => "#y#" %></td>
+        <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][#y#][per_flow]", "", :id => "compressor_centrifugal_design_piping_per_flow_#y#" %></td>
+        <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][#y#][ds_cv]", "", :id => "compressor_centrifugal_design_piping_ds_cv_#y#" %></td>
+        <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][#y#][length]", "", :id => "compressor_centrifugal_design_piping_length_#y#", :class => "compressor_centrifugal_design_piping_length", :row_id => "#y#" %></td>
+        <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][#y#][elev]", "", :id => "compressor_centrifugal_design_piping_elev_#y#", :class => "compressor_centrifugal_design_piping_elev", :row_id => "#y#" %></td>
+        <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#x#][compressor_centrifugal_design_pipings][#y#][delta_p]", "", :id => "compressor_centrifugal_design_piping_delta_p_#y#", :class => "compressor_centrifugal_design_piping_delta_p", :row_id => "#y#" %></td>
+        <td><%= label_tag "inlet_pressure", "", :class => "compressor_centrifugal_design_piping_inlet_pressure" %></td>
+        <td><%= link_to "X", "#", :class => "centrifugal_design_piping_close_tr", :row_id => "#y#" %></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- list of discharge circuit piping -->
+  <div id="list_of_centrifugal_design_piping" style="display:none;">
+    <% compressor_sizing.compressor_centrifugal_designs.each_with_index do |ccd, i| %>
+      <% ccd_row_id = i+1 %>
+      <% if ccd.compressor_centrifugal_design_pipings.empty? %>
+        <% next %>
+      <% end %>
+      <div id="centrifugal_design_piping_box_<%= ccd_row_id %>">
+        <table class="centrifugal_design_piping_table">
+          <tr>
+            <th rowspan="2">No.</th>
+            <th rowspan="2">Fitting(s)</th>
+            <th rowspan="2">Fitting Tag</th>
+            <th>Pipe Size</th>
+            <th rowspan="2">Pipe Sch.</th>
+            <th>Pipe ID</th>
+            <th rowspan="2">% Flow</th>
+            <th rowspan="2">Ds/Dl<br>or Cv</th>
+            <th>Length</th>
+            <th>Elev.</th>
+            <th>&Delta;P</th>
+            <th>Inlet Pressure</th>
+            <th rowspan="2"></th>
+          </tr>
+          <tr>
+            <th>inches</th>
+            <th><label class="compressor_centrifugal_design_piping_pipe_id_unit"></label></th>
+            <th><label class="compressor_centrifugal_design_piping_length_unit"></label></th>
+            <th><label class="compressor_centrifugal_design_piping_elev_unit"></label></th>
+            <th><label class="compressor_centrifugal_design_piping_delta_p_unit"></label></th>
+            <th><label class="compressor_centrifugal_design_piping_inlet_pressure_unit"></label></th>
+          </tr>
+          <% ccd.compressor_centrifugal_design_pipings.each_with_index do |ccdp, j| %>
+            <tr>
+              <td>
+                <%= j+1 %>
+                <%= hidden_field_tag "compressor_sizing[compressor_centrifugal_designs][#{ccd_row_id}][compressor_centrifugal_design_pipings][#{j+1}][id]", ccdp.id, :id => "compressor_centrifugal_design_piping_id_#{j+1}" %>
+              </td>
+              <td><%= select_tag "compressor_sizing[compressor_centrifugal_designs][#{ccd_row_id}][compressor_centrifugal_design_pipings][#{j+1}][fitting]", options_for_select(PipeSizing.fitting.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, ''), ccdp.fitting), :id => "compressor_centrifugal_design_piping_fitting_#{j+1}", :style => "width:200px;" %></td>
+              <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#{ccd_row_id}][compressor_centrifugal_design_pipings][#{j+1}][fitting_tag]", ccdp.fitting_tag, :id => "discharge_circuit_piping_fitting_tag_#{j+1}" %></td>
+              <td><%= select_tag "compressor_sizing[compressor_centrifugal_designs][#{ccd_row_id}][compressor_centrifugal_design_pipings][#{j+1}][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }.insert(0, ''), ccdp.pipe_size), :id => "compressor_centrifugal_design_piping_pipe_size_#{j+1}", :class => "compressor_centrifugal_design_piping_pipe_size", :row_id => "#{j+1}" %></td>
+              <td><%= select_tag "compressor_sizing[compressor_centrifugal_designs][#{ccd_row_id}][compressor_centrifugal_design_pipings][#{j+1}][pipe_schedule]", options_for_select(PipeSizing.pipe_size_schedules[ccdp.pipe_size.to_s], ccdp.pipe_schedule), :id => "compressor_centrifugal_design_piping_pipe_schedule_#{j+1}", :class => "compressor_centrifugal_design_piping_pipe_schedule", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#{ccd_row_id}][compressor_centrifugal_design_pipings][#{j+1}][pipe_id]", ccdp.pipe_id, :id => "compressor_centrifugal_design_piping_pipe_id_#{j+1}", :class => "compressor_centrifugal_design_piping_pipe_id", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#{ccd_row_id}][compressor_centrifugal_design_pipings][#{j+1}][per_flow]", ccdp.per_flow, :id => "compressor_centrifugal_design_piping_per_flow_#{j+1}" %></td>
+              <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#{ccd_row_id}][compressor_centrifugal_design_pipings][#{j+1}][ds_cv]", ccdp.ds_cv, :id => "compressor_centrifugal_design_piping_ds_cv_#{j+1}" %></td>
+              <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#{ccd_row_id}][compressor_centrifugal_design_pipings][#{j+1}][length]", ccdp.length, :id => "compressor_centrifugal_design_piping_length_#{j+1}", :class => "compressor_centrifugal_design_piping_length", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#{ccd_row_id}][compressor_centrifugal_design_pipings][#{j+1}][elev]", ccdp.elev, :id => "compressor_centrifugal_design_piping_elev_#{j+1}", :class => "compressor_centrifugal_design_piping_elev", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "compressor_sizing[compressor_centrifugal_designs][#{ccd_row_id}][compressor_centrifugal_design_pipings][#{j+1}][delta_p]", ccdp.delta_p, :id => "compressor_centrifugal_design_piping_delta_p_#{j+1}", :class => "compressor_centrifugal_design_piping_delta_p", :row_id => "#{j+1}" %></td>
+              <td><%= label_tag "inlet_pressure", "", :class => "compressor_centrifugal_design_piping_inlet_pressure" %></td>
+              <td><%= link_to "X", "#", :class => "centrifugal_design_piping_close_tr", :row_id => "#{j+1}" %></td>
+            </tr>
+          <% end %>
+        </table>
+
+        <%= link_to "Add More", "#", :class => "centrifugal_design_piping_box_add_more", :table_id => "#{ccd_row_id}" %>&nbsp;|&nbsp;<%= link_to "Close", "#", :class => "centrifugal_design_piping_close" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- compressor reciprocation design pipings -->
+  <div style="display:none;" id="reciprocation_design_piping_div">
+    <div id="reciprocation_design_piping_box_#x#">
+      <table class="reciprocation_design_piping_table">
+        <tr>
+          <th rowspan="2">No.</th>
+          <th rowspan="2">Fitting(s)</th>
+          <th rowspan="2">Fitting Tag</th>
+          <th>Pipe Size</th>
+          <th rowspan="2">Pipe Sch.</th>
+          <th>Pipe ID</th>
+          <th rowspan="2">% Flow</th>
+          <th rowspan="2">Ds/Dl<br>or Cv</th>
+          <th>Length</th>
+          <th>Elev.</th>
+          <th>&Delta;P</th>
+          <th>Inlet Pressure</th>
+          <th rowspan="2"></th>
+        </tr>
+        <tr>
+          <th>inches</th>
+          <th><label class="compressor_reciprocation_design_piping_pipe_id_unit"></label></th>
+          <th><label class="compressor_reciprocation_design_piping_length_unit"></label></th>
+          <th><label class="compressor_reciprocation_design_piping_elev_unit"></label></th>
+          <th><label class="compressor_reciprocation_design_piping_delta_p_unit"></label></th>
+          <th><label class="compressor_reciprocation_design_piping_inlet_pressure_unit"></label></th>
+        </tr>
+        <tr>
+          <td>
+            1
+            <%= hidden_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][1][id]", "", :id => "compressor_reciprocation_design_piping_id_1" %>
+          </td>
+          <td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][1][fitting]", options_for_select(PipeSizing.fitting.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, '')), :id => "compressor_reciprocation_design_piping_fitting_1", :style => "width:200px;" %></td>
+          <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][1][fitting_tag]", "", :id => "compressor_reciprocation_design_piping_fitting_tag_1" %></td>
+          <td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][1][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }.insert(0, '')), :id => "compressor_reciprocation_design_piping_pipe_size_1", :class => "compressor_reciprocation_design_piping_pipe_size", :row_id => "1" %></td>
+          <td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][1][pipe_schedule]", options_for_select([]), :id => "compressor_reciprocation_design_piping_pipe_schedule_1", :class => "compressor_reciprocation_design_piping_pipe_schedule", :row_id => "1" %></td>
+          <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][1][pipe_id]", "", :id => "compressor_reciprocation_design_piping_pipe_id_1", :class => "compressor_reciprocation_design_piping_pipe_id", :row_id => "1" %></td>
+          <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][1][per_flow]", "", :id => "compressor_reciprocation_design_piping_per_flow_1" %></td>
+          <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][1][ds_cv]", "", :id => "compressor_reciprocation_design_piping_ds_cv_1" %></td>
+          <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][1][length]", "", :id => "compressor_reciprocation_design_piping_length_1", :class => "compressor_reciprocation_design_piping_length", :row_id => "1" %></td>
+          <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][1][elev]", "", :id => "compressor_reciprocation_design_piping_elev_1", :class => "compressor_reciprocation_design_piping_elev", :row_id => "1" %></td>
+          <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][1][delta_p]", "", :id => "compressor_reciprocation_design_piping_delta_p_1", :class => "compressor_reciprocation_design_piping_delta_p", :row_id => "1" %></td>
+          <td><%= label_tag "inlet_pressure", "", :class => "compressor_reciprocation_design_piping_inlet_pressure" %></td>
+          <td><%= link_to "X", "#", :class => "reciprocation_design_piping_close_tr", :row_id => 1 %></td>
+        </tr>
+      </table>
+
+      <%= link_to "Add More", "#", :class => "reciprocation_design_piping_box_add_more", :table_id => "#x#" %>&nbsp;|&nbsp;<%= link_to "Close", "#", :class => "reciprocation_design_piping_close" %>
+    </div>
+
+    <table id="compressor_reciprocation_design_piping_tr">
+      <tr>
+        <td>
+          #y#
+          <%= hidden_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][#y#][id]", "", :id => "compressor_reciprocation_design_piping_id_#y#" %>
+        </td>
+        <td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][#y#][fitting]", options_for_select(PipeSizing.fitting.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, '')), :id => "compressor_reciprocation_design_piping_fitting_#y#", :style => "width:200px;" %></td>
+        <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][#y#][fitting_tag]", "", :id => "compressor_reciprocation_design_piping_fitting_tag_#y#" %></td>
+        <td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][#y#][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }.insert(0, '')), :id => "compressor_reciprocation_design_piping_pipe_size_#y#", :class => "compressor_reciprocation_design_piping_pipe_size", :row_id => "#y#" %></td>
+        <td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][#y#][pipe_schedule]", options_for_select([]), :id => "compressor_reciprocation_design_piping_pipe_schedule_#y#", :class => "compressor_reciprocation_design_piping_pipe_schedule", :row_id => "#y#" %></td>
+        <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][#y#][pipe_id]", "", :id => "compressor_reciprocation_design_piping_pipe_id_#y#", :class => "compressor_reciprocation_design_piping_pipe_id", :row_id => "#y#" %></td>
+        <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][#y#][per_flow]", "", :id => "compressor_reciprocation_design_piping_per_flow_#y#" %></td>
+        <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][#y#][ds_cv]", "", :id => "compressor_reciprocation_design_piping_ds_cv_#y#" %></td>
+        <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][#y#][length]", "", :id => "compressor_reciprocation_design_piping_length_#y#", :class => "compressor_reciprocation_design_piping_length", :row_id => "#y#" %></td>
+        <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][#y#][elev]", "", :id => "compressor_reciprocation_design_piping_elev_#y#", :class => "compressor_reciprocation_design_piping_elev", :row_id => "#y#" %></td>
+        <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#x#][compressor_reciprocation_design_pipings][#y#][delta_p]", "", :id => "compressor_reciprocation_design_piping_delta_p_#y#", :class => "compressor_reciprocation_design_piping_delta_p", :row_id => "#y#" %></td>
+        <td><%= label_tag "inlet_pressure", "", :class => "compressor_reciprocation_design_piping_inlet_pressure" %></td>
+        <td><%= link_to "X", "#", :class => "reciprocation_design_piping_close_tr", :row_id => "#y#" %></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- list of discharge circuit piping -->
+  <div id="list_of_reciprocation_design_piping" style="display:none;">
+    <% compressor_sizing.compressor_reciprocation_designs.each_with_index do |crd, i| %>
+      <% crd_row_id = i+1 %>
+      <% if crd.compressor_reciprocation_design_pipings.empty? %>
+        <% next %>
+      <% end %>
+      <div id="reciprocation_design_piping_box_<%= crd_row_id %>">
+        <table class="reciprocation_design_piping_table">
+          <tr>
+            <th rowspan="2">No.</th>
+            <th rowspan="2">Fitting(s)</th>
+            <th rowspan="2">Fitting Tag</th>
+            <th>Pipe Size</th>
+            <th rowspan="2">Pipe Sch.</th>
+            <th>Pipe ID</th>
+            <th rowspan="2">% Flow</th>
+            <th rowspan="2">Ds/Dl<br>or Cv</th>
+            <th>Length</th>
+            <th>Elev.</th>
+            <th>&Delta;P</th>
+            <th>Inlet Pressure</th>
+            <th rowspan="2"></th>
+          </tr>
+          <tr>
+            <th>inches</th>
+            <th><label class="compressor_reciprocation_design_piping_pipe_id_unit"></label></th>
+            <th><label class="compressor_reciprocation_design_piping_length_unit"></label></th>
+            <th><label class="compressor_reciprocation_design_piping_elev_unit"></label></th>
+            <th><label class="compressor_reciprocation_design_piping_delta_p_unit"></label></th>
+            <th><label class="compressor_reciprocation_design_piping_inlet_pressure_unit"></label></th>
+          </tr>
+          <% crd.compressor_reciprocation_design_pipings.each_with_index do |crdp, j| %>
+            <tr>
+              <td>
+                <%= j+1 %>
+                <%= hidden_field_tag "compressor_sizing[compressor_reciprocation_designs][#{crd_row_id}][compressor_reciprocation_design_pipings][#{j+1}][id]", crdp.id, :id => "compressor_reciprocation_design_piping_id_#{j+1}" %>
+              </td>
+              <td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][#{crd_row_id}][compressor_reciprocation_design_pipings][#{j+1}][fitting]", options_for_select(PipeSizing.fitting.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, ''), crdp.fitting), :id => "compressor_reciprocation_design_piping_fitting_#{j+1}", :style => "width:200px;" %></td>
+              <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{crd_row_id}][compressor_reciprocation_design_pipings][#{j+1}][fitting_tag]", crdp.fitting_tag, :id => "discharge_circuit_piping_fitting_tag_#{j+1}" %></td>
+              <td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][#{crd_row_id}][compressor_reciprocation_design_pipings][#{j+1}][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }.insert(0, ''), crdp.pipe_size), :id => "compressor_reciprocation_design_piping_pipe_size_#{j+1}", :class => "compressor_reciprocation_design_piping_pipe_size", :row_id => "#{j+1}" %></td>
+              <td><%= select_tag "compressor_sizing[compressor_reciprocation_designs][#{crd_row_id}][compressor_reciprocation_design_pipings][#{j+1}][pipe_schedule]", options_for_select(PipeSizing.pipe_size_schedules[crdp.pipe_size.to_s], crdp.pipe_schedule), :id => "compressor_reciprocation_design_piping_pipe_schedule_#{j+1}", :class => "compressor_reciprocation_design_piping_pipe_schedule", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{crd_row_id}][compressor_reciprocation_design_pipings][#{j+1}][pipe_id]", crdp.pipe_id, :id => "compressor_reciprocation_design_piping_pipe_id_#{j+1}", :class => "compressor_reciprocation_design_piping_pipe_id", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{crd_row_id}][compressor_reciprocation_design_pipings][#{j+1}][per_flow]", crdp.per_flow, :id => "compressor_reciprocation_design_piping_per_flow_#{j+1}" %></td>
+              <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{crd_row_id}][compressor_reciprocation_design_pipings][#{j+1}][ds_cv]", crdp.ds_cv, :id => "compressor_reciprocation_design_piping_ds_cv_#{j+1}" %></td>
+              <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{crd_row_id}][compressor_reciprocation_design_pipings][#{j+1}][length]", crdp.length, :id => "compressor_reciprocation_design_piping_length_#{j+1}", :class => "compressor_reciprocation_design_piping_length", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{crd_row_id}][compressor_reciprocation_design_pipings][#{j+1}][elev]", crdp.elev, :id => "compressor_reciprocation_design_piping_elev_#{j+1}", :class => "compressor_reciprocation_design_piping_elev", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "compressor_sizing[compressor_reciprocation_designs][#{crd_row_id}][compressor_reciprocation_design_pipings][#{j+1}][delta_p]", crdp.delta_p, :id => "compressor_reciprocation_design_piping_delta_p_#{j+1}", :class => "compressor_reciprocation_design_piping_delta_p", :row_id => "#{j+1}" %></td>
+              <td><%= label_tag "inlet_pressure", "", :class => "compressor_reciprocation_design_piping_inlet_pressure" %></td>
+              <td><%= link_to "X", "#", :class => "reciprocation_design_piping_close_tr", :row_id => "#{j+1}" %></td>
+            </tr>
+          <% end %>
+        </table>
+
+        <%= link_to "Add More", "#", :class => "reciprocation_design_piping_box_add_more", :table_id => "#{crd_row_id}" %>&nbsp;|&nbsp;<%= link_to "Close", "#", :class => "reciprocation_design_piping_close" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- clone_circuit_piping -->
+  <div style="display:none;">
+    <div id="clone_circuit_piping_div" style="padding:10px;">
+      <div style="float:left;height:90px;padding-top: 40px;">
+        Source Circuit Piping<br>
+        <%= select_tag "cricuit_piping", options_for_select(compressor_sizing.compressor_sizing_discharges.each_with_index.collect { |p, i| ["Design Path #{i+1}", p[:id]] }), :include_blank => true, :id => "src_cricuit_piping", :style => "width:150px;" %>
+      </div>
+      <div style="float:left;margin-left:20px;text-align:center;">
+        <img src="/images/arrow_right.png" alt="right arrow"><br>
+        <input type="button" value="Clone" id="clone_circuit_piping_btn">
+      </div>
+      <div style="float:left;margin-left:20px;height:90px;padding-top: 40px;">
+        Target Circuit Piping<br>
+        <%= select_tag "cricuit_piping", options_for_select(compressor_sizing.compressor_sizing_discharges.each_with_index.collect { |p, i| ["Design Path #{i+1}", p[:id]] }), :include_blank => true, :id => "trg_cricuit_piping", :style => "width:150px;" %>
+      </div>
+
+      <div class="clear"></div>
+    </div>
+  </div>
+
+  <!-- Compressor Sizing Mode-->
+  <div class="hidden">
+    <div id="add_compressor_sizing_mode_div">
+      <div class="form-element-last">
+        <%= label_tag :mode_name %>
+        <br>
+        <%= text_field_tag :mode_name %>
+      </div>
+      <div class="form-buttons">
+        <input type="button" value="Add Compressor Sizing Mode" id="add_compressor_sizing_mode_btn">
+      </div>
+    </div>
+
+    <div id="list_compressor_sizing_mode_div">
+      <table>
+        <tr>
+          <td><b>S.No</b></td>
+          <td><b>Compressor Sizing Mode</b></td>
+          <td><b>Edit</b></td>
+          <td><b>Delete</b></td>
+        </tr>
+        <% compressor_sizing_tag.compressor_sizing_modes.each_with_index do |mode, i| %>
+          <tr>
+            <td>
+              <%= "#{i+1}" %>
+              <%= hidden_field_tag "compressor_sizing_mode_id", mode.id, :id => "compressor_sizing_mode_id_#{i+1}" %>
+            </td>
+            <td>
+              <span id='compressor_sizing_mode_name_<%= "#{i+1}" %>'><%= mode.mode_name %></span>
+              <span id='edit_compressor_sizing_mode_name_<%= "#{i+1}" %>' class='hidden'><%= text_field_tag 'mode_name', mode.mode_name, :id => "mode_name_#{i+1}", :style => "width:150px;" %></span>
+            </td>
+            <td><%= link_to "edit", "#", :class => "compressor_sizing_mode_edit", :row_id => "#{i+1}" %></td>
+            <td><%= link_to "x", "#", :class => "compressor_sizing_mode_close_tr", :row_id => "#{i+1}" %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+  <div style="display:none;">
+
+    <div id="efficiency_graph_div">
+      <table>
+        <tr>
+          <th colspan="6"><b>Compressor Efficiency Convertor</b></th>
+        </tr>
+        <tr>
+          <td>Comperssion Ratio</td>
+          <td>&nbsp;</td>
+          <td>Original Efficiency</td>
+          <td>&nbsp;</td>
+          <td rowspan="2">
+            <fieldset style="border: 1px solid #000000;padding: 5px;width:auto;">
+              <legend>Compression Path</legend>
+              <input type='radio' name='compression_path'>&nbsp;Isentropic&nbsp;&nbsp;
+              <input type='radio' name='compression_path'>&nbsp;Polytropic
+            </fieldset>
+          </td>
+          <td rowspan="2"><input type='button' id='close_cbox' value='Close'></td>
+        </tr>
+        <tr>
+          <td>Isentrophic Exponet(k)</td>
+          <td>&nbsp;</td>
+          <td>New Efficiency</td>
+          <td><input type='text' name='new_efficiency'></td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="wheels_graph_div">
+      <table>
+        <tr>
+          <th colspan="7"><b>Compressor Wheel Count</b></th>
+        </tr>
+        <tr>
+          <td>MW</td>
+          <td>label</td>
+          <td>Diff. Head</td>
+          <td>label &nbsp;ft</td>
+          <td>No. of Wheels</td>
+          <td><input type='text' name='no_of_wheels'></td>
+          <td><input type='button' id='close_box' value='Close'></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+<% unless compressor_sizing_tag.new_record? %>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Attachments</legend>
+    <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+    <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+  </fieldset>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Comments</legend>
+    <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+    <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+  </fieldset>
+<% end %>
+
+<%= javascript_tag do %>
+  var sp_suction_count = <%= compressor_sizing.suction_pipings.where(:tab => "suction").empty? ? 2 : compressor_sizing.suction_pipings.where(:tab => "suction").length+1 %>;
+  var dc_count = <%= compressor_sizing.compressor_sizing_discharges.empty? ? 2 : compressor_sizing.compressor_sizing_discharges.length+1 %>;
+  var crd_count = <%= compressor_sizing.compressor_reciprocation_designs.empty? ? 2 : compressor_sizing.compressor_reciprocation_designs.length+1 %>;
+  var ccd_count = <%= compressor_sizing.compressor_centrifugal_designs.empty? ? 2 : compressor_sizing.compressor_centrifugal_designs.length+1 %>;
+
+  var pipe_size_schedules = <%= raw PipeSizing.pipe_size_schedules.to_json %>;
+  var pipe_size_pipe_ods = <%= raw PipeSizing.pipe_size_pipe_od.to_json %>;
+  var pipe_size_wall_thinkness = <%= raw PipeSizing.pipe_size_wall_thinkness.to_json %>;
+  var pipe_id_conversion_factor = <%= @project.conversion_factor("Length", "Pipe Tube Diameter") %>;
+
+  var compressor_sizing_tag_id = '<%= compressor_sizing_tag.id %>';
+  <% if compressor_sizing_tag.new_record? %>
+    $("#compressor_tabs,#compressor_modes_div").mask();
+  <% else %>
+    $(".edit_compressor_sizing_tag").submit(function(e){
+    if($('#compressor_sizing_mode_sel').val() == "") {
+    alert('Select Compressor Sizing Mode');
+    return false;
+    }
+    });
+  <% end %>
+  <% if params[:compressor_sizing_mode].blank? %>
+    $("#compressor_tabs").mask();
+  <% end %>
+
+<% end %>
+
+<script type="text/javascript">
+  //update sequence of a listing under an element
+  function update_sequence(id) {
+    $("#" + id + " td[id^='sequence']").each(function (index, value) {
+      //sequence should not start with zero, but array starts with 0 index
+      index = index + 1;
+      $(this).empty().append(index);
+    });
+  }
+  //call it when page loaded
+  update_sequence("suction_piping_box");
+  set_project_unit_and_decimals();
+  var unit_decimals = {
+    ".suction_pipings_pipe_id":{"measurement":"Length", "measurement_sub_type":"Pipe Tube Diameter"},
+    ".suction_pipings_length":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".suction_pipings_elev":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".suction_pipings_delta_p":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    ".discharge_circuit_piping_pipe_id":{"measurement":"Length", "measurement_sub_type":"Pipe Tube Diameter"},
+    ".discharge_circuit_piping_length":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".discharge_circuit_piping_elev":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".discharge_circuit_piping_delta_p":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    ".discharge_circuit_piping_inlet_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    ".compressor_centrifugal_design_piping_pipe_id":{"measurement":"Length", "measurement_sub_type":"Pipe Tube Diameter"},
+    ".compressor_centrifugal_design_piping_length":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".compressor_centrifugal_design_piping_elev":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".compressor_centrifugal_design_piping_delta_p":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    ".compressor_centrifugal_design_piping_inlet_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    ".compressor_reciprocation_design_piping_pipe_id":{"measurement":"Length", "measurement_sub_type":"Pipe Tube Diameter"},
+    ".compressor_reciprocation_design_piping_length":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".compressor_reciprocation_design_piping_elev":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".compressor_reciprocation_design_piping_delta_p":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    ".compressor_reciprocation_design_piping_inlet_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"}
+  };
+  set_project_unit_decimals(unit_decimals);
+  set_project_unit_labels(unit_decimals);
+
+
+  $('#compressor_sizing_process_basis_id').change(function (e) {
+    $('#compressor_sizing_su_stream_no >option').remove();
+    $('#compressor_sizing_su_stream_no').append($('<option></option>').val("").html("Please select"));
+    $("#tab1 table input[type=text]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/heat_and_material_balances/get_stream_nos', {process_basis_id:$(this).val()}, function (data) {
+      $(data).each(function (k, v) {
+        $('#compressor_sizing_su_stream_no').append(
+          $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+        );
+      });
+    }, 'json');
+  });
+
+  $('#compressor_sizing_su_stream_no').change(function (e) {
+    $("#tab1 table input[type=text]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+    $.get('/admin/compressor_sizings/get_stream_values',
+      {process_basis_id:$('#compressor_sizing_process_basis_id').val(), stream_no:$('#compressor_sizing_su_stream_no').val()},
+      function (data) {
+        //$('#storage_tank_sizing_s_'+col+'_pressure').val(get_project_field_value1("pressure_general",data['pressure']));
+        $('#compressor_sizing_su_pressure').val(get_project_field_value1("pressure_general", data['pressure_value']));
+        $('#compressor_sizing_su_temperature').val(get_project_field_value1("temperature_general", data['temperature_value']));
+        $('#compressor_sizing_su_mass_flow_rate').val(get_project_field_value1("mass_flow_rate_general", data['mass_flow_rate_value']));
+        $('#compressor_sizing_su_vapor_density').val(get_project_field_value1("density_general", data['vapor_density_value']));
+        $('#compressor_sizing_su_vapor_viscosity').val(get_project_field_value1("viscosity_general", data['vapor_viscosity_values']));
+      },
+      'json');
+  });
+
+  //suction piping
+  $('#enter_circuit_piping').click(function (e) {
+    $.colorbox({href:'#suction_piping_box', inline:true, width:'100%', height:'100%'});
+  });
+
+  $('#add_new_suction_piping').click(function (e) {
+    $.get("<%= suction_pipings_admin_compressor_sizings_path %>", function (data) {
+      $('#suction_piping_table').append(data);
+      set_project_unit_decimal('.suction_pipings_pipe_id', unit_decimals);
+      set_project_unit_decimal('.suction_pipings_length', unit_decimals);
+      set_project_unit_decimal('.suction_pipings_elev', unit_decimals);
+      set_project_unit_decimal('.suction_pipings_delta_p', unit_decimals);
+      update_sequence("suction_piping_box");
+    })
+    return false;
+  });
+
+  $('#close_suction_piping').click(function (e) {
+    $.colorbox.close();
+    return false;
+  });
+
+  $('.delete_suction_pipe').live('click', function (e) {
+    var id = $(this).attr('id');
+    $("tr#row_" + id).hide();
+    $("#destroy_" + id).attr('value', 1);
+    $("#sequence_" + id).attr('id', '');
+    update_sequence("suction_piping_box");
+    return false;
+  });
+
+  //Discharge Tab
+  $('#add_new_discharge_row').click(function (e) {
+    //var new_discharge_row = $('#new_row_discharge').html().replace(/#x#/g, dc_count);
+    $.get("<%= discharges_admin_compressor_sizings_path(1) %>", function (data) {
+      $('#compressor_sizing_discharges').append(data);
+      //get discharge circuit piping new
+      //we need unique id for this, get it from coming data
+      var uid = $(data).find("a.delete_discharge").attr("id").split(":")[1];
+      $.get("/admin/compressor_sizings/discharge_circuit_piping_div", {unique_id:uid}, function (data) {
+        $("#discharge_circuit_piping_div").append(data);
+      });
+      update_sequence('compressor_sizing_discharges');
+    });
+    return false;
+  });
+  $('.delete_discharge').live('click', function (e) {
+    var id = $(this).attr("id").split(":")[1];
+    $("#destroy_" + id).attr("value", 1);
+    $("#sequence_" + id).attr('id', '');
+    $("#row_" + id).hide();
+    update_sequence('compressor_sizing_discharges');
+    return false;
+  });
+
+  $('.discharge_process_basis').live('change', function (e) {
+    var id = $(this).attr('id').split(":")[1];
+    console.log(id);
+    $('.discharge_stream_no_' + id + ' >option').remove();
+    $('.discharge_stream_no_' + id).append($('<option></option>').val("").html(""));
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/heat_and_material_balances/get_stream_nos',
+      {process_basis_id:$(this).val()},
+      function (data) {
+        $(data).each(function (k, v) {
+          $('.discharge_stream_no_' + id).append(
+            $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+          );
+        });
+      },
+      'json'
+    );
+  });
+
+  $('.discharge_stream_no').live('change', function (e) {
+    var id = $(this).attr('id').split(":")[1];
+    $('#discharge_destination_pressure_' + id).val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/compressor_sizings/get_discharge_stream_nos',
+      {process_basis_id:$('.discharge_process_basis_' + id).val(), stream_no:$(this).val()},
+      function (data) {
+        $('#discharge_destination_pressure_' + id).val(data['pressure']);
+      },
+      'json'
+    );
+  });
+
+  $('#compressor_sizing_discharges input[name=design_circuit]').live('click', function (e) {
+    $("input[id^=discharge_design_circuit_]").val("");
+    $('#discharge_design_circuit_' + $(this).val()).val(true);
+  });
+
+  //discharge_circuit_piping
+  $('.discharge_circuit_piping_btn').live('click', function (e) {
+    var id = $(this).attr('id').split(":")[1];
+    //var discharge_circuit_piping_box = $('#discharge_circuit_piping_div').html().replace(/#x#/g, row_id);
+    //if($('#discharge_circuit_piping_box_'+row_id).text() == "") {
+    //	$('#list_of_discharge_circuit_piping').append($(discharge_circuit_piping_box));
+    //}
+    $.colorbox({href:'#discharge_circuit_piping_box_' + id, inline:true, width:'100%', height:'100%'});
+    update_sequence("discharge_circuit_piping_box_" + id);
+    //$.colorbox({
+    //	href:'#discharge_circuit_piping_box_'+id,
+    //	inline:true,
+    //	width:'100%',
+    //	height:'100%',
+    //	onComplete: function(){
+    //		var tr_row_id = parseInt($('#discharge_circuit_piping_box_'+row_id+' table tr:last td:last a').attr('row_id'))+1;
+    //		$('#discharge_circuit_piping_box_'+row_id).data({tr_row_id:tr_row_id, discharge_row_id:row_id});
+    //		return false;
+    //	}
+    //});
+    set_project_unit_decimal('.discharge_circuit_piping_pipe_id', unit_decimals);
+    set_project_unit_decimal('.discharge_circuit_piping_length', unit_decimals);
+    set_project_unit_decimal('.discharge_circuit_piping_elev', unit_decimals);
+    set_project_unit_decimal('.discharge_circuit_piping_delta_p', unit_decimals);
+    return false;
+  });
+
+  $('.discharge_circuit_piping_add_more').live('click', function (e) {
+    var id = $(this).attr('id');
+    $.get("/admin/compressor_sizings/discharge_circuit_pipings/", {unique_id:id}, function (data) {
+      $("#discharge_circuit_piping_table_" + id).append(data);
+      update_sequence("discharge_circuit_piping_table_" + id);
+    });
+    //var tr_row_id = $('#discharge_circuit_piping_box_'+table_id).data()['tr_row_id'];
+    //var new_discharge_circuit_pipings_tr = $('#discharge_circuit_pipings_tr').html().replace(/#x#/g, table_id);
+    //new_discharge_circuit_pipings_tr = new_discharge_circuit_pipings_tr.replace(/#y#/g, tr_row_id);
+    //$('#discharge_circuit_piping_box_'+table_id+' table').append($(new_discharge_circuit_pipings_tr));
+    //$('#discharge_circuit_piping_box_'+table_id).data()['tr_row_id'] = tr_row_id+1;
+    set_project_unit_decimal('.discharge_circuit_piping_pipe_id', unit_decimals);
+    set_project_unit_decimal('.discharge_circuit_piping_length', unit_decimals);
+    set_project_unit_decimal('.discharge_circuit_piping_elev', unit_decimals);
+    set_project_unit_decimal('.discharge_circuit_piping_delta_p', unit_decimals);
+    return false;
+  });
+
+  $('.discharge_circuit_piping_close,.centrifugal_design_piping_close,.reciprocation_design_piping_close').live('click', function (e) {
+    $.colorbox.close();
+    return false;
+  });
+
+  $('.delete_discharge_circuit_pipe').live('click', function (e) {
+    var id = $(this).attr('id').split(":")[1];
+    $("#row_" + id).hide();
+    $("#sequence_" + id).attr('id', '');
+    $("#destroy_" + id).attr('value', 1);
+    update_sequence("discharge_circuit_piping_table_" + id);
+    return false;
+  });
+
+  $('#show_clone_circuit_piping').click(function (e) {
+    $.colorbox({
+      href:'#clone_circuit_piping_div',
+      inline:true});
+    return false;
+  });
+
+  $('#clone_circuit_piping_btn').click(function (e) {
+    var src_circuit_piping = $('#src_cricuit_piping').val();
+    var trg_cricuit_piping = $('#trg_cricuit_piping').val();
+    if (src_circuit_piping == "" || trg_cricuit_piping == "") {
+      return false;
+    }
+
+    $('#clone_circuit_piping_btn').attr("disabled", true);
+
+    $.get('/admin/compressor_sizings/clone_circuit_piping',
+      {src_circuit_piping:src_circuit_piping, trg_cricuit_piping:trg_cricuit_piping},
+      function (data) {
+        $('#clone_circuit_piping_btn').attr("disabled", false);
+        alert('Circuit piping cloned successfully.');
+        window.location.reload(true);
+      },
+      'json'
+    );
+
+    return false;
+  });
+
+  $('#efficiency_btn').click(function (e) {
+    $.colorbox({
+      href:'#efficiency_div',
+      inline:true,
+      width:'auto',
+      height:'auto'});
+    return false;
+  });
+
+  $('#no_of_wheels_btn').click(function (e) {
+    $.colorbox({
+      href:'#no_of_wheels_div',
+      inline:true,
+      width:'auto',
+      height:'auto'});
+    return false;
+  });
+
+  //add_compressor_sizing_mode
+  $('#add_compressor_sizing_mode').click(function (e) {
+    $.colorbox({
+      href:'#add_compressor_sizing_mode_div',
+      inline:true,
+      width:'auto',
+      height:'auto'});
+    return false;
+  });
+
+  $('#add_compressor_sizing_mode_btn').click(function (e) {
+    if ($('#mode_name').val() == '') {
+      return false;
+    }
+    $.post(
+      '/admin/compressor_sizings/add_compressor_sizing_mode',
+      {compressor_sizing_tag_id:compressor_sizing_tag_id, mode_name:$('#mode_name').val()},
+      function () {
+        $('#mode_name').val('');
+      }, 'script');
+  });
+
+  $('#list_compressor_sizing_modes').click(function (e) {
+    $.colorbox({
+      href:'#list_compressor_sizing_mode_div',
+      inline:true,
+      width:'auto',
+      height:'auto',
+      onClosed:function () {
+        window.location.reload(true);
+      }
+    });
+    return false;
+  });
+
+  //edit
+  $('.compressor_sizing_mode_edit').click(function (e) {
+    var row_id = $(this).attr('row_id');
+    var $mode_name_id = $('#compressor_sizing_mode_id_' + row_id);
+    var $mode_name_lbl = $('#compressor_sizing_mode_name_' + row_id);
+    var $mode_name_txt = $('#edit_compressor_sizing_mode_name_' + row_id);
+    var $txt = $(this).text();
+
+    if ($txt == 'edit') {
+      $mode_name_lbl.hide();
+      $mode_name_txt.show();
+      $.colorbox.resize();
+      $(this).text('save');
+    } else if ($txt == 'save') {
+      $mode_name_lbl.show();
+      $mode_name_txt.hide();
+      $.post(
+        '/admin/compressor_sizings/edit_compressor_sizing_mode',
+        {id:$mode_name_id.val(), mode_name:$mode_name_txt.find('#mode_name_' + row_id).val()},
+        function () {
+          $mode_name_lbl.text($mode_name_txt.find('#mode_name_' + row_id).val());
+          $mode_name_lbl.closest('tr').find('td').glow('', 5000);
+        }, 'script');
+
+      $(this).text('edit');
+    }
+
+    return false;
+  });
+
+  $('.compressor_sizing_mode_close_tr').click(function (e) {
+    var row_id = $(this).attr('row_id');
+    var $mode_name_id = $('#compressor_sizing_mode_id_' + row_id);
+    $.post(
+      '/admin/compressor_sizings/delete_compressor_sizing_mode',
+      {id:$mode_name_id.val()},
+      function () {
+        $mode_name_id.closest('tr').hide();
+      }, 'script');
+  });
+
+  //compressor_sizing_mode_sel
+  $('#compressor_sizing_mode_sel').change(function (e) {
+    if ($(this).val() == "") {
+      return false;
+    }
+    window.location = "?compressor_sizing_mode=" + $(this).val();
+  });
+
+  //mechanical_specification
+  $('#add_new_mechanical_specification_column').click(function (e) {
+    var new_mechanical_specification_field = $('#new_mechanical_specification_field').html().replace(/#x#/g, crd_count);
+    $('.mechanical_specification_fields').append($(new_mechanical_specification_field));
+    crd_count++;
+    return false;
+  });
+
+  $('.close_mechanical_specification_field').live('click', function (e) {
+    var $column = $(this).closest('div.mechanical_specification_field');
+    $column.find('.compressor_reciprocation_design_delete').val('true');
+    $column.mask();
+    return false;
+  });
+
+  //compressor_centrifugal_designs
+  $('#add_new_centrifugal_design_column').click(function (e) {
+    var new_centrifugal_design_field = $('#new_centrifugal_design_field').html().replace(/#x#/g, ccd_count);
+    $('.centrifugal_design_fields').append($(new_centrifugal_design_field));
+    ccd_count++;
+    return false;
+  });
+
+  $('.close_centrifugal_design_field').live('click', function (e) {
+    var $column = $(this).closest('div.centrifugal_design_field');
+    $column.find('.compressor_centrifugal_design_delete').val('true');
+    $column.mask();
+    return false;
+  });
+
+  //centrifugal_design_piping
+  $('.centrifugal_design_piping_btn').live('click', function (e) {
+    var row_id = $(this).attr('row_id');
+    var centrifugal_design_piping_box = $('#centrifugal_design_piping_div').html().replace(/#x#/g, row_id);
+    $('#centrifugal_design_piping_box_' + row_id).text()
+    if ($('#centrifugal_design_piping_box_' + row_id).text() == "") {
+      $('#list_of_centrifugal_design_piping').append($(centrifugal_design_piping_box));
+    }
+    $.colorbox({
+      href:'#centrifugal_design_piping_box_' + row_id,
+      inline:true,
+      width:'100%',
+      height:'100%',
+      onComplete:function () {
+        var tr_row_id = parseInt($('#centrifugal_design_piping_box_' + row_id + ' table tr:last td:last a').attr('row_id')) + 1;
+        $('#centrifugal_design_piping_box_' + row_id).data({tr_row_id:tr_row_id, piping_row_id:row_id});
+        return false;
+      }
+    });
+    set_project_unit_decimal('.compressor_centrifugal_design_piping_pipe_id', unit_decimals);
+    set_project_unit_decimal('.compressor_centrifugal_design_piping_length', unit_decimals);
+    set_project_unit_decimal('.compressor_centrifugal_design_piping_elev', unit_decimals);
+    set_project_unit_decimal('.compressor_centrifugal_design_piping_delta_p', unit_decimals);
+    return false;
+  });
+
+  $('.centrifugal_design_piping_box_add_more').live('click', function (e) {
+    var table_id = $(this).attr('table_id');
+    var tr_row_id = $('#centrifugal_design_piping_box_' + table_id).data()['tr_row_id'];
+    var new_centrifugal_design_piping_tr = $('#compressor_centrifugal_design_piping_tr').html().replace(/#x#/g, table_id);
+    new_centrifugal_design_piping_tr = new_centrifugal_design_piping_tr.replace(/#y#/g, tr_row_id);
+    $('#centrifugal_design_piping_box_' + table_id + ' table').append($(new_centrifugal_design_piping_tr));
+    $('#centrifugal_design_piping_box_' + table_id).data()['tr_row_id'] = tr_row_id + 1;
+    set_project_unit_decimal('.compressor_centrifugal_design_piping_pipe_id', unit_decimals);
+    set_project_unit_decimal('.compressor_centrifugal_design_piping_length', unit_decimals);
+    set_project_unit_decimal('.compressor_centrifugal_design_piping_elev', unit_decimals);
+    set_project_unit_decimal('.compressor_centrifugal_design_piping_delta_p', unit_decimals);
+    return false;
+  });
+
+  $('.centrifugal_design_piping_close_tr').live('click', function (e) {
+    $('#compressor_centrifugal_design_piping_fitting_' + $(this).attr('row_id')).val('');
+    deleted_tr($(this).closest('tr'));
+    return false;
+  });
+
+  //compressor_reciprocation_design_piping
+  $('.compressor_reciprocation_design_piping_btn').live('click', function (e) {
+    var row_id = $(this).attr('row_id');
+    var reciprocation_design_piping_box = $('#reciprocation_design_piping_div').html().replace(/#x#/g, row_id);
+    $('#reciprocation_design_piping_box_' + row_id).text()
+    if ($('#reciprocation_design_piping_box_' + row_id).text() == "") {
+      $('#list_of_reciprocation_design_piping').append($(reciprocation_design_piping_box));
+    }
+    $.colorbox({
+      href:'#reciprocation_design_piping_box_' + row_id,
+      inline:true,
+      width:'100%',
+      height:'100%',
+      onComplete:function () {
+        var tr_row_id = parseInt($('#reciprocation_design_piping_box_' + row_id + ' table tr:last td:last a').attr('row_id')) + 1;
+        $('#reciprocation_design_piping_box_' + row_id).data({tr_row_id:tr_row_id, piping_row_id:row_id});
+        return false;
+      }
+    });
+    set_project_unit_decimal('.compressor_reciprocation_design_piping_pipe_id', unit_decimals);
+    set_project_unit_decimal('.compressor_reciprocation_design_piping_length', unit_decimals);
+    set_project_unit_decimal('.compressor_reciprocation_design_piping_elev', unit_decimals);
+    set_project_unit_decimal('.compressor_reciprocation_design_piping_delta_p', unit_decimals);
+    return false;
+  });
+
+  $('.reciprocation_design_piping_box_add_more').live('click', function (e) {
+    var table_id = $(this).attr('table_id');
+    var tr_row_id = $('#reciprocation_design_piping_box_' + table_id).data()['tr_row_id'];
+    var new_reciprocation_design_piping_tr = $('#compressor_reciprocation_design_piping_tr').html().replace(/#x#/g, table_id);
+    new_reciprocation_design_piping_tr = new_reciprocation_design_piping_tr.replace(/#y#/g, tr_row_id);
+    $('#reciprocation_design_piping_box_' + table_id + ' table').append($(new_reciprocation_design_piping_tr));
+    $('#reciprocation_design_piping_box_' + table_id).data()['tr_row_id'] = tr_row_id + 1;
+    set_project_unit_decimal('.compressor_reciprocation_design_piping_pipe_id', unit_decimals);
+    set_project_unit_decimal('.compressor_reciprocation_design_piping_length', unit_decimals);
+    set_project_unit_decimal('.compressor_reciprocation_design_piping_elev', unit_decimals);
+    set_project_unit_decimal('.compressor_reciprocation_design_piping_delta_p', unit_decimals);
+    return false;
+  });
+
+  $('.reciprocation_design_piping_close_tr').live('click', function (e) {
+    $('#compressor_reciprocation_design_piping_fitting_' + $(this).attr('row_id')).val('');
+    deleted_tr($(this).closest('tr'));
+    return false;
+  });
+
+  // Suction_piping
+  $('.suction_pipings_pipe_size').live('change', function (k) {
+    var id = $(this).attr('id').split(":")[1];
+    $('#suction_piping_pipe_id_' + id).val('');
+    $('.pipe_schedule_' + id + ' >option').remove();
+    $('.pipe_schedule_' + id).append($('<option></option>').val("").html(""));
+
+    $(pipe_size_schedules[$(this).val()]).each(function (k, v) {
+      $('.pipe_schedule_' + id).append($('<option></option>').val(v).html(v));
+    });
+  });
+
+  $('.suction_pipings_pipe_schedule').live('change', function (k) {
+    var id = $(this).attr('id').split(":")[1];
+    $('#suction_piping_pipe_id_' + id).val('');
+    var pipe_od = pipe_size_pipe_ods[$('.pipe_size_' + id).val()] / pipe_id_conversion_factor;
+    var wall_thickness = pipe_size_wall_thinkness[$('.pipe_size_' + id).val()][$(".pipe_schedule_" + id).val()] / pipe_id_conversion_factor;
+    var pipe_id = pipe_od - (2 * wall_thickness);
+    console.log(pipe_id)
+    $('#suction_piping_pipe_id_' + id).val(get_project_field_value('.suction_pipings_pipe_id', pipe_id, unit_decimals));
+  });
+
+
+  // discharge_circuit_piping
+  $('.discharge_circuit_piping_pipe_size').live('change', function (k) {
+    var id = $(this).attr('id').split(":")[1];
+    $('#discharge_circuit_piping_pipe_id_' + id).val('');
+    $('.pipe_schedule_' + id + '>option').remove();
+    $('.pipe_schedule_' + id).append($('<option></option>').val("").html(""));
+    $(pipe_size_schedules[$(this).val()]).each(function (k, v) {
+      $('.pipe_schedule_' + id).append($('<option></option>').val(v).html(v));
+    });
+  });
+
+
+  $('.discharge_circuit_piping_pipe_schedule').live('change', function (k) {
+    var id = $(this).attr('id').split(":")[1];
+    console.log(id)
+    $('#discharge_circuit_piping_pipe_id_' + id).val('');
+    if ($(this).val() == '') {
+      return false;
+    }
+    var pipe_od = pipe_size_pipe_ods[$('.pipe_size_' + id).val()] / pipe_id_conversion_factor;
+    var wall_thickness = pipe_size_wall_thinkness[$('.pipe_size_' + id).val()][$(this).val()] / pipe_id_conversion_factor;
+    var pipe_id = pipe_od - (2 * wall_thickness);
+    $('#discharge_circuit_piping_pipe_id_' + id).val(get_project_field_value('.discharge_circuit_piping_pipe_id', pipe_id, unit_decimals));
+  });
+
+
+  // compressor_centrifugal_design_piping
+  $('.compressor_centrifugal_design_piping_pipe_size').live('change', function (k) {
+    var row_id = $(this).attr('row_id');
+    $('#compressor_centrifugal_design_piping_pipe_id_' + row_id).val('');
+    $('#compressor_centrifugal_design_piping_pipe_schedule_' + row_id + '>option').remove();
+    $('#compressor_centrifugal_design_piping_pipe_schedule_' + row_id).append($('<option></option>').val("").html(""));
+    $(pipe_size_schedules[$(this).val()]).each(function (k, v) {
+      $('#compressor_centrifugal_design_piping_pipe_schedule_' + row_id).append($('<option></option>').val(v).html(v));
+    });
+  });
+
+
+  $('.compressor_centrifugal_design_piping_pipe_schedule').live('change', function (k) {
+    var row_id = $(this).attr('row_id');
+    $('#compressor_centrifugal_design_piping_pipe_id_' + row_id).val('');
+    if ($(this).val() == '') {
+      return false;
+    }
+    var pipe_od = pipe_size_pipe_ods[$('#compressor_centrifugal_design_piping_pipe_size_' + row_id).val()] / pipe_id_conversion_factor;
+    var wall_thickness = pipe_size_wall_thinkness[$('#compressor_centrifugal_design_piping_pipe_size_' + row_id).val()][$(this).val()] / pipe_id_conversion_factor;
+    var pipe_id = pipe_od - (2 * wall_thickness);
+    $('#compressor_centrifugal_design_piping_pipe_id_' + row_id).val(get_project_field_value('.compressor_centrifugal_design_piping_pipe_id', pipe_id, unit_decimals));
+  });
+
+  // compressor_reciprocation_design_pipingComment: .... This requires clarification.
+  $('.compressor_reciprocation_design_piping_pipe_size').live('change', function (k) {
+    var row_id = $(this).attr('row_id');
+    $('#compressor_reciprocation_design_piping_pipe_id_' + row_id).val('');
+    $('#compressor_reciprocation_design_piping_pipe_schedule_' + row_id + '>option').remove();
+    $('#compressor_reciprocation_design_piping_pipe_schedule_' + row_id).append($('<option></option>').val("").html(""));
+    $(pipe_size_schedules[$(this).val()]).each(function (k, v) {
+      $('#compressor_reciprocation_design_piping_pipe_schedule_' + row_id).append($('<option></option>').val(v).html(v));
+    });
+  });
+
+
+  $('.compressor_reciprocation_design_piping_pipe_schedule').live('change', function (k) {
+    var row_id = $(this).attr('row_id');
+    $('#compressor_reciprocation_design_piping_pipe_id_' + row_id).val('');
+    if ($(this).val() == '') {
+      return false;
+    }
+    var pipe_od = pipe_size_pipe_ods[$('#compressor_reciprocation_design_piping_pipe_size_' + row_id).val()] / pipe_id_conversion_factor;
+    var wall_thickness = pipe_size_wall_thinkness[$('#compressor_reciprocation_design_piping_pipe_size_' + row_id).val()][$(this).val()] / pipe_id_conversion_factor;
+    var pipe_id = pipe_od - (2 * wall_thickness);
+    $('#compressor_reciprocation_design_piping_pipe_id_' + row_id).val(get_project_field_value('.compressor_reciprocation_design_piping_pipe_id', pipe_id, unit_decimals));
+  });
+
+  function ajax_post(url, section_id) {
+    $.post($('form').attr('action'), $('form').serialize(), function (data) {
+      $.get(url, {compressor_sizing_id:data.compressor_sizing_id, section_id:section_id}, function (data) {
+        if (data.success) {
+          location.reload();
+        }
+        else {
+          alert(data.error);
+          location.reload();
+        }
+      });
+    });
+  }
+
+  //$('form').submit(function(){
+  //	$.post($('form').attr('action'),$('form').serialize(),function(data){
+  //		location.reload();
+  //	});
+  //	return false;
+  //})
+
+  $("#suction_calculate").click(function () {
+    ajax_post("/admin/compressor_sizings/suction_calculate")
+  });
+  $("#discharge_calculate").click(function () {
+    ajax_post("/admin/compressor_sizings/discharge_calculate")
+  });
+  //calculation for each centrifugal section
+  $(".cd_section_calculate").live("click", function () {
+    var id = $(this).attr('id');
+    if (id == "not_saved") {
+      alert("Please update before calculate");
+    }
+    else if ($("." + id).validateTab()) {
+      ajax_post("/admin/compressor_sizings/centrifugal_design_calculate", id);
+    }
+  });
+  //reciprocation calculation for each section
+  $(".rd_section_calculate").live("click", function () {
+    var id = $(this).attr('id');
+    if (id == "not_saved") {
+      alert("Please update before calculate");
+    }
+    else {
+      ajax_post("/admin/compressor_sizings/reciprocation_design_calculate", id);
+    }
+  });
+
+  $(".cd_piping_calculate").live("click", function () {
+    var id = $(this).attr('id');
+    if (id == "not_saved") {
+      alert("Please update before calculate");
+    }
+    else {
+      ajax_post("/admin/compressor_sizings/cd_interstage_piping_calculate", id);
+    }
+  });
+  $(".rd_piping_calculate").live("click", function () {
+    var id = $(this).attr('id');
+    if (id == "not_saved") {
+      alert("Please update before calculate");
+    }
+    else {
+      ajax_post("/admin/compressor_sizings/rd_interstage_piping_calculate", id);
+    }
+  });
+  //UI actions
+  $("#compressor_sizing_rd_gas_service_heavy_gas").click(function () {
+    $("#compressor_sizing_rd_gs_volumetric_cf").val(4);
+  });
+  $("#compressor_sizing_rd_gas_service_light_gas").click(function () {
+    $("#compressor_sizing_rd_gs_volumetric_cf").val(0);
+  });
+  $("#compressor_sizing_rd_speed_high_speed").click(function () {
+    $("#compressor_sizing_rd_over_efficiency").val(0.82);
+  });
+  $("#compressor_sizing_rd_speed_low_speed").click(function () {
+    $("#compressor_sizing_rd_over_efficiency").val(0.85);
+  });
+  $("#compressor_sizing_rd_compressor_lubrication_lubricated").click(function () {
+    $("#compressor_sizing_rd_volumetric_cf").val(0);
+  });
+  $("#compressor_sizing_rd_compressor_lubrication_non_lubricated").click(function () {
+    $("#compressor_sizing_rd_volumetric_cf").val(5);
+  });
+  //graph popups
+  $("#effciency_graph").click(function () {
+    $.colorbox({href:"#efficiency_graph_div", inline:true, width:'70%', height:'100%'});
+    $("#close_cbox").click(function () {
+      $.colorbox.close();
+    });
+  });
+</script>

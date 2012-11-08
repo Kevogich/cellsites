@@ -1,0 +1,947 @@
+<div id="column_design" class="tab_content">
+<!-- Column Design -->
+<div style="float:left;">
+  <table style="width:auto;">
+    <tr>
+      <td colspan="2"><label class="sub_title">COLUMN SPECIFICATIONS</label></td>
+    </tr>
+    <tr>
+      <td>
+        <input id="minimum_column_stages" type="button" value="" style="background:#30FF10;width:20px;">&nbsp;
+        Minimum Column Stages
+      </td>
+      <td><%= f.text_field :cd_minimum_column_stages %></td>
+    </tr>
+    <tr>
+      <td>
+        <input id="minimum_reflux_ratio" type="button" value="" style="background:#30FF10;width:20px;">&nbsp;
+        Minimum Reflux Ratio
+      </td>
+      <td><%= f.text_field :cd_minimum_reflux_ratio %></td>
+    </tr>
+    <tr>
+      <td>Optimal Reflux Ratio Factor</td>
+      <td><%= f.text_field :cd_optimal_reflux_ratio_factor %></td>
+    </tr>
+    <tr>
+      <td>Actual Reflux Ratio</td>
+      <td><%= f.text_field :cd_actual_reflux_ratio %></td>
+    </tr>
+    <tr>
+      <td>
+        <input id="optimal_stage_ratio" type="button" value="" style="background:#30FF10;width:20px;">&nbsp;
+        Optimal Stage Ratio</td>
+      <td><%= f.text_field :cd_optimal_stage_ratio %></td>
+    </tr>
+    <tr>
+      <td>
+        No of Theoretical Column Trays
+      </td>
+      <td><%= f.text_field :cd_no_of_theoretical_column_trays %></td>
+    </tr>
+    <tr>
+      <td>
+        <input id="column_plate_efficiency" type="button" value="" style="background:#30FF10;width:20px;">&nbsp;
+        No. of Trays Above Feed
+      </td>
+      <td><%= f.text_field :cd_no_of_trays_above_feed %></td>
+    </tr>
+    <tr>
+      <td>No. of Trays Below Feed</td>
+      <td><%= f.text_field :cd_no_of_trays_below_feed %></td>
+    </tr>
+    <tr>
+      <td>
+        <input id="overall_tray_efficiency" type="button" value="" style="background:#30FF10;width:20px;">&nbsp;
+        Overall Tray Efficiency
+      </td>
+      <td><%= f.text_field :cd_overall_tray_efficiency %></td>
+    </tr>
+    <tr>
+      <td>Total Actual Tray</td>
+      <td><%= f.text_field :cd_total_actual_tray %></td>
+    </tr>
+    <tr>
+      <td>Foaming Service</td>
+      <td><%= f.select :cd_foaming_service, StaticData.foaming_service.collect{|p| [raw(p), p]}, :include_blank => true%></td>
+    </tr>
+    <tr>
+      <td>System Factor</td>
+      <td>
+        <%= f.text_field :cd_system_factor, :class=>"small-text-100" %>&nbsp;&nbsp;&nbsp;
+        <input type="button" value="Tray Design" id="tray_design_btn">
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><label class="sub_title">PACKED BED COLUMN</label></td>
+    </tr>
+    <tr>
+      <td colspan="2" height="50px;"></td>
+    </tr>
+  </table>
+</div>
+
+<div style="float:left;margin-left:10px;">
+  <table>
+    <tr>
+      <td colspan="6"><label class="sub_title">SECTION SUMMARY</label></td>
+    </tr>
+    <tr>
+      <td><b>No</b></td>
+      <td><b>Description</b></td>
+      <td><b>T.Count</b></td>
+      <td><b>T.Spacing</b></td>
+      <td><b>T.Diameter</b></td>
+      <td><b>T.Height</b></td>
+    </tr>
+    <tr>
+      <td colspan="3"></td>
+      <td>mm</td>
+      <td>m</td>
+      <td>m</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+
+  <fieldset class="form_fieldset" style="margin: 10px 5px;padding: 10px;background-color: #E5F1F4;">
+    <legend>Column Sections</legend>
+    <span>
+      <%= f.radio_button :cd_cs_column_sections, "consider_one_section" %>&nbsp;Consider Only One Section
+    </span>
+    <span>
+      <%= f.radio_button :cd_cs_column_sections, "consider_multiple_sections" %>&nbsp;Consider Multiple Sections
+    </span>&nbsp;&nbsp;&nbsp;
+    <input type="button" value="View">
+  </fieldset>
+
+  <table>
+    <tr>
+      <td>Column Diameter</td>
+      <td><%= f.text_field :cd_column_diameter %></td>
+    </tr>
+    <tr>
+      <td>Top Vapor Disengagement Space</td>
+      <td><%= f.text_field :cd_top_vapor_disengagement_space %>&nbsp;m</td>
+    </tr>
+    <tr>
+      <td>Bottom Liquid Reservoir Space</td>
+      <td><%= f.text_field :cd_bottom_liquid_reservoir_space %>&nbsp;m</td>
+    </tr>
+    <tr>
+      <td>Additional Height Factor</td>
+      <td><%= f.text_field :cd_additional_height_factor %>&nbsp;m</td>
+    </tr>
+    <tr>
+      <td>Trayed Section Height</td>
+      <td><%= f.text_field :cd_trayed_section_height %>&nbsp;m</td>
+    </tr>
+    <tr>
+      <td>Column Height</td>
+      <td><%= f.text_field :cd_column_height %>&nbsp;m&nbsp;&nbsp;<input type="button" value="Calculate"></td>
+    </tr>
+  </table>
+</div>
+
+<div class="hidden">
+  <div id="minimum_column_stages_div">
+    <table>
+      <tr>
+        <td colspan="2"><label class="sub_title">Product Specification</label></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <fieldset class="form_fieldset">
+            <legend>Basis</legend>
+            <%= f.radio_button :cd_mcs_basis, "molar_flowrate", :class => "cd_mcs_basis" %>&nbsp;Molar Flowrate&nbsp;&nbsp;&nbsp;
+            <%= f.radio_button :cd_mcs_basis, "molar_fraction", :class => "cd_mcs_basis" %>&nbsp;Molar Fraction
+          </fieldset>
+        </td>
+      </tr>
+      <tr>
+        <td>Light Key (Lk) Component</td>
+        <td><%= f.text_field :cd_mcs_light_key_component %></td>
+      </tr>
+      <tr>
+        <td>Heavy Key (Hk) Component</td>
+        <td><%= f.text_field :cd_mcs_heavy_key_component %></td>
+      </tr>
+      <tr>
+        <td>Relative Volatility @ Top</td>
+        <td><%= f.text_field :cd_mcs_relative_volatility_top, :class => "required" %></td>
+      </tr>
+      <tr>
+        <td>Relative Volatility @ Feed</td>
+        <td><%= f.text_field :cd_mcs_relative_volatility_feed, :class => "required" %> if available</td>
+      </tr>
+      <tr>
+        <td>Relative Volatility @ Bottom</td>
+        <td><%= f.text_field :cd_mcs_relative_volatility_bottom, :class => "required" %></td>
+      </tr>
+      <tr>
+        <td><label id="lbl_cd_mcs_moles_of_lk_in_distillate">Moles of LK in Distillate</label></td>
+        <td><%= f.text_field :cd_mcs_moles_of_lk_in_distillate, :class => "moles_general required" %>&nbsp;<label class="moles_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td><label id="lbl_cd_mcs_moles_of_lk_in_bottoms">Moles of LK in Bottoms</label></td>
+        <td><%= f.text_field :cd_mcs_moles_of_lk_in_bottoms, :class => "moles_general required" %>&nbsp;<label class="moles_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td><label id="lbl_cd_mcs_moles_of_hk_in_distillate">Moles of HK in Distillate</label></td>
+        <td><%= f.text_field :cd_mcs_moles_of_hk_in_distillate, :class => "moles_general required" %>&nbsp;<label class="moles_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td><label id="lbl_cd_mcs_moles_of_hk_in_bottoms">Moles of HK in Bottoms</label></td>
+        <td><%= f.text_field :cd_mcs_moles_of_hk_in_bottoms, :class => "moles_general required" %>&nbsp;<label class="moles_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Separation Factor</td>
+        <td><%= f.text_field :cd_mcs_separation_factor %></td>
+      </tr>
+      <tr>
+        <td>Mean Relative Volatility</td>
+        <td><%= f.text_field :cd_mcs_mean_relative_volatility %>&nbsp;<input id="minimum_column_stages_winn_modified" type="button" value="Winn Modified">
+        </td>
+      </tr>
+      <tr>
+        <td>Minimum Stages</td>
+        <td><%= f.text_field :cd_mcs_minimum_stages %>&nbsp;<input id="minimum_column_stages_calculation" type="button" value="Calculate">
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <fieldset class="form_fieldset">
+            <legend>Additional Equilibrium Stages</legend>
+            <%= f.check_box :cd_mcs_includes_partial_condenser %>&nbsp;Includes Partial Condenser&nbsp;&nbsp;&nbsp;
+            <%= f.check_box :cd_mcs_includes_partial_reboiler %>&nbsp;Includes Partial Reboiler
+          </fieldset>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="minimum_reflux_ratio_div">
+    <table>
+      <tr>
+        <td width="25%">Component Count <%= f.select :cd_mrr_component_count, (1..40).to_a %></td>
+        <td width="25%">Liquid Mole Fraction of Feed
+          = <%= f.text_field :cd_mrr_liquid_mole_fraction_of_feed, :style => "width:50px", :class => "required" %></td>
+        <td width="25%">&theta; =
+          <label id="cd_mrr_theta"><%= column_sizing.cd_mrr_theta %></label><%= f.hidden_field :cd_mrr_theta %></td>
+        <td width="25%">
+          Minimum Reflux Ratio =
+          <label id="cd_mrr_minimum_reflux_ratio"><%= column_sizing.cd_mrr_minimum_reflux_ratio %></label><%= f.hidden_field :cd_mrr_minimum_reflux_ratio %>
+          <input id="minimum_reflux_ratio_calculation" type="button" value="Calculate" style="float: right;">
+        </td>
+      </tr>
+    </table>
+
+    <table id="minimum_reflux_ratio_table">
+      <tr>
+        <th>S.No</th>
+        <th>LK</th>
+        <th>HK</th>
+        <th>Basis</th>
+        <th>Component</th>
+        <th>Feed Mole %</th>
+        <th>Distillate Mole %</th>
+        <th>K- Value @ Feed</th>
+        <th>Relative Volatility</th>
+        <th></th>
+      </tr>
+      <% if column_sizing.minimum_reflux_ratios.empty? %>
+        <tr>
+          <td>
+            1
+            <%= hidden_field_tag "column_sizing[minimum_reflux_ratios][1][id]", "", :id => "minimum_reflux_ratios_id_1" %>
+          </td>
+          <td><%= check_box_tag "column_sizing[minimum_reflux_ratios][1][lk]", 1, true, :class => "lk" %></td>
+          <td><%= check_box_tag "column_sizing[minimum_reflux_ratios][1][hk]", 1, true, :class => "hk" %></td>
+          <td><%= check_box_tag "column_sizing[minimum_reflux_ratios][1][basis]", 1, true, :class => "basis" %></td>
+          <td><%= text_field_tag "column_sizing[minimum_reflux_ratios][1][component]", "", :class =>"minimum_reflux_ratios_component" %></td>
+          <td><%= text_field_tag "column_sizing[minimum_reflux_ratios][1][feed_mole]", "", :class =>"minimum_reflux_ratios_feed_mole" %></td>
+          <td><%= text_field_tag "column_sizing[minimum_reflux_ratios][1][distillate_mole]", "", :class =>"minimum_reflux_ratios_distillate_mole" %></td>
+          <td><%= text_field_tag "column_sizing[minimum_reflux_ratios][1][k_value_feed]", "", :class =>"minimum_reflux_ratios_k_value_feed", :id => "minimum_reflux_ratios_k_value_feed_1" %></td>
+          <td><%= hidden_field_tag "column_sizing[minimum_reflux_ratios][1][relative_volatility]", "", :class =>"minimum_reflux_ratios_relative_volatility" %></td>
+          <td><%= link_to "X", "#", :class => "minimum_reflux_ratios_close_tr", :minimum_reflux_ratios_id => 1 %></td>
+        </tr>
+      <% else %>
+        <% column_sizing.minimum_reflux_ratios.each_with_index do |mrr, i| %>
+          <tr>
+            <td>
+              <%= i+1 %>
+              <%= hidden_field_tag "column_sizing[minimum_reflux_ratios][#{i+1}][id]", mrr.id, :id => "minimum_reflux_ratios_id_#{i+1}" %>
+            </td>
+            <td><%= check_box_tag "column_sizing[minimum_reflux_ratios][#{i+1}][lk]", 1, mrr.lk, :class => "lk" %></td>
+            <td><%= check_box_tag "column_sizing[minimum_reflux_ratios][#{i+1}][hk]", 1, mrr.hk, :class => "hk" %></td>
+            <td><%= check_box_tag "column_sizing[minimum_reflux_ratios][#{i+1}][basis]", 1, mrr.basis, :class => "basis" %></td>
+            <td><%= text_field_tag "column_sizing[minimum_reflux_ratios][#{i+1}][component]", mrr.component, :class =>"minimum_reflux_ratios_component" %></td>
+            <td><%= text_field_tag "column_sizing[minimum_reflux_ratios][#{i+1}][feed_mole]", mrr.feed_mole, :class =>"minimum_reflux_ratios_feed_mole" %></td>
+            <td><%= text_field_tag "column_sizing[minimum_reflux_ratios][#{i+1}][distillate_mole]", mrr.distillate_mole, :class =>"minimum_reflux_ratios_distillate_mole" %></td>
+            <td><%= text_field_tag "column_sizing[minimum_reflux_ratios][#{i+1}][k_value_feed]", mrr.k_value_feed, :class =>"minimum_reflux_ratios_k_value_feed", :id => "minimum_reflux_ratios_k_value_feed_#{i+1}" %></td>
+            <td>
+              <%= mrr.relative_volatility %>
+              <%= hidden_field_tag "column_sizing[minimum_reflux_ratios][#{i+1}][relative_volatility]", mrr.relative_volatility, :class =>"minimum_reflux_ratios_relative_volatility" %>
+            </td>
+            <td><%= link_to "X", "#", :class => "minimum_reflux_ratios_close_tr", :minimum_reflux_ratios_id => "#{i+1}" %></td>
+          </tr>
+        <% end %>
+      <% end %>
+    </table>
+
+    <%= link_to "Add", "#", :id=>"minimum_reflux_ratios_new_row" %>&nbsp;|&nbsp;<%= link_to "Close", "#column_design", :onClick => "javascript:$.colorbox.close();" %>
+
+    <table id="minimum_reflux_ratios_new_tr" class="hidden">
+      <tr>
+        <td>
+          #x#
+          <%= hidden_field_tag "column_sizing[minimum_reflux_ratios][#x#][id]", "", :id => "minimum_reflux_ratios_id_#x#" %>
+        </td>
+        <td><%= check_box_tag "column_sizing[minimum_reflux_ratios][#x#][lk]", 1, :class => "lk" %></td>
+        <td><%= check_box_tag "column_sizing[minimum_reflux_ratios][#x#][hk]", 1, :class => "hk" %></td>
+        <td><%= check_box_tag "column_sizing[minimum_reflux_ratios][#x#][basis]", 1, false, :class => "basis" %></td>
+        <td><%= text_field_tag "column_sizing[minimum_reflux_ratios][#x#][component]", '', :class =>"minimum_reflux_ratios_component" %></td>
+        <td><%= text_field_tag "column_sizing[minimum_reflux_ratios][#x#][feed_mole]", '', :class =>"minimum_reflux_ratios_feed_mole" %></td>
+        <td><%= text_field_tag "column_sizing[minimum_reflux_ratios][#x#][distillate_mole]", '', :class =>"minimum_reflux_ratios_distillate_mole" %></td>
+        <td><%= text_field_tag "column_sizing[minimum_reflux_ratios][#x#}][k_value_feed]", '', :class =>"minimum_reflux_ratios_k_value_feed", :id => "minimum_reflux_ratios_k_value_feed_#x#" %></td>
+        <td><%= hidden_field_tag "column_sizing[minimum_reflux_ratios][#x#][relative_volatility]", '', :class =>"minimum_reflux_ratios_relative_volatility" %></td>
+        <td><%= link_to "X", "#", :class => "minimum_reflux_ratios_close_tr", :minimum_reflux_ratios_id => "#x#" %></td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="optimal_stage_ratio_div">
+    <table>
+      <tr>
+        <td>
+          <%= f.check_box :cd_osr_exclude_reboiler %>&nbsp;Exclude Reboiler&nbsp;&nbsp;&nbsp;
+          <%= f.check_box :cd_osr_exclude_condenser %>&nbsp;Exclude Condenser
+        </td>
+        <tr>
+          <td>
+            <fieldset class="form_fieldset">
+              <legend>Correlations</legend>
+              <ul>
+                <li>
+                  <%= f.radio_button :cd_osr_correlations, "erbar_maddox_correlation" %>&nbsp;Erbar-Maddox Correlation
+                  <%= f.radio_button :cd_osr_correlations, "gilliland_correlation" %>&nbsp;Gilliland Correlation
+                </li>
+              </ul>
+            </fieldset>
+          </td>
+        </tr>
+    </table>
+  </div>
+
+  <div id="minimum_column_stages_winn_modified_div">
+    <table>
+      <tr>
+        <td>Equilibrium K Value, Light Key</td><td><%= f.text_field :cd_win_equilibrium_k_value_light_key, :class => "required"%></td>
+      </tr>
+      <tr>
+        <td>Equilibrium K Value, Heavy Key</td><td><%= f.text_field :cd_win_equilibrium_k_value_heavy_key, :class => "required"%></td>
+      </tr>
+      <tr>
+        <td>Exponential, b</td><td><%= f.text_field :cd_win_exponential_b, :class => "required"%></td>
+      </tr>
+      <tr>
+        <td>Bottom Product Rate, B</td>
+        <td>
+          <%= f.text_field :cd_win_bottom_product_rate_b, :class => "moles_general required"%>&nbsp;
+          <label class="moles_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Distillate Product Rate, D</td>
+        <td>
+          <%= f.text_field :cd_win_distillate_product_rate_d, :class => "moles_general required"%>&nbsp;
+          <label class="moles_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Minimum Stages</td><td><%= f.text_field :cd_win_minimum_stages%></td>
+      </tr>
+      <tr>
+        <td></td><td><input type="button" id="minimum_column_stages_winn_modified_calculation" value="Calculate"></td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="erbarmaddox_div">
+    <table style="width:100%;">
+      <tr>
+        <td style="width:25%;">Lo/V1</td>
+        <td style="width:25%;">
+          <label id="cd_em_lov1"><%= column_sizing.cd_em_lov1 %></label>
+          <%= f.hidden_field :cd_em_lov1 %>
+        </td>
+        <td style="width:25%;">(Lo/V1)min</td>
+        <td style="width:25%;">
+          <label id="cd_em_lov1_min"><%= column_sizing.cd_em_lov1_min %></label>
+          <%= f.hidden_field :cd_em_lov1_min %>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <img src="/images/erbar_maddox.jpg" alt="erbar-maddox">
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>Smin/S</td>
+        <td><%= f.text_field :cd_em_smin %></td>
+        <td><input type="button" value="Close" id="erbarmaddox_div_close"></td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="no_of_trays_div">
+    <table>
+      <tr>
+        <td>Light key (LK) Component</td>
+        <td><%= f.text_field :cd_nt_light_key_component %></td>
+      </tr>
+      <tr>
+        <td>Heavy key (HK) Component</td>
+        <td><%= f.text_field :cd_nt_heavy_key_component %></td>
+      </tr>
+      <tr>
+        <td>Total Number of Stages</td>
+        <td><%= f.text_field :cd_nt_total_number_of_stages, :class => 'required' %></td>
+      </tr>
+      <tr>
+        <td>Mole Fraction of HK in Feed</td>
+        <td><%= f.text_field :cd_nt_mole_fraction_of_hk_in_feed, :class => 'required' %></td>
+      </tr>
+      <tr>
+        <td>Mole Fraction of LK in Feed</td>
+        <td><%= f.text_field :cd_nt_mole_fraction_of_lk_in_feed, :class => 'required' %></td>
+      </tr>
+      <tr>
+        <td>Moles Fraction of LK in Bottom</td>
+        <td><%= f.text_field :cd_nt_moles_fraction_of_lk_in_bottom, :class => 'required' %></td>
+      </tr>
+      <tr>
+        <td>Moles Fraction of HK in Distillate</td>
+        <td><%= f.text_field :cd_nt_moles_fraction_of_hk_in_distillate, :class => 'required' %></td>
+      </tr>
+      <tr>
+        <td>Molar Flow of Distillate</td>
+        <td>
+          <%= f.text_field :cd_nt_molar_flow_of_distillate, :class => "moles_general required"%>&nbsp;
+          <label class="moles_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Molar Flow of Bottoms</td>
+        <td>
+          <%= f.text_field :cd_nt_molar_flow_of_bottoms, :class => "moles_general required"%>&nbsp;
+          <label class="moles_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>NR/NS</td>
+        <td><%= f.text_field :cd_nt_nr_ns %></td>
+      </tr>
+      <tr>
+        <td>No. of Tray Above Feed</td>
+        <td><%= f.text_field :cd_nt_no_of_tray_above_feed %></td>
+      </tr>
+      <tr>
+        <td>No. of Tray Below Feed</td>
+        <td>
+          <%= f.text_field :cd_nt_no_of_tray_below_feed %>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <input type="button" id="no_of_trays_calculate" value="Calculate" style="float:right;">
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="overall_tray_efficiency_div">
+    <table>
+      <tr>
+        <td>Avg. Column T</td>
+        <td><%= f.text_field :cd_cpe_avg_column_t, :style => "width:100px;"%></td>
+        <td>Feed Viscosity @ Avg. Temp</td>
+        <td><%= f.text_field :cd_cpe_feed_viscosity, :style => "width:100px;", :class => "required"%></td>
+        <td>Avg. Volatility of Key Component</td>
+        <td><%= f.text_field :cd_cpe_avg_volatility, :style => "width:100px;", :class => "required"%></td>
+      </tr>
+      <tr>
+        <td colspan="6" style="text-align: center;">
+          <img src="/images/column_plate_efficiency.jpg" alt="column_plate_efficiency">
+        </td>
+      </tr>
+      <tr>
+        <td>Relative Volatility x Feed Viscosity</td>
+        <td>
+          <label id="cd_cpe_relative_volatility"></label>
+          <%= f.hidden_field :cd_cpe_relative_volatility %>
+        </td>
+        <td>
+          <input type="button" id="column_plate_efficiency_calculate" value="Calculate">
+        </td>
+        <td>Plate Efficiency</td>
+        <td><%= f.text_field :cd_cpe_plate_efficiency, :style => "width:100px;" %>&nbsp;</td>
+        <td><input type="button" value="Close" onclick="javascript:$.colorbox.close();"></td>
+      </tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<script type="text/javascript">
+  $('#minimum_column_stages').click(function() {
+    show_minimum_column_stages();
+  });
+
+  function show_minimum_column_stages(){
+    $.colorbox({
+      href: "#minimum_column_stages_div",
+      inline: true,
+      onOpen: function(){
+        basis_change_label_text();
+      }
+    });
+  }
+
+  $('#minimum_reflux_ratio').click(function() {
+    $.colorbox({
+      href: "#minimum_reflux_ratio_div",
+      inline: true,
+      width: "100%",
+      height:"100%"
+    });
+  });
+
+  var mrr_count = $('#minimum_reflux_ratio_table tr').length;
+  $('#minimum_reflux_ratios_new_row').click(function() {
+    var minimum_reflux_ratios_new_tr = $('#minimum_reflux_ratios_new_tr').html().replace(/#x#/g, mrr_count);
+    $('#minimum_reflux_ratio_table').append($(minimum_reflux_ratios_new_tr));
+    mrr_count++;
+    return false;
+  });
+
+  $('.minimum_reflux_ratios_close_tr').live('click', function() {
+    $('#column_sizing_minimum_reflux_ratios_' + $(this).attr('minimum_reflux_ratios_id') + '_component').val('');
+		deleted_tr($(this).closest('tr'));
+    return false;
+  });
+
+  $('#optimal_stage_ratio').click(function() {
+    $.colorbox({
+      href: "#optimal_stage_ratio_div",
+      inline: true
+    });
+    return false;
+  });
+
+  $('#minimum_column_stages_calculation').click(function(){
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('minimum_column_stages_calculation');
+
+    if (!$('#minimum_column_stages_div').validateTab()) {
+      return false;
+    }
+
+    if (column_sizing_id == "" || $('form.form_column_sizing').isDirty()) {
+      $.colorbox.close();
+      $('form.form_column_sizing').submit();
+      return false;
+    }
+
+    var params = $('#minimum_column_stages_div input').serializeObject();
+    params["column_sizing_id"] = column_sizing_id;
+    $.get("/admin/column_sizings/minimum_column_stages_calculation",
+            params,
+            function(data) {
+              alert('Calculation is completed successfully');
+              var column_sizing = data["column_sizing"];
+              $('#column_sizing_cd_mcs_separation_factor').val(column_sizing.cd_mcs_separation_factor);
+              $('#column_sizing_cd_mcs_mean_relative_volatility').val(column_sizing.cd_mcs_mean_relative_volatility);
+              $('#column_sizing_cd_mcs_minimum_stages').val(column_sizing.cd_mcs_minimum_stages);
+            },
+            'json'
+    );
+    return false;
+  });
+
+  $('#minimum_column_stages_winn_modified').click(function() {
+    $.colorbox({
+      href: "#minimum_column_stages_winn_modified_div",
+      inline: true,
+      onClosed: function(){
+        show_minimum_column_stages();
+        $('#column_sizing_cd_mcs_minimum_stages').val($('#column_sizing_cd_win_minimum_stages').val());
+      }
+    });
+    return false;
+  });
+
+  $('.cd_mcs_basis').change(function(){
+    basis_change_label_text()
+  });
+
+  function basis_change_label_text(){
+    var basis = $('.cd_mcs_basis:checked').val();
+    if(basis == "molar_flowrate"){
+      $('#lbl_cd_mcs_moles_of_lk_in_distillate').text('Moles of LK in Distillate');
+      $('#lbl_cd_mcs_moles_of_lk_in_bottoms').text('Moles of LK in Bottoms');
+      $('#lbl_cd_mcs_moles_of_hk_in_distillate').text('Moles of HK in Distillate');
+      $('#lbl_cd_mcs_moles_of_hk_in_bottoms').text('Moles of HK in Bottoms');
+      $('#minimum_column_stages_div .moles_general_unit').text(project_units1['moles_general']['unit']);
+    } else if (basis == "molar_fraction") {
+      $('#lbl_cd_mcs_moles_of_lk_in_distillate').text('Moles Fraction of LK in Distillate');
+      $('#lbl_cd_mcs_moles_of_lk_in_bottoms').text('Moles Fraction of LK in Bottoms');
+      $('#lbl_cd_mcs_moles_of_hk_in_distillate').text('Moles Fraction of HK in Distillate');
+      $('#lbl_cd_mcs_moles_of_hk_in_bottoms').text('Moles Fraction of HK in Bottoms');
+      $('#minimum_column_stages_div .moles_general_unit').text('');
+    }
+
+    $.colorbox.resize();
+  }
+
+  $('#minimum_column_stages_winn_modified_calculation').click(function() {
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('minimum_column_stages_winn_modified_calculation');
+
+    if (!$('#minimum_column_stages_winn_modified_div').validateTab()) {
+      return false;
+    }
+
+    if (column_sizing_id == "" || $('form.form_column_sizing').isDirty()) {
+      $.colorbox.close();
+      $('form.form_column_sizing').submit();
+      return false;
+    }
+
+    var params = $('#minimum_column_stages_winn_modified_div input').serializeObject();
+    params["column_sizing_id"] = column_sizing_id;
+    $.get("/admin/column_sizings/minimum_column_stages_winn_modified_calculation",
+            params,
+            function(data) {
+              alert('Calculation is completed successfully');
+              var column_sizing = data["column_sizing"];
+              $('#column_sizing_cd_win_minimum_stages').val(column_sizing.cd_win_minimum_stages);
+            },
+            'json'
+    );
+    return false;
+  });
+
+  $('.basis').live('change', function(){
+    $('.basis').attr('checked', false);
+    $(this).attr('checked', 'checked');
+  });
+
+  $('#minimum_reflux_ratio_calculation').click(function(){
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('minimum_reflux_ratio_calculation');
+
+    if (!$('#minimum_reflux_ratio_div').validateTab()) {
+      return false;
+    }
+
+    if (column_sizing_id == "" || $('form.form_column_sizing').isDirty()) {
+      $.colorbox.close();
+      $('form.form_column_sizing').submit();
+      return false;
+    }
+
+    //validate check boxes
+    if($('#minimum_reflux_ratio_table .basis:checked').length == 0) {
+      alert('Please select at least one component as basis.');
+      return false;
+    }
+
+    var row_id = $('#minimum_reflux_ratio_table .basis:checked').parents('tr').find('.minimum_reflux_ratios_close_tr').attr('minimum_reflux_ratios_id');
+    if($('#minimum_reflux_ratios_k_value_feed_'+row_id).val() == "" || $('#minimum_reflux_ratios_k_value_feed_'+row_id).val() == 0) {
+      $('.minimum_reflux_ratios_k_value_feed').removeClass('focused');
+      alert('No value is entered for the Equilibrium K-Value for the selected key component.  Please make sure that there is an Equilibrium K Value for the key component.');
+      $('#minimum_reflux_ratios_k_value_feed_'+row_id).addClass('focused');
+      return false;
+    }
+
+    if($('#minimum_reflux_ratio_table .lk:checked').length == 0) {
+      alert('No selection is made for the light key component.  Please select the light key component.');
+      return false;
+    }
+
+    if($('#minimum_reflux_ratio_table .hk:checked').length == 0) {
+      alert('No selection is made for the heavy key component.  Please select the heavy key component.');
+      return false;
+    }
+
+    var params = $('#minimum_reflux_ratio_div input').serializeObject();
+    params["column_sizing_id"] = column_sizing_id;
+    $.post("/admin/column_sizings/minimum_reflux_ratio_calculation",
+            params,
+            function(data) {
+              alert('Calculation is completed successfully');
+              window.location = location.pathname;
+            },
+            'json'
+    );
+
+    return false;
+  });
+
+  $('#column_sizing_cd_osr_correlations_gilliland_correlation').change(function(){
+    var cd_minimum_reflux_ratio = $('#column_sizing_cd_minimum_reflux_ratio');
+    if(cd_minimum_reflux_ratio.val() == "") {
+      alert('No value is entered for the minimum reflux ratio for the column design. Please enter a value for the minimum reflux ratio.');
+      cd_minimum_reflux_ratio.addClass('focused');
+      $.colorbox.close();
+      return false;
+    }
+    var rmin = cd_minimum_reflux_ratio.val() + 0;
+
+    var cd_minimum_column_stages = $('#column_sizing_cd_minimum_column_stages');
+    if(cd_minimum_column_stages.val() == "") {
+      alert('No value is entered for the minimum number of stages for the column design. Please enter a value for the minimum number of stages.');
+      cd_minimum_column_stages.addClass('focused');
+      $.colorbox.close();
+      return false;
+    }
+    var nmin = cd_minimum_column_stages.val() + 0;
+
+    var cd_actual_reflux_ratio = $('#column_sizing_cd_actual_reflux_ratio');
+    if(cd_actual_reflux_ratio.val() == "") {
+      alert('No value is entered for the actual reflux ratio for the column design.  Please enter a value for the actual reflux ratio.');
+      cd_actual_reflux_ratio.addClass('focused');
+      $.colorbox.close();
+      return false;
+    }
+    var r = cd_actual_reflux_ratio.val() + 0;
+
+    var x = (r - rmin) / (r + 1);
+    var part1 = ((1 + 54.4 * x) / (11 + 117.2 * x)) * ((x - 1) / Math.pow(x, 0.5));
+    var y = 1 - Math.exp(part1);
+    var n = (-nmin - y) / (y - 1);
+
+    var smin_s = nmin / n;
+
+    if($('#column_sizing_cd_osr_exclude_reboiler').is(':checked')) {
+      n = n - 1;
+    }
+
+    if($('#column_sizing_cd_osr_exclude_condenser').is(':checked')) {
+      n = n - 1;
+    }
+
+    $('#column_sizing_cd_optimal_stage_ratio').val(smin_s.toFixed(2));
+    $('#column_sizing_cd_no_of_theoretical_column_trays').val(n.toFixed(2));
+  });
+
+  $('#column_sizing_cd_osr_correlations_erbar_maddox_correlation').click(function(){
+    var cd_minimum_reflux_ratio = $('#column_sizing_cd_minimum_reflux_ratio');
+    if(cd_minimum_reflux_ratio.val() == "") {
+      alert('No value is entered for the minimum reflux ratio for the column design. Please enter a value for the minimum reflux ratio.');
+      cd_minimum_reflux_ratio.addClass('focused');
+      $.colorbox.close();
+      return false;
+    }
+    var rmin = cd_minimum_reflux_ratio.val() + 0;
+
+    var cd_minimum_column_stages = $('#column_sizing_cd_minimum_column_stages');
+    if(cd_minimum_column_stages.val() == "") {
+      alert('No value is entered for the minimum number of stages for the column design. Please enter a value for the minimum number of stages.');
+      cd_minimum_column_stages.addClass('focused');
+      $.colorbox.close();
+      return false;
+    }
+    var nmin = cd_minimum_column_stages.val() + 0;
+
+    var cd_actual_reflux_ratio = $('#column_sizing_cd_actual_reflux_ratio');
+    if(cd_actual_reflux_ratio.val() == "") {
+      alert('No value is entered for the actual reflux ratio for the column design.  Please enter a value for the actual reflux ratio.');
+      cd_actual_reflux_ratio.addClass('focused');
+      $.colorbox.close();
+      return false;
+    }
+    var r = cd_actual_reflux_ratio.val() + 0;
+
+    var lover_v = r / (r + 1);
+    var lover_vmin = rmin / (rmin + 1);
+
+    $('#cd_em_lov1').text(lover_v.toFixed(2));
+    $('#column_sizing_cd_em_lov1').val(lover_v.toFixed(2));
+    $('#cd_em_lov1_min').text(lover_vmin.toFixed(2));
+    $('#column_sizing_cd_em_lov1_min').val(lover_vmin.toFixed(2));
+
+    show_erbar_maddox();
+  });
+
+  function show_erbar_maddox() {
+    $.colorbox({
+      href: "#erbarmaddox_div",
+      inline: true
+    });
+  }
+
+  $('#column_plate_efficiency').click(function(){
+    $.colorbox({
+      href: "#no_of_trays_div",
+      inline: true
+    });
+  });
+
+  $('#no_of_trays_calculate').click(function(){
+    if(!$('#no_of_trays_div').validateTab()) {
+      return false;
+    }
+    var n = $('#column_sizing_cd_nt_total_number_of_stages').val();
+    var zHKF = $('#column_sizing_cd_nt_mole_fraction_of_hk_in_feed').val();
+    var zLKF = $('#column_sizing_cd_nt_mole_fraction_of_lk_in_feed').val();
+    var xLKB = $('#column_sizing_cd_nt_moles_fraction_of_lk_in_bottom').val();
+    var xHKD = $('#column_sizing_cd_nt_moles_fraction_of_hk_in_distillate').val();
+    var d = $('#column_sizing_cd_nt_molar_flow_of_distillate').val();
+    var b = $('#column_sizing_cd_nt_molar_flow_of_bottoms').val();
+
+    var NRNS = Math.pow(((zHKF / zLKF) * Math.pow((xLKB / xHKD), 2) * (b / d)), 0.206);
+    var NS = n / (NRNS + 1);
+    var NR = n - NS;
+
+    $('#column_sizing_cd_nt_nr_ns').val(NRNS.toFixed(3));
+    $('#column_sizing_cd_nt_no_of_tray_above_feed').val(NR.toFixed(0));
+    $('#column_sizing_cd_nt_no_of_tray_below_feed').val(NS.toFixed(0));
+    $('#column_sizing_cd_no_of_trays_above_feed').val(NR.toFixed(0));
+    $('#column_sizing_cd_no_of_trays_below_feed').val(NS.toFixed(0));
+  });
+
+  $('#overall_tray_efficiency').click(function() {
+    $.colorbox({
+      href: "#overall_tray_efficiency_div",
+      inline: true,
+      onClosed: function(){
+        $('#column_sizing_cd_overall_tray_efficiency').val($('#column_sizing_cd_cpe_plate_efficiency').val());
+      }
+    });
+  });
+
+  $('#column_plate_efficiency_calculate').click(function(){
+    if(!$('#overall_tray_efficiency_div').validateTab()) {
+      return false;
+    }
+    var FeedViscosity = $('#column_sizing_cd_cpe_feed_viscosity').val();
+    var Volatility = $('#column_sizing_cd_cpe_avg_volatility').val();
+    var Product = FeedViscosity * Volatility;
+    var Eff = 51 - 32.5 * (Math.log(Product) / Math.log(10));
+    $('#cd_cpe_relative_volatility').text(Product.toFixed(3));
+    $('#column_sizing_cd_cpe_relative_volatility').val(Product.toFixed(3));
+    $('#column_sizing_cd_cpe_plate_efficiency').val(Eff.toFixed(3));
+  });
+
+  $('#erbarmaddox_div_close').click(function() {
+    var smin = $('#column_sizing_cd_minimum_column_stages').val();
+    var column_sizing_cd_em_smin = $('#column_sizing_cd_em_smin');
+    if (column_sizing_cd_em_smin.val() == "") {
+      alert("No value is entered for the ratio of minimum number of stages to actual number of stages for the column design.  Please enter a value for the ratio of minimum number of stages to actual number of stages.");
+      column_sizing_cd_em_smin.addClass('focused');
+      return false;
+    }
+    var smin_s = column_sizing_cd_em_smin.val() + 0;
+
+    var s = smin / smin_s;
+
+    if ($('#column_sizing_cd_osr_exclude_reboiler').is(':checked')) {
+      s = s - 1;
+    }
+
+    if ($('#column_sizing_cd_osr_exclude_condenser').is(':checked')) {
+      s = s - 1;
+    }
+
+    $('#column_sizing_cd_optimal_stage_ratio').val(smin_s);
+    $('#column_sizing_cd_no_of_theoretical_column_trays').val(s.toFixed(2));
+
+    $.colorbox.close();
+
+  });
+
+  /*$('#tray_design_btn').click(function(){
+    $.colorbox({
+      href: "#tray_design_div",
+      inline: true,
+      width: '100%',
+      height: '100%'
+    });
+  });
+
+  var td_count = $('#tray_design_table tr').length - 1;
+  $('#add_row_column_section_tray_designs').click(function(){
+    var column_section_tray_designs_new_tr = $('#column_section_tray_designs_new_tr').html().replace(/#x#/g, td_count);
+    $('#tray_design_table').append($(column_section_tray_designs_new_tr));
+    td_count++;
+
+    set_project_unit_decimal1('mass_flow_rate_general');
+    set_project_unit_decimal1('temperature_general');
+    set_project_unit_decimal1('density_general');
+    set_project_unit_decimal1('viscosity_general');
+    set_project_unit_decimal1('length_large_dimension_length');
+    set_project_unit_decimal1('time_minutes');
+    set_project_unit_decimal1('pressure_general');
+
+    return false;
+  });
+
+  $('.column_section_tray_designs_remove').live('click', function(){
+    $('#zd_section_description_' + $(this).attr('row')).val('');
+		deleted_tr($(this).closest('tr'));
+    return false;
+  });    */
+</script>

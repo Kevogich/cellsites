@@ -1,0 +1,301 @@
+<div style="display:none;">
+  <div id="open_vent_relief_device_design_box">
+    <div style="padding-top:10px;"><b><u>1) Design Basis</u></b></div>
+    <table id="relief_design_basis" style="width:85%">
+      <tr>
+      <th colspan="2">Sizing Basis</th>
+      <th colspan="2">Minimum Temperature</th>
+      <th colspan="2">Maximum Temperature</th>
+      </tr>
+      <tr>
+        <td>Scenario</td>
+        <td>Closed Outlet On Vessel</td>
+        <td>Scenario</td>
+        <td>Closed Outlet On Vessel</td>
+        <td>Scenario</td>
+        <td>Closed Outlet On Vessel</td>
+      </tr>
+      <tr>
+        <td>Identifier</td>
+        <td>3&Prime; Gate Valve</td>
+        <td>Identifier</td>
+        <td>3&Prime; Gate Valve</td>
+        <td>Identifier</td>
+        <td>3&Prime; Gate Valve</td>
+      </tr>
+      <tr>
+        <td>Required Area</td>
+        <td>12.34&nbsp;&nbsp;&nbsp;<span class="area_orifice_unit"></span></td>
+        <td>Temperature</td>
+        <td>-20&nbsp;&nbsp;&nbsp;<span class="temperature_general_unit"></span></td>
+        <td>Temperature</td>
+        <td>450&nbsp;&nbsp;&nbsp;<span class="temperature_general_unit"></span></td>
+      </tr>
+      <tr>
+        <td>System Design Pressure</td>
+        <td><%= f.text_field :system_design_pressure, :style => "width:50px;", :id => "open_vent_design_pressure" %>&nbsp;&nbsp;<span class="pressure_general_unit"></span><a href="#" id="set_pressure">&nbsp;&nbsp;&nbsp;Set Pressure</a></td>
+        <td>System Min Design Temperature</td>
+        <td><%= f.text_field :system_min_design_temp, :style => "width:50px;", :id => "open_vent_min_design_temp" %>&nbsp;&nbsp;&nbsp;<span class="temperature_general_unit"></span></td>
+        <td>System Max Design Temperature</td>
+        <td><%= f.text_field :system_max_design_temp, :style => "width:50px;", :id => "open_vent_max_design_temp" %>&nbsp;&nbsp;&nbsp;<span class="temperature_general_unit"></span></td>
+      </tr>
+    </table>
+    <br>
+    <div style="padding-top:10px;padding-bottom:10px;"> <b><u>2)Vent Selection</u></b></div>
+    <div>
+      <span style="float:left;margin-right:40px;"> Location Characterization&nbsp;&nbsp;<%= f.select :discharge_location,options_for_select(StaticData.discharge_location),{},:class => 'discharge_location'%></span>
+      <span style="float:left;margin-right:40px;"> Flange Type&nbsp;&nbsp; <%= f.select :flange_type,options_for_select(StaticData.flange_type),{},:class => 'flange_type'%></span>
+      <span style="float:left;margin-right:40px;"><input type="button" id="open_vent_relief_device_design_button" value="Analyze"></span>
+    </div>
+    <div><br><br><br><a href="#" id="add_open_vent_relief_device">Add relief Device</a><br></div>
+    <table style="width:97%" id="open_vent_relief_devices_table">
+      <tr>
+        <th>No.</th>
+        <th>OP Tag</th>
+        <th>Body Size</th>
+        <th>Pipe Sch.</th>
+        <th>Net Flow Area</th>
+        <th>Inlet Flange</th>
+        <th>Outlet Flange</th>
+        <th>Piping</th>
+        <th></th>
+      </tr>
+      <tr>
+        <th colspan="2"></th>
+        <th><%= @fitting_pipe_size_unit %></th>
+        <th></th>
+        <th><span class="area_orifice_unit"></span></th>
+        <th colspan="4"></th>
+      </tr>
+      <% if @relief_device_sizing.relief_device_open_vent_relief_devices.empty? %>
+          <% @unique_id = Time.now.to_i %>
+          <% @open_vent_relief_device = @relief_device_sizing.relief_device_open_vent_relief_devices.new %>
+          <%= render :partial => 'open_vent_relief_devices' %>
+      <% else %>
+          <% @relief_device_sizing.relief_device_open_vent_relief_devices.each_with_index do |open_vent_relief_device| %>
+              <% @unique_id = Time.now.to_i+open_vent_relief_device.id %>
+              <% @open_vent_relief_device = open_vent_relief_device %>
+              <%= render :partial => 'open_vent_relief_devices' %>
+          <% end %>
+      <% end %>
+    </table>
+    <label class="open_vent_diff_area_orifice">*Need <label id="open_vent_need_area_orifice">0</label> <span class="open_vent_area_orifice_unit"></span> more</label>
+    <table style="width:50%;" id="valve_piping_table">
+      <tr>
+        <th colspan="2">Piping</th>
+      </tr>
+      <tr>
+        <td>Pipe Material</td><td><%= f.select :open_vent_pipe_material, @pipes.collect{|p| ["#{p["material"]} - #{p["conditions"]}", p["id"]]}, :prompt => true %></td>
+      </tr>
+      <tr>
+        <td>Pipe Roughness</td><td><%= f.text_field :open_vent_pipe_roughness, :class => "small-text-100" %>&nbsp;<%= @fitting_pipe_size_unit %></td>
+      </tr>
+    </table>
+    <br>
+    <div style="padding-top:10px;padding-bottom:10px;"> <b><u>3) Acceptable Location Check</u></b></div>
+    <div><a href="#" id="add_open_vent_location">Add Location</a><br></div>
+    <table style="width:100%;border: 0;margin:0;"><tr><td style="background: #ffffff;border: 0;">
+    <table style="width:99%" id="open_vent_location_table">
+      <tr>
+        <th>No.</th>
+        <th>Location</th>
+        <th>Limiting Fitting</th>
+        <th>Size</th>
+        <th>Contact Fluid Phase</th>
+        <th>Acidic Conditions</th>
+        <th>High Temp. Conditions </th>
+        <th>H2S Environment</th>
+        <th>Acceptability</th>
+        <th>Use</th>
+        <th></th>
+      </tr>
+      <tr>
+        <th colspan="3"></th>
+        <th><%= @fitting_pipe_size_unit %></th>
+        <th colspan="7"></th>
+      </tr>
+      <% if @relief_device_sizing.relief_device_open_vent_locations.empty? %>
+          <% @unique_id = Time.now.to_i %>
+          <% @open_vent_location = @relief_device_sizing.relief_device_open_vent_locations.new %>
+          <%= render :partial => 'open_vent_locations' %>
+      <% else %>
+          <% @relief_device_sizing.relief_device_open_vent_locations.each_with_index do |location| %>
+              <% @unique_id = Time.now.to_i+location.id %>
+              <% @open_vent_location = location %>
+              <%= render :partial => 'open_vent_locations' %>
+          <% end %>
+      <% end %>
+    </table>
+    </td> <td style="background: #ffffff;border: 0;"><input type="button" id="validate_btn" value="Validate"></td></tr></table>
+
+    <br>
+    <%= link_to "Add", "#", :id => "add_new_pipe_sizing" %>&nbsp;|&nbsp;<%= link_to "Close", "#", :id => "close_open_vent_relief_device" %>
+  </div>
+</div>
+
+
+
+
+<style type="text/css">
+    #relief_design_box
+     {
+        font: Arial,Helvetica,sans-serif;
+        font-size: 12px;
+    }
+</style>
+
+<%= javascript_tag do %>
+    var pipe_size_schedules = <%= raw PipeSizing.pipe_size_schedules.to_json %>;
+    var pipes = <%= raw @pipes.to_json %>;
+    var pipes_json = {};
+    $(pipes).each(function(k, v){
+    pipes_json[v.id] = v;
+    });
+    var uncertainty_factor = '<%= @uncertainty_factor %>';
+<% end %>
+
+<script type='text/javascript'>
+
+    //update sequence of all open_vent devices
+    function update_sequence_open_vent() {
+        $("td[id^='sequence_open_vent_relief_device']").each(function (index, value) {
+            //sequence should not start with zero, but array starts with 0 index
+            index = index + 1;
+            $(this).empty().append(index);
+        });
+    }
+    $("#add_open_vent_relief_device").click(function () {
+        $.get("<%= relief_device_sizing_open_vent_relief_devices_path(1)%>", function (data) {
+            $("#open_vent_relief_devices_table").append(data);
+            update_sequence_open_vent();
+        });
+    });
+    $("a.delete_open_vent_relief_device").live('click', function () {
+        var id = $(this).attr('id');
+        if ($("td#sequence_open_vent_relief_device_" + id).text() > 1) {
+            $("tr#row_" + id).hide();
+            //remove id "sequence" from hidden rows
+            //otherwise this interfers with sequence updater
+            $("td#sequence_open_vent_relief_device_" + id).attr('id', "");
+            $("input#destroy_" + id).attr('value', 1);
+            update_sequence_open_vent();
+        }
+    });
+
+    //update sequence of all open_vent locations
+    function update_sequence_open_vent_location() {
+        $("td[id^='sequence_open_vent_location']").each(function (index, value) {
+            //sequence should not start with zero, but array starts with 0 index
+            index = index + 1;
+            $(this).empty().append(index);
+        });
+    }
+    $("#add_open_vent_location").click(function () {
+        $.get("<%= relief_device_sizing_open_vent_locations_path(1)%>", function (data) {
+            $("#open_vent_location_table").append(data);
+            update_sequence_open_vent_location();
+        });
+    });
+    $("a.delete_open_vent_location").live('click', function () {
+        var id = $(this).attr('id');
+        if ($("td#sequence_open_vent_location_" + id).text() > 1) {
+            $("tr#row_" + id).hide();
+            //remove id "sequence" from hidden rows
+            //otherwise this interfers with sequence updater
+            $("td#sequence_open_vent_location_" + id).attr('id', "");
+            $("input#destroy_" + id).attr('value', 1);
+            update_sequence_open_vent_location();
+        }
+    });
+
+    $('#relief_device_sizing_open_vent_pipe_material').change(function (e) {
+        if ($(this).val() == "") {
+            $('#relief_device_sizing_open_vent_pipe_material').val('');
+            return false
+        }
+        $('#relief_device_sizing_open_vent_pipe_roughness').val($('body').data('pipes')[$(this).val()].roughness_recommended);
+    });
+
+
+    // close link validation
+    $('#close_open_vent_relief_device').click(function (e) {
+        var min_pressure = 10000;
+        var total_orificearea = 0;
+        var location_use = 0;
+        var close='true';
+        //A open_vent device is missing a tag
+        $("input[id^='optag_']").each(function() {
+            if(this.value == ''){
+                alert("A open vent Relief Device is missing a tag");
+                close = false;
+                return false
+            }
+        });
+        //The total Orifice Area selected is not less than the Required Area of the Design Basis
+        $("input[id^='netflowarea_']").each(function() {
+            //add only if the value is number
+            if(!isNaN(this.value) && this.value.length!=0) {
+                total_orificearea= total_orificearea + parseFloat(this.value);
+            }
+        });
+        if(total_orificearea < 12.34){
+            alert("The total Orifice Area selected is not greater than the Required Area of the Design Basis");
+            close = false;
+            $("#open_vent_need_area_orifice").empty().append(12.34-total_orificearea);
+            $(".open_vent_diff_area_orifice").attr("style", "color:red");
+            return false
+        } else {
+            $("#open_vent_need_area_orifice").empty().append(0);
+        }
+        //The total Orifice Area selected is not less than the Required Area of the Design Basis
+        $("input[id^='open_vent_location_use_']").each(function() {
+            //add only if the value is number
+            if(this.checked) {
+                location_use =1;
+                // The location tag for the selected location must be provided
+                var id = $(this).attr("id").slice(23);
+                if($("#location_" + id).val() == ''){
+                    alert("The location tag for the selected location must be provided");
+                    close = false;
+                    return false
+                }
+            }
+        });
+        if(location_use == 0){
+            alert("A location has to be select");
+            close = false;
+            return false
+        }
+
+        if(close == 'true'){
+            $.colorbox.close();
+            return false
+        }
+    });
+
+
+    $(".open_vent_bodysize").change(function(){
+        var id = $(this).attr("id").slice(9);
+        var val = $("option:selected", this).attr('value');
+        $("#pipesch_" + id +" > option").remove();
+        $("#pipesch_" + id +" > option").append($('<option></option>').val("").html(""));
+        $(pipe_size_schedules[val]).each(function(k, v){
+            $("#pipesch_" + id).append($('<option></option>').val(v).html(v));
+        });
+        return false;
+    });
+
+
+    // Validate click
+    $("#validate_btn").click(function () {
+    });
+
+
+    $('#relief_device_sizing_system_design_pressure').live('change', function() {
+        $("#open_vent_design_pressure").val($(this).val());
+    });
+    $('#open_vent_design_pressure').live('change', function() {
+        $("#relief_device_sizing_system_design_pressure").val($(this).val());
+    });
+
+</script>

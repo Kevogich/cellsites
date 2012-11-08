@@ -1,0 +1,547 @@
+<div id="fired_heater_tab" class="tab_content">
+<!-- Fired Heater -->
+<table style="width:100%;">
+<tr>
+  <td>
+    <fieldset class="form_fieldset" style="float:left;">
+      <legend> Fired Equipment Type</legend>
+      <ul class="unstyled">
+        <li>
+          <%= f.radio_button :fh_fired_equipment_type, "direct_fired" %>Direct Fired
+        </li>
+        <li>
+          <%= f.radio_button :fh_fired_equipment_type, "firetube" %>Firetube
+        </li>
+      </ul>
+    </fieldset>
+  </td>
+  <td>
+    <fieldset class="form_fieldset" style="float: left;">
+      <legend>
+        Fired Heater Sections
+      </legend>
+      <ul class="unstyled">
+        <li>
+          <%= f.radio_button :fh_fired_heater_sections, "radiant_only" %>Radiant Only
+        </li>
+        <li>
+          <%= f.radio_button :fh_fired_heater_sections, "covective_only" %>Covective Only
+        </li>
+        <li>
+          <%= f.radio_button :fh_fired_heater_sections, "both" %>Both
+        </li>
+      </ul>
+    </fieldset>
+  </td>
+  <td colspan="2">
+    <fieldset class="form_fieldset" style="float: left;">
+      <legend>
+        Direct Fired Type
+      </legend>
+      <ul class="unstyled">
+        <li>
+          <%= f.radio_button :fh_direct_fired_type, "cylindrical" %>Cylindrical
+        </li>
+        <li>
+          <%= f.radio_button :fh_direct_fired_type, "cabin" %>Cabin
+        </li>
+      </ul>
+    </fieldset>
+  </td>
+</tr>
+<tr>
+  <td colspan="4"><label class="sub_title">DESIGN PROCESS SPECIFICATIONS </label></td>
+</tr>
+<tr>
+  <td> Total Heat Duty</td>
+  <td colspan="3">
+    <%= f.text_field :fh_dps_total_heat_duty, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td> Thermal Efficiency, NTE</td>
+  <td colspan="3">
+    <%= f.text_field :fh_dps_thermal_efficiency_nte, :class => "small-text-100" %>&nbsp;
+  </td>
+</tr>
+<tr>
+  <td> Total Available Heat Duty</td>
+  <td colspan="3">
+   <%= heat_exchanger_sizing.fh_dps_total_available_heat_duty %>&nbsp;
+  </td>
+</tr>
+<tr>
+  <td></td>
+  <td><label class="sub_title">Radiant selection </label></td>
+  <td colspan="2"><label class="sub_title">convective selection </label></td>
+</tr>
+<tr>
+  <td> Service</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_service, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_service, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Heat Absorption</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_heat_absorption, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_heat_absorption, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Allowable Pressure Drop (Clean)</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_allowable_pressure_drop_clean, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_allowable_pressure_drop_clean, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Calculated Pressure Drop (Clean)</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_calculated_pressure_drop_clean, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_calculated_pressure_drop_clean, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Allowable Pressure Drop (Fouled)</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_allowable_pressure_drop_fouled, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_allowable_pressure_drop_fouled, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Calculated Pressure Drop (Fouled)</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_calculated_pressure_drop_fouled, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_calculated_pressure_drop_fouled, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Avg. Radiant Flex Density (Allowable)</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_avg_radiant_flux_density_allowable, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_avg_radiant_flux_density_allowable, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Avg. Radiant Flex Density (Calc)</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_avg_radiant_flux_density_calc, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_avg_radiant_flux_density_calc, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Max. Radiant Flex Density (Calc)</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_max_radiant_flux_density_calc, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_max_radiant_flux_density_calc, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Conv. Selection Flex Density (Bare Tube)</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_conv_section_flux_density_bare_tube, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_conv_section_flux_density_bare_tube, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Velocity Limitations</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_velocity_limitations, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_velocity_limitations, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Process Fluid Mass Velocity</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_process_fluid_mass_velocity, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_process_fluid_mass_velocity, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Maximum Allowable Inside Film Temp</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_max_allowable_inside_film_temp, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_max_allowable_inside_film_temp, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Maximum Calculated Inside Film Temp</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_max_calculated_inside_film_temp, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_max_calculated_inside_film_temp, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Fouling Factor</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_fouling_factor, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_fouling_factor, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Cooking Allowance</td>
+  <td>
+    <%= f.text_field :fh_dps_rs_cooking_allowance, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_dps_cs_cooking_allowance, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td colspan="4"><label class="sub_title">DIMENSION</label></td>
+</tr>
+<tr>
+  <td colspan="4"><label class="sub_title">Tube/Coil </label></td>
+</tr>
+<tr>
+  <td>Tube Orientation</td>
+  <td><%= f.select :fh_d_rs_tube_orientation, options_for_select([], heat_exchanger_sizing.fh_d_rs_tube_orientation), :include_blank => true %>&nbsp;
+  </td>
+  <td colspan="2"><%= f.select :fh_d_cs_tube_orientation, options_for_select([], heat_exchanger_sizing.fh_d_cs_tube_orientation), :include_blank => true %>&nbsp;
+  </td>
+</tr>
+<tr>
+  <td>Tube Material</td>
+  <td>
+    <%= f.text_field :fh_d_rs_tube_material, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_d_cs_tube_material, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Tube OD</td>
+  <td><%= f.select :fh_d_rs_tube_od, options_for_select([], heat_exchanger_sizing.fh_d_rs_tube_od), :include_blank => true %>&nbsp;
+  </td>
+  <td colspan="2"><%= f.select :fh_d_cs_tube_od, options_for_select([], heat_exchanger_sizing.fh_d_cs_tube_od), :include_blank => true %>&nbsp;
+  </td>
+</tr>
+<tr>
+  <td>Tube Thickness</td>
+  <td><%= f.select :fh_d_rs_tube_thickness, options_for_select([], heat_exchanger_sizing.fh_d_rs_tube_thickness), :include_blank => true %>&nbsp;
+  </td>
+  <td colspan="2"><%= f.select :fh_d_cs_tube_thickness, options_for_select([], heat_exchanger_sizing.fh_d_cs_tube_thickness), :include_blank => true %>&nbsp;
+  </td>
+</tr>
+<tr>
+  <td > Tube ID</td>
+  <td colspan="3">
+    <label id="fh_d_rs_tube_id"><%= heat_exchanger_sizing.fh_d_rs_tube_id %></label>
+       <%= f.hidden_field :fh_d_rs_tube_id %>
+    </td>
+ </tr>
+<tr>
+  <td>No.Of Passes</td>
+  <td>
+    <%= f.text_field :fh_d_rs_no_of_passes, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_d_cs_no_of_passes, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Total NO.of Tubes</td>
+  <td>
+    <%= f.text_field :fh_d_rs_total_no_of_tubes, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_d_cs_total_no_of_tubes, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>No.Of Bare Tube</td>
+  <td>
+    <%= f.text_field :fh_d_rs_no_of_bare_tube, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_d_cs_no_of_bare_tube, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Total Exposed Area(Bare Tubes)</td>
+  <td>
+    <%= f.text_field :fh_d_rs_total_exposed_area_bare_tubes, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_d_cs_total_exposed_area_bare_tubes, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Tubes Per Row</td>
+  <td>
+    <%= f.text_field :fh_d_rs_tubes_per_row, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_d_cs_tubes_per_row, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Overall Tube Length</td>
+  <td>
+    <%= f.text_field :fh_d_rs_overall_tube_length, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_d_cs_overall_tube_length, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Effective Tube Length</td>
+  <td>
+    <%= f.text_field :fh_d_rs_effective_tube_length, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_d_cs_effective_tube_length, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Tube Spacing</td>
+  <td>
+    <%= f.text_field :fh_d_rs_tube_spacing, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_d_cs_tube_spacing, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Tube Layout</td>
+  <td><%= f.select :fh_d_rs_tube_layout, options_for_select([], heat_exchanger_sizing.fh_d_rs_tube_layout), :include_blank => true %>&nbsp;
+  </td>
+  <td colspan="2"><%= f.select :fh_d_cs_tube_layout, options_for_select([], heat_exchanger_sizing.fh_d_cs_tube_layout), :include_blank => true %>&nbsp;
+  </td>
+</tr>
+<tr>
+  <td colspan="4"><label class="sub_title">Extended Surface</label></td>
+</tr>
+<tr>
+  <td> Type</td>
+  <td><%= f.select :fh_d_rs_type, options_for_select([], heat_exchanger_sizing.fh_d_rs_type), :include_blank => true %>&nbsp;
+  </td>
+  <td colspan="2"><%= f.select :fh_d_cs_type, options_for_select([], heat_exchanger_sizing.fh_d_cs_type), :include_blank => true %>&nbsp;
+  </td>
+</tr>
+<tr>
+  <td>Material</td>
+  <td>
+    <%= f.text_field :fh_d_rs_material, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_d_cs_material, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td> Fin Height</td>
+  <td><%= f.select :fh_d_rs_fin_height, options_for_select([], heat_exchanger_sizing.fh_d_rs_fin_height), :include_blank => true %>&nbsp;
+  </td>
+  <td colspan="2"><%= f.select :fh_d_cs_fin_height, options_for_select([], heat_exchanger_sizing.fh_d_cs_fin_height), :include_blank => true %>&nbsp;
+  </td>
+</tr>
+<tr>
+  <td> Fin Spacing</td>
+  <td><%= f.select :fh_d_rs_fin_spacing, options_for_select([], heat_exchanger_sizing.fh_d_rs_fin_spacing), :include_blank => true %>&nbsp;
+  </td>
+  <td colspan="2"><%= f.select :fh_d_cs_fin_spacing, options_for_select([], heat_exchanger_sizing.fh_d_cs_fin_spacing), :include_blank => true %>&nbsp;
+  </td>
+</tr>
+<tr>
+  <td>Fin Thickness</td>
+  <td>
+    <%= f.text_field :fh_d_rs_fin_thickness, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_d_cs_fin_thickness, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Maximum Tip Temperature</td>
+  <td>
+    <%= f.text_field :fh_d_rs_max_tip_temperature, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_d_cs_max_tip_temperature, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>No.Of Extended Surface Tube</td>
+  <td>
+    <%= f.text_field :fh_d_rs_no_of_extended_surface_tube, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_d_cs_no_of_extended_surface_tube, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Total Exposed Area</td>
+  <td>
+    <%= f.text_field :fh_d_rs_total_exposed_area, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_d_cs_total_exposed_area, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td>Extension Ratio</td>
+  <td>
+    <%= f.text_field :fh_d_rs_extension_ratio, :class => "small-text-100" %>
+  </td>
+  <td colspan="2">
+    <%= f.text_field :fh_d_cs_extension_ratio, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr></tr>
+
+<tr>
+  <td colspan="4"><label class="sub_title">COMBUSTION DESIGN</label></td>
+</tr>
+<tr>
+  <td colspan="4">
+    <fieldset class="form_fieldset">
+      <legend>Draft Type</legend>
+      <%= f.radio_button :fh_cd_draft_type, "natural" %>Natural &nbsp;&nbsp;&nbsp;&nbsp;
+      <%= f.radio_button :fh_cd_draft_type, "forced" %>Forced &nbsp;&nbsp;&nbsp;&nbsp;
+      <%= f.radio_button :fh_cd_draft_type, "induced" %>Induced &nbsp;&nbsp;&nbsp;&nbsp;
+    </fieldset>
+  </td>
+</tr>
+<tr>
+  <td colspan="2"><label class="sub_title">Fuel Conditions</label></td>
+  <td colspan="2"><label class="sub_title">Air Conditions</label></td>
+</tr>
+<tr>
+  <td> Fuel</td>
+  <td><%= f.select :fh_cd_fc_fuel, options_for_select([], heat_exchanger_sizing.fh_cd_fc_fuel), :include_blank => true %>&nbsp;
+  <td> Air Pressure</td>
+  <td>
+    <%= f.text_field :fh_cd_ac_air_pressure, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td> Fuel MW</td>
+  <td>
+    <%= f.text_field :fh_cd_fc_fuel_mw, :class => "small-text-100" %>
+  </td>
+  <td> Air Temperature</td>
+  <td>
+    <%= f.text_field :fh_cd_ac_air_temperature, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td> HHV</td>
+  <td>
+    <%= f.text_field :fh_cd_fc_hhv, :class => "small-text-100" %>
+  </td>
+  <td> Relative Humidity</td>
+  <td>
+    <%= f.text_field :fh_cd_ac_relative_humidity, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td> LHV</td>
+  <td>
+    <%= f.text_field :fh_cd_fc_lhv, :class => "small-text-100" %>
+  </td>
+  <td> Dry Air Required</td>
+  <td>
+    <%= f.text_field :fh_cd_ac_dry_air_required, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td> Pressure At Burner</td>
+  <td>
+    <%= f.text_field :fh_cd_fc_pressure_at_burner, :class => "small-text-100" %>
+  </td>
+  <td> Humid Air Required</td>
+  <td>
+    <%= f.text_field :fh_cd_ac_humid_air_required, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td> TemperatureAt Burner</td>
+  <td colspan="3">
+    <%= f.text_field :fh_cd_fc_temperature_at_burner, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td colspan="4"><label class="sub_title">Combustion</label></td>
+</tr>
+<tr>
+  <td> Excess Air</td>
+  <td colspan="3">
+    <%= f.text_field :fh_cd_c_excess_air, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td colspan="3"> Calculated Air Release(LHV)</td>
+  <td>
+    <%= heat_exchanger_sizing.fh_cd_c_calculated_heat_release_lhv %>&nbsp;
+  </td>
+</tr>
+<tr>
+  <td colspan="3"> Fuel Efficiency</td>
+  <td>
+    <%= heat_exchanger_sizing.fh_cd_c_fuel_efficiency %>&nbsp;
+  </td>
+</tr>
+<tr>
+  <td> Heat Loss In Radiant Section</td>
+  <td colspan="3">
+    <%= f.text_field :fh_cd_c_heat_loss_in_radiant_section, :class => "small-text-100" %>
+  </td>
+</tr>
+<tr>
+  <td colspan="3"> Flue Gas Temp Existing Radiant Section</td>
+  <td>
+    <%= heat_exchanger_sizing.fh_cd_c_flue_gas_temp_existing_radiant_section %>&nbsp;
+  </td>
+</tr>
+<tr>
+  <td colspan="3"> Flue Gas Temp Existing Convection Section</td>
+  <td>
+    <%= heat_exchanger_sizing.fh_cd_c_flue_gas_temp_existing_convection_section %>&nbsp;
+  </td>
+</tr>
+<tr>
+  <td colspan="3"> Flue Gas Temp Existing Air Preheater</td>
+  <td>
+    <%= heat_exchanger_sizing.fh_cd_c_flue_gas_temp_existing_air_pre_heater %>&nbsp;
+  </td>
+</tr>
+<tr>
+  <td colspan="3"> Flue Gas Quantity</td>
+  <td>
+    <%= heat_exchanger_sizing.fh_cd_c_flue_gas_quantity %>
+  </td>
+</tr>
+</table>
+</div>

@@ -1,0 +1,39 @@
+<% title 'Projects' %>
+<%= stylesheet("/javascripts/tablecloth/tablecloth.css") %>
+
+<br>
+<% if user_access_type == 1 %>
+  <%= link_to 'Add Project', new_admin_project_path %>
+<% end %>
+<br>
+
+<table id="projects_list" class="list">
+  <tr>
+    <th>Client Name</th>
+    <th>Location</th>
+    <th>Title</th>
+    <th>Project</th>
+    <th>Client Project Number</th>
+    <th>Options</th>
+    <th></th>
+  </tr>
+  <% for project in @projects %>
+    <tr id="project_<%= project.id %>">
+      <td><%= project.client.try(:name) %></td>
+      <td><%= project.location %></td>
+      <td><%= project.title %></td>
+      <td><%= link_to project.project_num, admin_project_path(project) %></td>
+      <td><%= project.document_num %></td>
+      <td>
+        <% if user_access_type == 1 %>
+          <%= link_to 'delete', admin_project_path(project), :method => :delete, :remote => true, :confirm => 'Are you sure?' %>
+        <% end %>
+      </td>
+      <td>
+        <% if user_access_type == 1 %>
+          <%= link_to 'assign', assign_admin_project_path(project) %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>

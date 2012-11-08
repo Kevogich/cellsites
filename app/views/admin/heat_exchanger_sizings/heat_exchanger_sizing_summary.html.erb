@@ -1,0 +1,32 @@
+<% title 'Heat Exchanger Sizing Summary' %>Download: <%= link_to "Pdf", admin_sizing_summary_pdf_path("heat_exchanger_sizing") %>
+<% stylesheet("/javascripts/tablecloth/tablecloth.css")%>
+<% javascript("jquery.fixer")%>
+
+<style>
+	.tab-header {
+		font-size: 14px;
+		font-weight: bold;
+		text-align: center;
+	}
+	
+	.column-header {
+		font-weight: bold;
+	}
+</style>
+
+<div style="margin-top:10px;">
+	<table class="vessel_sizing_summary">
+		<tr>
+			<td class="column-header">Calc Count</td>
+			<td class="column-header">Preliminary Tag</td>
+			<td class="column-header">Stream No</td>
+		</tr>
+		<% @heat_exchanger_sizings.each_with_index do |heat_exchanger_sizing, i|%>
+		<tr>
+			<td><%= i+1%></td>
+			<td><%= heat_exchanger_sizing.exchanger_tag%></td>
+			<td><%= heat_exchanger_sizing.sd_st_stream_no_1.split('.').first rescue ""%></td>			
+		</tr>
+		<% end%>	
+	</table>
+</div>

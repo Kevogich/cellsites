@@ -1,0 +1,8 @@
+<% if @line_sizing.errors.any?%>
+	$(".error_messages").remove();	
+	$("#new_line_sizing").prepend("<%= escape_javascript(error_messages_for(@line_sizing))%>");
+	$.colorbox.resize();
+<% else%>   
+	alert("New Line sizing Created Successfully.");
+	window.location.reload();
+<% end%>

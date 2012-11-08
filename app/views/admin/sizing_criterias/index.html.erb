@@ -1,0 +1,77 @@
+<% title "Sizing Criteria", false %>
+<% stylesheet("colorbox", "/javascripts/tablecloth/tablecloth.css") %>
+<% javascript("jquery.colorbox-min", "jquery.form") %>
+
+<%= render :partial => "/admin/sizing_criteria_categories/index", :locals => {:sizing_criteria_categoires => @sizing_criteria_categoires} %>
+
+<div style="border-bottom:1px solid #3B9BFF;margin-bottom:10px;"></div>
+
+<div class="sizing_criterias">
+  <h4>List of Sizing Criteria</h4>
+  <table id="sizing_criterias_list">
+    <tr>
+      <th rowspan="2"></th>
+      <th colspan="3" style="text-align:center;">Velocity</th>
+      <th colspan="3" style="text-align:center;">Maximum &Delta;P/100ft</th>
+      <th rowspan="2">User Notes</th>
+      <th rowspan="2">Edit</th>
+      <th rowspan="2">Delete</th>
+    </tr>
+    <tr>
+      <th>Min (ft/s)</th>
+      <th>Max (ft/s)</th>
+      <th>Selected (ft/s)</th>
+      <th>Min (psi)</th>
+      <th>Max (psi)</th>
+      <th>Selected (psi)</th>
+    </tr>
+    <% for sizing_criteria_category in @sizing_criteria_categoires %>
+      <% next if sizing_criteria_category.sizing_criteria_category_types.length == 0 %>
+      <tr>
+        <td colspan="10">
+          <b><%= sizing_criteria_category.name %></b>
+        </td>
+      </tr>
+      <% for sizing_criteria_category_type in sizing_criteria_category.sizing_criteria_category_types %>
+        <tr>
+          <td colspan="10">
+            <%= image_tag "gnome_go_next.png", :border => 0, :size => "12x12" %>
+            <b><%= sizing_criteria_category_type.name %></b>
+				<span>
+					<%= link_to 'Add Sizing Criteria', new_admin_sizing_criteria_path(:sizing_criteria_category_type_id => sizing_criteria_category_type.id), {:class => "add_new_sizing_criteria_link", :style => "font-size:12px;float:right;"} %>
+				</span>
+          </td>
+        </tr>
+        <% if sizing_criteria_category_type.sizing_criterias.length == 0 %>
+          <tr>
+            <td colspan="10" style="text-align:center;font-size:11px;color:#990000;">
+              Added Sizing criteria.
+            </td>
+          </tr>
+        <% else %>
+          <% for sizing_criteria in sizing_criteria_category_type.sizing_criterias %>
+            <tr>
+            <tr>
+              <td><%= sizing_criteria.name %></td>
+              <td width="10%"><%= sizing_criteria.velocity_min %></td>
+              <td width="10%"><%= sizing_criteria.velocity_max %></td>
+              <td width="10%"><%= sizing_criteria.velocity_sel %></td>
+              <td width="10%"><%= sizing_criteria.delta_per_100ft_min %></td>
+              <td width="10%"><%= sizing_criteria.delta_per_100ft_max %></td>
+              <td width="10%"><%= sizing_criteria.delta_per_100ft_sel %></td>
+              <td><%= sizing_criteria.user_notes %></td>
+              <td width="5%"><%= link_to "Edit", edit_admin_sizing_criteria_path(sizing_criteria), :class => "edit_sizing_criteria_link" %></td>
+              <td width="5%"><%= link_to "Delete", admin_sizing_criteria_path(sizing_criteria), :method => "delete", :confirm => "Are you sure?" %></td>
+            </tr>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </table>
+</div>
+
+<script type="text/javascript">
+  $('.add_new_sizing_criteria_link').colorbox();
+  $('.edit_sizing_criteria_link').colorbox();
+</script>

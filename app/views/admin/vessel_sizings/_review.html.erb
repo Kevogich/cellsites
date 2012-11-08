@@ -1,0 +1,285 @@
+<div id="review" class="tab_content">
+  <!-- Review -->
+  <table style="width: 100%">
+    <tr>
+      <td colspan="3"><label class="sub_title">SIZING REVIEW</label></td>
+    </tr>
+    <tr>
+      <td><b>1.</b></td>
+      <td>Drums are relatively small vessels to provide surge capacity or separation of entrained phases</td>
+      <td width="150px">
+        <%= f.radio_button :sizing_review_1, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_1, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_1, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>2.</b></td>
+      <td>Liquid drums are usually horizontal</td>
+      <td width="150px">
+        <%= f.radio_button :sizing_review_2, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_2, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_2, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>3.</b></td>
+      <td>Gas/liquid phase separators are usually vertical</td>
+      <td width="150px">
+        <%= f.radio_button :sizing_review_3, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_3, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_3, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>4.</b></td>
+      <td>Optical L/D ration is 3, but the range of 2-5 is common</td>
+      <td width="150px">
+        <%= f.radio_button :sizing_review_4, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_4, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_4, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>5.</b></td>
+      <td>Hold Up time is 5 mins half full for reflux drums and gas/liquid separators. 5-10 mins for products feeding another tower.</td>
+      <td width="150px">
+        <%= f.radio_button :sizing_review_5, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_5, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_5, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>6.</b></td>
+      <td>In drums feeing a furnace, 30 mins half-full drum is allows</td>
+      <td width="150px">
+        <%= f.radio_button :sizing_review_6, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_6, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_6, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>7.</b></td>
+      <td>knock out drums placed ahead of compressors should hold no less than 10 times the liquid volume passing through</td>
+      <td width="150px">
+        <%= f.radio_button :sizing_review_7, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_7, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_7, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>8.</b></td>
+      <td>Liquid/Liquid Separation are designed for a settling velocity of 0.85 - 1.27 mm/s (2 - 3 in./min)</td>
+      <td width="150px">
+        <%= f.radio_button :sizing_review_8, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_8, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_8, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>9.</b></td>
+      <td>Gas velocities in gas/liquid separators with k of 0.11(0.35) for systems with mesh deentrainer and k = 0.0305(0.1) without a mesh deentrainer</td>
+      <td width="150px">
+        <%= f.radio_button :sizing_review_9, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_9, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_9, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>10.</b></td>
+      <td>Entrainments removal of 99% is attained with 102-305 mm (4-12 in.) mesh pad thickness; 152.5 mm (6 in.) thickness is popular</td>
+      <td width="150px">
+        <%= f.radio_button :sizing_review_10, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_10, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_10, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>11.</b></td>
+      <td>For vertical pads, the value of the coefficient in step 9 is reduced by a factor of 2/3</td>
+      <td width="150px">
+        <%= f.radio_button :sizing_review_11, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_11, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_11, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>12.</b></td>
+      <td>Good performance can be expected at velocities of 30% - 100% of those calculated with the given k; 75% is popular</td>
+      <td width="150px">
+        <%= f.radio_button :sizing_review_12, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_12, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_12, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>13.</b></td>
+      <td>Disengagement Spaces of 152-427 mm (6-18 in.) ahead of the pad and 305 mm (12 in( above the pad are suitable</td>
+      <td width="150px">
+        <%= f.radio_button :sizing_review_13, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_13, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_13, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>14.</b></td>
+      <td>Cyclone Separator can be designed for 95% collection of 5 &mu;m particles, but are usually only droplets greater the 50 &mu;m need be removed</td>
+      <td width="150px">
+        <%= f.radio_button :sizing_review_14, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :sizing_review_14, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :sizing_review_14, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+  </table>
+
+  <table style="width: 100%">
+    <tr>
+      <td colspan="3"><label class="sub_title">DESIGN CONDITIONS REVIEW</label></td>
+    </tr>
+    <tr>
+      <td><b>1</b></td>
+      <td>
+        Design temperature between -30&deg;C and 345&deg;C is 25&deg;C (-20&deg;F and 650&deg;F is 50&deg;F) above
+        operating temperature: Higher safety margin are used outside the given temperature range
+      </td>
+      <td width="150px">
+        <%= f.radio_button :design_condition_review_1, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :design_condition_review_1, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :design_condition_review_1, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>2</b></td>
+      <td>
+        The design pressure is 10% or 0.69 - 1.7 bar (10 -25 psi) over the maximum operating pressure,
+        whichever is greater. The maximum operating pressure, in turn is taken as 1.7 bar (25 psi)
+        above the normal operation
+      </td>
+      <td width="150px">
+        <%= f.radio_button :design_condition_review_2, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :design_condition_review_2, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :design_condition_review_2, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>3</b></td>
+      <td>
+        Design pressure of vessels operating at 0-0.69 barg (0-10 psig) and 90-450 &deg;C (600 - 1000 &deg;F)
+        are 2.76 barg (40 psig)
+      </td>
+      <td width="150px">
+        <%= f.radio_button :design_condition_review_3, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :design_condition_review_3, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :design_condition_review_3, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>4</b></td>
+      <td>For vacuum operation, design pressure are 1 barg (15 psig) and full vacuum</td>
+      <td width="150px">
+        <%= f.radio_button :design_condition_review_4, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :design_condition_review_4, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :design_condition_review_4, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>5</b></td>
+      <td>
+        Minimum wall thickness for ridigity: 6.4 mm (0.25 in.) for 1.07 m (42 in.) dia and under 8.1 mm
+        (0.32 in.) for 1.07 - 1.52 m (42-60 in.) diameter and 9.7 mm (0.38 in.) for over 1.5 m (60 in.) diameter
+      </td>
+      <td width="150px">
+        <%= f.radio_button :design_condition_review_5, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :design_condition_review_5, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :design_condition_review_5, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>6</b></td>
+      <td>
+        Corrosion allowance of 8.9 mm (0.35 in) for know corrosive conditions, 3.8 mm (0.15 in.)
+        for noncorrosive streams, and 1.5 mm (0.06 in.) for steam drum and air receivers.
+      </td>
+      <td width="150px">
+        <%= f.radio_button :design_condition_review_6, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :design_condition_review_6, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :design_condition_review_6, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td><b>7</b></td>
+      <td>Allowable working stresses are one-fourth of the ultimate strength of the material.</td>
+      <td width="150px">
+        <%= f.radio_button :design_condition_review_7, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :design_condition_review_7, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :design_condition_review_7, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><b>8</b></td>
+      <td>
+        Maximum allowable stress depends sharply on temperature
+        <table>
+          <tr>
+            <td>Temperature (&deg;F)</td>
+            <td>-20-650</td>
+            <td>750</td>
+            <td>850</td>
+            <td>1000</td>
+          </tr>
+          <tr>
+            <td>Temperature (&deg;C)</td>
+            <td>-30-345</td>
+            <td>400</td>
+            <td>455</td>
+            <td>540</td>
+          </tr>
+          <tr>
+            <td>Low Alloy Steel SA 203 (psi)</td>
+            <td>18750</td>
+            <td>15650</td>
+            <td>9550</td>
+            <td>2500</td>
+          </tr>
+          <tr>
+            <td>Low Alloy Steel SA 203 (bar)</td>
+            <td>1290</td>
+            <td>1070</td>
+            <td>686</td>
+            <td>273</td>
+          </tr>
+          <tr>
+            <td>Type 302 Stainless (psi)</td>
+            <td>18750</td>
+            <td>18750</td>
+            <td>15900</td>
+            <td>6250</td>
+          </tr>
+          <tr>
+            <td>Type 302 Stainless (bar)</td>
+            <td>1290</td>
+            <td>1290</td>
+            <td>1100</td>
+            <td>431</td>
+          </tr>
+        </table>
+      </td>
+      <td width="150px" valign="top">
+        <%= f.radio_button :design_condition_review_8, "yes" %>&nbsp;Yes&nbsp;
+        <%= f.radio_button :design_condition_review_8, "no" %>&nbsp;No&nbsp;
+        <%= f.radio_button :design_condition_review_8, "na" %>&nbsp;N/A&nbsp;
+      </td>
+    </tr>
+  </table>
+
+  <table style="width: 100%">
+    <tr>
+      <td><label class="sub_title">NOTES</label></td>
+    </tr>
+    <tr>
+      <td>
+        <%= f.text_area :review_notes, :size=>"158x6" %>
+      </td>
+    </tr>
+  </table>
+</div>

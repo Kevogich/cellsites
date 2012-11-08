@@ -1,0 +1,42 @@
+<% title 'Pipe Roughness' %>
+<%= stylesheet("/javascripts/tablecloth/tablecloth.css") %>
+
+<% if user_access_type == 1 %>
+  <%= link_to 'Add Pipe Roughness', new_admin_pipe_roughnes_path %>
+<% end %>
+
+<table id="pipe_roughness_list">
+  <tr>
+    <th>Material</th>
+    <th>Conditions</th>
+    <th>Minimum Roughness&nbsp;(in)</th>
+    <th>Maximum Roughness&nbsp;(in)</th>
+    <th>Recommended Roughness&nbsp;(in)</th>
+    <th>Options</th>
+  </tr>
+  <% for pipe_roughness in @pipe_roughnesses %>
+    <tr class="<%= cycle("even", "odd") %>">
+      <td>
+        <%= pipe_roughness.material %>
+      </td>
+      <td>
+        <%= pipe_roughness.conditions %>
+      </td>
+      <td>
+        <%= pipe_roughness.roughness_min %>
+      </td>
+      <td>
+        <%= pipe_roughness.roughness_max %>
+      </td>
+      <td>
+        <%= pipe_roughness.roughness_recommended %>
+      </td>
+      <td>
+        <% if user_access_type == 1 %>
+          <%= link_to 'Edit', edit_admin_pipe_roughnes_path(pipe_roughness) %> |
+          <%= link_to 'Delete', admin_pipe_roughnes_path(pipe_roughness), :method => "delete", :confirm => "Are you sure?" %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>

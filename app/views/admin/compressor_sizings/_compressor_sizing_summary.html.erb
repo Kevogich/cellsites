@@ -1,0 +1,28 @@
+<style>
+	.tab-header {
+		font-size: 14px;
+		font-weight: bold;
+		text-align: center;
+	}
+	
+	.column-header {
+		font-weight: bold;
+	}
+</style>
+<%= render :partial => "shared/summary_client_header", :locals => {:client => client} %>
+<div style="margin-top:10px;">
+	<table class="compressor_sizing_summary">
+		<tr>
+			<td class="column-header">Calc Count</td>
+			<td class="column-header">Preliminary Tag</td>
+			<td class="column-header">Suction Stream No</td>
+		</tr>
+		<% compressor_sizings.each_with_index do |compressor_sizing, i|%>
+		<tr>
+			<td><%= i+1%></td>
+			<td><%= compressor_sizing.compressor_sizing_tag%></td>
+			<td><%= compressor_sizing.su_stream_no.split('.').first rescue ""%></td>
+		</tr>
+		<% end%>	
+	</table>
+</div>		

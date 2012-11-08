@@ -1,0 +1,248 @@
+<div style="display:none;">
+  <div id="low_pressure_vent_relief_device_design_box">
+    <div style="padding-top:10px;"><b><u>1) Design Basis</u></b></div>
+    <table id="relief_design_basis" style="width:85%">
+      <tr>
+        <th></th>
+        <th>Normal Venting (Pressure)</th>
+        <th>Normal Venting (Vacuum) </th>
+        <th>Emergency Venting (Pressure)</th>
+        <th>Emergency Venting (Vacuum)</th>
+      </tr>
+      <tr><th>Scenario</th><td></td><td></td><td></td><td></td></tr>
+      <tr><th>Identifier</th><td></td><td></td><td></td><td></td></tr>
+      <tr><th>Relief Rate Requirement(Mass)&nbsp; <span class="mass_flow_rate_general_unit"></span></th><td></td><td></td><td></td><td></td></tr>
+      <tr><th>Relief Rate Requirement(Volume)&nbsp; <span class="mass_flow_rate_general_unit"></span></th><td></td><td></td><td></td><td></td></tr>
+    </table>
+    <br>
+    <div style="padding-top:10px;padding-bottom:2px;"> <b><u>2) Pressure Setting</u></b></div>
+    <table style="width:25%" id="low_pressure_vent_pressure_setting_table">
+      <tr><th>Tank Tag</th><td><%= select_tag "low_pressure_vent_attributes[#{@unique_id}][low_pressure_tank_tag]",options_for_select(@user_project_settings.project.storage_tank_sizings.collect {|v| [v.storage_tank_tag,v.id]},@relief_device_sizing.low_pressure_tank_tag) %></td><td></td></tr>
+      <tr><th>Tank Code</th><td><%= select_tag "low_pressure_vent_attributes[#{@unique_id}][low_pressure_tank_code]",options_for_select(StaticData.low_pressure_tank_code,@relief_device_sizing.low_pressure_tank_code) %></td><td></td></tr>
+      <tr><th>Pressure Rating</th><td><%= f.text_field :low_pressure_pressure_rating, :style => "width:50px;", :id => "rupture_design_pressure" %></td><td><span class="pressure_general_unit"></span></td></tr>
+      <tr><th>Vacuum Rating</th><td><%= f.text_field :low_pressure_vacuum_rating, :style => "width:50px;", :id => "rupture_design_pressure" %></td><td><span class="pressure_general_unit"></span></td></tr>
+      <tr><th>Set Pressure</th><td><%= f.text_field :low_pressure_set_pressure, :style => "width:50px;", :id => "rupture_design_pressure" %></td><td><span class="pressure_general_unit"></span></td></tr>
+      <tr><th>Set Vacuum</th><td><%= f.text_field :low_pressure_set_vacuum, :style => "width:50px;", :id => "rupture_design_pressure" %></td><td><span class="pressure_general_unit"></span></td></tr>
+    </table>
+    <br>
+    <div style="padding-top:10px;padding-bottom:2px;"> <b><u>3) Vent Type Selection</u></b></div>
+  <table style="width:40%;border:0;">
+    <tr>
+      <td style="width:60%; background: #ffffff;border: 0;">
+        <table id="low_pressure_vent_type_table">
+          <tr><th>Flash Point Temperature</th><td><%= f.text_field :low_pressure_flashpoint_temp, :style => "width:50px;", :id => "rupture_design_pressure" %></td><td><span class="temperature_general_unit"></span></td></tr>
+          <tr><th>Fluid Temperature</th><td><%= f.text_field :low_pressure_fluid_temp, :style => "width:50px;", :id => "rupture_design_pressure" %></td><td><span class="temperature_general_unit"></span></td></tr>
+          <tr><th>Flash Point >= 100 F</th><td><%= select_tag "low_pressure_vent_attributes[#{@unique_id}][low_pressure_flashpoint]",options_for_select(StaticData.yes_no,@relief_device_sizing.low_pressure_flashpoint) %></td><td></td></tr>
+          <tr><th>Heated Tank</th><td><%= select_tag "low_pressure_vent_attributes[#{@unique_id}][low_pressure_heatedtank]",options_for_select(StaticData.yes_no,@relief_device_sizing.low_pressure_heatedtank) %></td><td></td></tr>
+          <tr><th>Tank Capacity</th><td><%= f.text_field :low_pressure_tankcapacity, :style => "width:50px;", :id => "rupture_design_pressure" %></td><td><span class="volume_general_unit"></span></td></tr>
+          <tr><th>Crude Oil Storage</th><td><%= select_tag "low_pressure_vent_attributes[#{@unique_id}][low_pressure_crudeoilstorage]",options_for_select(StaticData.yes_no,@relief_device_sizing.low_pressure_crudeoilstorage) %></td><td></td></tr>
+          <tr><th>Very Highly Viscous Fluid</th><td><%= select_tag "low_pressure_vent_attributes[#{@unique_id}][low_pressure_highviscousfluid]",options_for_select(StaticData.yes_no,@relief_device_sizing.low_pressure_highviscousfluid) %></td><td></td></tr>
+          <tr><th>Frangible Roof Design</th><td><%= select_tag "low_pressure_vent_attributes[#{@unique_id}][low_pressure_frangibleroof]",options_for_select(StaticData.yes_no,@relief_device_sizing.low_pressure_frangibleroof) %></td><td></td></tr>
+          <tr><th>Operating Pressure > 0.56 psig</th><td><%= select_tag "low_pressure_vent_attributes[#{@unique_id}][low_pressure_operatingpressure]",options_for_select(StaticData.yes_no,@relief_device_sizing.low_pressure_operatingpressure) %></td><td></td></tr>
+          <tr><th>Emission Standards</th><td><%= select_tag "low_pressure_vent_attributes[#{@unique_id}][low_pressure_emissionstandards]",options_for_select(StaticData.emission_standards,@relief_device_sizing.low_pressure_emissionstandards) %></td><td></td></tr>
+          <tr><th>Fluid MW</th><td><%= f.text_field :low_pressure_set_vacuum, :style => "width:50px;", :id => "low_pressure_fluidmw" %></td><td></td></tr>
+          <tr><th>Discharge Location</th><td><%= select_tag "low_pressure_vent_attributes[#{@unique_id}][low_pressure_dischargelocation]",options_for_select(StaticData.low_pressure_discharge_loc,@relief_device_sizing.low_pressure_dischargelocation) %></td><td></td></tr>
+        </table>
+      </td>
+      <td style="background: #ffffff;border: 0;"><input type="button" id="low_pressure_vent_type_select" value="Select"></td>
+    </tr>
+    <tr>
+      <td style="background: #ffffff;border: 0;vertical-align: top;">
+        <table>
+          <tr><th>Conservation Vent Type</th></tr>
+          <tr><td>
+            <%= f.radio_button :low_pressure_conservation_venttype, 'Open Vent' %>  Open Vent <br>
+            <%= f.radio_button :low_pressure_conservation_venttype, 'Pressure - Vacuum Vent(Direct Acting - Weight Loaded)' %>  Pressure - Vacuum Vent(Direct Acting - Weight Loaded) <br>
+            <%= f.radio_button :low_pressure_conservation_venttype, 'Pressure - Vacuum Vent(Direct Acting - Spring)' %>  Pressure - Vacuum Vent(Direct Acting - Spring) <br>
+            <%= f.radio_button :low_pressure_conservation_venttype, 'Pressure - Vacuum Vent(Pilot Operated)' %>  Pressure - Vacuum Vent(Pilot Operated)<br>
+          </td></tr>
+        </table>
+      </td>
+      <td style="background: #ffffff;border: 0;">
+        <table>
+          <tr><th>Emergency Vent Type</th></tr>
+          <tr><td>
+            <%= f.radio_button :low_pressure_emergency_venttype, 'Open Vent' %>  Open Vent <br>
+            <%= f.radio_button :low_pressure_emergency_venttype, 'Gauge Hatch' %> Gauge Hatch <br>
+            <%= f.radio_button :low_pressure_emergency_venttype, 'Manhole Cover' %>  Manhole Cover <br>
+            <%= f.radio_button :low_pressure_emergency_venttype, 'Rupture Disk' %>  Rupture Disk<br>
+            <%= f.radio_button :low_pressure_emergency_venttype, 'Frangible Roof' %> Frangible Roof<br>
+            <%= f.radio_button :low_pressure_emergency_venttype, 'Others' %> Others<br>
+            <%= f.radio_button :low_pressure_emergency_venttype, 'None' %>Nonet<br>
+          </td></tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+    <div><br><a href="#" id="add_low_pressure_vent_relief_device">Add Relief Disk</a><br></div>
+    <table style="width:97%" id="low_pressure_vent_relief_devices_table">
+      <tr>
+        <th>No.</th>
+        <th>Vent Tag</th>
+        <th>Protection Type</th>
+        <th>Vent Type</th>
+        <th>Pressure Size</th>
+        <th>Vacuum Size</th>
+        <th>Set Pressure</th>
+        <th>Set Vacuum</th>
+        <th>Pressure Capacity</th>
+        <th>Vacuum Capacity.</th>
+        <th>Piping</th>
+        <th></th>
+      </tr>
+      <tr>
+        <th colspan="4"></th>
+        <th><%= @fitting_pipe_size_unit %></th>
+        <th><%= @fitting_pipe_size_unit %></th>
+        <th><span class="pressure_general_unit"></span></th>
+        <th><span class="pressure_general_unit"></span></th>
+        <th><<span class="mass_flow_rate_general_unit"></span></th>
+        <th><span class="mass_flow_rate_general_unit"></span></th>
+        <th colspan="2"></th>
+      </tr>
+      <% if @relief_device_sizing.relief_device_low_pressure_vent_relief_devices.empty? %>
+          <% @unique_id = Time.now.to_i %>
+          <% @low_pressure_vent_relief_device = @relief_device_sizing.relief_device_low_pressure_vent_relief_devices.new %>
+          <%= render :partial => 'low_pressure_vent_relief_devices' %>
+      <% else %>
+          <% @relief_device_sizing.relief_device_low_pressure_vent_relief_devices.each_with_index do |low_pressure_vent_relief_device| %>
+              <% @unique_id = Time.now.to_i+low_pressure_vent_relief_device.id %>
+              <% @low_pressure_vent_relief_device = low_pressure_vent_relief_device %>
+              <%= render :partial => 'low_pressure_vent_relief_devices' %>
+          <% end %>
+      <% end %>
+    </table>
+    <label class="diff_area_orifice">*Need <label id="need_low_pressure_pressure_capacity">0</label> <span class="area_orifice_unit"></span> Air more Pressure capacity</label><br>
+    <label class="diff_area_orifice">*Need <label id="need_low_pressure_vacuum_capacity">0</label> <span class="area_orifice_unit"></span> Air more Vacuum capacity</label>
+    <table style="width:50%;" id="valve_piping_table">
+      <tr>
+        <th colspan="2">Piping</th>
+      </tr>
+      <tr>
+        <td>Pipe Material</td><td><%= f.select :low_pressure_vent_pipe_material, @pipes.collect{|p| ["#{p["material"]} - #{p["conditions"]}", p["id"]]}, :prompt => true %></td>
+      </tr>
+      <tr>
+        <td>Pipe Roughness</td><td><%= f.text_field :low_pressure_vent_pipe_roughness, :class => "small-text-100" %>&nbsp;<%= @fitting_pipe_size_unit %></td>
+      </tr>
+    </table>
+
+    <table width=100%>
+      <tr>
+        <td><b><u>Notes</u></b></td>
+      </tr>
+      <tr>
+        <td>
+          <%= f.text_area :low_pressure_note, :cols =>150, :rows => 6 %> </td>
+      </tr>
+    </table>
+
+    <br>
+    <%= link_to "Add", "#", :id => "add_new_pipe_sizing" %>&nbsp;|&nbsp;<%= link_to "Close", "#", :id => "close_low_pressure_vent_relief_device" %>
+  </div>
+</div>
+
+
+
+
+<style type="text/css">
+    #low_pressure_vent_relief_device_design_box
+     {
+        font: Arial,Helvetica,sans-serif;
+        font-size: 12px;
+    }
+</style>
+
+<%= javascript_tag do %>
+    var pipe_size_schedules = <%= raw PipeSizing.pipe_size_schedules.to_json %>;
+    var pipes = <%= raw @pipes.to_json %>;
+    var pipes_json = {};
+    $(pipes).each(function(k, v){
+    pipes_json[v.id] = v;
+    });
+    var uncertainty_factor = '<%= @uncertainty_factor %>';
+<% end %>
+
+
+<script type='text/javascript'>
+
+    //update sequence of all low_pressure devices
+    function update_sequence_low_pressure_vent() {
+        $("td[id^='sequence_low_pressure_vent_relief_device']").each(function (index, value) {
+            //sequence should not start with zero, but array starts with 0 index
+            index = index + 1;
+            $(this).empty().append(index);
+        });
+    }
+    $("#add_low_pressure_vent_relief_device").click(function () {
+        $.get("<%= relief_device_sizing_low_pressure_vent_relief_devices_path(1)%>", function (data) {
+            $("#low_pressure_vent_relief_devices_table").append(data);
+            update_sequence_low_pressure_vent();
+        });
+    });
+    $("a.delete_low_pressure_vent_relief_device").live('click', function () {
+        var id = $(this).attr('id');
+        if ($("td#sequence_low_pressure_vent_relief_device_" + id).text() > 1) {
+            $("tr#row_" + id).hide();
+            //remove id "sequence" from hidden rows
+            //otherwise this interferes with sequence updater
+            $("td#sequence_low_pressure_vent_relief_device_" + id).attr('id', "");
+            $("input#destroy_" + id).attr('value', 1);
+            update_sequence_low_pressure_vent();
+        }
+    });
+
+    $('#relief_device_sizing_low_pressure_vent_pipe_material').change(function (e) {
+        if ($(this).val() == "") {
+            $('#relief_device_sizing_low_pressure_vent_pipe_material').val('');
+            return false
+        }
+        $('#relief_device_sizing_low_pressure_vent_pipe_roughness').val($('body').data('pipes')[$(this).val()].roughness_recommended);
+    });
+
+
+    // close link validation
+    $('#close_low_pressure_vent_relief_device').click(function (e) {
+        var min_pressure = 10000;
+        var total_orificearea = 0;
+        var location_use = 0;
+        var close='true';
+        //A open_vent device is missing a tag
+        $("input[id^='venttag_']").each(function() {
+            if(this.value == ''){
+                alert("A Low Pressure Vent Relief Device is missing a tag");
+                close = false;
+                return false
+            }
+        });
+
+
+        if(close == 'true'){
+            $.colorbox.close();
+            return false
+        }
+    });
+
+    $('.low_pressure_vent_protectiontype').live("change", function () {
+        var id = $(this).attr("id").slice(15);
+        var val = $("option:selected", this).attr('value');
+        $("#venttype_" + id +" > option").remove();
+        if(val=="Open Vent"){
+            $("#venttype_" + id).append($('<option></option>').val("").html(""));
+        }else if(val=="Conservation Vent"){
+            $("#venttype_" + id).append($('<option></option>').val("").html(""));
+            $("#venttype_" + id).append($('<option></option>').val("PVV - Direct Acting Weight Loaded").html("PVV - Direct Acting Weight Loaded"));
+            $("#venttype_" + id).append($('<option></option>').val("PVV - Direct Acting - Spring Loaded").html("PVV - Direct Acting - Spring Loaded"));
+            $("#venttype_" + id).append($('<option></option>').val("PVV - Pilot Operated").html("PVV - Pilot Operated"));
+        }else{
+            $("#venttype_" + id).append($('<option></option>').val("Gauge Hatch").html("Gauge Hatch"));
+            $("#venttype_" + id).append($('<option></option>').val("Manhole Cover").html("Manhole Cover"));
+            $("#venttype_" + id).append($('<option></option>').val("Rupture Disk").html("Rupture Disk"));
+            $("#venttype_" + id).append($('<option></option>').val("Frangible Roof").html("Frangible Roof"));
+            $("#venttype_" + id).append($('<option></option>').val("Others").html("Others"));
+        }
+        return false;
+    });
+
+
+</script>

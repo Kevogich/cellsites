@@ -1,0 +1,23 @@
+<%= fields_for @suction_piping do |f| %>
+<tr id=<%= "row_#{@unique_id}"%> >
+	<td id=<%= "sequence_#{@unique_id}"%>></td>
+	<%= f.hidden_field :id, :name => "suction_pipings[#{@unique_id}][id]"%>
+	<%= f.hidden_field :_destroy, :name => "suction_pipings[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_#{@unique_id}" %>
+	<td><%= select_tag "suction_pipings[#{@unique_id}][fitting]",options_for_select(PipeSizing.fitting.collect {|p| [raw(p[:value]), p[:id]]}.insert(0,' '),@suction_piping.fitting) %></td>
+	<td><%= f.text_field :fitting_tag, :name => "suction_pipings[#{@unique_id}][fitting_tag]"%></td>
+	<td><%= select_tag "suction_pipings[#{@unique_id}][pipe_size]",options_for_select(PipeSizing.pipe_sizes.collect {|p| [raw(p[:name]), p[:value]]}.insert(0,' '),@suction_piping.pipe_size), :class => "suction_pipings_pipe_size pipe_size_#{@unique_id}", :id => "pipe_size:#{@unique_id}" %></td>
+	<% if @suction_piping.pipe_schedule.nil? %>
+		<td><%= select_tag "suction_pipings[#{@unique_id}][pipe_schedule]",options_for_select([]), :class => "suction_pipings_pipe_schedule pipe_schedule_#{@unique_id}", :id => "pipe_schedule:#{@unique_id}" %></td>
+	<% else %>
+		<td><%= select_tag "suction_pipings[#{@unique_id}][pipe_schedule]",options_for_select(PipeSizing.pipe_schedules.collect {|p|[raw(p[:name]),p[:name]]}.insert(0,' '),@suction_piping.pipe_schedule), :class => "suction_pipings_pipe_schedule pipe_schedule_#{@unique_id}", :id => "pipe_schedule:#{@unique_id}" %></td>
+	<% end %>
+	<td><%= f.text_field :pipe_id, :name => "suction_pipings[#{@unique_id}][pipe_id]", :class => "suction_pipings_pipe_id", :id => "suction_piping_pipe_id_#{@unique_id}" %></td>
+	<td><%= f.text_field :per_flow, :name => "suction_pipings[#{@unique_id}][per_flow]" %></td>
+	<td><%= f.text_field :ds_cv, :name => "suction_pipings[#{@unique_id}][ds_cv]" %></td>
+	<td><%= f.text_field :length, :name => "suction_pipings[#{@unique_id}][length]", :class => "suction_pipings_length"%></td>
+	<td><%= f.text_field :elev, :name => "suction_pipings[#{@unique_id}][elev]", :class => "suction_pipings_elev"%></td>
+	<td><%= f.text_field :delta_p, :name => "suction_pipings[#{@unique_id}][delta_p]", :class => "suction_pipings_delta_p"%></td>
+	<td><%= f.text_field :outlet_pressure, :name => "suction_pipings[#{@unique_id}][outlet_pressure]"%></td>
+	<td><%= link_to "X", "#", :class => "delete_suction_pipe", :id => @unique_id %></td>
+</tr>
+<% end %>

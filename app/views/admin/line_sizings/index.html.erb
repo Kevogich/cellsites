@@ -1,0 +1,39 @@
+<% title 'Line sizing'%>
+
+<%= render :partial => '/admin/user_project_settings/project_filter' %>
+
+<%= link_to 'Add Line sizing', new_admin_line_sizing_path%>&nbsp;|&nbsp;
+<%= link_to 'Line Sizing Summary', line_sizing_summary_admin_line_sizings_path%>
+<br>
+<table width="auto">
+	<tr>
+		<th>Line number</th>
+		<th width="30%">Description</th>
+		<th>By</th>
+		<th>Reviewer</th>
+		<th>Approver</th>
+		<th>Created at</th>
+		<th>Updated at</th>
+		<th>Edit</th>
+		<th>Delete</th>
+		<th>Clone</th>
+	</tr>
+	<% for line_sizing in @line_sizings%>
+		<tr>
+			<td><%= link_to line_sizing.line_number, admin_line_sizing_path(line_sizing)%></td>
+			<td><%= line_sizing.description%></td>
+			<td><%= line_sizing.sizing_status_activities.created_by%></td>
+			<td><%= line_sizing.sizing_status_activities.reviewer%></td>
+			<td><%= line_sizing.sizing_status_activities.approver%></td>
+			<td><%= line_sizing.created_at.strftime("%d-%m-%Y")%></td>
+			<td><%= line_sizing.updated_at.strftime("%d-%m-%Y")%></td>
+			<td><%= link_to "Edit", edit_admin_line_sizing_path(line_sizing)%></td>
+			<td><%= link_to "Delete", admin_line_sizing_path(line_sizing), :method=>"delete", :confirm => "Are you sure?"%></td>
+			<td><%= link_to "Clone", clone_admin_line_sizing_path(line_sizing), :class => "clone_sizing" %></td>
+		</tr>
+	<% end%>
+</table>
+
+<script type="text/javascript">
+
+</script>

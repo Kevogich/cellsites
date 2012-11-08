@@ -1,0 +1,19 @@
+<div>
+	<h4>Vapor flow model</h4>
+	<div class="form-element" style="width:200px;">
+		<%= f.radio_button :vapor_flow_model, "Isothermal"%>&nbsp;<%= f.label :vapor_flow_model, "Isothermal"%>
+	</div>
+	<div class="form-element-last" style="width:200px;">
+		<%= f.radio_button :vapor_flow_model, "Adiabatic"%>&nbsp;<%= f.label :vapor_flow_model, "Adiabatic"%>
+	</div>
+</div>
+
+<div style="margin-top:20px;">
+	<h4>Two phase flow model</h4>
+	<div class="form-element" style="width:200px;">
+		<%= f.radio_button :two_phase_flow_model, "Lockhart-Martinelli"%>&nbsp;<%= f.label :two_phase_flow_model, "Lockhart-Martinelli"%>
+	</div>
+	<div class="form-element-last" style="width:200px;">
+		<%= f.radio_button :two_phase_flow_model, "Dukler"%>&nbsp;<%= f.label :two_phase_flow_model, "Dukler"%>
+	</div>
+</div>

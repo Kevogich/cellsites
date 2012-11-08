@@ -1,0 +1,6 @@
+<%= form_for measurement_sub_type, :url => measurement_sub_type.new_record? ? superadmin_measurement_sub_types_path : superadmin_measurement_sub_type_path(measurement_sub_type), :remote => true, :html => {:class => 'form-inline well measurement_sub_type_form', :style => 'width:auto;'} do |f| %>
+  <%= f.hidden_field :measurement_id%>
+  <%= f.label :name, "Sub Type Name"%>
+  <%= f.text_field :name%>
+  <%= f.submit measurement_sub_type.new_record? ? "Create" : "Update" %>
+<% end%>

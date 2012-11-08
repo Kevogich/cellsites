@@ -1,0 +1,12 @@
+<div class="colorbox-dialog">
+<%= form_for title, :url => admin_titles_path, :remote => true do |f| %>
+	<%= f.error_messages%>
+	<div class="form-element-last">
+		<%= f.label :name%><br>
+		<%= f.text_field :name%>
+	</div>
+	<div class="form-buttons">
+		<%= f.submit "Create" %>
+  	</div>
+<% end%>
+</div>  

@@ -1,0 +1,23 @@
+<% title @company_user.name << " Profile"%>
+<%= stylesheet("/javascripts/tablecloth/tablecloth.css")%>
+
+<div class="company-user-details">
+	<table style="width:auto;">
+		<tr><td>Name</td><td><%= @company_user.name %></td></tr>
+		<tr><td>Username</td><td><%= @company_user.username %></td></tr>
+		<tr><td>Group</td><td><%= @company_user.group %></td></tr>
+		<tr><td>Title</td><td><%= @company_user.title %></td></tr>
+		<tr><td>Official Title</td><td><%= @company_user.official_title %></td></tr>
+		<tr><td>Location</td><td><%= @company_user.location %></td></tr>
+		<tr><td>Address</td><td><%= @company_user.address %></td></tr>
+		<tr><td>Official Telephone</td><td><%= @company_user.official_tel %></td></tr>
+		<tr><td>Mobile</td><td><%= @company_user.cell %></td></tr>
+		<tr><td>Fax</td><td><%= @company_user.fax %></td></tr>
+		<tr><td>Email</td><td><%= @company_user.email %></td></tr>
+		<tr><td>Access Type</td><td><%= @company_user.access_type %></td></tr>
+		<tr><td>Roles</td><td><%= @company_user.user.role_names %></td></tr>
+		<tr><td>Units</td><td><%= @company_user.unit_names %></td></tr>
+	</table>
+	<br>
+	<%= link_to 'Edit', edit_admin_company_user_path(@company_user)%>
+</div>

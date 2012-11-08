@@ -1,0 +1,86 @@
+<style>
+	.tab-header td {
+		font-size: 16px;
+		font-weight: bold;
+		text-align: center;
+	}
+	
+	.column-header td {
+		font-weight: bold;
+	}
+</style>
+
+<%= render :partial => "shared/summary_client_header", :locals => {:client => client} %>
+<div style="margin-top:10px;">
+	<table class="steam_turbine_summary" style="width:auto;">
+		<tr class="tab-header">
+			<td colspan="2"></td>
+			<td colspan="4">ASSOCIATED ROTATING EQUIPMENT</td>
+			<td colspan="3">INLET SIDE</td>
+			<td colspan="3">EXHAUST SIDE</td>
+			<td colspan="6">STEAM TURBINE RATING</td>
+		</tr>
+		<tr class="column-header">
+			<td>Count</td>
+			<td>Preliminary Tag</td>
+			<td>Equipment Type</td>
+			<td>Equipment Tag</td>
+			<td>Horsepower</td>
+			<td>Speed</td>
+			<td>Inlet Nozzle  Size</td>
+			<td>Source Pressure</td>
+			<td>Source Temperature</td>
+			<td>Exhaust Nozzle Size</td>
+			<td>Exhaust Pressure</td>
+			<td>Exhaust Temperature</td>
+			<td>Turbine Type</td>
+			<td>Estimated No of Stages</td>
+			<td>Design Steam Rate</td>
+			<td>Design Speed</td>
+			<td>Corrected Efficiency</td>
+			<td>Total Steam Rate</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>kW</td>
+			<td>RPM</td>
+			<td>inches</td>
+			<td>psig</td>
+			<td>barg</td>			
+			<td>&deg;C</td>			
+			<td>psig</td>
+			<td>barg</td>
+			<td></td>
+			<td></td>
+			<td>lb/hr</td>			
+			<td>kg/hr</td>
+			<td>RPM</td>
+			<td>HP</td>
+		</tr>
+		<% steam_turbines.each_with_index do |steam_turbine, i|%>
+		<tr>
+			<td><%= i+1%></td>
+			<td><%= steam_turbine.steam_turbine_tag%></td>
+			<td><%= steam_turbine.ms_equipment_type%></td>
+			<td><%= steam_turbine.ms_equipment_tag%></td>
+			<td><%= steam_turbine.std_horsepower%></td>
+			<td><%= steam_turbine.std_speed%></td>
+			<td></td>			
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>a<%= steam_turbine.std_ee_turbine_type%></td>
+			<td></td>			
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+		</tr>
+		<% end%>
+	</table>
+</div>

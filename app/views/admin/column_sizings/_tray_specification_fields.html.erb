@@ -1,0 +1,45 @@
+<tr>
+  <td><%= i%></td>
+  <td><%= f.text_field :zd_section_description %></td>
+  <td><%= f.text_field :zd_tray_numbers %></td>
+  <td><%= f.select :zd_tray_count, (1..100), :include_blank => true %></td>
+  <td><%= f.text_field :vl_mass_flow_rate %></td>
+  <td><%= f.text_field :vl_temperature %></td>
+  <td><%= f.text_field :vl_pressure %></td>
+  <td><%= f.text_field :vl_density %></td>
+  <td><%= f.text_field :vl_molecular_weight %></td>
+  <td><%= f.text_field :vl_compressibility %></td>
+  <td><%= f.text_field :ll_mass_flow_rate %></td>
+  <td><%= f.text_field :ll_temperature %></td>
+  <td><%= f.text_field :ll_surface_tension %></td>
+  <td><%= f.text_field :ll_viscosity %></td>
+  <td><%= f.select :td_type_of_trays, options_for_select(StaticData.type_of_trays, f.object.td_type_of_trays), :include_blank => true %></td>
+  <td><%= f.text_field :td_tray_manufacturer %></td>
+  <td><%= f.text_field :td_tray_model %></td>
+  <td><%= f.text_field :td_tray_spacing, :class => "length_large_dimension_length" %></td>
+  <td><%= f.text_field :td_no_of_passes %></td>
+  <td><%= f.select :td_tray_foaming_tendency, options_for_select(StaticData.tray_foaming_tendency, f.object.td_tray_foaming_tendency), :include_blank => true %></td>
+  <td><%= f.text_field :td_max_rate_as_of_design %></td>
+  <td><%= f.text_field :td_min_rate_as_of_design %></td>
+  <td><%= f.text_field :td_design_rate_as_flood_rate %></td>
+  <td><%= f.text_field :td_tray_material %></td>
+  <td><%= f.text_field :td_valve_cap_material %></td>
+  <td><%= f.text_field :td_corrosion_allowance, :class => "length_large_dimension_length" %></td>
+  <td><%= f.text_field :td_tray_thickness, :class => "length_large_dimension_length" %></td>
+  <td><%= f.text_field :td_tray_diameter, :class => "length_large_dimension_length" %></td>
+  <td><%= f.text_field :td_section_height, :class => "length_large_dimension_length" %></td>
+  <td><%= f.text_field :td_pressure_drop_per_tray, :class => "pressure_general" %></td>
+  <td><%= f.text_field :bd_packing_type %></td>
+  <td><%= f.text_field :bd_packing_manufacture %></td>
+  <td><%= f.text_field :bd_packing_material %></td>
+  <td><%= f.text_field :bd_random_packing_type %></td>
+  <td><%= f.text_field :bd_random_packing_size %></td>
+  <td><%= f.text_field :bd_packing_factor %></td>
+  <td><%= f.text_field :bd_height_of_theoretical_plate %></td>
+  <td><%= f.text_field :bd_height_of_transfer_unit %></td>
+  <td><%= f.text_field :bd_tower_diameter, :class => "length_large_dimension_length" %></td>
+  <td><%= f.text_field :bd_pressure_drop_per_ft_of_packing %></td>
+  <td><%= f.text_field :bd_bed_height, :class => "length_large_dimension_length" %></td>
+
+  <td><%= link_to raw("&times;"), "#", :class => "column_section_tray_designs_remove" %></td>
+</tr>

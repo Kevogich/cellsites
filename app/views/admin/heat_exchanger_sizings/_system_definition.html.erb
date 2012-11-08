@@ -1,0 +1,149 @@
+<div id="system_definition" class="tab_content">
+  <!-- System Definition -->
+  <table style="width:100%">
+    <tr>
+      <td width="50%"><b><u>Process Basis</u></b></td>
+      <td width="50%" rowspan="3">
+        <fieldset class="form_fieldset">
+          <legend>Exchanger Type</legend>
+          <ul class="unstyled">
+            <li>
+              <%= f.radio_button :sd_exchanger_type, "shell_tube", :class => "exchange_type_rb" %>Shell & Tube&nbsp;&nbsp;
+              <%= f.radio_button :sd_exchanger_type, "aerial_cooler", :class => "exchange_type_rb" %>Aerial Cooler
+            </li>
+            <li>
+              <%= f.radio_button :sd_exchanger_type, "plate_fin", :class => "exchange_type_rb" %>Plate & Fin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <%= f.radio_button :sd_exchanger_type, "fired_heater", :class => "exchange_type_rb" %>Fired Heater
+            </li>
+          </ul>
+        </fieldset>
+      </td>
+    </tr>
+    <tr>
+      <td><%= f.collection_select :sd_process_basis_id, @project.heat_and_material_balances, :id, :case, :prompt => true %></td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div style="margin: 10px;">
+          <div id="shell_tube">
+            <div id="st_streams_1" class="streams" style="position:absolute;top:15px;left:100px;">
+              <ul class="unstyled">
+                <li><b>Hot In</b></li>
+                <li><%= f.collection_select :sd_st_stream_no_hot_in, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => "hot_in", :rd => 'st'} %></li>
+                <li><%= f.text_field :sd_st_pressure_hot_in, :style => "width:60px;" %>&nbsp;barg</li>
+                <li><%= f.text_field :sd_st_temperature_hot_in, :style => "width:60px;" %>&nbsp;&deg;C</li>
+              </ul>
+            </div>
+
+            <div id="st_streams_2" class="streams" style="position:absolute;top:65px;left:450px;">
+              <ul class="unstyled">
+                <li><b>Cold Out</b></li>
+                <li><%= f.collection_select :sd_st_stream_no_cold_out, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => "cold_out", :rd => 'st'} %></li>
+                <li><%= f.text_field :sd_st_pressure_cold_out, :style => "width:60px;" %>&nbsp;barg</li>
+                <li><%= f.text_field :sd_st_temperature_cold_out, :style => "width:60px;" %>&nbsp;&deg;C</li>
+              </ul>
+            </div>
+
+            <div id="st_streams_3" class="streams" style="position:absolute;top:175px;left:10px;">
+              <ul class="unstyled">
+                <li><b>Cold In</b></li>
+                <li><%= f.collection_select :sd_st_stream_no_cold_in, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => "cold_in", :rd => 'st'} %></li>
+                <li><%= f.text_field :sd_st_pressure_cold_in, :style => "width:60px;" %>&nbsp;barg</li>
+                <li><%= f.text_field :sd_st_temperature_cold_in, :style => "width:60px;" %>&nbsp;&deg;C</li>
+              </ul>
+            </div>
+
+            <div id="st_streams_4" class="streams" style="position:absolute;top:245px;left:400px;">
+              <ul class="unstyled">
+                <li><b>Hot Out</b></li>
+                <li><%= f.collection_select :sd_st_stream_no_hot_out, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => "hot_out", :rd => 'st'} %></li>
+                <li><%= f.text_field :sd_st_pressure_hot_out, :style => "width:60px;" %>&nbsp;barg</li>
+                <li><%= f.text_field :sd_st_temperature_hot_out, :style => "width:60px;" %>&nbsp;&deg;C</li>
+              </ul>
+            </div>
+          </div>
+
+          <div id="plate_fin">
+            <div id="pf_streams_1" class="streams" style="position:absolute;top:15px;left:45px;">
+              <ul class="unstyled">
+                <li><b>Hot In</b></li>
+                <li><%= f.collection_select :sd_pf_stream_no_hot_in, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => "hot_in", :rd => 'pf'} %></li>
+                <li><%= f.text_field :sd_pf_pressure_hot_in, :style => "width:60px;" %>&nbsp;barg</li>
+                <li><%= f.text_field :sd_pf_temperature_hot_in, :style => "width:60px;" %>&nbsp;&deg;C</li>
+              </ul>
+            </div>
+
+            <div id="pf_streams_2" class="streams" style="position:absolute;top:15px;left:450px;">
+              <ul class="unstyled">
+                <li><b>Cold Out</b></li>
+                <li><%= f.collection_select :sd_pf_stream_no_cold_out, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => "cold_out", :rd => 'pf'} %></li>
+                <li><%= f.text_field :sd_pf_pressure_cold_out, :style => "width:60px;" %>&nbsp;barg</li>
+                <li><%= f.text_field :sd_pf_temperature_cold_out, :style => "width:60px;" %>&nbsp;&deg;C</li>
+              </ul>
+            </div>
+
+            <div id="pf_streams_3" class="streams" style="position:absolute;top:250px;left:45px;">
+              <ul class="unstyled">
+                <li><b>Cold In</b></li>
+                <li><%= f.collection_select :sd_pf_stream_no_cold_in, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => "cold_in", :rd => 'pf'} %></li>
+                <li><%= f.text_field :sd_pf_pressure_cold_in, :style => "width:60px;" %>&nbsp;barg</li>
+                <li><%= f.text_field :sd_pf_temperature_cold_in, :style => "width:60px;" %>&nbsp;&deg;C</li>
+              </ul>
+            </div>
+
+            <div id="pf_streams_4" class="streams" style="position:absolute;top:250px;left:450px;">
+              <ul class="unstyled">
+                <li><b>Hot Out</b></li>
+                <li><%= f.collection_select :sd_pf_stream_no_hot_out, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => "hot_out", :rd => 'pf'} %></li>
+                <li><%= f.text_field :sd_pf_pressure_hot_out, :style => "width:60px;" %>&nbsp;barg</li>
+                <li><%= f.text_field :sd_pf_temperature_hot_out, :style => "width:60px;" %>&nbsp;&deg;C</li>
+              </ul>
+            </div>
+          </div>
+
+          <div id="aerial_cooler">
+            <div id="ac_streams_1" class="streams" style="position:absolute;top:50px;left:50px;">
+              <ul class="unstyled">
+                <li><b>Hot In</b></li>
+                <li><%= f.collection_select :sd_ac_stream_no_hot_in, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => "hot_in", :rd => 'ac'} %></li>
+                <li><%= f.text_field :sd_ac_pressure_hot_in, :style => "width:60px;" %>&nbsp;barg</li>
+                <li><%= f.text_field :sd_ac_temperature_hot_in, :style => "width:60px;" %>&nbsp;&deg;C</li>
+              </ul>
+            </div>
+
+            <div id="ac_streams_2" class="streams" style="position:absolute;top:50px;left:475px;">
+              <ul class="unstyled">
+                <li><b>Hot Out</b></li>
+                <li><%= f.collection_select :sd_ac_stream_no_hot_out, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => "hot_out", :rd => 'ac'} %></li>
+                <li><%= f.text_field :sd_ac_pressure_hot_out, :style => "width:60px;" %>&nbsp;barg</li>
+                <li><%= f.text_field :sd_ac_temperature_hot_out, :style => "width:60px;" %>&nbsp;&deg;C</li>
+              </ul>
+            </div>
+          </div>
+          <div id="fired_heater">
+            <div id="fh_streams_1" class="streams" style="position:absolute;top:115px;left:100px;">
+              <ul class="unstyled">
+                <li><b>Cold In</b></li>
+                <li><%= f.collection_select :sd_fh_stream_no_cold_in, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => "cold_in", :rd => 'fh'} %></li>
+                <li><%= f.text_field :sd_fh_pressure_cold_in, :style => "width:60px;" %>&nbsp;barg</li>
+                <li><%= f.text_field :sd_fh_temperature_cold_in, :style => "width:60px;" %>&nbsp;&deg;C</li>
+              </ul>
+            </div>
+
+            <div id="fh_streams_2" class="streams" style="position:absolute;top:115px;left:415px;">
+              <ul class="unstyled">
+                <li><b>Cold Out</b></li>
+                <li><%= f.collection_select :sd_fh_stream_no_cold_out, @streams, :stream_no, :display_stream_no, {:include_blank => ""}, {:style => "width:100px;", :class => "sd_stream_no", :sno => "cold_out", :rd => 'fh'} %></li>
+                <li><%= f.text_field :sd_fh_pressure_cold_out, :style => "width:60px;" %>&nbsp;barg</li>
+                <li><%= f.text_field :sd_fh_temperature_cold_out, :style => "width:60px;" %>&nbsp;&deg;C</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>

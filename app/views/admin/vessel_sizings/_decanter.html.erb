@@ -1,0 +1,103 @@
+<div id="decanter" class="tab_content">
+  <!-- Decanter -->
+  <table>
+    <tr>
+      <td>L/D</td>
+      <td><%= f.text_field :dc_ld, :class => "required" %></td>
+      <td colspan="2" rowspan="8"></td>
+    </tr>
+    <tr>
+      <td colspan="2"><label>Horizontal Decanter Details</label></td>
+    </tr>
+    <tr>
+      <td>Dispersed Phase, &theta;</td>
+      <td>
+        <label id="dc_dispersed_phase"><%= vessel_sizing.dc_dispersed_phase.to_s %></label>
+        <%= f.hidden_field :dc_dispersed_phase%>
+      </td>
+    </tr>
+    <tr>
+      <td>Settling Rate of Light Phase</td>
+      <td>
+        <label id="dc_settling_rate_of_light_phase"><%= vessel_sizing.dc_settling_rate_of_light_phase.to_s %></label>
+        <%= f.hidden_field :dc_settling_rate_of_light_phase%>&nbsp;
+        <label class="speed_general_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Settling Rate of Heavy Phase</td>
+      <td>
+        <label id="dc_settling_rate_of_heavy_phase"><%= vessel_sizing.dc_settling_rate_of_heavy_phase.to_s %></label>
+        <%= f.hidden_field :dc_settling_rate_of_heavy_phase %>&nbsp;
+        <label class="speed_general_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Area Interface</td>
+      <td>
+        <label id="dc_area_interface"><%= vessel_sizing.dc_area_interface.to_s %></label>
+        <%= f.hidden_field :dc_area_interface %>&nbsp;
+        <label class="area_vessel_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Cross-sectional Area, light</td>
+      <td>
+        <label id="dc_cross_sectional_area_light"><%= vessel_sizing.dc_cross_sectional_area_light.to_s %></label>
+        <%= f.hidden_field :dc_cross_sectional_area_light %>&nbsp;
+        <label class="area_vessel_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Cross-sectional Area, Heavy</td>
+      <td>
+        <label id="dc_cross_sectional_area_heavy"><%= vessel_sizing.dc_cross_sectional_area_heavy.to_s %></label>
+        <%= f.hidden_field :dc_cross_sectional_area_heavy %>&nbsp;
+        <label class="area_vessel_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Coalescence Time</td>
+      <td>
+        <label id="dc_coalescence_time"><%= vessel_sizing.dc_coalescence_time.to_s %></label>
+        <%= f.hidden_field :dc_coalescence_time %>&nbsp;
+        <label class="time_seconds_unit"></label>
+      </td>
+      <td colspan="2"><label>NOTES</label></td>
+    </tr>
+    <tr>
+      <td>Reynolds Number, Light</td>
+      <td>
+        <label id="dc_reynolds_number_light"><%= vessel_sizing.dc_reynolds_number_light.to_s %></label>
+        <%= f.hidden_field :dc_reynolds_number_light %>&nbsp;
+      </td>
+      <td colspan="2" rowspan="3"><%= f.text_area :dc_notes, :size => '75x4' %></td>
+    </tr>
+    <tr>
+      <td>Reynolds Number, Heavy</td>
+      <td>
+        <label id="dc_reynolds_number_heavy"><%= vessel_sizing.dc_reynolds_number_heavy.to_s %></label>
+        <%= f.hidden_field :dc_reynolds_number_heavy %>&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>Diameter</td>
+      <td>
+        <label id="dc_diameter"><%= vessel_sizing.dc_diameter.to_s %></label>
+        <%= f.hidden_field :dc_diameter %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Length</td>
+      <td>
+        <label id="dc_length"><%= vessel_sizing.dc_length.to_s %></label>
+        <%= f.hidden_field :dc_length %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+      <td colspan="2">
+        <input type="button" id="decanter_calculation" value="Calculate">
+      </td>
+    </tr>
+  </table>
+</div>

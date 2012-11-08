@@ -1,0 +1,290 @@
+<style type="text/css">
+  #shell_tube, #plate_fin, #aerial_cooler, #fired_heater {
+    border: 1px solid #CCCAAA;
+    margin: 0 auto;
+  }
+
+  #shell_tube {
+    background-image: url("/images/heat_exchanger/shell_tube.jpg");
+    background-repeat: no-repeat;
+    height: 374px;
+    width: 625px;
+    display: none;
+    position: relative;
+  }
+
+  #plate_fin {
+    background-image: url("/images/heat_exchanger/plate_fin.jpg");
+    background-repeat: no-repeat;
+    height: 374px;
+    width: 625px;
+    display: none;
+    position: relative;
+  }
+
+  #aerial_cooler {
+    background-image: url("/images/heat_exchanger/aerial_cooler.jpg");
+    background-repeat: no-repeat;
+    height: 374px;
+    width: 625px;
+    display: none;
+    position: relative;
+  }
+
+  #fired_heater {
+    background-image: url("/images/heat_exchanger/fired_heater.jpg");
+    background-repeat: no-repeat;
+    height: 374px;
+    width: 625px;
+    display: none;
+    position: relative;
+  }
+
+  .streams li {
+    margin-bottom: 2px;
+  }
+
+  #heat_exchanger_sizing_st_exchanger_fo_shell_side, #heat_exchanger_sizing_st_exchanger_fo_tube_side,
+  #heat_exchanger_sizing_st_tube_od, #heat_exchanger_sizing_st_tube_thickness {
+    width: 150px;
+  }
+</style>
+
+<%= form_for heat_exchanger_sizing, :url => heat_exchanger_sizing.new_record? ? admin_heat_exchanger_sizings_path : admin_heat_exchanger_sizing_path(heat_exchanger_sizing), :html => {:class => 'form_heat_exchanger_sizing', :style => 'width:auto;'} do |f| %>
+  <%= f.error_messages %>
+  <% if heat_exchanger_sizing.new_record? %>
+    <%= f.hidden_field :company_id %>
+    <%= f.hidden_field :client_id, :value => @user_project_settings.client_id %>
+    <%= f.hidden_field :project_id, :value => @user_project_settings.project_id %>
+    <%= f.hidden_field :process_unit_id, :value => @user_project_settings.process_unit_id %>
+  <% end %>
+  <div class="form-element-last">
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :client_id %><br>
+      <%= f.label :client_id, (heat_exchanger_sizing.client.name rescue @user_project_settings.client.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :project_id %><br>
+      <%= f.label :project_id, (heat_exchanger_sizing.project.project_num rescue @user_project_settings.project.project_num), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :process_unit_id %><br>
+      <%= f.label :process_unit_id, (heat_exchanger_sizing.process_unit.name rescue @user_project_settings.process_unit.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :exchanger_tag %><br>
+      <%= f.text_field :exchanger_tag %>
+		</span>
+    <% unless heat_exchanger_sizing.new_record? %>
+      <span style="float:left;margin-right:40px;">
+        <%= label_tag :status %><br>
+        <strong><%= sizing_status(heat_exchanger_sizing) %></strong>
+      </span>
+      <span style="float:left;margin-right:40px;">
+        <br>
+        <%= sizing_status_request_button(heat_exchanger_sizing) %>
+      </span>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+  <div class="hidden">
+    <%= hidden_field_tag :tab %>
+    <%= hidden_field_tag :calculate_btn %>
+  </div>
+  <div class="form-buttons">
+    <%= f.submit heat_exchanger_sizing.new_record? ? 'Create' : 'Update' %>
+  </div>
+  <!-- tabs -->
+  <div>
+  <ul class="simple-tabs">
+    <li><a href="#system_definition" tab="system_definition">System Definition</a></li>
+    <li><a href="#stream_summary" tab="stream_summary">Stream Summary</a></li>
+    <li><a href="#shell_n_tube" tab="shell_n_tube">Shell & Tube</a></li>
+    <li><a href="#aerial_cooler_tab" tab="aerial_cooler_tab">Aerial Cooler</a></li>
+    <li><a href="#fired_heater_tab" tab="fired_heater_tab">Fired Heater</a></li>
+    <li><a href="#plat_and_frame_tab" tab="plat_and_frame_tab">Plate & Frame</a></li>
+    <li><a href="#design_conditions_tab" tab="design_conditions_tab">Design Conditions</a></li>
+    <li><a href="#mechanical_design_tab" tab="mechanical_design_tab">Mechanical Design</a></li>
+    <li><a href="#review" tab="review">Review</a></li>
+  </ul>
+  <div class="tab_container">
+    <%= render :partial => 'system_definition', :locals => {:f => f, :heat_exchanger_sizing => heat_exchanger_sizing}  %>
+    <%= render :partial => "stream_summary", :locals => {:f => f, :heat_exchanger_sizing => heat_exchanger_sizing} %>
+    <%= render :partial => "shell_n_tube", :locals => {:f => f, :heat_exchanger_sizing => heat_exchanger_sizing} %>
+    <%= render :partial => "aerial_cooler", :locals => {:f => f, :heat_exchanger_sizing => heat_exchanger_sizing} %>
+    <%= render :partial => "review", :locals => {:f => f, :heat_exchanger_sizing => heat_exchanger_sizing} %>
+    <%= render :partial => "fired_heater", :locals => {:f => f, :heat_exchanger_sizing => heat_exchanger_sizing} %>
+    <%= render :partial => "plate_and_frame", :locals => {:f => f, :heat_exchanger_sizing => heat_exchanger_sizing} %>
+    <%= render :partial => "design_conditions", :locals => {:f => f, :heat_exchanger_sizing => heat_exchanger_sizing} %>
+    <%= render :partial => "mechanical_design", :locals => {:f => f, :heat_exchanger_sizing => heat_exchanger_sizing} %>
+  </div>
+  <div class="clear"></div>
+  </div>
+<% end %>
+
+<% unless heat_exchanger_sizing.new_record? %>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Attachments</legend>
+    <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+    <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+  </fieldset>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Comments</legend>
+    <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+    <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+  </fieldset>
+<% end %>
+
+<%= javascript_tag do %>
+  var heat_exchanger_sizing_id = "<%= heat_exchanger_sizing.id %>";
+  <% if heat_exchanger_sizing.sd_exchanger_type.nil? %>
+    $('#shell_tube').show();
+  <% else %>
+    $('#'+'<%= heat_exchanger_sizing.sd_exchanger_type %>').show();
+  <% end %>
+
+  <% if heat_exchanger_sizing.new_record? %>
+  <% else %>
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+
+  set_project_unit_and_decimals();
+
+  $('form.form_heat_exchanger_sizing').dirtyForms();
+
+  $("ul.simple-tabs li a").click(function () {
+    $('#tab').val($(this).attr('tab'));
+  });
+
+  $('.exchange_type_rb').click(function (e) {
+    $('#shell_tube, #plate_fin, #aerial_cooler, #fired_heater').hide();
+    $('#' + $(this).val()).show();
+  });
+
+  $('#heat_exchanger_sizing_sd_process_basis_id').change(function (e) {
+    $('.sd_stream_no >option').remove();
+    $('.sd_stream_no').append($('<option></option>').val("").html(""));
+    $("#tab1 li input[type=text]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/heat_and_material_balances/get_stream_nos', {process_basis_id:$(this).val()}, function (data) {
+      $(data).each(function (k, v) {
+        $('.sd_stream_no').append(
+          $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+        );
+      });
+    }, 'json');
+  });
+
+  var stream_types = {hot_in:'hi', hot_out:'ho', cold_in:'ci', cold_out:'co'};
+  $('.sd_stream_no').change(function (e) {
+    var stream_no = $(this).find('option:selected').text();
+    var sno = $(this).attr("sno");
+    var rd = $(this).attr("rd");
+    $("#tab1 div#streams_" + sno + " input[type=text]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/heat_exchanger_sizings/get_stream_values',
+      {process_basis_id:$('#heat_exchanger_sizing_sd_process_basis_id').val(), stream_no:$(this).val()},
+      function (data) {
+        $('#heat_exchanger_sizing_sd_' + rd + '_pressure_' + sno).val(data['pressure']);
+        $('#heat_exchanger_sizing_sd_' + rd + '_temperature_' + sno).val(data['temperature']);
+
+        populate_stream_summary(stream_types[sno], stream_no, data);
+      },
+      'json');
+  });
+
+
+  function populate_stream_summary(st, stream_no, data) {
+    var lbl_stream_no = $('#ss_' + st + '_stream_no');
+    lbl_stream_no.text(stream_no);
+    var hd_stream_no = $('#heat_exchanger_sizing_ss_' + st + '_stream_no');
+    hd_stream_no.val(stream_no);
+
+    var pressure = get_project_field_value1('pressure_general', data['pressure']);
+    var lbl_pressure = $('#ss_' + st + '_pressure');
+    lbl_pressure.text(pressure);
+    var hd_pressure = $('#heat_exchanger_sizing_ss_' + st + '_pressure');
+    hd_pressure.val(pressure);
+
+    var temperature = get_project_field_value1('temperature_general', data['temperature']);
+    var lbl_temperature = $('#ss_' + st + '_temperature');
+    lbl_temperature.text(temperature);
+    var hd_temperature = $('#heat_exchanger_sizing_ss_' + st + '_temperature');
+    hd_pressure.val(hd_temperature);
+
+    var liquid_flow_rate = data['liquid_flow_rate'];
+    var txt_liquid_flow_rate = $('#heat_exchanger_sizing_ss_' + st + '_liquid_flow_rate');
+    txt_liquid_flow_rate.val(liquid_flow_rate);
+
+    var liquid_density = data['liquid_density'];
+    var txt_liquid_density = $('#heat_exchanger_sizing_ss_' + st + '_liquid_density');
+    txt_liquid_density.val(liquid_density);
+
+    var liquid_viscosity = data['liquid_viscosity'];
+    var txt_liquid_viscosity = $('#heat_exchanger_sizing_ss_' + st + '_liquid_viscosity');
+    txt_liquid_viscosity.val(liquid_viscosity);
+
+    var liquid_specific_heat_capacity = data['liquid_specific_heat_capacity'];
+    var txt_liquid_specific_heat_capacity = $('#heat_exchanger_sizing_ss_' + st + '_liquid_specific_heat_capacity');
+    txt_liquid_specific_heat_capacity.val(liquid_specific_heat_capacity);
+
+    var liquid_thermal_conductivity = data['liquid_thermal_conductivity'];
+    var txt_liquid_thermal_conductivity = $('#heat_exchanger_sizing_ss_' + st + '_liquid_thermal_conductivity');
+    txt_liquid_thermal_conductivity.val(liquid_thermal_conductivity);
+
+    var liquid_latent_heat = data['liquid_latent_heat'];
+    var txt_liquid_latent_heat = $('#heat_exchanger_sizing_ss_' + st + '_liquid_latent_heat');
+    txt_liquid_latent_heat.val(liquid_latent_heat);
+
+    var liquid_surface_tension = data['liquid_surface_tension'];
+    var txt_liquid_surface_tension = $('#heat_exchanger_sizing_ss_' + st + '_liquid_surface_tension');
+    txt_liquid_surface_tension.val(liquid_surface_tension);
+
+    var liquid_expansion_coefficient = data['liquid_expansion_coefficient'];
+    var txt_liquid_expansion_coefficient = $('#heat_exchanger_sizing_ss_' + st + '_liquid_expansion_coefficient');
+    txt_liquid_expansion_coefficient.val(liquid_expansion_coefficient);
+
+    var vapor_flow_rate = data['vapor_flow_rate'];
+    var txt_vapor_flow_rate = $('#heat_exchanger_sizing_ss_' + st + '_vapor_flow_rate');
+    txt_vapor_flow_rate.val(vapor_flow_rate);
+
+    var vapor_viscosity = data['vapor_viscosity'];
+    var txt_vapor_viscosity = $('#heat_exchanger_sizing_ss_' + st + '_vapor_viscosity');
+    txt_vapor_viscosity.val(vapor_viscosity);
+
+    var vapor_mw = data['vapor_mw'];
+    var txt_vapor_mw = $('#heat_exchanger_sizing_ss_' + st + '_vapor_mw');
+    txt_vapor_mw.val(vapor_mw);
+
+    var vapor_z = data['vapor_z'];
+    var txt_vapor_z = $('#heat_exchanger_sizing_ss_' + st + '_vapor_z');
+    txt_vapor_z.val(vapor_z);
+
+    var vapor_specific_heat_capacity = data['vapor_specific_heat_capacity'];
+    var txt_vapor_specific_heat_capacity = $('#heat_exchanger_sizing_ss_' + st + '_vapor_specific_heat_capacity');
+    txt_vapor_specific_heat_capacity.val(vapor_specific_heat_capacity);
+
+    var vapor_thermal_conductivity = data['vapor_thermal_conductivity'];
+    var txt_vapor_thermal_conductivity = $('#heat_exchanger_sizing_ss_' + st + '_vapor_thermal_conductivity');
+    txt_vapor_thermal_conductivity.val(vapor_thermal_conductivity);
+
+  }
+
+</script>
+<%= javascript_tag do %>
+  //hit calculate button
+  var calculate_btn = "<%= params[:calculate_btn] %>";
+  if(calculate_btn == "change_tube_od") {
+  $('#heat_exchanger_sizing_st_tube_od').trigger('change');
+  }
+
+<% end %>
+

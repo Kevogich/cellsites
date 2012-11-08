@@ -1,0 +1,39 @@
+<% title "Clients" %>
+<%= stylesheet("/javascripts/tablecloth/tablecloth.css") %>
+
+<% if user_access_type == 1 %>
+  <%= link_to 'Add Client', new_admin_client_path %>
+<% end %>
+
+<table id="clients_list">
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Address</th>
+    <th>Email</th>
+    <th>Primary Contact Name</th>
+    <th>Phone</th>
+    <th></th>
+    <th></th>
+  </tr>
+  <% for client in @clients %>
+    <tr id="client_<%= client.id %>">
+      <td><%= link_to client.name, projects_admin_client_path(client) %></td>
+      <td><%= client.client_type %></td>
+      <td><%= client.address %></td>
+      <td><%= client.email %></td>
+      <td><%= client.primary_contact_name %></td>
+      <td><%= client.phone %></td>
+ 	  <td>
+        <% if user_access_type == 1 %>
+          <%= link_to 'edit', edit_admin_client_path(client) %>
+        <% end %>
+      </td>
+      <td>
+        <% if user_access_type == 1 %>
+          <%= link_to 'delete', admin_client_path(client), :method => :delete, :confirm => 'Are you sure?' %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>

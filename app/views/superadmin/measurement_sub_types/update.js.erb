@@ -1,0 +1,8 @@
+<% if @measurement_sub_type.errors.any? %>
+  $('.error_messages').remove();
+  var errors = "<%= escape_javascript error_messages_for(@measurement_sub_type) %>";
+  $('.measurement_sub_type_form').prepend(errors);
+  $.colorbox.resize();
+<% else %>
+  $.colorbox({href:"<%= superadmin_measurement_sub_types_path(:measurement_id => @measurement_sub_type.measurement_id) %>"});
+<% end %>

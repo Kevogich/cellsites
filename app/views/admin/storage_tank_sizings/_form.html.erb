@@ -1,0 +1,1103 @@
+<style type="text/css">
+
+  #tab1 input[type="text"], #tab5 input[type="text"] {
+    width: 150px;
+  }
+</style>
+
+<%= form_for storage_tank_sizing, :url => storage_tank_sizing.new_record? ? admin_storage_tank_sizings_path : admin_storage_tank_sizing_path(storage_tank_sizing), :html => {:style => 'width:auto;'} do |f| %>
+  <%= f.error_messages %>
+  <% if storage_tank_sizing.new_record? %>
+    <%= f.hidden_field :company_id %>
+    <%= f.hidden_field :client_id, :value => @user_project_settings.client_id %>
+    <%= f.hidden_field :project_id, :value => @user_project_settings.project_id %>
+    <%= f.hidden_field :process_unit_id, :value => @user_project_settings.process_unit_id %>
+  <% end %>
+  <div class="form-element-last">
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :client_id %><br>
+      <%= f.label :client_id, (storage_tank_sizing.client.name rescue @user_project_settings.client.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :project_id %><br>
+      <%= f.label :project_id, (storage_tank_sizing.project.project_num rescue @user_project_settings.project.project_num), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :process_unit_id %><br>
+      <%= f.label :process_unit_id, (storage_tank_sizing.process_unit.name rescue @user_project_settings.process_unit.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :storage_tank_tag %><br>
+      <%= f.text_field :storage_tank_tag %>
+		</span>
+    <% unless storage_tank_sizing.new_record? %>
+      <span style="float:left;margin-right:40px;">
+        <%= label_tag :status %><br>
+        <strong><%= sizing_status(storage_tank_sizing) %></strong>
+      </span>
+      <span style="float:left;margin-right:40px;">
+        <br>
+        <%= sizing_status_request_button(storage_tank_sizing) %>
+      </span>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+  <div class="form-buttons">
+    <%= f.submit storage_tank_sizing.new_record? ? 'Create' : 'Update' %>
+  </div>
+  <!-- tabs -->
+  <div>
+  <ul class="simple-tabs">
+    <li><a href="#tab1">Streams</a></li>
+    <li><a href="#tab2">Design Conditions</a></li>
+    <li><a href="#tab3">Low Pressure Storage</a></li>
+    <li><a href="#tab4">Pressure Storage</a></li>
+    <li><a href="#tab5">Mechanical Design</a></li>
+    <li><a href="#tab6">Review</a></li>
+  </ul>
+  <div class="tab_container">
+  <div id="tab1" class="tab_content">
+    <!-- Streams -->
+    <div class="form-element-last" style="width:200px;">
+      <%= f.label :s_process_basis_id, "Process Basis" %>
+      <br>
+      <%= f.collection_select :s_process_basis_id, @project.heat_and_material_balances, :id, :case, :prompt => true %>
+    </div>
+
+    <table>
+      <tr>
+        <td colspan="2"><b><u>FILLING STREAM</u></b></td>
+        <td colspan="2"><b><u>EMPTYING STREAM</u></b></td>
+      </tr>
+      <tr>
+        <td width="25%">Stream</td>
+        <td width="25%"><%= f.collection_select :s_fs_stream_no, @streams, :stream_no, :display_stream_no, {:prompt => true}, {:col => "fs"} %></td>
+        <td width="25%">Stream</td>
+        <td width="25%"><%= f.collection_select :s_es_stream_no, @streams, :stream_no, :display_stream_no, {:prompt => true}, {:col => "es"} %></td>
+      </tr>
+      <tr>
+        <td>Pressure</td>
+        <td><%= f.text_field :s_fs_pressure, :class => "pressure_general" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+        <td>Pressure</td>
+        <td><%= f.text_field :s_es_pressure, :class => "pressure_general" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Temperature</td>
+        <td><%= f.text_field :s_fs_temperature, :class => "temperature_general" %>&nbsp;<label class="temperature_general_unit"></label>
+        </td>
+        <td>Temperature</td>
+        <td><%= f.text_field :s_es_temperature, :class => "temperature_general" %>&nbsp;<label class="temperature_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Phase</td>
+        <td>
+          <label id="fs_phase"><%= storage_tank_sizing.s_fs_phase %></label>
+          <%= f.hidden_field :s_fs_phase %>
+        </td>
+        <td>Phase</td>
+        <td>
+          <label id="es_phase"><%= storage_tank_sizing.s_es_phase %></label>
+          <%= f.hidden_field :s_es_phase %>
+        </td>
+      </tr>
+      <tr>
+        <td>Flow Rate</td>
+        <td><%= f.text_field :s_fs_flow_rate, :class => "mass_flow_rate_general" %>&nbsp;<label class="mass_flow_rate_general_unit"></label>
+        </td>
+        <td>Flow Rate</td>
+        <td><%= f.text_field :s_es_flow_rate, :class => "mass_flow_rate_general" %>&nbsp;<label class="mass_flow_rate_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Density</td>
+        <td><%= f.text_field :s_fs_density, :class => "density_general" %>&nbsp;<label class="density_general_unit"></label>
+        </td>
+        <td>Density</td>
+        <td><%= f.text_field :s_es_density, :class => "density_general" %>&nbsp;<label class="density_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Volume Flow Rate</td>
+        <td><%= f.text_field :s_fs_volume_flow_rate, :class => "volumetric_flow_rate_liquid" %>&nbsp;<label class="volumetric_flow_rate_liquid_unit"></label>
+        </td>
+        <td>Volume Flow Rate</td>
+        <td><%= f.text_field :s_es_volume_flow_rate, :class => "volumetric_flow_rate_liquid" %>&nbsp;<label class="volumetric_flow_rate_liquid_unit"></label>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab2" class="tab_content">
+    <!-- Design Conditions -->
+    <table style="width:auto;">
+      <tr>
+        <td>Refrigerated Design</td>
+        <td><%= f.select :dc_refrigerated_design, options_for_select(['Yes', 'No'], storage_tank_sizing.dc_refrigerated_design), :style => "width:150px;" %></td>
+      </tr>
+      <tr>
+        <td>Representative Chemical</td>
+        <td><%= f.select :dc_representative_chemical, options_for_select(StaticData.chemicals, storage_tank_sizing.dc_representative_chemical), :style => "width:150px;" %></td>
+      </tr>
+      <tr>
+        <td>Maximum Liquid Surface Temperature</td>
+        <td><%= f.text_field :dc_maximum_liquid_surface_temperature, :class => "temperature_general required" %>&nbsp;
+          <label class="temperature_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Minimum Liquid Surface Temperature</td>
+        <td><%= f.text_field :dc_minimum_liquid_surface_temperature, :class => "temperature_general required" %>&nbsp;
+          <label class="temperature_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Liquid Storage Temperature</td>
+        <td><%= f.text_field :dc_liquid_storage_temperature, :class => "temperature_general required" %>&nbsp;
+          <label class="temperature_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>TVP at Maximum Liquid Surface Temperature</td>
+        <td><%= f.text_field :dc_tvp_at_maximum_liquid_surface_temperature, :class => "pressure_absolute required" %>&nbsp;
+          <label class="pressure_absolute_unit"></label></td>
+      </tr>
+      <tr>
+        <td>TVP at Minimum Liquid Surface Temperature</td>
+        <td><%= f.text_field :dc_tvp_at_minimum_liquid_surface_temperature, :class => "pressure_absolute required" %>&nbsp;
+          <label class="pressure_absolute_unit"></label></td>
+      </tr>
+      <tr>
+        <td>TVP at Storage Temperature</td>
+        <td><%= f.text_field :dc_tvp_at_storage_temperature, :class => "pressure_absolute required" %>&nbsp;
+          <label class="pressure_absolute_unit"></label>&nbsp;&nbsp;&nbsp;<input id="pvapor_btn" type="button" value="Pvapor" style="float:right;">
+        </td>
+      </tr>
+      <tr>
+        <td>Vacuum Vent Set Point</td>
+        <td><%= f.text_field :dc_vacuum_vent_set_point, :class => "pressure_absolute required" %>&nbsp;
+          <label class="pressure_absolute_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Storage Pressure</td>
+        <td><%= storage_tank_sizing.dc_storage_pressure %>&nbsp;<label class="pressure_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Design Pressure</td>
+        <td><%= storage_tank_sizing.dc_design_pressure %>&nbsp;<label class="pressure_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Design Temperature</td>
+        <td><%= storage_tank_sizing.dc_design_temperature %>&nbsp;<label class="temperature_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Design Vacuum Pressure</td>
+        <td><%= storage_tank_sizing.dc_design_vacuum_pressure %>&nbsp;<label class="pressure_absolute_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Vacuum Temperature</td>
+        <td><%= storage_tank_sizing.dc_vacuum_temperature %>&nbsp;<label class="temperature_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align:right;">
+          <input type="button" id="design_conditions_calculate" value="Calculate"></td>
+      </tr>
+
+      <tr>
+        <td>Recommendation on Fixed Roof</td>
+        <td><b><%= storage_tank_sizing.dc_fixed_roof_recommendation %></b></td>
+      </tr>
+      <tr>
+        <td>Recommendation on Floating Roof</td>
+        <td><b><%= storage_tank_sizing.dc_floating_roof_recommendation %></b></td>
+      </tr>
+      <tr>
+        <td>Recommendation on Tank Type</td>
+        <td><b><%= storage_tank_sizing.dc_tank_type_recommendation %></b></td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab3" class="tab_content">
+    <!-- ATM/Low Pressure Storage -->
+    <table style="width:auto;float:left;">
+      <tr>
+        <td colspan="2"><b><u>LIQUID LEVEL</u></b></td>
+      </tr>
+      <tr>
+        <td>Fill Time From Bottom To Normal Fill Level(NFL)</td>
+        <td><%= f.text_field :atm_bottom_to_normal_fill_level, :class => 'time_hour required' %>
+          &nbsp;<label class="time_hour_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Fill Time From NFL To Safe Fill Level(SFL)</td>
+        <td><%= f.text_field :atm_nfl_to_safe_fill_level, :class => "time_minute required" %>
+          &nbsp;<label class="time_minute_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Fill Time From SFL To Overfill Level(OFL)</td>
+        <td><%= f.text_field :atm_sfl_to_over_fill_level, :class => "time_minute required" %>
+          &nbsp;<label class="time_minute_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Vapor Space Capacity Above Maximum Level</td>
+        <td><%= f.text_field :atm_vapor_space_capacity_above_maximum_level, :class => "required" %>&nbsp;%</td>
+      </tr>
+      <tr>
+        <td>Normal Capacity</td>
+        <td><%= storage_tank_sizing.atm_normal_capacity %>&nbsp;
+          <label class="volume_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Rated Capacity</td>
+        <td><%= storage_tank_sizing.atm_rated_capacity %>&nbsp;<label class="volume_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Maximum Capacity</td>
+        <td><%= storage_tank_sizing.atm_maximum_capacity %>&nbsp;<label class="volume_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Nominal Diameter</td>
+        <td><%= f.text_field :atm_nominal_diameter, :class => "mass_flow_rate_general required" %>
+          &nbsp;<label class="length_large_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Normal Fill Level(NFL)</td>
+        <td><%= storage_tank_sizing.atm_normal_fill_level %>&nbsp;
+          <label class="length_large_dimension_length_unit"></label>
+          &nbsp; <%= storage_tank_sizing.atm_normal_fill_level_percent %> &nbsp;%
+        </td>
+      </tr>
+      <tr>
+        <td>Safe Fill Level(SFL)</td>
+        <td><%= storage_tank_sizing.atm_safe_fill_level %>&nbsp;
+          <label class="length_large_dimension_length_unit"></label>
+          &nbsp; <%= storage_tank_sizing.atm_safe_fill_level_percent %> &nbsp;%
+        </td>
+      </tr>
+      <tr>
+        <td>Overfill Level(OFL)</td>
+        <td><%= storage_tank_sizing.atm_over_fill_level %>&nbsp;
+          <label class="length_large_dimension_length_unit"></label>
+          &nbsp; <%= storage_tank_sizing.atm_over_fill_level_percent %> &nbsp;%
+        </td>
+      </tr>
+      <tr>
+        <td>Available Vapor Space</td>
+        <td><%= storage_tank_sizing.atm_available_vapor_space %>&nbsp;
+          <label class="length_large_dimension_length_unit"></label>
+          &nbsp; <%= storage_tank_sizing.atm_available_vapor_space_percent %> &nbsp;%
+        </td>
+      </tr>
+      <tr>
+        <td>Calculated Height</td>
+        <td><%= storage_tank_sizing.atm_calculated_height %>&nbsp;<label class="length_large_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Nominal Height</td>
+        <td><%= storage_tank_sizing.atm_nominal_height %>&nbsp;<label class="length_large_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align:right;">
+          <input type="button" value="Calculate" id="atm_low_pressure_storage_calculate">
+          <input type="button" value="Standardize" id="atm_standardize_popup_btn">
+        </td>
+      </tr>
+    </table>
+    <table style="width:auto;float:left;margin:10px 0 0 10px;">
+
+      <tr>
+        <td>
+          <fieldset style="border: 1px solid #000000;padding:5px;margin-bottom:10px;">
+            <legend style="font-weight:bold;">Capacity Basis</legend>
+            <ul>
+              <li><%= f.radio_button :atm_capacity_basis, "max_filling_rate" %>&nbsp;Max Filling Rate</li>
+              <li><%= f.radio_button :atm_capacity_basis, "max_emptying_rate" %>&nbsp;Max Emptying Rate</li>
+            </ul>
+          </fieldset>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <fieldset style="border: 1px solid #000000;padding:5px;margin-bottom:10px;">
+            <legend style="font-weight:bold;">Storage Tank Type</legend>
+            <ul>
+              <li><%= f.radio_button :atm_storage_tank_type, "fixed_roof" %>&nbsp;Fixed Roof</li>
+              <li><%= f.radio_button :atm_storage_tank_type, "floating_roof" %>&nbsp;Floating Roof</li>
+              <li><%= f.radio_button :atm_storage_tank_type, "internal_floating_roof" %>&nbsp;Internal Floating Roof
+              </li>
+            </ul>
+          </fieldset>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <fieldset style="border: 1px solid #000000;padding:5px;margin-bottom:10px;">
+            <legend style="font-weight:bold;">Design Codes</legend>
+            <ul>
+              <li><%= f.radio_button :atm_design_codes, "api_620" %>&nbsp;API 620 (DP <15 psig)</li>
+              <li><%= f.radio_button :atm_design_codes, "api_650" %>&nbsp;API 650 (DP <2.5 psig)</li>
+              <li><%= f.radio_button :atm_design_codes, "underwriter_laboratories" %>&nbsp;Underwriter Laboratories</li>
+              <li><%= f.radio_button :atm_design_codes, "other_codes" %>&nbsp;Other Codes</li>
+            </ul>
+          </fieldset>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <fieldset style="border: 1px solid #000000;padding:5px;margin-bottom:10px;">
+            <legend style="font-weight:bold;">Frangible Roof</legend>
+            <ul>
+              <li><%= f.radio_button :atm_frangible_roof, "api_620" %>&nbsp;Yes</li>
+              <li><%= f.radio_button :atm_frangible_roof, "api_650" %>&nbsp;No</li>
+            </ul>
+          </fieldset>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <fieldset style="border: 1px solid #000000;padding:5px;margin-bottom:10px;">
+            <legend style="font-weight:bold;">Vapor Recovery System</legend>
+            <ul>
+              <li><%= f.radio_button :atm_vapor_recovery_system, "api_620" %>&nbsp;Yes</li>
+              <li><%= f.radio_button :atm_vapor_recovery_system, "api_650" %>&nbsp;No</li>
+            </ul>
+          </fieldset>
+        </td>
+      </tr>
+    </table>
+    <div class="clear"></div>
+  </div>
+  <div id="tab4" class="tab_content">
+    <!-- Pressure Storage -->
+    <table>
+      <tr>
+        <td>
+          <fieldset style="border: 1px solid #000000;padding:5px;">
+            <legend style="font-weight:bold;">Storage Tank Type</legend>
+            <ul>
+              <li><%= f.radio_button :ps_storage_tank_type, "horizontal_cylinder" %>&nbsp;Horizontal Cylinder</li>
+              <li><%= f.radio_button :ps_storage_tank_type, "sphere" %>&nbsp;Sphere</li>
+              <li><%= f.radio_button :ps_storage_tank_type, "spheroid" %>&nbsp;Spheriod</li>
+            </ul>
+          </fieldset>
+        </td>
+        <td>
+          <fieldset style="border: 1px solid #000000;padding:5px;">
+            <legend style="font-weight:bold;">Capacity Basis</legend>
+            <ul>
+              <li><%= f.radio_button :ps_capacity_basis, "max_filling_rate" %>&nbsp;Max Filling Rate</li>
+              <li><%= f.radio_button :ps_capacity_basis, "max_emptying_rate" %>&nbsp;Max Emptying Rate</li>
+            </ul>
+          </fieldset>
+        </td>
+        <td>
+          <fieldset style="border: 1px solid #000000;padding:5px;">
+            <legend style="font-weight:bold;">Design Codes</legend>
+            <ul>
+              <li><%= f.radio_button :ps_design_codes, "asme_viii" %>&nbsp;ASME VIII (DP > 15 psig)</li>
+              <li><%= f.radio_button :ps_design_codes, "other_codes" %>&nbsp;Other Codes</li>
+            </ul>
+          </fieldset>
+        </td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td colspan="2"><b><u>LIQUID LEVEL</u></b></td>
+      </tr>
+      <tr>
+        <td>Fill Time From Bottom To Normal Fill Level(NFL)</td>
+        <td><%= f.text_field :ps_bottom_to_normal_fill_level, :class => "time_general required" %>&nbsp;
+          <label class="time_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Fill Time From NFL To Maximum Level(MFL)</td>
+        <td>
+          <%= f.text_field :ps_nfl_to_maximum_level, :class => "time_general required" %>&nbsp;
+          <label class="time_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Vapor Space Capacity Above Maximum Level</td>
+        <td><%= f.text_field :ps_vpc_above_maximum_level, :class => "required" %>&nbsp;%</td>
+      </tr>
+      <tr>
+        <td>Normal Capacity</td>
+        <td><%= storage_tank_sizing.ps_normal_capacity %>&nbsp;<label class="volume_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Maximum Capacity</td>
+        <td><%= storage_tank_sizing.ps_maximum_capacity %>&nbsp;<label class="volume_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Nominal Length</td>
+        <td><%= f.text_field :ps_nominal_length, :class => "length_large_dimension_length required" %>&nbsp;
+          <label class="length_large_dimension_length_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Nominal Depth</td>
+        <td><%= f.text_field :ps_nominal_depth, :class => "length_large_dimension_length required" %>&nbsp;
+          <label class="length_large_dimension_length_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Normal Fill Level(NFL)</td>
+        <td><%= storage_tank_sizing.ps_normal_fill_level %>&nbsp;
+          <label class="length_large_dimension_length_unit"></label>&nbsp;
+          <%= storage_tank_sizing.ps_normal_fill_level_percent %> &nbsp;%
+        </td>
+      </tr>
+      <tr>
+        <td>Overfill Level(OFL)</td>
+        <td><%= storage_tank_sizing.ps_over_fill_level %>&nbsp;
+          <label class="length_large_dimension_length_unit"></label>&nbsp;
+          <%= storage_tank_sizing.ps_over_fill_level_percent %> &nbsp;%
+        </td>
+      </tr>
+      <tr>
+        <td>Available Vapor Space</td>
+        <td><%= storage_tank_sizing.ps_available_vapor_space %>&nbsp;
+          <label class="length_large_dimension_length_unit"></label>&nbsp;
+          <%= storage_tank_sizing.ps_available_vapor_space_percent %>&nbsp;%
+        </td>
+      </tr>
+      <tr>
+        <td>Calculated Diameter</td>
+        <td><%= storage_tank_sizing.ps_nominal_diameter %>&nbsp;<label class="length_large_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Nominal Diameter</td>
+        <td id="ps_nominal_d"><%= storage_tank_sizing.ps_nominal_diameter %>&nbsp;<label class="length_large_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align:right;">
+          <input type="button" value="Standardize" id="ps_standardize_popup_btn">
+          <input type="button" value="Calculate" id="pressure_storage_calculate">
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab5" class="tab_content">
+    <!-- Mechanical Design -->
+    <table style="width:100%;">
+      <tr>
+        <td colspan="2"><b><u>VESSEL THICKNESS</u></b></td>
+        <td><b><u>RESULTS</u></b></td>
+        <td><input type="button" value="Calculate" id="mechanical_design_calculate"></td>
+      </tr>
+      <tr>
+        <td width="25%">Tank Type</td>
+        <td width="25%"><%= f.select :md_tank_type, options_for_select(StaticData.tank_type, storage_tank_sizing.md_tank_type), :style => "150px;" %></td>
+        <td width="25%">Design Code</td>
+        <td width="25%"><%= storage_tank_sizing.md_design_code %></td>
+      </tr>
+      <tr>
+        <td>Tank Orientation</td>
+        <td> <%= f.select :md_tank_orientation, options_for_select(StaticData.orientation, storage_tank_sizing.md_tank_orientation), :style => "150px;" %> </td>
+        <td>Design Pressure</td>
+        <td><%= f.text_field :md_design_pressure, :class => "required" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Head Type</td>
+        <td><%= f.select :md_head_type, options_for_select(StaticData.head_type, storage_tank_sizing.md_head_type), :include_blank => true %></td>
+        <td>Shell Diameter</td>
+        <td><%= f.text_field :md_shell_diameter, :class => "required" %>&nbsp;<label class="length_large_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Material of Contruction</td>
+        <td><%= f.text_field :md_material_of_contruction, :class => "required" %></td>
+
+        <td>Design Temperature</td>
+        <td><%= storage_tank_sizing.md_design_temperature %>&nbsp;<label class="temperature_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Allowable Design Stress</td>
+        <td><%= f.text_field :md_allowable_design_stress, :class => "pressure_differential required" %>&nbsp;
+          <label class="pressure_differential_unit"></label></td>
+        <td>Minimum Temperature</td>
+        <td><%= storage_tank_sizing.md_minimum_temperature %>&nbsp;<label class="temperature_general_unit_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Shell Corrosion Allowance</td>
+        <td><%= f.text_field :md_shell_corrosion_allowance, :class => "length_small_dimension_length required" %>&nbsp;
+          <label class="length_small_dimension_length_unit"></label></td>
+
+        <td>Hydrotest Pressure</td>
+        <td><%= storage_tank_sizing.md_hydrotest_pressure %>&nbsp;<label class="pressure_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Head Corrosion Allowance</td>
+        <td><%= f.text_field :md_head_corrosion_allowance, :class => "length_small_dimension_length required" %>&nbsp;
+          <label class="length_small_dimension_length_unit"></label></td>
+        <td>Shell Length</td>
+        <td><%= f.text_field :md_shell_length, :class => "required" %>&nbsp;<label class="length_large_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Shell/Head Joint Efficiency</td>
+        <td><%= f.text_field :md_head_joint_efficiency, :class => "required" %>&nbsp;%</td>
+        <td>Design Liquid Level</td>
+        <td><%= f.text_field :md_liquid_level, :class => "required" %>&nbsp;<label class="length_large_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Straight Flange</td>
+        <td><%= f.text_field :md_straight_flange, :class => "required" %>&nbsp;<label class="length_small_dimension_length_unit"></label>
+        </td>
+        <td>Maximum Capacity</td>
+        <td><%= storage_tank_sizing.md_maximum_capacity %>&nbsp;<label class="volume_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Tank Material Density</td>
+        <td><%= f.text_field :md_tank_material_density, :class => "density_general required" %>&nbsp;
+          <label class="density_general_unit"></label></td>
+        <td>Nominal Shell Thickness</td>
+        <td><%= storage_tank_sizing.md_nominal_shell_thickness %>&nbsp;<label class="length_small_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Tank Weight Allowance</td>
+        <td><%= f.text_field :md_tank_weight_allowance, :class => "required" %>&nbsp;%</td>
+        <td>Nominal Head Thickness</td>
+        <td><%= storage_tank_sizing.md_nominal_head_thickness %>&nbsp;<label class="length_small_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Tank Content Density</td>
+        <td><%= f.text_field :md_tank_content_density, :class => "density_general required" %>&nbsp;
+          <label class="density_general_unit"></label></td>
+        <td>Weight Empty Vessel</td>
+        <td><%= storage_tank_sizing.md_weight_empty_vessel %>&nbsp;<label class="weight_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Bottom Corrosion Allowance</td>
+        <td><%= f.text_field :md_bottom_corrosion_allowance, :class => "length_small_dimension_length required" %>&nbsp;
+          <label class="length_small_dimension_length_unit"></label></td>
+        <td>Weight Full Vessel</td>
+        <td><%= storage_tank_sizing.md_weight_full_vessel %>&nbsp;<label class="weight_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Allowable Test Stress</td>
+        <td><%= f.text_field :md_allowable_test_stress, :class => "pressure_differential required" %>&nbsp;
+          <label class="pressure_differential_unit"></label></td>
+        <td>Nominal Bottom Thickness</td>
+        <td><%= storage_tank_sizing.md_nominal_bottom_thickness %>&nbsp;<label class="length_small_dimension_length_unit"></label>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab6" class="tab_content">
+    <!-- Heuristics validation -->
+    <table width='100%'>
+      <tr>
+        <td>1</td>
+        <td>For less than 38 m3 (1000 gal), use vertical tanks on legs.</td>
+        <td width=15%>
+          <input type='radio' name='option1' value='yes'>&nbsp;Yes&nbsp;
+          <input type='radio' name='option1' value='no'>&nbsp;No&nbsp;
+          <input type='radio' name='option1' value='na'>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>For 3.8 - 38 m3 (1000 - 10000 gal), use horizontal tanks on concrete supports.</td>
+        <td>
+          <input type='radio' name='option2' value='yes'>&nbsp;Yes&nbsp;
+          <input type='radio' name='option2' value='no'>&nbsp;No&nbsp;
+          <input type='radio' name='option2' value='na'>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Beyond 38 m3 (10000 gal), use vertical tanks on concrete foundations.</td>
+        <td>
+          <input type='radio' name='option3' value='yes'>&nbsp;Yes&nbsp;
+          <input type='radio' name='option3' value='no'>&nbsp;No&nbsp;
+          <input type='radio' name='option3' value='na'>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Liquids subject to breathing losses may be stored in tanks with floating or expansion roofs for
+          conservation.
+        </td>
+        <td>
+          <input type='radio' name='option4' value='yes'>&nbsp;Yes&nbsp;
+          <input type='radio' name='option4' value='no'>&nbsp;No&nbsp;
+          <input type='radio' name='option4' value='na'>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+
+      <tr>
+        <td>5</td>
+        <td>Freeboard is 15% below 1.9 cm3 (500 gal) and 10% above 1.9% (500 gal) capacity.</td>
+        <td>
+          <input type='radio' name='option5' value='yes'>&nbsp;Yes&nbsp;
+          <input type='radio' name='option5' value='no'>&nbsp;No&nbsp;
+          <input type='radio' name='option5' value='na'>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>A 30 day capacity oftren is specified for raw materials and products but depends on connecting transporation
+          equipment schedules.
+        </td>
+        <td>
+          <input type='radio' name='option6' value='yes'>&nbsp;Yes&nbsp;
+          <input type='radio' name='option6' value='no'>&nbsp;No&nbsp;
+          <input type='radio' name='option6' value='na'>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>Capacities of storage tanks are at least 1.5 times the size of connecting transporation equipment; for
+          instance, 28.4 m3 (7500 gal) tanker tunks,
+          130 m3 (34,500 gal) rail cars, and virtually unlimited barge and tanker capacities.
+        </td>
+        <td>
+          <input type='radio' name='option7' value='yes'>&nbsp;Yes&nbsp;
+          <input type='radio' name='option7' value='no'>&nbsp;No&nbsp;
+          <input type='radio' name='option7' value='na'>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td><u><b>NOTES</b></u></td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td><textarea style="width:900px;height:100px;"></textarea></td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+    <!-- Heuristics validation -->
+  </div>
+  </div>
+  <div class="clear"></div>
+  </div>
+  <!-- Standardize popup in ATM/Low Pressure Storage   -->
+  <div style="display:none;">
+    <div id="atm_standardize_popup_div">
+      <table style="width: auto;">
+        <tr>
+          <td colspan="3"><b><u>Tank Standard Dimensioning</u></b></td>
+        </tr>
+        <tr>
+          <td>Nominal Diameter</td>
+          <td>
+            <%= f.text_field :atm_standard_nominal_diameter, :id => "atm_standard", :class => "length_large_dimension_length" %>&nbsp;
+            <label class="length_small_dimension_length_unit"></label>
+          </td>
+          <td id="atm_standard" width="145" rowspan="8"></td>
+        </tr>
+        <tr>
+          <td>Selected Height</td>
+          <td><%= f.text_field :atm_standard_selected_height, :class => "small-text-100 length_large_dimension_length" %>
+            &nbsp;<label class="length_large_dimension_length_unit"></label>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Normal Fill Level(NFL)</td>
+          <td><%= storage_tank_sizing.atm_standard_normal_fill_level %>
+            &nbsp;<label class="length_large_dimension_length_unit"></label>
+          </td>
+        </tr>
+        <tr>
+          <td>Save Fill Level(SFL)</td>
+          <td><%= storage_tank_sizing.atm_standard_save_fill_level %>
+            &nbsp;<label class="length_large_dimension_length_unit"></label>
+          </td>
+        </tr>
+        <tr>
+          <td>Overfill Level(OFL)</td>
+          <td><%= storage_tank_sizing.atm_standard_overfill_level %>
+            &nbsp;<label class="length_large_dimension_length_unit"></label>
+          </td>
+        </tr>
+        <tr>
+          <td>Available Vapor Space</td>
+          <td><%= storage_tank_sizing.atm_standard_available_vapor_space %>
+            &nbsp;<label class="length_large_dimension_length_unit"></label>
+          </td>
+        </tr>
+        <tr>
+          <td>Freeboard</td>
+          <td><%= storage_tank_sizing.atm_standard_freeboard %>&nbsp;%
+          </td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td><input type="button" value="Calculate" id="atm_standardize_calculate" style="float:right;"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <!-- Standardize popup in  Pressure Storage   -->
+  <div style="display:none;">
+    <div id="pressure_storage_popup_div">
+      <table style="width: auto;">
+        <tr>
+          <td colspan="3"><b><u>Tank Standard Dimensioning</u></b></td>
+        </tr>
+        <tr>
+          <td>Nominal Length</td>
+          <td><%= f.text_field :ps_standard_nominal_length, :id => "ps_standard_length" %>
+            &nbsp;<label class="length_large_dimension_length_unit"></label>
+          </td>
+          <td width="145" rowspan="8"></td>
+        </tr>
+        <tr>
+          <td>Nominal Depth</td>
+          <td><%= f.text_field :ps_standard_nominal_depth, :id => "ps_standard_depth" %>
+            &nbsp;<label class="length_large_dimension_length_unit"></label>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Selected Diameter</td>
+          <td><%= f.text_field :ps_standard_selected_diameter, :class => "small-text-100" %>
+            &nbsp;<label class="length_large_dimension_length_unit"></label>
+          </td>
+        </tr>
+        <tr>
+          <td>Normal Fill Level(NFL)</td>
+          <td><%= storage_tank_sizing.ps_standard_normal_fill_level %>
+            &nbsp;<label class="length_large_dimension_length_unit"></label>
+          </td>
+        </tr>
+        <tr>
+          <td>Overfill Level(OFL)</td>
+          <td><%= storage_tank_sizing.ps_standard_overfill_level %>
+            &nbsp;<label class="length_large_dimension_length_unit"></label>
+          </td>
+        </tr>
+        <tr>
+          <td>Available Vapor Space</td>
+          <td><%= storage_tank_sizing.ps_standard_available_vapor_space %>
+            &nbsp;<label class="length_large_dimension_length_unit"></label>
+          </td>
+        </tr>
+        <tr>
+          <td>Freeboard</td>
+          <td><%= storage_tank_sizing.ps_standard_freeboard %>&nbsp;%</td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td><input type="button" value="Calculate" id="ps_standardize_calculate" style="float:right;"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+<% end %>
+<% unless storage_tank_sizing.new_record? %>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Attachments</legend>
+    <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+    <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+  </fieldset>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Comments</legend>
+    <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+    <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+  </fieldset>
+<% end %>
+
+
+<%= javascript_tag do %>
+  var storage_tank_id = "<%= storage_tank_sizing.id %>";
+<% end %>
+
+<script type="text/javascript">
+  set_project_unit_and_decimals();
+
+  $('#storage_tank_sizing_s_process_basis_id').change(function (e) {
+    $('#storage_tank_sizing_s_fs_stream_no >option, #storage_tank_sizing_s_es_stream_no >option').remove();
+    $('#storage_tank_sizing_s_fs_stream_no, #storage_tank_sizing_s_es_stream_no').append($('<option></option>').val("").html("Please select"));
+    $("#tab1 table input[type=text]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+    $.get('/admin/heat_and_material_balances/get_stream_nos', {process_basis_id:$(this).val()}, function (data) {
+      $(data).each(function (k, v) {
+        $('#storage_tank_sizing_s_fs_stream_no, #storage_tank_sizing_s_es_stream_no').append(
+          $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+        );
+      });
+    }, 'json');
+  });
+
+  $('#storage_tank_sizing_s_fs_stream_no, #storage_tank_sizing_s_es_stream_no').change(function (e) {
+    var col = $(this).attr('col');
+    $("#tab1 table input[type=text][id*=_" + col + "_]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+    $.get('/admin/storage_tank_sizings/get_stream_values',
+      {process_basis_id:$('#storage_tank_sizing_s_process_basis_id').val(), stream_no:$(this).val()},
+      function (data) {
+        $('#storage_tank_sizing_s_' + col + '_pressure').val(get_project_field_value1("pressure_general", data['pressure']));
+        $('#storage_tank_sizing_s_' + col + '_temperature').val(get_project_field_value1("temperature_general", data['temperature']));
+        $('#storage_tank_sizing_s_' + col + '_flow_rate').val(get_project_field_value1("mass_flow_rate_general", data['flow_rate']));
+        $('#storage_tank_sizing_s_' + col + '_density').val(get_project_field_value1("density_general", data['density']));
+        $('#storage_tank_sizing_s_' + col + '_volume_flow_rate').val(get_project_field_value1("volumetric_flow_rate_liquid", data['volume_flow_rate']));
+        $('#storage_tank_sizing_s_' + col + '_phase').val(data['phase']);
+        $('#' + col + '_phase').text(data['phase']);
+      },
+      'json');
+  });
+
+  // atm standardize button
+  $('#atm_standardize_popup_btn').click(function (e) {
+    $("input#atm_standard").val($("#storage_tank_sizing_atm_nominal_diameter").val());
+    $.colorbox({
+      href:'#atm_standardize_popup_div',
+      inline:true
+    });
+  });
+
+  var is_ps_standardize_popup_calc = false;
+  //pressure storage standardize button
+  $('#ps_standardize_popup_btn').click(function (e) {
+    $("input#ps_standard_length").val($("#storage_tank_sizing_ps_nominal_length").val());
+    $("input#ps_standard_depth").val($("#storage_tank_sizing_ps_nominal_depth").val());
+    $.colorbox({
+      href:'#pressure_storage_popup_div',
+      inline:true,
+      onClosed:function () {
+        if (is_ps_standardize_popup_calc) {
+          is_ps_standardize_popup_calc = false;
+          ajax_post("/admin/storage_tank_sizings/ps_standardize_calculate/");
+        }
+      }
+    });
+  });
+
+  function ajax_post(url) {
+    $.post($('form').attr('action'), $('form').serialize(), function (data) {
+      $.get(url, {storage_tank_id:data.storage_tank_id},
+        function (data) {
+          if (data.success) {
+            location.reload();
+          }
+          else {
+            alert(data.error)
+          }
+        })
+    });
+  }
+  //design conditions calculate
+  $("#design_conditions_calculate").click(function () {
+    if ($("#tab2").validateTab()) {
+      ajax_post("/admin/storage_tank_sizings/design_conditions_calculate/")
+    }
+  });
+  //ATM/Low pressure storage calculate
+  $("#atm_low_pressure_storage_calculate").click(function () {
+    //first validate input boxes
+    if ($("#tab3").validateTab()) {
+      //validate capacity basis
+      var capacity_basis1 = $("#storage_tank_sizing_atm_capacity_basis_max_filling_rate").attr('checked');
+      var capacity_basis2 = $("#storage_tank_sizing_atm_capacity_basis_max_emptying_rate").attr('checked');
+      if (!capacity_basis1 && !capacity_basis2) {
+        alert("Please select capacity basis for this claculation")
+      }
+      else {
+        ajax_post("/admin/storage_tank_sizings/atm_low_pressure_storage_calculate/")
+      }
+    }
+  });
+  $("#pressure_storage_calculate").click(function () {
+    //first validate input boxes
+    if ($("#tab4").validateTab()) {
+      //validate capacity basis
+      var cb1 = $("#storage_tank_sizing_ps_capacity_basis_max_filling_rate").attr('checked');
+      var cb2 = $("#storage_tank_sizing_ps_capacity_basis_max_emptying_rate").attr('checked');
+      var stt1 = $("#storage_tank_sizing_ps_storage_tank_type_horizontal_cylinder").attr('checked');
+      var stt2 = $("#storage_tank_sizing_ps_storage_tank_type_sphere").attr('checked');
+      var stt3 = $("#storage_tank_sizing_ps_storage_tank_type_spheroid").attr('checked');
+
+      if (!cb1 && !cb2) {
+        alert("Please select capacity basis for this calculation")
+      }
+      else if (!stt1 && !stt2 && !stt3) {
+        alert("Please select storage tank type for this calculation")
+      }
+      else {
+        ajax_post("/admin/storage_tank_sizings/pressure_storage_calculate/");
+      }
+    }
+  });
+  //mechanical design calculate
+  $("#mechanical_design_calculate").click(function () {
+    if ($("#tab5").validateTab()) {
+      ajax_post("/admin/storage_tank_sizings/mechanical_design_calculate/")
+    }
+  });
+
+  $("#atm_standardize_calculate").click(function () {
+    var sh = $("input#storage_tank_sizing_atm_standard_selected_height").val();
+    if ($("#tab3").validateTab()) {
+      //validate capacity basis
+      var capacity_basis1 = $("#storage_tank_sizing_atm_capacity_basis_max_filling_rate").attr('checked');
+      var capacity_basis2 = $("#storage_tank_sizing_atm_capacity_basis_max_emptying_rate").attr('checked');
+      if (!capacity_basis1 && !capacity_basis2) {
+        alert("Please select capacity basis for this claculation")
+      }
+      else if (sh == "") {
+        alert("Please enter a value for selected height!");
+      }
+      else {
+        $.colorbox.close();
+        ajax_post("/admin/storage_tank_sizings/atm_standardize_calculate/");
+      }
+    }
+  });
+  $("#ps_standardize_calculate").click(function () {
+    var sh = $("input#storage_tank_sizing_ps_standard_selected_diameter").val();
+    if ($("#tab4").validateTab()) {
+      //validate capacity basis
+      var capacity_basis1 = $("#storage_tank_sizing_ps_capacity_basis_max_filling_rate").attr('checked');
+      var capacity_basis2 = $("#storage_tank_sizing_ps_capacity_basis_max_emptying_rate").attr('checked');
+      var stt1 = $("#storage_tank_sizing_ps_storage_tank_type_horizontal_cylinder").attr('checked');
+      var stt2 = $("#storage_tank_sizing_ps_storage_tank_type_sphere").attr('checked');
+      var stt3 = $("#storage_tank_sizing_ps_storage_tank_type_spheroid").attr('checked');
+      if (!capacity_basis1 && !capacity_basis2) {
+        alert("Please select capacity basis for this calculation");
+      } else if (!stt1 && !stt2 && !stt3) {
+        alert("Please select capacity basis for this calculation");
+      } else if (sh == "") {
+        alert("Please enter a value for selected diameter!");
+      } else {
+        is_ps_standardize_popup_calc = true;
+        $.colorbox.close();
+      }
+    }
+  });
+
+  //ui changes based on user selection
+  $("#storage_tank_sizing_dc_representative_chemical").change(function () {
+    if ($(this).val() == 'user entered') {
+      $("#pvapor_btn").attr('disabled', 'disabled')
+    }
+    else {
+      $("#pvapor_btn").attr('disabled', '')
+    }
+  });
+  $("#pvapor_btn").click(function () {
+    var temp1 = $("#storage_tank_sizing_dc_maximum_liquid_surface_temperature");
+    var temp2 = $("#storage_tank_sizing_dc_minimum_liquid_surface_temperature");
+    var temp3 = $("#storage_tank_sizing_dc_liquid_storage_temperature");
+    var error = false;
+    var url = "/admin/storage_tank_sizings/pvapor_calculate";
+    $.each([temp1, temp2, temp3], function () {
+      if ($(this).val() == "") {
+        error = true
+        $(this).css({"border":"1px solid red"});
+      }
+    });
+    if (error) {
+      alert("Please enter required values");
+    }
+    else {
+      $.post($('form').attr('action'), $('form').serialize(), function (data) {
+        //first click of pvapor button
+        $.get(url, {storage_tank_id:data.storage_tank_id, temp_check:'true'},
+          function (data) {
+            if (data.success) {
+              location.reload()
+            }
+            else if (data.error == 'confirm') {
+              if (confirm(data.msg)) {
+                //do calculation without checking
+                $.get(url, {storage_tank_id:data.storage_tank_id, temp_check:'false'},
+                  function (data) {
+                    if (data.success) {
+                      location.reload();
+                    }
+                    else {
+                      alert(data.error);
+                    }
+                  })
+              }
+            }
+            else {
+              alert(data.error);
+            }
+          })
+      });
+    }
+  });
+
+  $("#storage_tank_sizing_md_tank_orientation").change(function () {
+    var ore = $(this).val();
+    if (ore == "Spherical" || ore == "Spheroidal") {
+      $("#storage_tank_sizing_md_head_type").attr('disabled', 'disabled');
+      $("#storage_tank_sizing_md_head_corrosion_allowance").attr('disabled', 'disabled');
+      $("#storage_tank_sizing_md_head_joint_efficiency").attr('disabled', 'disabled');
+      $("#storage_tank_sizing_md_straight_flange").attr('disabled', 'disabled');
+    }
+    else {
+      $("#storage_tank_sizing_md_head_type").attr('disabled', '');
+      $("#storage_tank_sizing_md_head_corrosion_allowance").attr('disabled', '');
+      $("#storage_tank_sizing_md_head_joint_efficiency").attr('disabled', '');
+      $("#storage_tank_sizing_md_straight_flange").attr('disabled', '');
+    }
+  });
+  $("#storage_tank_sizing_ps_storage_tank_type_horizontal_cylinder").click(function () {
+    $("#storage_tank_sizing_ps_nominal_depth").attr('disabled', 'disabled').removeClass("required");
+  });
+
+  $("#storage_tank_sizing_ps_storage_tank_type_sphere").click(function () {
+    $("#storage_tank_sizing_ps_nominal_depth").attr('disabled', 'disabled').removeClass("required");
+  });
+
+  $("#storage_tank_sizing_ps_storage_tank_type_spheroid").click(function () {
+    $("#storage_tank_sizing_ps_nominal_depth").attr('disabled', '').addClass("required");
+  });
+  $("#storage_tank_sizing_md_tank_type").change(function () {
+    var type = $(this).val();
+    if (type == "Atmospheric Storage" || type == "Low Pressure Storage") {
+      $("#storage_tank_sizing_md_bottom_corrosion_allowance").attr('disabled', 'disabled').removeClass('required');
+      $("#storage_tank_sizing_md_tank_material_density").attr('disabled', 'disabled').removeClass('required');
+      $("#storage_tank_sizing_md_tank_weight_allowance").attr('disabled', 'disabled').removeClass('required');
+      $("#storage_tank_sizing_md_tank_content_density").attr('disabled', 'disabled').removeClass('required');
+      $("#storage_tank_sizing_md_straight_flange_density").attr('disabled', 'disabled').removeClass('required');
+
+      var atm_dc1 = $("#storage_tank_sizing_atm_design_codes_api_620").attr("checked");
+      var atm_dc2 = $("#storage_tank_sizing_atm_design_codes_api_650").attr("checked");
+      var atm_dc3 = $("#storage_tank_sizing_atm_design_codes_other_codes").attr("checked");
+      if (!atm_dc1 && !atm_dc2 && !atm_dc3) {
+        alert("No selection made for the design code for the atmospheric/low pressure tank. Please select a design code for the atmospheric/low pressure tank.")
+      }
+    }
+    else {
+      $("#storage_tank_sizing_md_bottom_corrosion_allowance").attr('disabled', '').addClass('required');
+      $("#storage_tank_sizing_md_tank_material_density").attr('disabled', '').addClass('required');
+      $("#storage_tank_sizing_md_tank_weight_allowance").attr('disabled', '').addClass('required');
+      $("#storage_tank_sizing_md_tank_content_density").attr('disabled', '').addClass('required');
+      $("#storage_tank_sizing_md_straight_flange_density").attr('disabled', '').addClass('required');
+      var ps_dc1 = $("#storage_tank_sizing_ps_design_codes_asme_viii").attr("checked");
+      var ps_dc2 = $("#storage_tank_sizing_ps_design_codes_other_codes").attr("checked");
+      if (!ps_dc1 && !ps_dc2) {
+        alert("No selection made for for the design code for the high pressure storage tank.  Please select a design code for the high pressure storage tank.")
+
+      }
+    }
+  });
+
+
+</script>

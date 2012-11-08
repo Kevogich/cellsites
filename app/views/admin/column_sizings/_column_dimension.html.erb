@@ -1,0 +1,284 @@
+<div id="column_dimension" class="tab_content">
+  <!-- Column Dimension -->
+  <table>
+    <tr>
+      <td colspan="9"><label class="sub_title">SECTION SUMMARY</label></td>
+    </tr>
+    <tr>
+      <td><b>No</b></td>
+      <td><b>Description</b></td>
+      <td><b>Tray Type</b></td>
+      <td><b>T.Count</b></td>
+      <td><b>T.Spacing</b></td>
+      <td><b>HETP</b></td>
+      <td><b>Height</b></td>
+      <td><b>Diameter</b></td>
+      <td><b>Section &Delta;P</b></td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <td colspan="2"><label class="sub_title">COLUMN DIAMETER</label></td>
+    </tr>
+    <tr>
+    <tr>
+      <td>
+        <%= f.radio_button :cd_cs_column_sections, "consider_one_section" %>&nbsp;Consider Only One Section
+        <%= f.text_field :cd_cs_column_sections_text, :class => 'span2 length_large_dimension_length' %>&nbsp;<label class="length_large_dimension_length_unit"></label>
+      </td>
+      <td>
+        <%= f.radio_button :cd_cs_column_sections, "consider_multiple_sections" %>&nbsp;Consider Multiple Sections
+        <input id="consider_multiple_section_view" type="button" value="View" class="pull-right">
+      </td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <td colspan="2"><label class="sub_title">COLUMN HEIGHT</label></td>
+      <td colspan="2"><label class="sub_title">TOWER LIQUID HEAD</label></td>
+    </tr>
+    <tr>
+      <td>Top Vapor Disengagement Space</td>
+      <td><%= f.text_field :cd_top_vapor_disengagement_space, :class => 'length_large_dimension_length' %>&nbsp;<label class="length_large_dimension_length_unit"></label></td>
+      <td>Bottom Stream</td>
+      <td><%= f.select :cd_bottom_stream, [] %></td>
+    </tr>
+    <tr>
+      <td>Bottom Liquid Reservoir Space</td>
+      <td><%= f.text_field :cd_bottom_liquid_reservoir_space, :class => 'length_large_dimension_length' %>&nbsp;<label class="length_large_dimension_length_unit"></label></td>
+      <td>Bottom Product Rate</td>
+      <td><%= f.text_field :cd_bottom_product_rate, :class => 'mass_flow_rate_general' %>&nbsp;<label class="mass_flow_rate_general_unit"></label></td>
+    </tr>
+    <tr>
+      <td>Additional Height Factor</td>
+      <td><%= f.text_field :cd_additional_height_factor, :class => 'length_large_dimension_length' %>&nbsp;<label class="length_large_dimension_length_unit"></label></td>
+      <td>Bottom Density</td>
+      <td><%= f.text_field :cd_bottom_density, :class => 'density_general' %>&nbsp;<label class="density_general_unit"></label></td>
+    </tr>
+    <tr>
+      <td>Trayed Section Height</td>
+      <td><%= f.text_field :cd_trayed_section_height, :class => 'length_large_dimension_length' %>&nbsp;<label class="length_large_dimension_length_unit"></label></td>
+      <td>Bottom Column Diameter</td>
+      <td><%= f.text_field :cd_bottom_column_diameter, :class => 'length_large_dimension_length' %>&nbsp;<label class="length_large_dimension_length_unit"></label></td>
+    </tr>
+    <tr>
+      <td>Column Height</td>
+      <td>
+        <%= f.text_field :cd_column_height, :class => 'length_large_dimension_length' %>&nbsp;<label class="length_large_dimension_length_unit"></label>
+        <input type="button" value="Calculate" class="pull-right">
+      </td>
+      <td>Resident Time</td>
+      <td><%= f.text_field :cd_resident_time, :class => 'time_minutes'%>&nbsp;<label class="time_minutes_unit"></label></td>
+    </tr>
+    <tr>
+      <td colspan="2" rowspan="2"></td>
+      <td>Max Liquid Level</td>
+      <td><%= f.text_field :cd_max_liquid_level, :class => 'length_large_dimension_length' %>&nbsp;<label class="length_large_dimension_length_unit"></label>
+    </tr>
+    <tr>
+      <td>Static Pressure</td>
+      <td>
+        <%= f.text_field :cd_static_pressure, :class => 'pressure_general' %>&nbsp;<label class="pressure_general_unit"></label>
+        <input type="button" value="Calculate" class="pull-right">
+      </td>
+    </tr>
+  </table>
+
+  <div class="hidden">
+    <div id="column_section_height_div">
+      <table>
+        <tr>
+          <td><b>Process Basis</b></td>
+          <td></td>
+          <td colspan="3"></td>
+        </tr>
+        <tr>
+          <td><b>Column Tag</b></td>
+          <td></td>
+          <td colspan="2"></td>
+          <td><input type="button" value="Calculate" class="btn"></td>
+        </tr>
+        <tr>
+          <td><b>No of Sections</b></td>
+          <td><%= f.select :csh_no_of_sections, (1..6) %></td>
+          <td colspan="2"></td>
+          <td><input type="button" value="Close" class="btn" onclick="$.colorbox.close();"></td>
+        </tr>
+        <tr>
+          <td><label class="sub_title">Section No.</label></td>
+          <td><label class="sub_title">Diameter</label></td>
+          <td><label class="sub_title">Height</label></td>
+          <td><label class="sub_title">Surface Area</label></td>
+          <td><label class="sub_title">Volume</label></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><label class="length_large_dimension_length_unit"></label></td>
+          <td><label class="length_large_dimension_length_unit"></label></td>
+          <td><label class="area_general_unit"></label></td>
+          <td><label class="volume_general_unit"></label></td>
+        </tr>
+        <tr>
+          <td><b>Top</b></td>
+          <td><%= f.text_field :csh_top_diameter, :class => 'span2' %></td>
+          <td><%= f.text_field :csh_top_height, :class => 'span2' %></td>
+          <td><%= f.object.csh_top_surface_area %></td>
+          <td><%= f.object.csh_top_volume %></td>
+        </tr>
+        <tr>
+          <td><b>TZ-1</b></td>
+          <td><%= f.text_field :csh_tz_1_diameter, :class => 'span2' %></td>
+          <td><%= f.text_field :csh_tz_1_height, :class => 'span2' %></td>
+          <td><%= f.object.csh_tz_1_surface_area %></td>
+          <td><%= f.object.csh_tz_1_volume %></td>
+        </tr>
+        <tr>
+          <td><b>Section 1</b></td>
+          <td><%= f.text_field :csh_section_1_diameter, :class => 'span2' %></td>
+          <td><%= f.text_field :csh_section_1_height, :class => 'span2' %></td>
+          <td><%= f.object.csh_section_1_surface_area %></td>
+          <td><%= f.object.csh_section_1_volume %></td>
+        </tr>
+        <tr>
+          <td><b>TZ-2</b></td>
+          <td><%= f.text_field :csh_tz_2_diameter, :class => 'span2' %></td>
+          <td><%= f.text_field :csh_tz_2_height, :class => 'span2' %></td>
+          <td><%= f.object.csh_tz_2_surface_area %></td>
+          <td><%= f.object.csh_tz_2_volume %></td>
+        </tr>
+        <tr>
+          <td><b>Section 2</b></td>
+          <td><%= f.text_field :csh_section_2_diameter, :class => 'span2' %></td>
+          <td><%= f.text_field :csh_section_2_height, :class => 'span2' %></td>
+          <td><%= f.object.csh_section_2_surface_area %></td>
+          <td><%= f.object.csh_section_2_volume %></td>
+        </tr>
+        <tr>
+          <td><b>TZ-3</b></td>
+          <td><%= f.text_field :csh_tz_3_diameter, :class => 'span2' %></td>
+          <td><%= f.text_field :csh_tz_3_height, :class => 'span2' %></td>
+          <td><%= f.object.csh_tz_3_surface_area %></td>
+          <td><%= f.object.csh_tz_3_volume %></td>
+        </tr>
+        <tr>
+          <td><b>Section 3</b></td>
+          <td><%= f.text_field :csh_section_3_diameter, :class => 'span2' %></td>
+          <td><%= f.text_field :csh_section_3_height, :class => 'span2' %></td>
+          <td><%= f.object.csh_section_3_surface_area %></td>
+          <td><%= f.object.csh_section_3_volume %></td>
+        </tr>
+        <tr>
+          <td><b>TZ-5</b></td>
+          <td><%= f.text_field :csh_tz_5_diameter, :class => 'span2' %></td>
+          <td><%= f.text_field :csh_tz_5_height, :class => 'span2' %></td>
+          <td><%= f.object.csh_tz_5_surface_area %></td>
+          <td><%= f.object.csh_tz_5_volume %></td>
+        </tr>
+        <tr>
+          <td><b>Section 5</b></td>
+          <td><%= f.text_field :csh_section_5_diameter, :class => 'span2' %></td>
+          <td><%= f.text_field :csh_section_5_height, :class => 'span2' %></td>
+          <td><%= f.object.csh_section_5_surface_area %></td>
+          <td><%= f.object.csh_section_5_volume %></td>
+        </tr>
+        <tr>
+          <td><b>TZ-6</b></td>
+          <td><%= f.text_field :csh_tz_6_diameter, :class => 'span2' %></td>
+          <td><%= f.text_field :csh_tz_6_height, :class => 'span2' %></td>
+          <td><%= f.object.csh_tz_6_surface_area %></td>
+          <td><%= f.object.csh_tz_6_volume %></td>
+        </tr>
+        <tr>
+          <td><b>bottom</b></td>
+          <td><%= f.text_field :csh_bottom_diameter, :class => 'span2' %></td>
+          <td><%= f.text_field :csh_bottom_height, :class => 'span2' %></td>
+          <td><%= f.object.csh_bottom_surface_area %></td>
+          <td><%= f.object.csh_bottom_volume %></td>
+        </tr>
+        <tr>
+          <td colspan="2"></td>
+          <td><b>Total</b></td>
+          <td><%= f.object.csh_total %></td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    $('#consider_multiple_section_view').click(function(){
+      //alert('Note that having more column sections may result in a more expensive design.');
+      $.colorbox({
+        href:"#column_section_height_div",
+        inline:true});
+    });
+  </script>
+</div>

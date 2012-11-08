@@ -1,0 +1,7 @@
+<% if @user_project_setting.errors.any?%>
+	$(".error_messages").remove();	
+	$(".edit_user_project_setting").prepend("<%= escape_javascript(error_messages_for(@user_project_setting))%>");	
+<% else%>
+	$(".error_messages").remove();
+	alert("Update Project Settings Successfully.");
+<% end%>

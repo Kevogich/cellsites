@@ -1,0 +1,19 @@
+<% title 'Process Units' %>
+<table id="projects_list" class="list">
+  <tr>
+    <th>Project</th>
+    <th>Name</th>
+    <th>&nbsp;</th>
+  </tr>
+  <% for unit in @process_units %>
+	  <td><%= @project.project_num %></td>
+	  <% if @default_process_unit_id == unit.id %>
+		  <td><%= unit.name %> (default)</td>
+		  <td>&nbsp;</td>
+	  <% else%>
+		  <td><%= unit.name %></td>
+		  <td><%= link_to "Set this as default", "#{setdefault_admin_dashboard_path}?id=#{unit.id}" %></td>
+	  <% end %>
+  </tr>
+  <% end %>
+</table>

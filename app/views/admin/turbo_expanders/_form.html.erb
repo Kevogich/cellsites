@@ -1,0 +1,915 @@
+<%= form_for turbo_expander, :url => turbo_expander.new_record? ? admin_turbo_expanders_path : admin_turbo_expander_path(turbo_expander), :html => {:style => 'width:auto;', :class => 'turbo_expander'} do |f| %>
+  <%= f.error_messages %>
+  <% if turbo_expander.new_record? %>
+    <%= f.hidden_field :company_id %>
+    <%= f.hidden_field :client_id, :value => @user_project_settings.client_id %>
+    <%= f.hidden_field :project_id, :value => @user_project_settings.project_id %>
+    <%= f.hidden_field :process_unit_id, :value => @user_project_settings.process_unit_id %>
+    <%= f.hidden_field :driver_type, :value => "turbo_expander" %>
+  <% end %>
+
+  <div class="form-element-last">
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :client_id %><br>
+      <%= f.label :client_id, (turbo_expander.client.name rescue @user_project_settings.client.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :project_id %><br>
+      <%= f.label :project_id, (turbo_expander.project.project_num rescue @user_project_settings.project.project_num), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :process_unit_id %><br>
+      <%= f.label :process_unit_id, (turbo_expander.process_unit.name rescue @user_project_settings.process_unit.name), :style => "font-weight:bold" %>
+		</span>		
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :turbo_expander_tag %><br>
+      <%= f.text_field :turbo_expander_tag, :class => "validate[required]" %>
+		</span>
+    <% unless turbo_expander.new_record? %>
+      <span style="float:left;margin-right:40px;">
+        <%= label_tag :status %><br>
+        <strong><%= sizing_status(turbo_expander) %></strong>
+      </span>
+      <span style="float:left;margin-right:40px;">
+        <br>
+        <%= sizing_status_request_button(turbo_expander) %>
+      </span>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+  <div class="hidden">
+    <%= hidden_field_tag :tab %>
+    <%= hidden_field_tag :calculate_btn %>
+  </div>
+  <div class="form-buttons">
+    <%= f.submit turbo_expander.new_record? ? 'Create' : 'Update' %>
+  </div>
+  <!-- tabs -->
+  <div>
+  <ul class="simple-tabs">
+    <li><a href="#tab1" tab="tab1">Stream Inlet Conditions</a></li>
+    <li><a href="#tab2" tab="tab2">Stream Outlet Conditions</a></li>
+    <li><a href="#tab3" tab="tab3">Expander Design</a></li>
+    <li><a href="#tab4" tab="tab4">Review</a></li>
+  </ul>
+  <div class="tab_container">
+  <div id="tab1" class="tab_content">
+    <!-- Stream Inlet Conditions -->
+    <div class="form-element-last" style="width:200px;">
+      <%= f.label :sic_process_basis_id, "Process Basis" %>
+      <br>
+      <%= f.collection_select :sic_process_basis_id, @company.heat_and_material_balances, :id, :case, {:prompt => true} %>
+    </div>
+
+    <table width="100%" id="stream_inlet_conditions_table">
+      <tr>
+        <td width="30%"></td>
+        <td width="20%">
+          <b><u>Mininum</u></b>&nbsp;<%= f.check_box :sic_mininum, :class => "stream_inlet_check_box", :col => "min" %>
+        </td>
+        <td width="20%">
+          <b><u>Normal</u></b>&nbsp;<%= f.check_box :sic_normal, :class => "stream_inlet_check_box", :col => "nor" %>
+        </td>
+        <td width="20%">
+          <b><u>Maximum</u></b>&nbsp;<%= f.check_box :sic_maximum, :class => "stream_inlet_check_box", :col => "max" %>
+        </td>
+        <td width="10%"></td>
+      </tr>
+      <tr>
+        <td>Stream No</td>
+        <td><%= f.collection_select :sic_min_stream_no, @streams, :stream_no, :display_stream_no, {:prompt => true}, {:class => "sic_stream_no", :col => "min"} %></td>
+        <td><%= f.collection_select :sic_nor_stream_no, @streams, :stream_no, :display_stream_no, {:prompt => true}, {:class => "sic_stream_no", :col => "nor"} %></td>
+        <td><%= f.collection_select :sic_max_stream_no, @streams, :stream_no, :display_stream_no, {:prompt => true}, {:class => "sic_stream_no", :col => "max"} %></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Stream Inlet Pressure</td>
+        <td><%= f.text_field :sic_min_stream_inlet_pressure, :class => "stream_inlet_pressure" %></td>
+        <td><%= f.text_field :sic_nor_stream_inlet_pressure, :class => "stream_inlet_pressure" %></td>
+        <td><%= f.text_field :sic_max_stream_inlet_pressure, :class => "stream_inlet_pressure" %></td>
+        <td><label class="stream_inlet_pressure_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stream Inlet Temperature</td>
+        <td><%= f.text_field :sic_min_stream_inlet_temperature, :class => "steam_phase_calc stream_inlet_temperature", :col => "min" %></td>
+        <td><%= f.text_field :sic_nor_stream_inlet_temperature, :class => "steam_phase_calc stream_inlet_temperature", :col => "nor" %></td>
+        <td><%= f.text_field :sic_max_stream_inlet_temperature, :class => "steam_phase_calc stream_inlet_temperature", :col => "max" %></td>
+        <td><label class="stream_inlet_temperature_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stream Mass Vapor Fraction</td>
+        <td><%= f.text_field :sic_min_stream_mass_vapor_fraction, :class => "stream_mass_vapor_fraction mass_vapor_fraction_dimensionless" %></td>
+        <td><%= f.text_field :sic_nor_stream_mass_vapor_fraction, :class => "stream_mass_vapor_fraction mass_vapor_fraction_dimensionless" %></td>
+        <td><%= f.text_field :sic_max_stream_mass_vapor_fraction, :class => "stream_mass_vapor_fraction mass_vapor_fraction_dimensionless" %></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Stream Saturation Temperature</td>
+        <td><%= f.text_field :sic_min_stream_saturation_temperature, :class => "steam_phase_calc stream_saturation_temperature", :col => "min" %></td>
+        <td><%= f.text_field :sic_nor_stream_saturation_temperature, :class => "steam_phase_calc stream_saturation_temperature", :col => "nor" %></td>
+        <td><%= f.text_field :sic_max_stream_saturation_temperature, :class => "steam_phase_calc stream_saturation_temperature", :col => "max" %></td>
+        <td><label class="stream_saturation_temperature_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stream Flowrate</td>
+        <td><%= f.text_field :sic_min_stream_flowrate, :class => "stream_flowrate" %></td>
+        <td><%= f.text_field :sic_nor_stream_flowrate, :class => "stream_flowrate" %></td>
+        <td><%= f.text_field :sic_max_stream_flowrate, :class => "stream_flowrate" %></td>
+        <td><label class="stream_flowrate_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stream Density</td>
+        <td><%= f.text_field :sic_min_stream_density, :class => "stream_density" %></td>
+        <td><%= f.text_field :sic_nor_stream_density, :class => "stream_density" %></td>
+        <td><%= f.text_field :sic_max_stream_density, :class => "stream_density" %></td>
+        <td><label class="stream_density_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stream Entropy</td>
+        <td><%= f.text_field :sic_min_stream_entropy, :class => "sic_stream_entropy stream_entropy exhaust_phase_calc", :col => "min" %></td>
+        <td><%= f.text_field :sic_nor_stream_entropy, :class => "sic_stream_entropy stream_entropy exhaust_phase_calc", :col => "nor" %></td>
+        <td><%= f.text_field :sic_max_stream_entropy, :class => "sic_stream_entropy stream_entropy exhaust_phase_calc", :col => "max" %></td>
+        <td><label class="stream_entropy_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stream Enthalpy</td>
+        <td><%= f.text_field :sic_min_stream_enthalpy, :class => "stream_enthalpy" %></td>
+        <td><%= f.text_field :sic_nor_stream_enthalpy, :class => "stream_enthalpy" %></td>
+        <td><%= f.text_field :sic_max_stream_enthalpy, :class => "stream_enthalpy" %></td>
+        <td><label class="stream_enthalpy_unit"></label></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <label id="lbl_supply_steam_phase_min"><%= turbo_expander.sic_steam_phase_min %></label>
+          <%= f.hidden_field :sic_steam_phase_min %>
+        </td>
+        <td>
+          <label id="lbl_supply_steam_phase_nor"><%= turbo_expander.sic_steam_phase_nor %></label>
+          <%= f.hidden_field :sic_steam_phase_nor %>
+        </td>
+        <td>
+          <label id="lbl_supply_steam_phase_max"><%= turbo_expander.sic_steam_phase_max %></label>
+          <%= f.hidden_field :sic_steam_phase_max %>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab2" class="tab_content">
+    <!-- Stream Outlet Conditions -->
+    <table width="100%" id="stream_outlet_conditions_table">
+      <tr>
+        <td width="30%"></td>
+        <td width="20%">
+          <b><u>Mininum</u></b>&nbsp;<%= f.check_box :soc_mininum, :class => "stream_outlet_check_box", :col => "min" %>
+        </td>
+        <td width="20%">
+          <b><u>Normal</u></b>&nbsp;<%= f.check_box :soc_normal, :class => "stream_outlet_check_box", :col => "nor" %>
+        </td>
+        <td width="20%">
+          <b><u>Maximum</u></b>&nbsp;<%= f.check_box :soc_maximum, :class => "stream_outlet_check_box", :col => "max" %>
+        </td>
+        <td width="10%"></td>
+      </tr>
+      <tr>
+        <td>Stream No</td>
+        <td><%= f.collection_select :soc_min_stream_no, @streams, :stream_no, :display_stream_no, {:prompt => true}, {:class => "soc_stream_no", :col => "min"} %></td>
+        <td><%= f.collection_select :soc_nor_stream_no, @streams, :stream_no, :display_stream_no, {:prompt => true}, {:class => "soc_stream_no", :col => "nor"} %></td>
+        <td><%= f.collection_select :soc_max_stream_no, @streams, :stream_no, :display_stream_no, {:prompt => true}, {:class => "soc_stream_no", :col => "max"} %></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Outlet Pressure</td>
+        <td><%= f.text_field :soc_min_outlet_pressure, :class => "stream_outlet_pressure" %></td>
+        <td><%= f.text_field :soc_nor_outlet_pressure, :class => "stream_outlet_pressure" %></td>
+        <td><%= f.text_field :soc_max_outlet_pressure, :class => "stream_outlet_pressure" %></td>
+        <td><label class="stream_outlet_pressure_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Outlet Temp (Isentropic Flash)</td>
+        <td><%= f.text_field :soc_min_outlet_temperature, :class => "stream_outlet_temperature" %></td>
+        <td><%= f.text_field :soc_nor_outlet_temperature, :class => "stream_outlet_temperature" %></td>
+        <td><%= f.text_field :soc_max_outlet_temperature, :class => "stream_outlet_temperature" %></td>
+        <td><label class="stream_outlet_temperature_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stream Saturation Temperature</td>
+        <td><%= f.text_field :soc_min_stream_saturation_temperature, :class => "stream_outlet_saturation_temperature" %></td>
+        <td><%= f.text_field :soc_nor_stream_saturation_temperature, :class => "stream_outlet_saturation_temperature" %></td>
+        <td><%= f.text_field :soc_max_stream_saturation_temperature, :class => "stream_outlet_saturation_temperature" %></td>
+        <td><label class="stream_outlet_saturation_temperature_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stream Mass Fraction</td>
+		<td><%= f.text_field :soc_min_stream_mass_fraction, :class => "mass_vapor_fraction_dimensionless" %></td>
+        <td><%= f.text_field :soc_nor_stream_mass_fraction, :class => "mass_vapor_fraction_dimensionless"%></td>
+        <td><%= f.text_field :soc_max_stream_mass_fraction, :class => "mass_vapor_fraction_dimensionless"%></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Stream Density</td>
+        <td><%= f.text_field :soc_min_stream_density, :class => "stream_outlet_density" %></td>
+        <td><%= f.text_field :soc_nor_stream_density, :class => "stream_outlet_density" %></td>
+        <td><%= f.text_field :soc_max_stream_density, :class => "stream_outlet_density" %></td>
+        <td><label class="stream_outlet_density_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stream Entropy</td>
+        <td>
+          <label id="lbl_exhaust_stream_entropy_min"><%= turbo_expander.soc_min_stream_entropy %></label>
+          <%= f.hidden_field :soc_min_stream_entropy %>
+        </td>
+        <td>
+          <label id="lbl_exhaust_stream_entropy_nor"><%= turbo_expander.soc_nor_stream_entropy %></label>
+          <%= f.hidden_field :soc_nor_stream_entropy %>
+        </td>
+        <td>
+          <label id="lbl_exhaust_stream_entropy_max"><%= turbo_expander.soc_max_stream_entropy %></label>
+          <%= f.hidden_field :soc_max_stream_entropy %>
+        </td>
+        <td><label class="stream_outlet_entropy_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stream Enthalpy</td>
+        <td><%= f.text_field :soc_min_stream_enthalpy, :class => "stream_outlet_enthalpy" %></td>
+        <td><%= f.text_field :soc_nor_stream_enthalpy, :class => "stream_outlet_enthalpy" %></td>
+        <td><%= f.text_field :soc_max_stream_enthalpy, :class => "stream_outlet_enthalpy" %></td>
+        <td><label class="stream_outlet_enthalpy_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stream Vapor Entropy</td>
+        <td><%= f.text_field :soc_min_stream_vapor_entropy, :class => "stream_outlet_vapor_entropy exhaust_phase_calc", :col => "min" %></td>
+        <td><%= f.text_field :soc_nor_stream_vapor_entropy, :class => "stream_outlet_vapor_entropy exhaust_phase_calc", :col => "nor" %></td>
+        <td><%= f.text_field :soc_max_stream_vapor_entropy, :class => "stream_outlet_vapor_entropy exhaust_phase_calc", :col => "max" %></td>
+        <td><label class="stream_outlet_vapor_entropy_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stream Vapor Enthalpy</td>
+        <td><%= f.text_field :soc_min_stream_vapor_enthalpy, :class => "stream_outlet_vapor_enthalpy" %></td>
+        <td><%= f.text_field :soc_nor_stream_vapor_enthalpy, :class => "stream_outlet_vapor_enthalpy" %></td>
+        <td><%= f.text_field :soc_max_stream_vapor_enthalpy, :class => "stream_outlet_vapor_enthalpy" %></td>
+        <td><label class="stream_outlet_vapor_enthalpy_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stream Liquid Entropy</td>
+        <td><%= f.text_field :soc_min_stream_liquid_entropy, :class => "stream_outlet_liquid_entropy exhaust_phase_calc", :col => "min" %></td>
+        <td><%= f.text_field :soc_nor_stream_liquid_entropy, :class => "stream_outlet_liquid_entropy exhaust_phase_calc", :col => "nor" %></td>
+        <td><%= f.text_field :soc_max_stream_liquid_entropy, :class => "stream_outlet_liquid_entropy exhaust_phase_calc", :col => "max" %></td>
+        <td><label class="stream_outlet_liquid_entropy_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stream Liquid Enthalpy</td>
+        <td><%= f.text_field :soc_min_stream_liquid_enthalpy, :class => "stream_outlet_liquid_enthalpy" %></td>
+        <td><%= f.text_field :soc_nor_stream_liquid_enthalpy, :class => "stream_outlet_liquid_enthalpy" %></td>
+        <td><%= f.text_field :soc_max_stream_liquid_enthalpy, :class => "stream_outlet_liquid_enthalpy" %></td>
+        <td><label class="stream_outlet_liquid_enthalpy_unit"></label></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <label id="lbl_exhaust_steam_phase_min"><%= turbo_expander.soc_steam_phase_min %></label>
+          <%= f.hidden_field :soc_steam_phase_min %>
+        </td>
+        <td>
+          <label id="lbl_exhaust_steam_phase_nor"><%= turbo_expander.soc_steam_phase_nor %></label>
+          <%= f.hidden_field :soc_steam_phase_nor %>
+        </td>
+        <td>
+          <label id="lbl_exhaust_steam_phase_max"><%= turbo_expander.soc_steam_phase_max %></label>
+          <%= f.hidden_field :soc_steam_phase_max %>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab3" class="tab_content">
+    <!-- Expander Design -->
+    <table width="100%">
+      <tr>
+        <td colspan="2"><b><u>Expander Available Power</u></b></td>
+        <td colspan="2"><b><u>Rotating Equipment Details</u></b></td>
+      </tr>
+      <tr>
+        <td width="25%">Basis Efficiency</td>
+        <td width="25%"><%= f.text_field :ed_basis_efficiency, :class => "small-text-100" %>&nbsp;%</td>
+        <td>Equipment Type</td>
+        <td><%= f.select :ed_equipment_type, options_for_select(StaticData.equipment_type, turbo_expander.ed_equipment_type), :include_blank => true %></td>
+      </tr>
+      <tr>
+        <td>Theoretical Enthalpy Change</td>
+        <td>
+          <label id="lbl_ed_theoretical_enthalpy_change"><%= turbo_expander.ed_theoretical_enthalpy_change %></label>
+          <%= f.hidden_field :ed_theoretical_enthalpy_change %>
+          &nbsp;<label class="ed_theoretical_enthalpy_change_unit"></label>
+        </td>
+        <td>Equipment Tag</td>
+        <td><%= f.select :ed_equipment_tag, options_for_select(@equipment_tag.collect { |h| [raw(h[:tag]), h[:id]] }, turbo_expander.ed_equipment_tag), :include_blank => true %></td>
+      </tr>
+      <tr>
+        <td>Actual Enthalpy Change</td>
+        <td>
+          <label id="lbl_ed_actual_enthalpy_change"><%= turbo_expander.ed_actual_enthalpy_change %></label>
+          <%= f.hidden_field :ed_actual_enthalpy_change %>
+          &nbsp;<label class="ed_actual_enthalpy_change_unit"></label>
+        </td>
+        <td>Capacity</td>
+        <td><%= f.text_field :ed_capacity %>&nbsp;<label id="turbo_expander_ed_capacity_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stream No</td>
+        <td><%= f.collection_select :ed_stream_no, @streams, :stream_no, :display_stream_no, {:prompt => true}, :class => "sic_stream_no" %></td>
+        <td>Differential Pressure</td>
+        <td><%= f.text_field :ed_differential_pressure %>&nbsp;<label id="turbo_expander_ed_differential_pressure_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Actual Outlet Temperature</td>
+        <td><%= f.text_field :ed_actual_outlet_temperature, :class => "small-text-100" %>&nbsp;<label id="turbo_expander_ed_actual_outlet_temperature_unit"></label>
+        </td>
+        <td>Horsepower</td>
+        <td><%= f.text_field :ed_horsepower %>&nbsp;<label id="turbo_expander_ed_horsepower_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Actual Outlet Mass Vapor Fraction</td>
+        <td><%= f.text_field :ed_actual_outlet_mass_vapor_fraction, :class => "small-text-100 mass_vapor_fraction_dimensionless" %>&nbsp;</td>
+        <td>Speed</td>
+        <td><%= f.text_field :ed_speed %>&nbsp;RPM</td>
+      </tr>
+      <tr>
+        <td>Actual Outlet Stream Entropy</td>
+        <td><%= f.text_field :ed_actual_outlet_stream_entropy, :class => "small-text-100" %>&nbsp;<label id="turbo_expander_ed_actual_outlet_stream_entropy_unit"></label>
+        </td>
+        <td colspan="2" rowspan="4"></td>
+      </tr>
+      <tr>
+        <td>Actual Outlet Stream Enthalpy</td>
+        <td><%= f.text_field :ed_actual_outlet_stream_enthalpy, :class => "small-text-100" %>&nbsp;<label id="turbo_expander_ed_actual_outlet_stream_enthalpy_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Basis Flow Rate</td>
+        <td>
+          <label id="lbl_ed_basis_flow_rate"><%= turbo_expander.ed_basis_flow_rate %></label>
+          <%= f.hidden_field :ed_basis_flow_rate %>
+          &nbsp;<label class="ed_basis_flow_rate_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Work Produced</td>
+        <td>
+          <label id="lbl_ed_work_produced"><%= turbo_expander.ed_work_produced %></label>
+          <%= f.hidden_field :ed_work_produced %>
+          &nbsp;<label class="ed_work_produced_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Horsepower Produced</td>
+        <td>
+          <label id="lbl_ed_horsepower_produced"><%= turbo_expander.ed_horsepower_produced %></label>
+          <%= f.hidden_field :ed_horsepower_produced %>
+          &nbsp;<label class="ed_horsepower_produced_unit"></label>
+        </td>
+        <td colspan="2"><b><u>Power Balance</u></b></td>
+      </tr>
+      <tr>
+        <td>Mechanical Losses (Shaft, Bearings)</td>
+        <td><%= f.text_field :ed_mechanical_losses, :class => "small-text-100" %>&nbsp;%</td>
+        <td>Brake Horsepower</td>
+        <td>
+          <label id="lbl_ed_pb_brake_horsepower"><%= turbo_expander.ed_pb_brake_horsepower %></label>
+          <%= f.hidden_field :ed_pb_brake_horsepower %>
+          &nbsp;<label class="ed_pb_brake_horsepower_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Net Horsepower</td>
+        <td>
+          <label id="lbl_ed_net_horsepower"><%= turbo_expander.ed_net_horsepower %></label>
+          <%= f.hidden_field :ed_net_horsepower %>
+          &nbsp;<label class="ed_net_horsepower_unit"></label>
+          <input id="ed_calculate_design" type="button" value="Calculate" style="float:right;">
+        </td>
+        <td colspan="2"></td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab4" class="tab_content">
+    <!-- Heuristics Review-->
+    <table>
+      <tr>
+        <td><b>1.</b></td>
+        <td>
+          Efficiency is greater for larger machines. Motors, 85-95%; steam turbines, 42-78%; gas
+          engines and turbines, 28-38%.
+        </td>
+        <td width="200px">
+          <%= f.radio_button :te_sizing_review_1, "yes" %>&nbsp;Yes&nbsp;
+          <%= f.radio_button :te_sizing_review_1, "no" %>&nbsp;No&nbsp;
+          <%= f.radio_button :te_sizing_review_1, "na" %>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <!--<tr>
+						<td><b>2.</b></td>
+						<td>
+							For under 74.6 kW(100 hp), electric motors are used almost exclusively. They are made for up
+							to 14,900 kW (20,000 hp).	
+						</td>
+						<td>
+							<%= f.radio_button :te_sizing_review_2, "yes" %>&nbsp;Yes&nbsp;
+							<%= f.radio_button :te_sizing_review_2, "no" %>&nbsp;No&nbsp;
+							<%= f.radio_button :te_sizing_review_2, "na" %>&nbsp;N/A&nbsp;
+						</td>						
+					</tr>-->
+      <!--<tr>
+						<td><b>3.</b></td>
+						<td>
+							Induction motors are most popular. Synchronous motors are made for speeds as low as 150
+							rpm and are thus suited, for example, for low speed reciprocating compressors, but are not
+							made smaller than 50 hp. A variety of enclosures are available from weather-proof to 
+							explosion-proof.
+						</td>
+						<td>
+							<%= f.radio_button :te_sizing_review_3, "yes" %>&nbsp;Yes&nbsp;
+							<%= f.radio_button :te_sizing_review_3, "no" %>&nbsp;No&nbsp;
+							<%= f.radio_button :te_sizing_review_3, "na" %>&nbsp;N/A&nbsp;
+						</td>
+					</tr>-->
+      <!--<tr>
+						<td><b>4.</b></td>
+						<td>
+							Steam turbines are competitive above 76.6 kW (100 hp). They are speed-controllable. They 
+							are frequently used as spares in case of power failure.
+						</td>
+						<td>
+							<%= f.radio_button :te_sizing_review_4, "yes" %>&nbsp;Yes&nbsp;
+							<%= f.radio_button :te_sizing_review_4, "no" %>&nbsp;No&nbsp;
+							<%= f.radio_button :te_sizing_review_4, "na" %>&nbsp;N/A&nbsp;
+						</td>
+					</tr>-->
+      <!--<tr>
+						<td><b>5.</b></td>
+						<td>
+							Combustion engines and turbines are restricted to mobile and remote locations.
+						</td>
+						<td>
+							<%= f.radio_button :te_sizing_review_5, "yes" %>&nbsp;Yes&nbsp;
+							<%= f.radio_button :te_sizing_review_5, "no" %>&nbsp;No&nbsp;
+							<%= f.radio_button :te_sizing_review_5, "na" %>&nbsp;N/A&nbsp;
+						</td>
+					</tr>-->
+      <tr>
+        <td><b>2.</b></td>
+        <td>
+          Gas expanders for power recovery may be justified at capacities of several hundred hp;
+          otherwise any pressure reduction in a process is done with throttling valves.
+        </td>
+        <td>
+          <%= f.radio_button :te_sizing_review_6, "yes" %>&nbsp;Yes&nbsp;
+          <%= f.radio_button :te_sizing_review_6, "no" %>&nbsp;No&nbsp;
+          <%= f.radio_button :te_sizing_review_6, "na" %>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <!--<tr>
+						<td><b>7.</b></td>
+						<td>
+							The following useful definition are give:<br><br>
+							<div style="margin-bottom:15px;">
+								<span style="float:left;margin-right:5px;padding-top:25px;">
+									shaft power = 	
+								</span>
+								<span style="float:left;">
+									<span>theoretical power to pump fluid (liquid or gas)</span><br>
+									<span>____________________________________</span><br><br>
+									<span>efficiency of pump or compressor, e sh</span>
+								</span>
+								<div class="clear"></div>								 
+							</div>			
+							<div>
+								<span style="float:left;margin-right:5px;padding-top:25px;">
+									shaft power = 	
+								</span>
+								<span style="float:left;">
+									<span>theoretical power to pump fluid (liquid or gas)</span><br>
+									<span>____________________________________</span><br><br>
+									<span>efficiency of pump or compressor, e dr</span>
+								</span>
+								<div class="clear"></div>								 
+							</div><br>
+							Overall efficiency = eiv = esh * edr											
+						</td>
+						<td>
+							<%= f.radio_button :te_sizing_review_7, "yes" %>&nbsp;Yes&nbsp;
+							<%= f.radio_button :te_sizing_review_7, "no" %>&nbsp;No&nbsp;
+							<%= f.radio_button :te_sizing_review_7, "na" %>&nbsp;N/A&nbsp;
+						</td>
+					</tr>-->
+      <tr>
+        <td></td>
+        <td colspan="2"><b><u>NOTES</u></b></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td colspan="2"><%= f.text_area :te_notes, :size => "140x8" %></td>
+      </tr>
+    </table>
+  </div>
+  </div>
+  <div class="clear"></div>
+  </div>
+<% end %>
+
+<% unless turbo_expander.new_record? %>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Attachments</legend>
+    <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+    <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+  </fieldset>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Comments</legend>
+    <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+    <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+  </fieldset>
+<% end %>
+
+<%= javascript_tag do %>
+  var turbo_expander_id = "<%= params[:id] %>";
+
+  $('#stream_inlet_conditions_table,#stream_outlet_conditions_table').find('input[type=text],select').attr('disabled', true);
+  <% if !turbo_expander.new_record? %>
+    var inlet_col = $('#stream_inlet_conditions_table').find('input[type=checkbox]:checked').closest('td').index();
+    $('#stream_inlet_conditions_table').column(inlet_col).find('input[type=text],select').attr('disabled', false);
+    var outlet_col = $('#stream_outlet_conditions_table').find('input[type=checkbox]:checked').closest('td').index();
+    $('#stream_outlet_conditions_table').column(outlet_col).find('input[type=text],select').attr('disabled', false);
+  <% else %>
+    var inlet_col = $('#stream_inlet_conditions_table').find('input[type=checkbox]:checked').closest('td').index();
+    $('#stream_inlet_conditions_table').column(inlet_col).find('input[type=text],select').attr('disabled', false);
+    var outlet_col = $('#stream_outlet_conditions_table').find('input[type=checkbox]:checked').closest('td').index();
+    $('#stream_outlet_conditions_table').column(outlet_col).find('input[type=text],select').attr('disabled', false);
+    $('#turbo_expander_ed_basis_efficiency').val("<%= @project.turbo_expander_efficiency %>");
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+
+  //config for units and decimals
+  var unit_decimals = {
+    ".stream_inlet_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    ".stream_inlet_temperature":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    ".stream_saturation_temperature":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    ".stream_flowrate":{"measurement":"Mass Flow Rate", "measurement_sub_type":"General"},
+    ".stream_density":{"measurement":"Density", "measurement_sub_type":"General"},
+    ".stream_entropy":{"measurement":"Entropy", "measurement_sub_type":"General"},
+    ".stream_enthalpy":{"measurement":"Enthalpy", "measurement_sub_type":"General"},
+
+    ".stream_outlet_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    ".stream_outlet_temperature":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    ".stream_outlet_saturation_temperature":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    ".stream_outlet_density":{"measurement":"Density", "measurement_sub_type":"General"},
+    ".stream_outlet_entropy":{"measurement":"Entropy", "measurement_sub_type":"General"},
+    ".stream_outlet_enthalpy":{"measurement":"Enthalpy", "measurement_sub_type":"General"},
+    ".stream_outlet_vapor_entropy":{"measurement":"Entropy", "measurement_sub_type":"General"},
+    ".stream_outlet_vapor_enthalpy":{"measurement":"Enthalpy", "measurement_sub_type":"General"},
+    ".stream_outlet_liquid_entropy":{"measurement":"Entropy", "measurement_sub_type":"General"},
+    ".stream_outlet_liquid_enthalpy":{"measurement":"Enthalpy", "measurement_sub_type":"General"},
+
+    ".ed_theoretical_enthalpy_change":{"measurement":"Enthalpy", "measurement_sub_type":"General"},
+    ".ed_actual_enthalpy_change":{"measurement":"Enthalpy", "measurement_sub_type":"General"},
+    "#turbo_expander_ed_actual_outlet_temperature":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    "#turbo_expander_ed_actual_outlet_stream_entropy":{"measurement":"Entropy", "measurement_sub_type":"General"},
+    "#turbo_expander_ed_actual_outlet_stream_enthalpy":{"measurement":"Enthalpy", "measurement_sub_type":"General"},
+    ".ed_basis_flow_rate":{"measurement":"Mass Flow Rate", "measurement_sub_type":"General"},
+    ".ed_work_produced":{"measurement":"Power", "measurement_sub_type":"General"},
+    ".ed_horsepower_produced":{"measurement":"Power", "measurement_sub_type":"General"},
+    ".ed_net_horsepower":{"measurement":"Power", "measurement_sub_type":"General"},
+    "#turbo_expander_ed_capacity":{"measurement":"Volumetric Flow Rate", "measurement_sub_type":"Liquid"},
+    "#turbo_expander_ed_differential_pressure":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#turbo_expander_ed_horsepower":{"measurement":"Power", "measurement_sub_type":"General"},
+    ".ed_pb_brake_horsepower":{"measurement":"Power", "measurement_sub_type":"General"}
+  };
+
+	set_project_unit_and_decimals()
+  set_project_unit_decimals(unit_decimals);
+  set_project_unit_labels(unit_decimals);
+
+  $('form.turbo_expander').validationEngine();
+  $('form.turbo_expander').dirtyForms();
+
+  $("ul.simple-tabs li a").click(function () {
+    $('#tab').val($(this).attr('tab'));
+  });
+
+  function form_validations() {
+    var alert_msg = '';
+
+    if ($('#turbo_expander_ed_mechanical_losses').val() == "") {
+      alert_msg += "Please enter a value for mechanical losses.\n";
+    }
+
+    if (alert_msg != '') {
+      alert(alert_msg);
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  $('.stream_inlet_check_box').click(function () {
+    $('.stream_inlet_check_box').attr('checked', false);
+    $(this).attr('checked', true);
+    var col = $(this).closest('td').index();
+    $('#stream_inlet_conditions_table').find('input[type=text],select').attr('disabled', true);
+    $('#stream_inlet_conditions_table').column(col).find('input[type=text],select').attr('disabled', false);
+  });
+
+  $('#turbo_expander_sic_process_basis_id').change(function (e) {
+    $('.sic_stream_no >option, .soc_stream_no >option').remove();
+    $('.sic_stream_no, .soc_stream_no').append($('<option></option>').val("").html("Please select"));
+    $("#tab1 table input[type=text],#tab2 table input[type=text]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/heat_and_material_balances/get_stream_nos', {process_basis_id:$(this).val()}, function (data) {
+      $(data).each(function (k, v) {
+        $('.sic_stream_no, .soc_stream_no,#turbo_expander_ed_stream_no').append(
+          $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+        );
+      });
+    }, 'json');
+  });
+
+  $('.sic_stream_no').change(function (e) {
+    var col = $(this).attr('col');
+    $("#tab1 table input[type=text][id*=" + col + "]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/turbo_expanders/get_stream_values',
+      {process_basis_id:$('#turbo_expander_sic_process_basis_id').val(), stream_no:$(this).val()},
+      function (data) {
+        $('#turbo_expander_sic_' + col + '_stream_inlet_pressure').val(get_project_field_value('.stream_inlet_pressure', data["pressure"], unit_decimals));
+        $('#turbo_expander_sic_' + col + '_stream_inlet_temperature').val(get_project_field_value('.stream_inlet_temperature', data["temperature"], unit_decimals));
+        $('#turbo_expander_sic_' + col + '_stream_mass_vapor_fraction').val(get_project_field_value1('mass_vapor_fraction_dimensionless',data['mass_vapour_fraction']));
+        $('#turbo_expander_sic_' + col + '_stream_flowrate').val(get_project_field_value('.stream_flowrate', data["flowrate"], unit_decimals));
+        $('#turbo_expander_sic_' + col + '_stream_density').val(get_project_field_value('.stream_density', data["density"], unit_decimals));
+        $('#turbo_expander_sic_' + col + '_stream_enthalpy').val(get_project_field_value('.stream_enthalpy', data["enthalpy"], unit_decimals));
+
+        set_exhaust_stream_entropy();
+        supply_mass_vapor_fraction_alert();
+      },
+      'json');
+  });
+
+
+  $('.stream_outlet_check_box').click(function () {
+    $('.stream_outlet_check_box').attr('checked', false);
+    $(this).attr('checked', true);
+    var col = $(this).closest('td').index();
+    $('#stream_outlet_conditions_table').find('input[type=text],select').attr('disabled', true);
+    $('#stream_outlet_conditions_table').column(col).find('input[type=text],select').attr('disabled', false);
+  });
+
+  $('.soc_stream_no').change(function (e) {
+    var col = $(this).attr('col');
+    $("#tab2 table input[type=text][id*=" + col + "]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+    var outlet_stream_no = $('#turbo_expander_soc_' + col + '_stream_no option:selected').text();
+
+    $.get('/admin/turbo_expanders/get_stream_values',
+      {process_basis_id:$('#turbo_expander_sic_process_basis_id').val(), stream_no:$(this).val()},
+      function (data) {
+        $('#turbo_expander_soc_' + col + '_outlet_pressure').val(get_project_field_value('.stream_outlet_pressure', data["pressure"], unit_decimals));
+        $('#turbo_expander_soc_' + col + '_outlet_temperature').val(get_project_field_value('.stream_outlet_temperature', data["temperature"], unit_decimals));
+        $('#turbo_expander_soc_' + col + '_stream_mass_fraction').val(get_project_field_value1('mass_vapor_fraction_dimensionless',data['mass_vapour_fraction']));
+        $('#turbo_expander_soc_' + col + '_stream_density').val(get_project_field_value('.stream_outlet_density', data["density"], unit_decimals));
+        $('#turbo_expander_soc_' + col + '_stream_enthalpy').val(get_project_field_value('.stream_outlet_enthalpy', data["enthalpy"], unit_decimals));
+
+        var inlet_col = $('.stream_inlet_check_box:checked').attr('col');
+        var inlet_stream_no = $('#turbo_expander_sic_' + inlet_col + '_stream_no option:selected').text();
+
+        var msg = "Please ensure that all properties for stream no. " + outlet_stream_no +
+          " selected from the process basis (" + $('#turbo_expander_sic_process_basis_id').val() + ")" +
+          " are indeed a results of an isentropic flashing of the inlet stream (" + inlet_stream_no + ")" +
+          " to the desired outlet pressure of stream no." + $(this).val() + ".";
+        alert(msg);
+      },
+      'json');
+  });
+
+  $('#turbo_expander_ed_stream_no').change(function (e) {
+    $.get('/admin/turbo_expanders/get_expander_design_stream_values',
+      {process_basis_id:$('#turbo_expander_sic_process_basis_id').val(), stream_no:$(this).val()},
+      function (data) {
+        $('#turbo_expander_ed_actual_outlet_temperature').val(get_project_field_value('#turbo_expander_ed_actual_outlet_temperature', data["temperature"], unit_decimals));
+        $('#turbo_expander_ed_actual_outlet_mass_vapor_fraction').val(get_project_field_value1('mass_vapor_fraction_dimensionless',data['mass_vapour_fraction']));
+        $('#turbo_expander_ed_actual_outlet_stream_enthalpy').val(get_project_field_value('#turbo_expander_ed_actual_outlet_stream_enthalpy', data["enthalpy"], unit_decimals));
+      },
+      'json');
+  });
+
+  $('#ed_calculate_design').click(function (e) {
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('ed_calculate_design');
+
+    if (form_validations() == false) {
+      return false;
+    }
+
+    if (turbo_expander_id == "" || $('form.turbo_expander').isDirty()) {
+      $('form.turbo_expander').submit();
+      return false;
+    }
+
+    $.get('/admin/turbo_expanders/expander_design_calculation',
+      {turbo_expander_id:turbo_expander_id},
+      function (data) {
+        var ed_theoretical_enthalpy_change = get_project_field_value('.ed_theoretical_enthalpy_change', data["theoretical_enthalpy_change"], unit_decimals);
+        $('#lbl_ed_theoretical_enthalpy_change').html(ed_theoretical_enthalpy_change);
+        $('#turbo_expander_ed_theoretical_enthalpy_change').val(ed_theoretical_enthalpy_change);
+
+        var ed_actual_enthalpy_change = get_project_field_value('.ed_actual_enthalpy_change', data["actual_enthalpy_change"], unit_decimals);
+        $('#lbl_ed_actual_enthalpy_change').html(ed_actual_enthalpy_change);
+        $('#turbo_expander_ed_actual_enthalpy_change').val(ed_actual_enthalpy_change);
+
+        var ed_basis_flow_rate = get_project_field_value('.ed_basis_flow_rate', data["basis_flow_rate"], unit_decimals);
+        $('#lbl_ed_basis_flow_rate').html(ed_basis_flow_rate);
+        $('#turbo_expander_ed_basis_flow_rate').val(ed_basis_flow_rate);
+
+
+        var ed_work_produced = get_project_field_value('.ed_work_produced', data["work_produced"], unit_decimals);
+        $('#lbl_ed_work_produced').html(ed_work_produced);
+        $('#turbo_expander_ed_work_produced').val(ed_work_produced);
+
+        var ed_horsepower_produced = get_project_field_value('.ed_horsepower_produced', data["horsepower_produced"], unit_decimals);
+        $('#lbl_ed_horsepower_produced').html(ed_horsepower_produced);
+        $('#turbo_expander_ed_horsepower_produced').val(ed_horsepower_produced);
+
+        var ed_net_horsepower = get_project_field_value('.ed_net_horsepower', data["net_horsepower"], unit_decimals);
+        $('#lbl_ed_net_horsepower').html(ed_net_horsepower);
+        $('#turbo_expander_ed_net_horsepower').val(ed_net_horsepower);
+
+        var ed_pb_brake_horsepower = get_project_field_value('.ed_pb_brake_horsepower', data["balance_brake_horsepower"], unit_decimals);
+        $('#lbl_ed_pb_brake_horsepower').text(ed_pb_brake_horsepower);
+        $('#turbo_expander_ed_pb_brake_horsepower').val(ed_pb_brake_horsepower);
+
+        //msgs
+        if (ed_pb_brake_horsepower < 0) {
+          alert("The turbo expanded does not have the full horsepower requirement to power the associated rotating equipment and therefore will need a \" & Chr(34) & \"helper\" & Chr(34) & \" driver in supplemental service.\" & Chr(13) & Chr(13)" +
+            "#& \"When possible, the supplemental driver is an electric motor with the full horsepower rating to power the associated equipment on its own.\", vbOKOnly, \"Supplemental Driver Required")
+        }
+      },
+      'json'
+    );
+  });
+
+  //getting pump sizing and compressor sizing values in equipment tag
+  $('#turbo_expander_ed_equipment_type').change(function (e) {
+    $('#turbo_expander_ed_equipment_tag >option').remove();
+    $('#turbo_expander_ed_equipment_tag').append($('<option></option>').val('').html(''));
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/turbo_expanders/get_equiment_tag_by_equiment_type',
+      {project_id:$('#turbo_expander_project_id').val(),
+        equipment_type:$(this).val()},
+      function (data) {
+        $.each(data, function (k, v) {
+          $('#turbo_expander_ed_equipment_tag').append(
+            $('<option></option>').val(v.id).html(v.tag)
+          );
+        });
+      },
+      'json'
+    );
+  });
+
+  $('#turbo_expander_ed_equipment_tag').change(function (e) {
+    if ($('#turbo_expander_ed_equipment_type').val() == "" || $(this).val() == "") {
+      alert('Select equipement type and equipment tag');
+      return false;
+    }
+
+    $.get('/admin/turbo_expanders/get_rotating_equipment_details',
+      {equipment_type:$('#turbo_expander_ed_equipment_type').val(),
+        equipment_tag:$(this).val()},
+      function (data) {
+        $('#turbo_expander_ed_capacity').val(get_project_field_value('#turbo_expander_ed_capacity', data["capacity"], unit_decimals));
+        $('#turbo_expander_ed_differential_pressure').val(get_project_field_value('#turbo_expander_ed_differential_pressure', data["differential_pressure"], unit_decimals));
+        $('#turbo_expander_ed_horsepower').val(get_project_field_value('#turbo_expander_ed_horsepower', data["horsepower"], unit_decimals));
+        $('#turbo_expander_ed_speed').val(data['speed']);
+      },
+      'json'
+    );
+  });
+
+  $('.steam_phase_calc').change(function (e) {
+    var col = $(this).attr('col');
+    steam_phase = "";
+    var stream_inlet_temperature = parseFloat($('#turbo_expander_sic_' + col + '_stream_inlet_temperature').val()).toFixed(0);
+    var stream_saturation_temperature = $('#turbo_expander_sic_' + col + '_stream_saturation_temperature').val();
+    if (stream_saturation_temperature == "") {
+      $('#lbl_supply_steam_phase_' + col).text("");
+      $('#turbo_expander_sic_steam_phase_' + col).val("");
+      return false;
+    }
+    stream_saturation_temperature = parseFloat(stream_saturation_temperature).toFixed(0);
+
+    if (stream_inlet_temperature > stream_saturation_temperature) {
+      steam_phase = "Superheated";
+    }
+    else if (stream_inlet_temperature < stream_saturation_temperature) {
+      steam_phase = "Subcooled";
+    }
+    else if (stream_inlet_temperature == stream_saturation_temperature) {
+      steam_phase = "Saturated";
+    }
+
+    $('#lbl_supply_steam_phase_' + col).text(steam_phase);
+    $('#turbo_expander_sic_steam_phase_' + col).val(steam_phase);
+  });
+
+  $('.exhaust_phase_calc').change(function (e) {
+    var exhaust_phase = "";
+    var inlet_entropy = $('.stream_entropy:enabled').val();
+    if (inlet_entropy == "") {
+      return false;
+    }
+    inlet_entropy = parseFloat(inlet_entropy).toFixed(0);
+
+    var col = $('.stream_outlet_vapor_entropy:enabled').attr('col');
+
+    var exhaust_vapor_entropy = $('.stream_outlet_vapor_entropy:enabled').val();
+    var exhaust_liquid_entropy = $('.stream_outlet_liquid_entropy:enabled').val();
+    if (exhaust_vapor_entropy == undefined && exhaust_liquid_entropy == undefined) {
+      return false;
+    }
+    if (exhaust_vapor_entropy == "" && exhaust_liquid_entropy == "") {
+      return false;
+    }
+
+    exhaust_vapor_entropy = parseFloat(exhaust_vapor_entropy).toFixed(0);
+    exhaust_liquid_entropy = parseFloat(exhaust_liquid_entropy).toFixed(0);
+
+    //Determine Exhaust Phase
+    if (inlet_entropy == exhaust_vapor_entropy) {
+      exhaust_phase = "Vapor - Saturated"
+    } else if (inlet_entropy > exhaust_vapor_entropy) {
+      exhaust_phase = "Vapor - Superheated"
+    } else if (inlet_entropy < exhaust_vapor_entropy) {
+      exhaust_phase = "Two Phase"
+    } else if (inlet_entropy == exhaust_liquid_entropy) {
+      col = $('.stream_outlet_liquid_entropy:enabled').attr('col');
+      exhaust_phase = "Saturated Liquid"
+    }
+
+    $('#lbl_exhaust_steam_phase_' + col).text(exhaust_phase);
+    $('#turbo_expander_soc_steam_phase_' + col).val(exhaust_phase);
+  });
+
+  $('.stream_mass_vapor_fraction').change(function () {
+    supply_mass_vapor_fraction_alert();
+  });
+
+  //Mass vapor fractions
+  function supply_mass_vapor_fraction_alert() {
+    var stream_mass_vapor_fraction = $('.stream_mass_vapor_fraction:enabled').val();
+    if (stream_mass_vapor_fraction < 0) {
+      alert('The inlet stream to the turbo expander may contain liquid.  The presence of liquid in the inlet stream may not be appropriate for the turbo expander design.  Please review the stream selection and update accordingly.');
+    } else if (stream_mass_vapor_fraction == '') {
+      alert('No mass vapor fraction value is retrieved for the selected inlet stream to the turbo expander, therefore the presence of liquid in the inlet stream could not be verified.  Liquid into the turbo expander may not be appropriate for the turbo expander design.  Please review the stream selection and update the mass vapor fracton value accordingly.');
+    }
+  }
+
+  //setting outlet entropy
+  $('.sic_stream_entropy').change(function (e) {
+    set_exhaust_stream_entropy();
+  });
+  $('.stream_inlet_check_box, .stream_outlet_check_box').click(function (e) {
+    if ($(this).is(':checked')) {
+      set_exhaust_stream_entropy();
+    }
+  });
+
+  //Exhaust Stream Entropy
+  function set_exhaust_stream_entropy() {
+    var supply_col = $('.stream_inlet_check_box:checked').attr('col');
+    var exhaust_col = $('.stream_outlet_check_box:checked').attr('col');
+    if (supply_col != "" && supply_col != undefined && exhaust_col != undefined) {
+      $('#lbl_exhaust_stream_entropy_' + exhaust_col).text($('#turbo_expander_sic_' + supply_col + '_stream_entropy').val());
+      $('#turbo_expander_soc_' + exhaust_col + '_stream_entropy').val($('#turbo_expander_sic_' + supply_col + '_stream_entropy').val());
+    }
+  }
+
+</script>
+<%= javascript_tag do %>
+  //hit calculate button
+  var calculate_btn = "<%= params[:calculate_btn] %>";
+  if(calculate_btn == "ed_calculate_design") {
+  $('#ed_calculate_design').trigger('click');
+  }
+
+<% end %>

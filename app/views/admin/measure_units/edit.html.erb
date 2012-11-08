@@ -1,0 +1,5 @@
+<% title 'Edit Measure Unit'%>
+
+<div>	
+	<%= render :partial => 'form', :locals => {:measure_unit => @measure_unit, :measurements => @company.measurements, :measurement_sub_types => MeasurementSubType.where(:measurement_id => @measure_unit.measurement_id)}%>
+</div>

@@ -1,0 +1,73 @@
+<div style="width:400px;">
+	<div class="form-element">
+		<%= f.label :barometric_pressure%><br>
+		<%= f.text_field :barometric_pressure, :class=>"validate[required]"%> <%= @project.unit("Pressure", "Absolute").to_s%>
+	</div>
+	<div class="form-element">
+		<%= f.label :standard_temperature %><br>
+		<%= f.text_field :standard_temperature, :class=>"validate[required]"%> <%= @project.unit("Temperature", "General").to_s%>
+	</div>
+	<div class="form-element">
+		<%= f.label :standard_pressure %><br>
+		<%= f.text_field :standard_pressure, :class=>"validate[required]"%> <%= @project.unit("Pressure", "General").to_s%>
+	</div>
+	<div class="form-element">
+		<%= f.label :hydraulic_sizing_overdesign_factor%><br>
+		<%= f.text_field :hydraulic_sizing_overdesign_factor, :class=>"validate[required]"%> %
+	</div>
+	<div class="form-element">
+		<%= f.label :maximum_operating_pressure_allowance%>
+		<%= f.text_field :maximum_operating_pressure_allowance%>&nbsp;<%= @project.unit("Pressure", "Differential").to_s %>
+	</div>
+	<div class="form-element">
+		<%= f.label :maximum_operating_temperature_allowance%>
+		<%= f.text_field :maximum_operating_temperature_allowance%>&nbsp;<%= @project.unit("Temperature", "General").to_s%>
+	</div>
+	<div class="form-element">
+		<%= f.label :design_pressure_allowance%>
+		<%= f.text_field :design_pressure_allowance%>&nbsp;<%= @project.unit("Pressure", "Differential").to_s %>
+	</div>
+	<div class="form-element">
+		<%= f.label :design_temperature_allowance%>
+		<%= f.text_field :design_temperature_allowance%>&nbsp;<%= @project.unit("Temperature", "General").to_s%>
+	</div>
+	<div class="form-element">
+		<%= f.label :default_flow_element_pressure_drop %><br>
+		<%= f.text_field :default_flow_element_pressure_drop %>&nbsp;<%= @project.unit("Pressure", "Differential").to_s%>
+	</div>
+	<div class="form-element">
+		<%= f.label :default_minimum_control_valve_pressure_drop%><br>
+		<%= f.text_field :minimum_control_value_pressure_drop%>&nbsp;<%= @project.unit("Pressure", "Differential").to_s%>
+	</div>
+	<div class="form-element">
+		<%= f.label "", "Control Valve/Flow Element Flow Basis"%><br>
+		<table style="width:auto;">
+			<tr><td>Minimum</td><td> <%= f.text_field :control_flow_bias_min, :class => 'small-text-40 validate[required]' %>&nbsp;%</td></tr>
+			<tr><td>Normal</td><td> <%= f.text_field :control_flow_bias_normal, :class => 'small-text-40 validate[required]' %>&nbsp;%</td></tr>
+			<tr><td>Maximum</td><td> <%= f.text_field :control_flow_bias_max, :class => 'small-text-40 validate[required]' %>&nbsp;%</td></tr>
+		</table>	
+	</div>
+	<div class="form-element">
+		<%= f.label :default_control_valve_pressure_drop_ratio_factor %><br>
+		<%= f.text_field :default_pressure_drop_ratio_factor%>
+	</div>
+	<div class="form-element">
+		<%= f.label :default_control_valve_rated_liquid_pressure_recovery_factor%><br>
+		<%= f.text_field :default_rated_liquid_pressure_recovery_factor%>
+	</div>
+
+	<div class="form-element">
+		<%= f.label :restriction_orifice_meter_default_type%><br>
+		<%= f.radio_button :restriction_orifice_meter_default_type, "Flange Taps" %>&nbsp;<%= f.label "", "Flange Taps"%><br>
+		<%= f.radio_button :restriction_orifice_meter_default_type, "Corner Taps" %>&nbsp;<%= f.label "", "Corner Taps"%><br>
+		<%= f.radio_button :restriction_orifice_meter_default_type, "Pipe Taps" %>&nbsp;<%= f.label "", "Pipe Taps"%><br>
+		<%= f.radio_button :restriction_orifice_meter_default_type, "Radius Taps" %>&nbsp;<%= f.label "", "Radius Taps"%>
+	</div>
+
+	<div class="form-element-last">
+		<%= f.label :flange_fitting_test_pressure_factor %><br>
+		<%= f.text_field :flange_fitting_test_pressure_factor %>
+	</div>
+	
+</div>
+

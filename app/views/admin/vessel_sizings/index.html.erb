@@ -1,0 +1,34 @@
+<% title 'Separator Vessel Sizing' %>
+
+<%= render :partial => '/admin/user_project_settings/project_filter' %>
+
+<%= link_to 'Add Vessel sizing', new_admin_vessel_sizing_path %>&nbsp;|&nbsp;
+<%= link_to 'Vessel Sizing Summary', vessel_sizing_summary_admin_vessel_sizings_path %>
+<br>
+
+<table width="auto">
+  <tr>
+    <th>Name</th>
+    <th>By</th>
+    <th>Reviewer</th>
+    <th>Approver</th>
+    <th>Created at</th>
+    <th>Updated at</th>
+    <th>Edit</th>
+    <th>Delete</th>
+    <th>Clone</th>
+  </tr>
+  <% for vessel_sizing in @vessel_sizings %>
+      <tr>
+        <td><%= vessel_sizing.name %></td>
+        <td><%= vessel_sizing.sizing_status_activities.created_by %></td>
+        <td><%= vessel_sizing.sizing_status_activities.reviewer %></td>
+        <td><%= vessel_sizing.sizing_status_activities.approver %></td>
+        <td><%= vessel_sizing.created_at.strftime("%d-%m-%Y") %></td>
+        <td><%= vessel_sizing.updated_at.strftime("%d-%m-%Y") %></td>
+        <td><%= link_to "Edit", edit_admin_vessel_sizing_path(vessel_sizing) %></td>
+        <td><%= link_to "Delete", admin_vessel_sizing_path(vessel_sizing), :method => "delete", :confirm => "Are you sure?" %></td>
+        <td><%= link_to "Clone", clone_admin_vessel_sizing_path(vessel_sizing), :class => "clone_sizing" %></td>
+      </tr>
+  <% end %>
+</table>

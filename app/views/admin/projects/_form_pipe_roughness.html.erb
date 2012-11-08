@@ -1,0 +1,54 @@
+<%= f.fields_for :pipes do |p| %>
+	<table>
+		<tr>
+			<th>Base</th>
+			<th>Material</th>
+			<th>Conditions</th>
+			<th>Roughness Range (<%=  @project.unit('Length', 'Small Dimension Length')%>)</th>
+			<th>Recommended Roughness (<%=  @project.unit('Length', 'Small Dimension Length')%>)</th>
+		</tr>
+		<% Pipe.all.each do |pipe| %>
+			<% project_pipe = project.pipe_ids.include?( pipe.id ) ? project.project_pipes.where( :pipe_id => pipe.id ).first : nil %>
+			<tr>
+				<td><%= p.radio_button "base", pipe.id, {:checked => !project_pipe.nil?} %></td>
+				<td><%= pipe.material %></td>
+				<td><%= pipe.conditions %></td>
+			<td><%= "#{(pipe.roughness_min * @pipe_r_cf[:factor]).round(@pipe_r_cf[:decimals]) rescue nil} - #{(pipe.roughness_max * @pipe_r_cf[:factor]).round(@pipe_r_cf[:decimals]) rescue nil}" %></td>
+			<td><%= p.text_field "roughness[#{pipe.id}]", :id => "project_pipes_roughness_#{pipe.id}", :size => 5, :value => ((project_pipe.try(:roughness) * @pipe_r_cf[:factor]).round(@pipe_r_cf[:decimals]) rescue nil) || ((pipe.roughness_recommended * @pipe_r_cf[:factor]).round(@pipe_r_cf[:decimals]) rescue nil), :style => "width:80px;" %></td>
+			</tr>
+		<% end%>  
+	</table>
+<% end%>
+
+<%= link_to "Default", '#', :onclick => "reset_pipe_default(); return false;" %>
+<!-- <%= link_to "Reset", '#', :onclick => "reset_pipe_selection(); reset_pipe_default(); return false;" %> -->
+
+<%= javascript_tag do %>
+	var pipes = [];
+	<% @project.convert_pipe_roughness_values[:pipes].each do |pipe| %>
+		pipes.push([<%= pipe["id"]%>, "<%= pipe["roughness_recommended"] %>"]);
+	<% end%>	
+<% end%>
+
+<script type="text/javascript">	
+
+function reset_pipe_default(){		
+		$.each(pipes, function(index, value){
+				$('#project_pipes_roughness_'+ value[0]).val(value[1]);			
+		});
+	}
+
+function reset_pipe_selection(){
+	$.each(pipes, function(index, value){
+			$('#project_pipes_roughness_'+ value[0]).val(value[1]);
+			$('#project_pipes_base_'+value[0]).attr('checked', false);
+			//$('#project_pipes_roughness_'+value[0]).attr('disabled', true);			
+			});
+}
+
+$('input[id^="project_pipes_base"]').change(function(){
+		//$('input[id^="project_pipes_roughness"]').attr('disabled', true);
+		var id = $(this).val();
+		$('#project_pipes_roughness_'+id).attr('disabled', false);
+		});
+</script>

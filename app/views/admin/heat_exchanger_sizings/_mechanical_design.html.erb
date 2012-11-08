@@ -1,0 +1,142 @@
+<div id="mechanical_design_tab" class="tab_content">
+  <!-- Mechanical Design -->
+  <table width="50%">
+    <tr>
+      <td width="20%">
+        <b>
+          <u>
+            VESSEL THICKNESS
+          </u>
+        </b>
+      </td>
+      <td width="20%">
+        <b>
+          <u>
+            SHELL
+          </u>
+        </b>
+      </td>
+      <td>
+        <b>
+          <u>
+            TUBE
+          </u>
+        </b>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        Design Pressure
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        Design Temperature
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        Minimum Temperature
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Material of Construction
+      </td>
+      <td>
+        <%= f.text_field :md_s_material_of_construction %>
+      </td>
+      <td>
+        <%= f.text_field :md_c_material_of_construction %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Allowable Stress
+      </td>
+      <td>
+        <%= f.text_field :md_s_allowable_stress %>
+
+      </td>
+      <td>
+        <%= f.text_field :md_c_allowable_stress %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Shell Corrosion Allowance
+      </td>
+      <td>
+        <%= f.text_field :md_s_shell_corrosion_allowance %>
+      </td>
+      <td>
+        <%= f.text_field :md_c_shell_corrosion_allowance %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Head Type
+      </td>
+      <td>
+        <select style="width:150px;">
+        </select>
+      </td>
+      <td>
+        <select style="width:150px;">
+        </select>
+      </td>
+    <tr>
+      <td>
+        Head Corrosion Allowance
+      </td>
+      <td>
+        <%= f.text_field :md_s_head_corrosion_allowance, :class => "small-text-100" %>&nbsp;
+      </td>
+      <td>
+        <%= f.text_field :md_c_head_corrosion_allowance, :class => "small-text-100" %>&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Shell/Head Joint Efficiency
+      </td>
+      <td>
+        <%= f.text_field :md_s_head_joint_efficiency %>
+      </td>
+      <td>
+        <%= f.text_field :md_c_head_joint_efficiency %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Straight Flange
+      </td>
+      <td>
+        <%= f.text_field :md_s_straight_flange %>
+      </td>
+      <td>
+        <%= f.text_field :md_c_straight_flange %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        Shell Thickness
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        Head Thickness
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        Inner Diameter
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">
+        Outer Diameter
+      </td>
+    </tr>
+  </table>
+</div>

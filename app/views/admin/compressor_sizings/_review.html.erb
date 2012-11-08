@@ -1,0 +1,178 @@
+
+<%= fields_for compressor_sizing do |cs|%>
+	<table>
+		<tr>
+			<td>
+				Fans are used to raise the pressure by about 3%[12 in. (30 cm) water], blowers raise to less
+				than 2.75 barg (40 psig), and compressors to higher pressures, although the blower ranges is
+				commonly included in the compressor range.
+			</td>
+			<td width="150px">
+				<%= cs.radio_button :cs_sizing_review_1, "yes"%>&nbsp;Yes&nbsp;
+				<%= cs.radio_button :cs_sizing_review_1, "no"%>&nbsp;No&nbsp;
+				<%= cs.radio_button :cs_sizing_review_1, "na"%>&nbsp;N/A&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table>
+					<tr>
+						<td colspan="2">For Vacuum pumps use the following:</td>
+					</tr>
+					<tr>
+						<td>Reciprocating piston type</td>
+						<td>down to 1333.3 Pa(1 torr)</td>
+					</tr>
+					<tr>
+						<td>Rotary piston type</td>
+						<td>down to 0.133 Pa(0.001 torr)</td>
+					</tr>
+					<tr>
+						<td>Two lobe rotraty type</td>
+						<td>down to 0.0133 Pa(0.0001 torr)</td>
+					</tr>
+					<tr>
+						<td>stream jet ejectors</td>
+						<td>1 stage down to 13.3 kPa (100 torr)</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>3 stage down to 133.3 Pa (1 torr)</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>5 stage down to 6.7 Pa (0.05 torr)</td>
+					</tr>
+				</table>
+			</td>
+			<td width="150px">
+				<%= cs.radio_button :cs_sizing_review_2, "yes"%>&nbsp;Yes&nbsp;
+				<%= cs.radio_button :cs_sizing_review_2, "no"%>&nbsp;No&nbsp;
+				<%= cs.radio_button :cs_sizing_review_2, "na"%>&nbsp;N/A&nbsp;
+			</td>						
+		</tr>
+		<tr>
+			<td>
+				A three stage ejector needs 100 kg stream/kg air to maitain a pressure of 133.3 Pa (1 torr)
+			</td>
+			<td width="150px">
+				<%= cs.radio_button :cs_sizing_review_3, "yes"%>&nbsp;Yes&nbsp;
+				<%= cs.radio_button :cs_sizing_review_3, "no"%>&nbsp;No&nbsp;
+				<%= cs.radio_button :cs_sizing_review_3, "na"%>&nbsp;N/A&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td>
+				In-leakage of ari evacuated equipment depends on the absolute pressure (torr) and the
+				volume of the equipment, V in m3 (ft3), according to W = kV^(2/3) kg/hr (lb/hr), with k = 0.98
+				(0.2) when P > 90 torr, k = 0.39 (0.08) when P is between 0.4 and 2.67 kPa (3 and 20 torr),
+				and k = 0.12 (0.025) at p less than 133.3 Pa (1 torr)
+			</td>
+			<td width="150px">
+				<%= cs.radio_button :cs_sizing_review_4, "yes"%>&nbsp;Yes&nbsp;
+				<%= cs.radio_button :cs_sizing_review_4, "no"%>&nbsp;No&nbsp;
+				<%= cs.radio_button :cs_sizing_review_4, "na"%>&nbsp;N/A&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Theorectical adiabatic horsepower<br>
+				THP = ((SCFM) T1)/8130a [(P2/P1)^a-1]<br>
+				where T1 is inlet temperature in Rankine, R = F + 460 and a = (k-1)/k, k = Cp/Cv. Theoretical
+				reversible adiabatic power = mz1RT1[(P2/P1)^a - 1]/a Where T1 is inlet temperature, R = Gas
+				Constant, z1 = comprssibility factor, m = molar flow rate a = (k-1)/k and k = Cp/Cv. Values of
+				R = 8.314 J/mol k = 1.987 Btu/lbmol R = 0.7302 atm ft3/lb mol F.
+			</td>
+			<td width="150px">
+				<%= cs.radio_button :cs_sizing_review_5, "yes"%>&nbsp;Yes&nbsp;
+				<%= cs.radio_button :cs_sizing_review_5, "no"%>&nbsp;No&nbsp;
+				<%= cs.radio_button :cs_sizing_review_5, "na"%>&nbsp;N/A&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Outlet temperature for reverisble adiabatic process<br>
+				T2 = T1(P2/P1)^a
+			</td>
+			<td width="150px">
+				<%= cs.radio_button :cs_sizing_review_6, "yes"%>&nbsp;Yes&nbsp;
+				<%= cs.radio_button :cs_sizing_review_6, "no"%>&nbsp;No&nbsp;
+				<%= cs.radio_button :cs_sizing_review_6, "na"%>&nbsp;N/A&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td>
+				To Compress air from 37.8 C (100 F), k = 1.4, compression ratio = 3, theoretical power required 
+				= 62 hp/million ft3/day, outlet temperature 152.2 C (306 F)											
+			</td>
+			<td width="150px">
+				<%= cs.radio_button :cs_sizing_review_7, "yes"%>&nbsp;Yes&nbsp;
+				<%= cs.radio_button :cs_sizing_review_7, "no"%>&nbsp;No&nbsp;
+				<%= cs.radio_button :cs_sizing_review_7, "na"%>&nbsp;N/A&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Exit temperature should not exceed 167-204 C (350 - 400 F); for diatomic gases (Cp/Cv = 1.4),
+				this corresponds to a compression ration of about 4.
+			</td>
+			<td width="150px">
+				<%= cs.radio_button :cs_sizing_review_8, "yes"%>&nbsp;Yes&nbsp;
+				<%= cs.radio_button :cs_sizing_review_8, "no"%>&nbsp;No&nbsp;
+				<%= cs.radio_button :cs_sizing_review_8, "na"%>&nbsp;N/A&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Compression ratio should be about the same for each stage of a multistage unit, ratio = 
+				(Pa/Pa)^(1/n), with n stages	
+			</td>
+			<td width="150px">
+				<%= cs.radio_button :cs_sizing_review_9, "yes"%>&nbsp;Yes&nbsp;
+				<%= cs.radio_button :cs_sizing_review_9, "no"%>&nbsp;No&nbsp;
+				<%= cs.radio_button :cs_sizing_review_9, "na"%>&nbsp;N/A&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Efficiencies of reciprocating compressors: 65% at compression ratio of 1.5, 75% at 2.0 and 80
+				-85% at 3-6.
+			</td>
+			<td width="150px">
+				<%= cs.radio_button :cs_sizing_review_10, "yes"%>&nbsp;Yes&nbsp;
+				<%= cs.radio_button :cs_sizing_review_10, "no"%>&nbsp;No&nbsp;
+				<%= cs.radio_button :cs_sizing_review_10, "na"%>&nbsp;N/A&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Efficiencies of large centrifugal compressors, 2.83-47.2 m&sup3/s (6000 - 100,000 acfm) at suction,
+				are 76 - 78%.
+			</td>
+			<td width="150px">
+				<%= cs.radio_button :cs_sizing_review_11, "yes"%>&nbsp;Yes&nbsp;
+				<%= cs.radio_button :cs_sizing_review_11, "no"%>&nbsp;No&nbsp;
+				<%= cs.radio_button :cs_sizing_review_11, "na"%>&nbsp;N/A&nbsp;
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Rotary compressors have efficencies of 70%, except liquid liner types which have 50%
+			</td>
+			<td width="150px">
+				<%= cs.radio_button :cs_sizing_review_12, "yes"%>&nbsp;Yes&nbsp;
+				<%= cs.radio_button :cs_sizing_review_12, "no"%>&nbsp;No&nbsp;
+				<%= cs.radio_button :cs_sizing_review_12, "na"%>&nbsp;N/A&nbsp;
+			</td>
+		</tr>		
+		<tr>
+			<td colspan="2"><b><u>NOTES</u></b></td>
+		</tr>
+		<tr>
+			<td colspan="2"><%= cs.text_area :cs_notes, :size=>"140x8"%></td>
+		</tr>
+	</table>
+<% end%>
+			</div>					
+		</div>
+		<div class="clear"></div>	

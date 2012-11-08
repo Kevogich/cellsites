@@ -1,0 +1,12 @@
+<% title 'New Measurement'%>
+
+<%= form_for @measurement, :url => admin_measurements_path, :html => {:style => 'width:400px;'} do |f| %>
+	<%= f.error_messages %>
+	<div class="form-element-last">
+		<%= f.label :name, "Measurement"%><br>
+		<%= f.text_field :name%>
+	</div>	
+	<div class="form-buttons">
+		<%= f.submit "Create" %>
+  	</div>
+<% end%>

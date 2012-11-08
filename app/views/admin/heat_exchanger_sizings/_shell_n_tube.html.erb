@@ -1,0 +1,273 @@
+<div id="shell_n_tube" class="tab_content">
+  <!-- Shell & Tube -->
+  <table style="width:100%">
+    <tr>
+      <td width="33%">
+        <fieldset class="form_fieldset" style="float:left;">
+          <legend>Exchanger Flow Type </legend>
+          <ul class="unstyled">
+            <li><%= f.radio_button :st_exchanger_flow_type, "co-current_flow" %>Co-Current Flow</li>
+            <li><%= f.radio_button :st_exchanger_flow_type, "counter-current_flow" %>Counter-Current Flow</li>
+            <li><%= f.radio_button :st_exchanger_flow_type, "cross_flow" %>Cross Flow</li>
+          </ul>
+        </fieldset>
+      </td>
+      <td width="33%">
+        <fieldset class="form_fieldset" style="float:left;margin-left:10px;">
+          <legend>Fluid Orientation</legend>
+          <ul class="unstyled">
+            <li>Shell Side = <%= f.select :st_exchanger_fo_shell_side, %w(Hot Cold), :include_blank => true %>
+              <input type="button" style="background:#30FF10;" value=" "></li>
+            <li> Tube Side = <%= f.select :st_exchanger_fo_tube_side, %w(Hot Cold), :include_blank => true %></li>
+          </ul>
+        </fieldset>
+      </td>
+      <td width="33%">
+        <fieldset class="form_fieldset" style="float:left;margin-left:10px;">
+          <legend>Exchanger Type</legend>
+          <ul class="unstyled">
+            <li><%= f.radio_button :st_exchanger_type, "shell_tube" %>Shell & Tube</li>
+            <li><%= f.radio_button :st_exchanger_type, "multi_tube" %>Multi-Tube</li>
+            <li><%= f.radio_button :st_exchanger_type, "double_pipe" %>Double Pipe</li>
+          </ul>
+        </fieldset>
+      </td>
+     </tr>
+  </table>
+      <table>
+    <tr>
+      <td colspan="2"><label class="sub_title">Design Process Specifications</label></td>
+      <td colspan="2"><label class="sub_title">Dimensions</label></td>
+    </tr>
+    <tr>
+      <td>Heat Duty</td>
+      <td> <%= f.text_field :st_heat_duty, :class => "small-text-100" %>&nbsp;
+              <td>Heat Transfer Area</td>
+      <td> <%= f.text_field :st_heat_transfer_area, :class => "small-text-100" %>&nbsp;
+           </tr>
+    <tr>
+      <td>LMTD</td>
+      <td><%= f.text_field :st_lmtd, :class => "small-text-100" %>&nbsp;
+          </td>
+      <td>Tube OD</td>
+      <td><%= f.select :st_tube_od, StaticData.tube_od.collect { |t| [raw(t[:name]), t[:value]] }, :include_blank => true %>&nbsp;in</td>
+    </tr>
+    <tr>
+      <td>Shell Tube Pass</td>
+      <td><%= f.select :st_shell_tube_pass, options_for_select(StaticData.shell_tube_pass, heat_exchanger_sizing.st_shell_tube_pass), :include_blank => true %></td>
+      <td>Tube Thickness</td>
+      <td><%= f.select :st_tube_thickness, StaticData.tube_thickness.to_a.collect { |t| [t, t.to_f] }, :include_blank => true %></td>
+    </tr>
+    <tr>
+      <td>F Factor</td>
+      <td><%= f.text_field :st_f_factor, :class => "small-text-100" %>&nbsp;
+             </td>
+      <td>Tube ID</td>
+      <td>
+        <label id="st_tube_id"><%= heat_exchanger_sizing.st_tube_id %></label>
+        <%= f.hidden_field :st_tube_id %>
+        &nbsp;in
+      </td>
+    </tr>
+    <tr>
+      <td>Corrected LMTD</td>
+      <td><%= f.text_field :st_corrected_lmtd, :class => "small-text-100" %>&nbsp;&nbsp;
+              </td>
+      <td>Tube Length</td>
+      <td><%= f.text_field :st_tube_length, :class => "small-text-100" %>&nbsp; ft
+      </td>
+    </tr>
+    <tr>
+      <td><u><b> Heat Transfer Coefficients </b></u></td>
+      <td></td>
+      <td> Tube Type</td>
+      <td><%= f.select :st_tube_type, options_for_select([], heat_exchanger_sizing.st_tube_type), :include_blank => true %>&nbsp;
+    </tr>
+    <tr>
+      <td>Tube Material</td>
+      <td><%= f.select :st_tube_material, options_for_select(StaticData.tube_material.collect { |p| [raw(p), p] }, heat_exchanger_sizing.st_tube_material), :include_blank => true %></td>
+      <td>No.of Tubes</td>
+      <td>
+        <%= f.text_field :st_required_no_of_tubes, :class => "small-text-100" %>&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>Metal Temperature</td>
+      <td><%= f.text_field :st_tube_length, :class => "small-text-100" %>&nbsp;
+             </td>
+      <td>Tube Pitch</td>
+      <td><%= f.select :st_tube_pitch, options_for_select(StaticData.tube_pitch.collect { |p| [raw(p), p] }, heat_exchanger_sizing.st_tube_pitch), :include_blank => true %></td>
+    </tr>
+    <tr>
+      <td>Metal Resistance</td>
+      <td><%= f.text_field :st_metal_resistance, :class => "small-text-100" %>&nbsp;</td>
+      <td> Pitch Ratio</td>
+      <td><%= f.text_field :st_pitch_ratio, :class => "small-text-100" %>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>Fouling Resistance (Shell Side)</td>
+      <td><%= f.text_field :st_fouling_resistance_shell_side, :class => "small-text-100" %>&nbsp;</td>
+      <td>TEMA Type</td>
+      <td><select></select>&nbsp;<select></select>&nbsp;<select></select>
+        &nbsp;&nbsp;<input type="button" style="background:#30FF10;" value=" ">
+      </td>
+    </tr>
+    <tr>
+      <td>Fouling Resistance (Tube Side)</td>
+      <td><%= f.text_field :st_fouling_resistance_tube_side, :class => "small-text-100" %>&nbsp;</td>
+      <td>Shell ID</td>
+      <td><%= f.text_field :st_estimated_shell_inner_diameter, :class => "small-text-100" %>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>Film Resistance (Shell Side)</td>
+      <td><%= f.text_field :st_film_resistance_shell_side, :class => "small-text-100" %>&nbsp;</td>
+      <td>Baffle Type</td>
+      <td><%= f.select :st_baffle_type, options_for_select([], heat_exchanger_sizing.st_baffle_type), :include_blank => true %>&nbsp;
+    </tr>
+    <tr>
+      <td>Film Resistance (Tube Side)</td>
+      <td><%= f.text_field :st_film_resistance_tube_side, :class => "small-text-100" %>&nbsp;</td>
+      <td>Baffle Cut</td>
+      <td><%= f.text_field :st_baffle_cut, :class => "small-text-100" %>&nbsp;
+    </tr>
+    <tr>
+      <td>Calculated Overall Service U</td>
+      <td><%= f.text_field :st_calculated_overall_service_u, :class => "small-text-100" %>&nbsp;
+      <td> Baffle Spacing</td>
+      <td><%= f.text_field :st_baffle_spacing, :class => "small-text-100" %>&nbsp;
+    </tr>
+    <tr>
+      <td>Calculated Overall Clean U</td>
+      <td colspan="3"><%= f.text_field :st_calculated_overall_clean_u, :class => "small-text-100" %>&nbsp;
+    </tr>
+    <tr>
+      <td><u><b> Pressure Drop </b></u></td>
+      <td></td>
+      <td colspan="2"><u><b> Velocity </b></u></td>
+    </tr>
+    <tr>
+      <td>Shell side Allowable Pressure Drop</td>
+      <td><%= f.text_field :st_allowable_pressure_drop_shell_side, :class => "small-text-100" %>&nbsp;&nbsp;psi
+        <%= heat_exchanger_sizing.st_allowable_pressure_drop_shell_side %>&nbsp;</td>
+      <td>Shell side Allowable Velocity</td>
+      <td><%= f.text_field :st_allowable_velocity_shell_side, :class => "small-text-100" %>&nbsp;
+    </tr>
+    <tr>
+      <td>Shell side Calculate Pressure Drop</td>
+      <td><%= f.text_field :st_calculated_pressure_drop_shell_side, :class => "small-text-100" %>&nbsp;&nbsp;psi
+       </td>
+      <td>Shell side Calculated Velocity</td>
+      <td><%= f.text_field :st_calculated_velocity_shell_side, :class => "small-text-100" %>&nbsp;
+    </tr>
+    <tr>
+      <td>Tube side Allowable Pressure Drop</td>
+      <td><%= f.text_field :st_allowable_pressure_drop_tube_side, :class => "small-text-100" %>&nbsp;&nbsp;psi
+        </td>
+      <td>Tube side Allowable Velocity</td>
+      <td><%= f.text_field :st_allowable_velocity_tube_side, :class => "small-text-100" %>&nbsp;
+    </tr>
+    <tr>
+      <td>Tube side Calculate Pressure Drop</td>
+      <td><%= f.text_field :st_allowable_pressure_drop_tube_side, :class => "small-text-100" %>&nbsp;&nbsp;psi
+       </td>
+      <td>Tube side Calculated Velocity</td>
+      <td><%= f.text_field :st_calculated_velocity_tube_side, :class => "small-text-100" %>&nbsp;
+    </tr>
+
+  </table>
+</div>
+
+<script type="text/javascript">
+  $('#heat_exchanger_sizing_st_exchanger_fo_shell_side').change(function () {
+    if ($(this).val() == "Hot") {
+      $('#heat_exchanger_sizing_st_exchanger_fo_tube_side').val("Cold");
+    } else if ($(this).val() == "Cold") {
+      $('#heat_exchanger_sizing_st_exchanger_fo_tube_side').val("Hot");
+    }
+  });
+
+  $('#heat_exchanger_sizing_st_exchanger_fo_tube_side').change(function () {
+    if ($(this).val() == "Hot") {
+      $('#heat_exchanger_sizing_st_exchanger_fo_shell_side').val("Cold");
+    } else if ($(this).val() == "Cold") {
+      $('#heat_exchanger_sizing_st_exchanger_fo_shell_side').val("Hot");
+    }
+  });
+
+  $('#heat_exchanger_sizing_st_tube_od, #heat_exchanger_sizing_st_tube_thickness').change(function () {
+
+    if ($('#heat_exchanger_sizing_st_tube_thickness').val() == '' || $('#heat_exchanger_sizing_st_tube_od').val() == '') {
+      return false;
+    }
+
+    var tube_diameter = $('#heat_exchanger_sizing_st_tube_od').val();
+    var tube_bwg = $('#heat_exchanger_sizing_st_tube_thickness').val();
+
+    var id = 0;
+    if (tube_bwg == 7) {
+      id = 0.18;
+    }
+    else if (tube_bwg = 8) {
+      id = 0.165;
+    }
+    else if (tube_bwg = 10) {
+      id = 0.134;
+    }
+    else if (tube_bwg = 11) {
+      id = 0.12;
+    }
+    else if (tube_bwg = 12) {
+      id = 0.109;
+    }
+    else if (tube_bwg = 13) {
+      id = 0.095;
+    }
+    else if (tube_bwg = 14) {
+      id = 0.083;
+    }
+    else if (tube_bwg = 15) {
+      id = 0.072;
+    }
+    else if (tube_bwg = 16) {
+      id = 0.065;
+    }
+    else if (tube_bwg = 17) {
+      id = 0.058;
+    }
+    else if (tube_bwg = 18) {
+      id = 0.049;
+    }
+    else if (tube_bwg = 19) {
+      id = 0.042;
+    }
+    else if (tube_bwg = 20) {
+      id = 0.035;
+    }
+    else if (tube_bwg = 22) {
+      id = 0.028;
+    }
+    else if (tube_bwg = 24) {
+      id = 0.022;
+    }
+    else if (tube_bwg = 26) {
+      id = 0.018;
+    }
+    else if (tube_bwg = 27) {
+      id = 0.016;
+    }
+    else {
+
+    }
+
+    var tube_id = tube_diameter - (2 * id);
+
+    if (tube_id < 0) {
+      $('#st_tube_id').text('N/A');
+      $('#heat_exchanger_sizing_st_tube_id').val('N/A');
+    }
+    else {
+      $('#st_tube_id').text(tube_id);
+      $('#heat_exchanger_sizing_st_tube_id').val(tube_id);
+    }
+  });
+</script>

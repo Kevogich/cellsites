@@ -1,0 +1,100 @@
+<div id="settler" class="tab_content">
+  <!-- Settler -->
+  <table>
+    <tr>
+      <td>L/D</td>
+      <td><%= f.text_field :st_ld, :class=>"required" %></td>
+      <td colspan="2" rowspan="9"></td>
+    </tr>
+    <tr>
+      <td colspan="2"><label>Horizontal Settler Details</label></td>
+    </tr>
+    <tr>
+      <td>Light Phase Flowrate</td>
+      <td>
+        <label id="st_light_phase_flowrate"><%= vessel_sizing.st_light_phase_flowrate.to_s %></label>
+        <%= f.hidden_field :st_light_phase_flowrate %>&nbsp;
+        <label class="flow_rate_general_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Heavy Phase Flowrate</td>
+      <td>
+        <label id="st_heavy_phase_flowrate"><%= vessel_sizing.st_heavy_phase_flowrate.to_s %></label>
+        <%= f.hidden_field :st_heavy_phase_flowrate %>&nbsp;
+        <label class="flow_rate_general_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Light Phase Terminal Velocity</td>
+      <td>
+        <label id="st_light_phase_terminal_velocity"><%= vessel_sizing.st_light_phase_terminal_velocity.to_s %></label>
+        <%= f.hidden_field :st_light_phase_terminal_velocity %>&nbsp;
+        <label class="velocity_general_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Heavy Phase Terminal Velocity</td>
+      <td>
+        <label id="st_heavy_phase_terminal_velocity"><%= vessel_sizing.st_heavy_phase_terminal_velocity.to_s %></label>
+        <%= f.hidden_field :st_heavy_phase_terminal_velocity %>&nbsp;
+        <label class="velocity_general_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Light Phase Height</td>
+      <td>
+        <label id="st_light_phase_height"><%= vessel_sizing.st_light_phase_height.to_s %></label>
+        <%= f.hidden_field :st_light_phase_height %>&nbsp;
+        <label class="small_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Heavy Phase Height</td>
+      <td>
+        <label id="st_heavy_phase_height"><%= vessel_sizing.st_heavy_phase_height.to_s %></label>
+        <%= f.hidden_field :st_heavy_phase_height %>&nbsp;
+        <label class="small_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Interface Height</td>
+      <td>
+        <label id="st_interface_height"><%= vessel_sizing.st_interface_height.to_s %></label>
+        <%= f.hidden_field :st_interface_height %>&nbsp;
+        <label class="small_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Light Phase Residence Time</td>
+      <td>
+        <label id="st_light_phase_residence_time"><%= vessel_sizing.st_light_phase_residence_time.to_s %></label>
+        <%= f.hidden_field :st_light_phase_residence_time %>&nbsp;
+        <label class="time_minutes_unit"></label>
+      </td>
+      <td colspan="2"><label>NOTES</label></td>
+    </tr>
+    <tr>
+      <td>Diameter</td>
+      <td>
+        <label id="st_diameter"><%= vessel_sizing.st_diameter.to_s %></label>
+        <%= f.hidden_field :st_diameter %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+      <td colspan="2" rowspan="3"><%= f.text_area :st_notes, :size=>"75x4" %></td>
+    </tr>
+    <tr>
+      <td>Length</td>
+      <td>
+        <label id="st_length"><%= vessel_sizing.st_length.to_s %></label>
+        <%= f.hidden_field :st_length %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <input type="button" id="settler_calculate" value="Calculate">
+      </td>
+    </tr>
+  </table>
+</div>

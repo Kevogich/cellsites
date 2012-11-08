@@ -1,0 +1,11 @@
+<div class="project_case_details">
+	<h3>Upload Excel File</h3>
+	<%= form_tag update_case_details_admin_projects_path, :multipart => true, :remote => true do %>
+		<div class="form-element">
+			<%= file_field("case_details", "excel")%>
+		</div>
+		<div class="form-element">
+			<%= submit_tag "Upload"%>
+		</div>
+	<% end%>
+</div>

@@ -1,0 +1,9 @@
+<% title 'New Compressor sizing'%>
+<% stylesheet("simple-tabs", "/javascripts/tablecloth/tablecloth", "colorbox", "jquery.loadmask")%>
+<% javascript("simple-tabs", "jquery.colorbox-min", "jquery.loadmask","jquery.format.1.05","/admin/sizing_data.js")%>
+
+
+
+<div>
+	<%= render :partial => 'form', :locals => {:compressor_sizing_tag => @compressor_sizing_tag, :compressor_sizing => @compressor_sizing}%>
+</div>

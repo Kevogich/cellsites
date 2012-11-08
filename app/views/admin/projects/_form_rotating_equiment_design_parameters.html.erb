@@ -1,0 +1,39 @@
+<div>
+	<div class="form-element">
+		<%= f.label :centrifugal_pump_design_safety_factor%><br>
+		<%= f.text_field :centrifugal_pump_design_safety_factor%>&nbsp;%
+	</div>
+	<div class="form-element">
+		<%= f.label :default_centrifugal_pump_efficiency%><br>
+		<%= f.text_field :default_centrifugal_pump_efficiency%>&nbsp;%
+	</div>
+	<div class="form-element">
+		<%= f.label :centrifugal_pump_shut_off_factor%><br>
+		<%= f.text_field :centrifugal_pump_shut_off_factor%>&nbsp;%
+	</div>
+	<div class="form-element">
+		<%= f.label :positive_displacement_mechanical_efficiency%><br>
+		<%= f.text_field :positive_displacement_mechanical_efficiency%>&nbsp;%
+	</div>
+	<div class="form-element">
+		<%= f.label :positive_displacement_pump_design_safety_factor%><br>
+		<%= f.text_field :positive_displacement_pump_design_safety_factor%>&nbsp;%
+	</div>
+	<div class="form-element">
+		<%= f.label :compression_path%><br>
+		<%= f.radio_button :compression_path, "Isentropic"%>&nbsp;<%= f.label "", "Isentropic"%>&nbsp;
+		<%= f.radio_button :compression_path, "Polytropic"%>&nbsp;<%= f.label "", "Polytropic"%>	
+	</div>
+	<div class="form-element">
+		<%= f.label :compressor_design_safety_factor%><br>
+		<%= f.text_field :compressor_design_safety_factor%>&nbsp;%
+	</div>
+	<div class="form-element">
+		<%= f.label :allowable_centrifugal_compressor_mawt%><br>
+		<%= f.text_field :allowable_centrifugal_compressor_mawt%>&nbsp;<%= @project.unit("Temperature", "General").to_s%>
+	</div>
+	<div class="form-element-last">
+		<%= label_tag "Allowable Compression Ratio Per Reciprocating Compressor Stage"%><br>
+		<%= f.text_field :allowable_compression_ratio_per_recip_comp_stage_start, :class => "small-text-40"%> to limit the compressor discharge temperature for each compression stage to <%= f.text_field :allowable_compression_ratio_per_recip_comp_stage_end, :class => "small-text-40"%>&nbsp;<%= @project.unit("Temperature", "General").to_s%> 
+	</div>		
+</div>

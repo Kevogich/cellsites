@@ -1,0 +1,35 @@
+<% title 'Column Sizing'%>
+
+<%= render :partial => '/admin/user_project_settings/project_filter' %>
+
+<br>
+<%= link_to 'Add Column sizing', new_admin_column_sizing_path%>&nbsp;|&nbsp;
+<%= link_to 'Column Sizing Summary', column_sizing_summary_admin_column_sizings_path%>
+<br>
+
+<table width="auto">
+	<tr>
+		<th>Column System</th>
+		<th>By</th>
+		<th>Reviewer</th>
+		<th>Approver</th>
+		<th>Created at</th>
+		<th>Updated at</th>
+		<th>Edit</th>
+		<th>Delete</th>
+		<th>Clone</th>
+	</tr>
+	<% for column_sizing in @column_sizings%>
+		<tr>
+			<td><%= column_sizing.column_system%></td>
+			<td><%= column_sizing.sizing_status_activities.created_by%></td>
+			<td><%= column_sizing.sizing_status_activities.reviewer%></td>
+			<td><%= column_sizing.sizing_status_activities.approver%></td>
+			<td><%= column_sizing.created_at.strftime("%d-%m-%Y")%></td>
+			<td><%= column_sizing.updated_at.strftime("%d-%m-%Y")%></td>
+			<td><%= link_to "Edit", edit_admin_column_sizing_path(column_sizing)%></td>
+			<td><%= link_to "Delete", admin_column_sizing_path(column_sizing), :method=>"delete", :confirm => "Are you sure?"%></td>
+			<td><%= link_to "Clone", clone_admin_column_sizing_path(column_sizing), :class => "clone_sizing" %></td>
+		</tr>
+	<% end%>
+</table>

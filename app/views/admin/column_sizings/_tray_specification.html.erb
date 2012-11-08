@@ -1,0 +1,103 @@
+<div id="tray_specification" class="tab_content" style="overflow: auto;">
+  <!-- Tray Specification -->
+  <div>
+    <label>Number of Peak Loading Sections</label>&nbsp;
+    <%= f.select :ts_number_of_peak_loading_sections, options_for_select((1..6).to_a, column_sizing.ts_number_of_peak_loading_sections) %>
+  </div>
+
+  <table id="tray_design_table">
+    <tr>
+      <th rowspan="3"></th>
+      <th colspan="3" style="text-align:center;">Zone Description</th>
+      <th colspan="6" style="text-align:center;">Vapor Loading</th>
+      <th colspan="4" style="text-align:center;">Liquid Loading</th>
+      <th colspan="16" style="text-align:center;">Tray Details</th>
+      <th colspan="11" style="text-align:center;">Tray Details</th>
+      <th rowspan="3"></th>
+    </tr>
+    <tr>
+      <th>Section Description</th>
+      <th>Tray Numbers</th>
+      <th>Tray Count</th>
+      <th>Mass Flow Rate</th>
+      <th>Temperature</th>
+      <th>Pressure</th>
+      <th>Density</th>
+      <th>Molecular Weight</th>
+      <th>Compressibility</th>
+      <th>Mass Flow Rate</th>
+      <th>Temperature</th>
+      <th>Surface Tension</th>
+      <th>Viscosity</th>
+      <th>Type of Trays</th>
+      <th>Tray Manufacturer</th>
+      <th>Tray Model</th>
+      <th>Tray Spacing</th>
+      <th>No of Passes</th>
+      <th>Tray Foaming Tendency</th>
+      <th>Max Rate as % of Design</th>
+      <th>Min Rate as % of Design</th>
+      <th>Design Rate as % Flood Rate</th>
+      <th>Tray Material</th>
+      <th>Valve/Cap Material</th>
+      <th>Corrosion Allowance</th>
+      <th>Tray Thickness</th>
+      <th>Tray Diameter</th>
+      <th>Section Height</th>
+      <th>Pressure Drop per Tray</th>
+      <th>Packing Type</th>
+      <th>Packing Manufacture</th>
+      <th>Packing Material</th>
+      <th>Random Packing Type</th>
+      <th>Random Packing Size</th>
+      <th>Packing Factor</th>
+      <th>Height of Theoretical Plate</th>
+      <th>Height of Transfer Unit</th>
+      <th>Tower Diameter</th>
+      <th>Pressure Drop per ft of Packing</th>
+      <th>Bed Height</th>
+    </tr>
+    <tr>
+      <th colspan="3"></th>
+      <th><label class="mass_flow_rate_general_unit"></label></th>
+      <th><label class="temperature_general_unit"></label></th>
+      <th></th>
+      <th><label class="density_general_unit"></label></th>
+      <th></th>
+      <th><label class="mass_flow_rate_general_unit"></label></th>
+      <th><label class="temperature_general_unit"></label></th>
+      <th><label class="surface_tension_general_unit"></label></th>
+      <th><label class="density_general_unit"></label></th>
+      <th><label class="viscosity_general_unit"></label></th>
+      <th colspan="3"></th>
+      <th><label class="length_large_dimension_length_unit"></label></th>
+      <th colspan="3"></th>
+      <th><label class="length_large_dimension_length_unit"></label></th>
+      <th><label class="time_minutes_unit"></label></th>
+      <th>%</th>
+      <th>%</th>
+      <th>%</th>
+      <th colspan="2"></th>
+      <th><label class="length_large_dimension_length_unit"></label></th>
+      <th><label class="length_large_dimension_length_unit"></label></th>
+      <th colspan="8"></th>
+      <th><label class="length_large_dimension_length_unit"></label></th>
+      <th></th>
+      <th><label class="length_large_dimension_length_unit"></label></th>
+    </tr>
+    <% i = 1 %>
+    <%= f.fields_for :column_tray_specifications do |tray_specification| %>
+      <%= render :partial => "tray_specification_fields", :locals => {:f => tray_specification, :i => i} %>
+      <% i = i + 1 %>
+    <% end %>
+  </table>
+
+  <input type="button" id="tray_design_calculate" value="Calculate">
+
+  <script type="text/javascript">
+    $('a.column_section_tray_designs_remove').live('click', function(){
+      $(this).parents('tr').find('input, select').val('');
+      return false;
+    });
+  </script>
+</div>

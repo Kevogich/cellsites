@@ -1,0 +1,4 @@
+$.colorbox.close();
+var new_group = '<tr><td><%= @group.name%></td><td><%= link_to 'delete', admin_group_path(@group), :method => :delete, :remote => true, :confirm => 'Are you sure?' %></td></tr>';
+$('#groups_list').append(new_group);
+

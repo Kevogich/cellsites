@@ -1,0 +1,155 @@
+<% title "Driver Sizing"%>
+
+<%= render :partial => '/admin/user_project_settings/project_filter' %>
+
+<br>
+<!-- tabs -->
+<div>
+	<ul class="simple-tabs">
+		<li><a id="electric_motor_tab" href="#electric_motor">Electric Motor</a></li>
+		<li><a id="steam_turbine_tab" href="#steam_turbine">Steam Turbine</a></li>
+		<li><a id="hydraulic_turbine_tab" href="#hydraulic_turbine">Hydraulic Turbine</a></li>
+		<li><a id="turbo_expander_tab" href="#turbo_expander">Turbo Expander</a></li>								
+	</ul>
+	<div class="tab_container">
+		<div id="electric_motor" class="tab_content">
+			<!-- Electric Motor -->
+			<br>
+			<%= link_to 'Add Electric Motor', new_admin_electric_motor_path%>&nbsp;|&nbsp;
+			<%= link_to 'Electric Motor Summary', electric_motor_summary_admin_electric_motors_path%>
+			<br><br>			
+			<table width="auto">
+				<tr>
+					<th>Electric Motor tag</th>
+					<th>By</th>
+					<th>Reviewer</th>
+					<th>Approver</th>
+					<th>Created at</th>
+					<th>Updated at</th>
+					<th>Edit</th>
+					<th>Delete</th>
+					<th>Clone</th>
+				</tr>
+				<% for eletric_motor in @eletric_motors%>
+					<tr>
+						<td><%= eletric_motor.electric_motor_tag%></td>
+						<td><%= eletric_motor.sizing_status_activities.created_by%></td>
+						<td><%= eletric_motor.sizing_status_activities.reviewer%></td>
+						<td><%= eletric_motor.sizing_status_activities.approver%></td>
+						<td><%= eletric_motor.created_at.strftime("%d-%m-%Y")%></td>
+						<td><%= eletric_motor.updated_at.strftime("%d-%m-%Y")%></td>
+						<td><%= link_to "Edit", edit_admin_electric_motor_path(eletric_motor)%></td>
+						<td><%= link_to "Delete", admin_electric_motor_path(eletric_motor), :method=>"delete", :confirm => "Are you sure?"%></td>
+						<td><%= link_to "Clone", clone_admin_electric_motor_path(eletric_motor), :class => "clone_sizing" %></td>
+					</tr>
+				<% end%>
+			</table>
+
+		</div>	
+		<div id="steam_turbine" class="tab_content">
+			<!-- Steam Turbine -->
+			<br>
+			<%= link_to 'Add Steam Turbine', new_admin_steam_turbine_path%>&nbsp;|&nbsp;
+			<%= link_to 'Steam Turbine Summary', steam_turbine_summary_admin_steam_turbines_path%>
+			<br><br>			
+			<table width="auto">
+				<tr>
+					<th>Steam turbine tag</th>
+					<th>By</th>
+					<th>Reviewer</th>
+					<th>Approver</th>
+					<th>Created at</th>
+					<th>Updated at</th>
+					<th>Edit</th>
+					<th>Delete</th>
+					<th>Clone</th>
+				</tr>
+				<% for steam_turbine in @steam_turbines%>
+					<tr>
+						<td><%= steam_turbine.steam_turbine_tag%></td>
+						<td><%= steam_turbine.sizing_status_activities.created_by%></td>
+						<td><%= steam_turbine.sizing_status_activities.reviewer%></td>
+						<td><%= steam_turbine.sizing_status_activities.approver%></td>
+						<td><%= steam_turbine.created_at.strftime("%d-%m-%Y")%></td>
+						<td><%= steam_turbine.updated_at.strftime("%d-%m-%Y")%></td>
+						<td><%= link_to "Edit", edit_admin_steam_turbine_path(steam_turbine)%></td>
+						<td><%= link_to "Delete", admin_steam_turbine_path(steam_turbine), :method=>"delete", :confirm => "Are you sure?"%></td>
+						<td><%= link_to "Clone", clone_admin_steam_turbine_path(steam_turbine), :class => "clone_sizing" %></td>
+					</tr>
+				<% end%>
+			</table>
+		</div>
+		<div id="hydraulic_turbine" class="tab_content">
+			<!-- Hydraulic Turbine -->
+			<br>
+			<%= link_to 'Add Hydraulic Turbine', new_admin_hydraulic_turbine_path%>&nbsp;|&nbsp;
+			<%= link_to 'Hydraulic Turbine Summary', hydraulic_turbine_summary_admin_hydraulic_turbines_path%>
+			<br><br>
+			<table width="auto">
+				<tr>
+					<th>Hydraulic turbine tag</th>
+					<th>By</th>
+					<th>Reviewer</th>
+					<th>Approver</th>
+					<th>Created at</th>
+					<th>Updated at</th>
+					<th>Edit</th>
+					<th>Delete</th>
+					<th>Clone</th>
+				</tr>
+				<% for hydraulic_turbine in @hydraulic_turbines%>
+					<tr>
+						<td><%= hydraulic_turbine.hydraulic_turbine_tag%></td>
+						<td><%= hydraulic_turbine.sizing_status_activities.created_by%></td>
+						<td><%= hydraulic_turbine.sizing_status_activities.reviewer%></td>
+						<td><%= hydraulic_turbine.sizing_status_activities.approver%></td>
+						<td><%= hydraulic_turbine.created_at.strftime("%d-%m-%Y")%></td>
+						<td><%= hydraulic_turbine.updated_at.strftime("%d-%m-%Y")%></td>
+						<td><%= link_to "Edit", edit_admin_hydraulic_turbine_path(hydraulic_turbine)%></td>
+						<td><%= link_to "Delete", admin_hydraulic_turbine_path(hydraulic_turbine), :method=>"delete", :confirm => "Are you sure?"%></td>
+						<td><%= link_to "Clone", clone_admin_hydraulic_turbine_path(hydraulic_turbine), :class => "clone_sizing" %></td>
+					</tr>
+				<% end%>
+			</table>							
+		</div>
+		<div id="turbo_expander" class="tab_content">
+			<!-- Turbo Expander -->
+			<br>
+			<%= link_to 'Add Turbo Expander', new_admin_turbo_expander_path%>&nbsp;|&nbsp;
+			<%= link_to 'Turbo Expander Summary', turbo_expanders_summary_admin_turbo_expanders_path%>
+			<br><br>
+			<table width="auto">
+				<tr>
+					<th>Turbo expander tag</th>
+					<th>By</th>
+					<th>Reviewer</th>
+					<th>Approver</th>
+					<th>Created at</th>
+					<th>Updated at</th>
+					<th>Edit</th>
+					<th>Delete</th>
+					<th>Clone</th>
+				</tr>
+				<% for turbo_expander in @turbo_expanders%>
+					<tr>
+						<td><%= turbo_expander.turbo_expander_tag%></td>
+						<td><%= turbo_expander.sizing_status_activities.created_by%></td>
+						<td><%= turbo_expander.sizing_status_activities.reviewer%></td>
+						<td><%= turbo_expander.sizing_status_activities.approver%></td>
+						<td><%= turbo_expander.created_at.strftime("%d-%m-%Y")%></td>
+						<td><%= turbo_expander.updated_at.strftime("%d-%m-%Y")%></td>
+						<td><%= link_to "Edit", edit_admin_turbo_expander_path(turbo_expander)%></td>
+						<td><%= link_to "Delete", admin_turbo_expander_path(turbo_expander), :method=>"delete", :confirm => "Are you sure?"%></td>
+						<td><%= link_to "Clone", clone_admin_turbo_expander_path(turbo_expander), :class => "clone_sizing" %></td>
+					</tr>
+				<% end%>
+			</table>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+<!-- end tabs -->
+
+<script type="text/javascript">
+
+</script>

@@ -1,0 +1,1894 @@
+<style type="text/css">
+
+  #tab1 input[type="text"] {
+    width: 150px;
+  }
+
+  #tab3 input[type="text"] {
+    width: 150px;
+  }
+
+  #tab4 input[type="text"] {
+    width: 150px;
+  }
+
+  .downstream_tables {
+    width: auto;
+  }
+
+  .downstream_tables input[type="text"] {
+    width: 50px;
+  }
+
+  #piping_table input[type="text"] {
+    width: 50px;
+  }
+
+  .dowmstream_circuit_piping_table input[type="text"] {
+    width: 50px;
+  }
+</style>
+
+<%= form_for control_valve_sizing, :url => control_valve_sizing.new_record? ? admin_control_valve_sizings_path : admin_control_valve_sizing_path(control_valve_sizing), :html => {:style => 'width:auto;', :class => "form_control_valve"} do |f| %>
+  <%= f.error_messages %>
+  <% if control_valve_sizing.new_record? %>
+    <%= f.hidden_field :company_id %>
+    <%= f.hidden_field :client_id, :value => @user_project_settings.client_id %>
+    <%= f.hidden_field :project_id, :value => @user_project_settings.project_id %>
+    <%= f.hidden_field :process_unit_id, :value => @user_project_settings.process_unit_id %>
+  <% end %>
+  <div class="form-element-last">		
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :client_id %><br>
+      <%= f.label :client_id, (control_valve_sizing.client.name rescue @user_project_settings.client.name), :style => "font-weight:bold" %>			
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :project_id %><br>
+      <%= f.label :project_id, (control_valve_sizing.project.project_num rescue @user_project_settings.project.project_num), :style => "font-weight:bold" %>			
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :process_unit_id %><br>
+      <%= f.label :process_unit_id, (control_valve_sizing.process_unit.name rescue @user_project_settings.process_unit.name), :style => "font-weight:bold" %>
+		</span>		
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :control_valve_tag %><br>
+      <%= f.text_field :control_valve_tag %>
+		</span>
+    <% unless control_valve_sizing.new_record? %>
+      <span style="float:left;margin-right:40px;">
+        <%= label_tag :status %><br>
+        <strong><%= sizing_status(control_valve_sizing) %></strong>
+      </span>
+      <span style="float:left;margin-right:40px;">
+        <br>
+        <%= sizing_status_request_button(control_valve_sizing) %>
+      </span>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+  <div class="hidden">
+    <%= hidden_field_tag :tab %>
+    <%= hidden_field_tag :calculate_btn %>
+  </div>
+  <div class="form-buttons">
+    <%= f.submit control_valve_sizing.new_record? ? 'Create' : 'Update' %>&nbsp;&nbsp;
+    <%= f.submit 'Save' if !control_valve_sizing.new_record? %>
+  </div>
+  <!-- tabs -->
+  <div>
+  <ul class="simple-tabs">
+    <li><a href="#tab1" tab="tab1">Upstream</a></li>
+    <li><a href="#tab2" tab="tab2">Downstream</a></li>
+    <li><a href="#tab3" tab="tab3">Control Valve Design</a></li>
+    <li><a href="#tab4" tab="tab4">Bypass Design</a></li>
+  </ul>
+  <div class="tab_container">
+  <div id="tab1" class="tab_content">
+  <!-- Upstream -->
+  <table width="100%">
+    <tr>
+      <td>
+        <b><u>Process Basis</u></b>&nbsp;&nbsp;&nbsp;
+        <%= f.collection_select :up_process_basis_id, @project.heat_and_material_balances, :id, :case, :prompt => true %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Upstream Condition Basis&nbsp;&nbsp;&nbsp;
+        <%= f.select :upstream_condition_basis, options_for_select(@upstream_condition_basis.collect { |h| [raw(h[:name]), h[:value]] }, control_valve_sizing.upstream_condition_basis) %>
+      </td>
+    </tr>
+  </table>
+
+  <table id="upstream_conditions_maximum" class="upstream_coditions_table">
+    <tr>
+      <td colspan="4"><b><u>Upstream Conditions Maximum</u></b></td>
+    </tr>
+    <tr>
+      <td width="25%">Stream No</td>
+      <td width="25%"><%= f.collection_select :up_max_stream_no, @streams, :stream_no, :display_stream_no, :prompt => true %></td>
+      <td width="25%">Stream Phase</td>
+      <td width="25%"><%= f.select :up_max_stream_phase, options_for_select(StaticData.stream_phase, control_valve_sizing.up_max_stream_phase), :include_blank => true %></td>
+    </tr>
+    <tr>
+      <td>Pressure</td>
+      <td><%= f.text_field :up_max_pressure, :class => "upstream_pressure" %>&nbsp;<label class="upstream_pressure_unit"></label>
+      </td>
+      <td>Mass Vapor Fraction</td>
+	  <td><%= f.text_field :up_max_mass_vapor_fraction, :class => "mass_vapor_fraction_dimensionless" %></td>
+    </tr>
+    <tr>
+      <td>Temperature</td>
+      <td><%= f.text_field :up_max_temperature, :class => "upstream_temperature" %>&nbsp;<label class="upstream_temperature_unit"></label>
+      </td>
+      <td>Mass Flow Rate</td>
+      <td><%= f.text_field :up_max_mass_flow_rate, :class => "upstream_mass_flow_rate" %>&nbsp;<label class="upstream_mass_flow_rate_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><b><u>Vapor Properties</u></b></td>
+      <td colspan="2"><b><u>Liquid Properties</u></b></td>
+    </tr>
+    <tr>
+      <td>Density</td>
+      <td><%= f.text_field :up_max_vp_density, :class => "upstream_vp_density" %>&nbsp;<label class="upstream_vp_density_unit"></label>
+      </td>
+      <td>Density</td>
+      <td><%= f.text_field :up_max_lp_density, :class => "upstream_lp_density" %>&nbsp;<label class="upstream_lp_density_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Viscosity</td>
+      <td><%= f.text_field :up_max_vp_viscosity, :class => "upstream_vp_viscosity" %>&nbsp;<label class="upstream_vp_viscosity_unit"></label>
+      </td>
+      <td>Viscosity</td>
+      <td><%= f.text_field :up_max_lp_viscosity, :class => "upstream_lp_viscosity" %>&nbsp;<label class="upstream_lp_viscosity_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>MW</td>
+	  <td><%= f.text_field :up_max_vp_mw, :class => "molecular_weight_dimensionless" %></td>
+      <td>Surface Tension</td>
+      <td><%= f.text_field :up_max_lp_surface_tension, :class => "upstream_lp_surface_tension" %>&nbsp;<label class="upstream_lp_surface_tension_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Cp/Cv</td>
+	  <td><%= f.text_field :up_max_vp_cp_cv, :class => "specific_heat_capacity_ratio_dimensionless" %></td>
+      <td>Critical Pressure</td>
+      <td><%= f.text_field :up_max_lp_critical_pressure, :class => "upstream_lp_critical_pressure" %>&nbsp;<label class="upstream_lp_critical_pressure_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Z</td>
+	  <td><%= f.text_field :up_max_vp_z, :class => "vapor_compressibility_dimensionless" %></td>
+      <td>Vapor Pressure</td>
+      <td><%= f.text_field :up_max_lp_vapor_pressure, :class => "upstream_lp_vapor_pressure" %>&nbsp;<label class="upstream_lp_vapor_pressure_unit"></label>
+      </td>
+    </tr>
+  </table>
+
+  <table id="upstream_conditions_normal" class="upstream_coditions_table" style="display:none;">
+    <tr>
+      <td colspan="4"><b><u>Upstream Conditions Normal</u></b></td>
+    </tr>
+    <tr>
+      <td width="25%">Stream No</td>
+      <td width="25%"><%= f.collection_select :up_nor_stream_no, @streams, :stream_no, :display_stream_no, :prompt => true %></td>
+      <td width="25%">Stream Phase</td>
+      <td width="25%"><%= f.select :up_nor_stream_phase, options_for_select(StaticData.stream_phase, control_valve_sizing.up_nor_stream_phase), :include_blank => true %></td>
+    </tr>
+    <tr>
+      <td>Pressure</td>
+      <td><%= f.text_field :up_nor_pressure, :class => "upstream_pressure" %>&nbsp;<label class="upstream_pressure_unit"></label>
+      </td>
+      <td>Mass Vapor Fraction</td>
+	  <td><%= f.text_field :up_nor_mass_vapor_fraction, :class => "mass_vapor_fraction_dimensionless" %></td>
+    </tr>
+    <tr>
+      <td>Temperature</td>
+      <td><%= f.text_field :up_nor_temperature, :class => "upstream_temperature" %>&nbsp;<label class="upstream_temperature_unit"></label>
+      </td>
+      <td>Mass Flow Rate</td>
+      <td><%= f.text_field :up_nor_mass_flow_rate, :class => "upstream_mass_flow_rate" %>&nbsp;<label class="upstream_mass_flow_rate_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><b><u>Vapor Properties</u></b></td>
+      <td colspan="2"><b><u>Liquid Properties</u></b></td>
+    </tr>
+    <tr>
+      <td>Density</td>
+      <td><%= f.text_field :up_nor_vp_density, :class => "upstream_vp_density" %>&nbsp;<label class="upstream_vp_density_unit"></label>
+      </td>
+      <td>Density</td>
+      <td><%= f.text_field :up_nor_lp_density, :class => "upstream_lp_density" %>&nbsp;<label class="upstream_lp_density_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Viscosity</td>
+      <td><%= f.text_field :up_nor_vp_viscosity, :class => "upstream_vp_viscosity" %>&nbsp;<label class="upstream_vp_viscosity_unit"></label>
+      </td>
+      <td>Viscosity</td>
+      <td><%= f.text_field :up_nor_lp_viscosity, :class => "upstream_lp_viscosity" %>&nbsp;<label class="upstream_lp_viscosity_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>MW</td>
+      <td><%= f.text_field :up_nor_vp_mw %></td>
+      <td>Surface Tension</td>
+      <td><%= f.text_field :up_nor_lp_surface_tension, :class => "upstream_lp_surface_tension" %>&nbsp;<label class="upstream_lp_surface_tension_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Cp/Cv</td>
+      <td><%= f.text_field :up_nor_vp_cp_cv %></td>
+      <td>Critical Pressure</td>
+      <td><%= f.text_field :up_nor_lp_critical_pressure, :class => "upstream_lp_critical_pressure" %>&nbsp;<label class="upstream_lp_critical_pressure_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Z</td>
+      <td><%= f.text_field :up_nor_vp_z %></td>
+      <td>Vapor Pressure</td>
+      <td><%= f.text_field :up_nor_lp_vapor_pressure, :class => "upstream_lp_vapor_pressure" %>&nbsp;<label class="upstream_lp_vapor_pressure_unit"></label>
+      </td>
+    </tr>
+  </table>
+
+  <table id="upstream_conditions_minimum" class="upstream_coditions_table" style="display:none;">
+    <tr>
+      <td colspan="4"><b><u>Upstream Conditions Minimum</u></b></td>
+    </tr>
+    <tr>
+      <td width="25%">Stream No</td>
+      <td width="25%"><%= f.collection_select :up_min_stream_no, @streams, :stream_no, :display_stream_no, :prompt => true %></td>
+      <td width="25%">Stream Phase</td>
+      <td width="25%"><%= f.select :up_min_stream_phase, options_for_select(StaticData.stream_phase, control_valve_sizing.up_min_stream_phase), :include_blank => true %></td>
+    </tr>
+    <tr>
+      <td>Pressure</td>
+      <td><%= f.text_field :up_min_pressure, :class => "upstream_pressure" %>&nbsp;<label class="upstream_pressure_unit"></label>
+      </td>
+      <td>Mass Vapor Fraction</td>
+	  <td><%= f.text_field :up_min_mass_vapor_fraction, :class => "mass_vapor_fraction_dimensionless" %></td>
+    </tr>
+    <tr>
+      <td>Temperature</td>
+      <td><%= f.text_field :up_min_temperature, :class => "upstream_temperature" %>&nbsp;<label class="upstream_temperature_unit"></label>
+      </td>
+      <td>Mass Flow Rate</td>
+      <td><%= f.text_field :up_min_mass_flow_rate, :class => "upstream_mass_flow_rate" %>&nbsp;<label class="upstream_mass_flow_rate_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><b><u>Vapor Properties</u></b></td>
+      <td colspan="2"><b><u>Liquid Properties</u></b></td>
+    </tr>
+    <tr>
+      <td>Density</td>
+      <td><%= f.text_field :up_min_vp_density, :class => "upstream_vp_density" %>&nbsp;<label class="upstream_vp_density_unit"></label>
+      </td>
+      <td>Density</td>
+      <td><%= f.text_field :up_min_lp_density, :class => "upstream_lp_density" %>&nbsp;<label class="upstream_lp_density_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Viscosity</td>
+      <td><%= f.text_field :up_min_vp_viscosity, :class => "upstream_vp_viscosity" %>&nbsp;<label class="upstream_vp_viscosity_unit"></label>
+      </td>
+      <td>Viscosity</td>
+      <td><%= f.text_field :up_min_lp_viscosity, :class => "upstream_lp_viscosity" %>&nbsp;<label class="upstream_lp_viscosity_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>MW</td>
+      <td><%= f.text_field :up_min_vp_mw %></td>
+      <td>Surface Tension</td>
+      <td><%= f.text_field :up_min_lp_surface_tension, :class => "upstream_lp_surface_tension" %>&nbsp;<label class="upstream_lp_surface_tension_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Cp/Cv</td>
+      <td><%= f.text_field :up_min_vp_cp_cv %></td>
+      <td>Critical Pressure</td>
+      <td><%= f.text_field :up_min_lp_critical_pressure, :class => "upstream_lp_critical_pressure" %>&nbsp;<label class="upstream_lp_critical_pressure_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Z</td>
+      <td><%= f.text_field :up_min_vp_z %></td>
+      <td>Vapor Pressure</td>
+      <td><%= f.text_field :up_min_lp_vapor_pressure, :class => "upstream_lp_vapor_pressure" %>&nbsp;<label class="upstream_lp_vapor_pressure_unit"></label>
+      </td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <td><b><u>Upstream Pipe Configuration</u></b></td>
+    </tr>
+    <tr>
+      <td>
+        <input type="button" value="Enter Circuit Piping" id="enter_piping">&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="upstream_calculate" value="Calculate">
+      </td>
+    </tr>
+  </table>
+
+  <!-- upstream loss maximum -->
+  <table class="upstream_loss_table" id="upstream_loss_maximum">
+    <tr>
+      <td colspan="4"><b><u>Upstream Loss Maximum</u></b></td>
+    </tr>
+    <tr>
+      <td>Fitting &Delta;P</td>
+      <td><%= f.text_field :up_max_fitting_dp, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_max_fitting_dp_unit"></label>
+      </td>
+      <td>Total Upstream &Delta;P</td>
+      <td><%= f.text_field :up_max_total_upstream_dp, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up__max_total_upstream_dp_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Equipment &Delta;P</td>
+      <td><%= f.text_field :up_max_equipment_dp, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_max_equipment_dp_unit"></label>
+      </td>
+      <td>Pressure @ Inlet Flange</td>
+      <td><%= f.text_field :up_max_pressure_at_inlet_flange, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_max_pressure_at_inlet_flange_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Control Valve &Delta;P</td>
+      <td><%= f.text_field :up_max_control_valve_dp, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_max_control_valve_dp_unit"></label>
+      </td>
+      <td colspan="2" rowspan="2"></td>
+    </tr>
+    <tr>
+      <td>Orifice &Delta;P</td>
+      <td><%= f.text_field :up_max_orifice_dp, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_max_orifice_dp_unit"></label>
+      </td>
+    </tr>
+  </table>
+  <!-- upstream loss maximum -->
+
+  <!-- upstream loss minimum -->
+  <table class="upstream_loss_table" id="upstream_loss_minimum" style="display:none;">
+    <tr>
+      <td colspan="4"><b><u>Upstream Loss Minimum</u></b></td>
+    </tr>
+    <tr>
+      <td>Fitting &Delta;P</td>
+      <td><%= f.text_field :up_min_fitting_dp, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_min_fitting_dp_unit"></label>
+      </td>
+      <td>Total upstream &Delta;P</td>
+      <td><%= f.text_field :up_min_total_upstream_dp, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_min_total_upstream_dp_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Equipment &Delta;P</td>
+      <td><%= f.text_field :up_min_equipment_dp, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_min_equipment_dp_unit"></label>
+      </td>
+      <td>Pressure @ Inlet Flange</td>
+      <td><%= f.text_field :up_min_pressure_at_inlet_flange, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_min_pressure_at_inlet_flange_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Control Valve &Delta;P</td>
+      <td><%= f.text_field :up_min_control_valve_dp, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_min_control_valve_dp_unit"></label>
+      </td>
+      <td colspan="2" rowspan="2"></td>
+    </tr>
+    <tr>
+      <td>Orifice &Delta;P</td>
+      <td><%= f.text_field :up_min_orifice_dp, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_min_orifice_dp_unit"></label>
+      </td>
+    </tr>
+  </table>
+  <!-- upstream loss minimum -->
+
+  <!-- upstream loss normal -->
+  <table class="upstream_loss_table" id="upstream_loss_normal" style="display:none;">
+    <tr>
+      <td colspan="4"><b><u>Upstream Loss Normal</u></b></td>
+    </tr>
+    <tr>
+      <td>Fitting &Delta;P</td>
+      <td><%= f.text_field :up_nor_fitting_dp, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_nor_fitting_dp_unit"></label>
+      </td>
+      <td>Total Upstream &Delta;P</td>
+      <td><%= f.text_field :up_nor_total_upstream_dp, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_nor_total_upstream_dp_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Equipment &Delta;P</td>
+      <td><%= f.text_field :up_nor_equipment_dp, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_nor_equipment_dp_unit"></label>
+      </td>
+      <td>Pressure @ Inlet Flange</td>
+      <td><%= f.text_field :up_nor_pressure_at_inlet_flange, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_nor_pressure_at_inlet_flange_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Control Valve &Delta;P</td>
+      <td><%= f.text_field :up_nor_control_valve_dp, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_nor_control_valve_dp_unit"></label>
+      </td>
+      <td colspan="2" rowspan="2"></td>
+    </tr>
+    <tr>
+      <td>Orifice &Delta;P</td>
+      <td><%= f.text_field :up_nor_orifice_dp, :class => "small-text-100" %>&nbsp;<label id="control_valve_sizing_up_nor_orifice_dp_unit"></label>
+      </td>
+    </tr>
+  </table>
+  <!-- upstream loss normal -->
+
+  </div>
+  <div id="tab2" class="tab_content">
+  <!-- Downstream -->
+  <div>
+    Downstream Condition Basis
+    <%= f.select :downstream_condition_basis, options_for_select(@upstream_condition_basis.collect { |h| [raw(h[:name]), h[:value]] }, control_valve_sizing.downstream_condition_basis) %>
+  </div>
+
+  <div id="downstream_maximum" class="downstream_tables_div">
+    <b>Maximum</b>
+    <table id="downstream_maximum_table" class="downstream_tables">
+      <tr>
+        <th rowspan="2">S.No</th>
+        <th rowspan="2">Design Circuit</th>
+        <th rowspan="2">Process Basis</th>
+        <th rowspan="2">Destination Stream</th>
+        <th rowspan="2">Circuit Piping</th>
+        <th>Destination Pressure</th>
+        <th>Fitting &Delta;P</th>
+        <th>Equipment &Delta;P</th>
+        <th>Control Valve &Delta;P</th>
+        <th>Orifice &Delta;P</th>
+        <th>Total System &Delta;P</th>
+        <th>Pressure @ Outlet Flange</th>
+        <th rowspan="2"></th>
+      </tr>
+      <tr>
+        <th><label class="downstream_destination_pressure_unit"></label></th>
+        <th><label class="downstream_fitting_dp_unit"></label></th>
+        <th><label class="downstream_equipment_dp_unit"></label></th>
+        <th><label class="downstream_control_valve_dp_unit"></label></th>
+        <th><label class="downstream_orifice_dp_unit"></label>r</th>
+        <th><label class="downstream_total_system_dp_unit"></label></th>
+        <th><label class="downstream_pressure_at_outlet_flange_unit"></label></th>
+      </tr>
+      <% control_valve_sizing.downstream_maximum.each_with_index do |dmax, i| %>
+        <tr>
+          <td>
+            <b><%= i+1 %></b>
+            <%= hidden_field_tag "control_valve_sizing[downstream_maximum][#{i+1}][id]", dmax.id, :id => "dmax_discharges_id_#{i+1}" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_normal][#{i+1}][path]", "#{i+1}", :id => "dnor_path_#{i+1}" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_maximum][#{i+1}][delete]", false, :id => "dmax_discharges_delete_#{i+1}" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_maximum][#{i+1}][downstream_condition_basis]", dmax.downstream_condition_basis %>
+          </td>
+          <td>
+            <%= radio_button_tag "design_circuit", i+1, dmax.design_circuit, :id => "dmax_design_circuit_#{i+1}" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_maximum][#{i+1}][design_circuit]", dmax.design_circuit, :id => "dmax_discharge_design_circuit_#{i+1}" %>
+          </td>
+          <td><%= select_tag "control_valve_sizing[downstream_maximum][#{i+1}][process_basis_id]", options_for_select(@company.heat_and_material_balances.collect { |p| [p[:case], p[:id]] }.insert(0, ''), dmax.process_basis_id), {:id => "dmax_discharge_process_basis_id_#{i+1}", :style => "width:100px;", :row_id => i+1} %></td>
+          <td><%= select_tag "control_valve_sizing[downstream_maximum][#{i+1}][destination_stream_no]", options_for_select(Stream.get_stream_nos_by_process_basis(dmax.process_basis_id).collect { |p| [p.display_stream_no, p.stream_no] }.insert(0, ''), dmax.destination_stream_no), :id => "dmax_discharge_destination_stream_no_#{i+1}", :style => "width:100px;", :row_id => i+1 %></td>
+          <td><input type="button" value="Circuit Piping" class="circuit_piping_btn" row_id="<%= i+1 %>"></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#{i+1}][destination_pressure]", dmax.destination_pressure, :id => "dmax_discharge_destination_pressure_#{i+1}", :class => "downstream_destination_pressure" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#{i+1}][fitting_dp]", dmax.fitting_dp, :id => "dmax_discharge_fitting_dp_#{i+1}", :class => "downstream_fitting_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#{i+1}][equipment_dp]", dmax.equipment_dp, :id => "dmax_discharge_equipment_dp_#{i+1}", :class => "downstream_equipment_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#{i+1}][control_valve_dp]", dmax.control_valve_dp, :id => "dmax_discharge_control_valve_dp_#{i+1}", :class => "downstream_control_valve_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#{i+1}][orifice_dp]", dmax.orifice_dp, :id => "dmax_discharge_orifice_dp_#{i+1}", :class => "downstream_orifice_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#{i+1}][total_system_dp]", dmax.total_system_dp, :id => "dmax_discharge_total_system_dp_#{i+1}", :class => "downstream_total_system_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#{i+1}][pressure_at_outlet_flange]", dmax.pressure_at_outlet_flange, :id => "dmax_discharge_pressure_at_outlet_flange_#{i+1}", :class => "downstream_pressure_at_outlet_flange" %></td>
+          <td><%= link_to "X", "#", :class => "downstream_maximum_table_close_tr", :downstream_maximum_id => dmax.id, :row_id => "#{i+1}" %></td>
+        </tr>
+      <% end %>
+      <% if control_valve_sizing.downstream_maximum.empty? %>
+        <tr>
+          <td>
+            <b>1</b>
+            <%= hidden_field_tag "control_valve_sizing[downstream_maximum][1][id]", "", :id => "dmax_discharges_id_1" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_maximum][1][path]", "1", :id => "dmax_path_1" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_maximum][1][downstream_condition_basis]", "maximum" %>
+          </td>
+          <td>
+            <%= radio_button_tag "design_circuit", '1', false, :id => "dmax_design_circuit_1" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_maximum][1][design_circuit]", "", :id => "dmax_discharge_design_circuit_1" %>
+          </td>
+          <td><%= select_tag "control_valve_sizing[downstream_maximum][1][process_basis_id]", options_for_select(@company.heat_and_material_balances.collect { |p| [p[:case], p[:id]] }.insert(0, '')), {:id => "dmax_discharge_process_basis_id_1", :style => "width:100px;", :row_id => 1} %></td>
+          <td><%= select_tag "control_valve_sizing[downstream_maximum][1][destination_stream_no]", options_for_select(@streams.collect { |p| [p[:stream_no], p[:display_stream_no]] }.insert(0, '')), :id => "dmax_discharge_destination_stream_no_1", :style => "width:100px;", :row_id => 1 %></td>
+          <td><input type="button" value="Circuit Piping" class="circuit_piping_btn" row_id="1"></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][1][destination_pressure]", "", :id => "dmax_discharge_destination_pressure_1", :class => "downstream_destination_pressure" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][1][fitting_dp]", "", :id => "dmax_discharge_fitting_dp_1", :class => "downstream_fitting_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][1][equipment_dp]", "", :id => "dmax_discharge_equipment_dp_1", :class => "downstream_equipment_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][1][control_valve_dp]", "", :id => "dmax_discharge_control_valve_dp_1", :class => "downstream_control_valve_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][1][orifice_dp]", "", :id => "dmax_discharge_orifice_dp_1", :class => "downstream_orifice_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][1][total_system_dp]", "", :id => "dmax_discharge_total_system_dp_1", :class => "downstream_total_system_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][1][pressure_at_outlet_flange]", "", :id => "dmax_discharge_pressure_at_outlet_flange_1", :class => "downstream_pressure_at_outlet_flange" %></td>
+          <td><%= link_to "X", "#", :class => "downstream_maximum_table_close_tr", :downstream_maximum_id => "0", :row_id => "1" %></td>
+        </tr>
+      <% end %>
+    </table>
+
+    <%= link_to "Add More", "#", :id => "add_new_downstream_maximum_row", :class => "add_new_downstream_row" %>
+
+    <table class="hidden" id="new_downstream_maximum_row">
+      <tr>
+        <td>
+          <b>#x#</b>
+          <%= hidden_field_tag "control_valve_sizing[downstream_maximum][#x#][id]", "", :id => "dmax_discharges_id_#x#" %>
+          <%= hidden_field_tag "control_valve_sizing[downstream_maximum][#x#][path]", "1", :id => "dmax_path_#x#" %>
+          <%= hidden_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_condition_basis]", "maximum" %>
+        </td>
+        <td>
+          <%= radio_button_tag "design_circuit", '#x#', false, :id => "dmax_design_circuit_#x#" %>
+          <%= hidden_field_tag "control_valve_sizing[downstream_maximum][#x#][design_circuit]", "", :id => "dmax_discharge_design_circuit_#x#" %>
+        </td>
+        <td><%= select_tag "control_valve_sizing[downstream_maximum][#x#][process_basis_id]", options_for_select(@company.heat_and_material_balances.collect { |p| [p[:case], p[:id]] }.insert(0, '')), {:id => "dmax_discharge_process_basis_id_#x#", :style => "width:100px;", :row_id => "#x#"} %></td>
+        <td><%= select_tag "control_valve_sizing[downstream_maximum][#x#][destination_stream_no]", options_for_select(@streams.collect { |p| [p[:stream_no], p[:display_stream_no]] }.insert(0, '')), :id => "dmax_discharge_destination_stream_no_#x#", :style => "width:100px;", :row_id => "#x#" %></td>
+        <td><input type="button" value="Circuit Piping" class="circuit_piping_btn" row_id="#x#"></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][destination_pressure]", "", :id => "dmax_discharge_destination_pressure_#x#", :class => "downstream_destination_pressure" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][fitting_dp]", "", :id => "dmax_discharge_fitting_dp_#x#", :class => "downstream_fitting_dp" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][equipment_dp]", "", :id => "dmax_discharge_equipment_dp_#x#", :class => "downstream_equipment_dp" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][control_valve_dp]", "", :id => "dmax_discharge_control_valve_dp_#x#", :class => "downstream_control_valve_dp" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][orifice_dp]", "", :id => "dmax_discharge_orifice_dp_#x#", :class => "downstream_orifice_dp" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][total_system_dp]", "", :id => "dmax_discharge_total_system_dp_#x#", :class => "downstream_total_system_dp" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][pressure_at_outlet_flange]", "", :id => "dmax_discharge_pressure_at_outlet_flange_#x#", :class => "downstream_pressure_at_outlet_flange" %></td>
+        <td><%= link_to "X", "#", :class => "downstream_maximum_table_close_tr", :downstream_maximum_id => "0", :row_id => "#x#" %></td>
+      </tr>
+    </table>
+  </div>
+
+  <div id="downstream_normal" class="downstream_tables_div" style="display:none;">
+    <b>Normal</b>
+    <table id="downstream_normal_table" class="downstream_tables">
+      <tr>
+        <th rowspan="2">S.No</th>
+        <th rowspan="2">Design Circuit</th>
+        <th rowspan="2">Process Basis</th>
+        <th rowspan="2">Destination Stream</th>
+        <th rowspan="2">Circuit Piping</th>
+        <th>Destination Pressure</th>
+        <th>Fitting &Delta;P</th>
+        <th>Equipment &Delta;P</th>
+        <th>Control Valve &Delta;P</th>
+        <th>Orifice &Delta;P</th>
+        <th>Total System &Delta;P</th>
+        <th>Pressure @ Outlet Flange</th>
+        <th rowspan="2"></th>
+      </tr>
+      <tr>
+        <th><label class="downstream_destination_pressure_unit"></label></th>
+        <th><label class="downstream_fitting_dp_unit"></label></th>
+        <th><label class="downstream_equipment_dp_unit"></label></th>
+        <th><label class="downstream_control_valve_dp_unit"></label></th>
+        <th><label class="downstream_orifice_dp_unit"></label>r</th>
+        <th><label class="downstream_total_system_dp_unit"></label></th>
+        <th><label class="downstream_pressure_at_outlet_flange_unit"></label></th>
+      </tr>
+      <% control_valve_sizing.downstream_normal.each_with_index do |dnor, i| %>
+        <tr>
+          <td>
+            <b><%= i+1 %></b>
+            <%= hidden_field_tag "control_valve_sizing[downstream_normal][#{i+1}][id]", dnor.id, :id => "dnor_discharges_id_#{i+1}" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_normal][#{i+1}][path]", "#{i+1}", :id => "dnor_path_#{i+1}" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_normal][#{i+1}][delete]", false, :id => "dnor_discharges_delete_#{i+1}" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_normal][#{i+1}][downstream_condition_basis]", dnor.downstream_condition_basis %>
+          </td>
+          <td>
+            <%= radio_button_tag "design_circuit", i+1, dnor.design_circuit, :id => "design_circuit_#{i+1}" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_normal][#{i+1}][design_circuit]", dnor.design_circuit, :id => "dnor_discharge_design_circuit_#{i+1}" %>
+          </td>
+          <td><%= select_tag "control_valve_sizing[downstream_normal][#{i+1}][process_basis_id]", options_for_select(@company.heat_and_material_balances.collect { |p| [p[:case], p[:id]] }.insert(0, ''), dnor.process_basis_id), {:id => "dnor_discharge_process_basis_id_#{i+1}", :style => "width:100px;", :row_id => i+1} %></td>
+          <td><%= select_tag "control_valve_sizing[downstream_normal][#{i+1}][destination_stream_no]", options_for_select(Stream.get_stream_nos_by_process_basis(dnor.process_basis_id).collect { |p| [p.display_stream_no, p.stream_no] }.insert(0, ''), dnor.destination_stream_no), :id => "dnor_discharge_destination_stream_no_#{i+1}", :style => "width:100px;", :row_id => i+1 %></td>
+          <td><input type="button" value="Circuit Piping" class="circuit_piping_btn" row_id="<%= i+1 %>"></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_normal][#{i+1}][destination_pressure]", dnor.destination_pressure, :id => "dnor_discharge_destination_pressure_#{i+1}", :class => "downstream_destination_pressure" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_normal][#{i+1}][fitting_dp]", dnor.fitting_dp, :id => "dnor_discharge_fitting_dp_#{i+1}", :class => "downstream_fitting_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_normal][#{i+1}][equipment_dp]", dnor.equipment_dp, :id => "dnor_discharge_equipment_dp_#{i+1}", :class => "downstream_equipment_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_normal][#{i+1}][control_valve_dp]", dnor.control_valve_dp, :id => "dnor_discharge_control_valve_dp_#{i+1}", :class => "downstream_control_valve_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_normal][#{i+1}][orifice_dp]", dnor.orifice_dp, :id => "dnor_discharge_orifice_dp_#{i+1}", :class => "downstream_orifice_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_normal][#{i+1}][total_system_dp]", dnor.total_system_dp, :id => "dnor_discharge_total_system_dp_#{i+1}", :class => "downstream_total_system_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_normal][#{i+1}][pressure_at_outlet_flange]", dnor.pressure_at_outlet_flange, :id => "dnor_discharge_pressure_at_outlet_flange_#{i+1}", :class => "downstream_pressure_at_outlet_flange" %></td>
+          <td><%= link_to "X", "#", :class => "downstream_normal_table_close_tr", :downstream_normal_id => dnor.id, :row_id => "#{i+1}" %></td>
+        </tr>
+      <% end %>
+      <% if control_valve_sizing.downstream_normal.empty? %>
+        <tr>
+          <td>
+            <b>1</b>
+            <%= hidden_field_tag "control_valve_sizing[downstream_normal][1][id]", "", :id => "dnor_discharges_id_1" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_normal][1][path]", "", :id => "dnor_path_1" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_normal][1][downstream_condition_basis]", "normal" %>
+          </td>
+          <td>
+            <%= radio_button_tag "design_circuit", '1', false, :id => "dnor_design_circuit_1" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_normal][1][design_circuit]", "", :id => "dnor_discharge_design_circuit_1" %>
+          </td>
+          <td><%= select_tag "control_valve_sizing[downstream_normal][1][process_basis_id]", options_for_select(@company.heat_and_material_balances.collect { |p| [p[:case], p[:id]] }.insert(0, '')), {:id => "dnor_discharge_process_basis_id_1", :style => "width:100px;", :row_id => 1} %></td>
+          <td><%= select_tag "control_valve_sizing[downstream_normal][1][destination_stream_no]", options_for_select(@streams.collect { |p| [p[:stream_no], p[:display_stream_no]] }.insert(0, '')), :id => "dnor_discharge_destination_stream_no_1", :style => "width:100px;", :row_id => 1 %></td>
+          <td><input type="button" value="Circuit Piping" class="circuit_piping_btn" row_id="1"></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_normal][1][destination_pressure]", "", :id => "dnor_discharge_destination_pressure_1", :class => "downstream_destination_pressure" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_normal][1][fitting_dp]", "", :id => "dnor_discharge_fitting_dp_1", :class => "downstream_fitting_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_normal][1][equipment_dp]", "", :id => "dnor_discharge_equipment_dp_1", :class => "downstream_equipment_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_normal][1][control_valve_dp]", "", :id => "dnor_discharge_control_valve_dp_1", :class => "downstream_control_valve_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_normal][1][orifice_dp]", "", :id => "dnor_discharge_orifice_dp_1", :class => "downstream_orifice_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_normal][1][total_system_dp]", "", :id => "dnor_discharge_total_system_dp_1", :class => "downstream_total_system_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_normal][1][pressure_at_outlet_flange]", "", :id => "dnor_discharge_pressure_at_outlet_flange_1", :class => "downstream_pressure_at_outlet_flange" %></td>
+          <td><%= link_to "X", "#", :class => "downstream_normal_table_close_tr", :downstream_normal_id => "0", :row_id => "1" %></td>
+        </tr>
+      <% end %>
+    </table>
+
+    <%= link_to "Add More", "#", :id => "add_new_downstream_normal_row", :class => "add_new_downstream_row" %>
+
+    <table class="hidden" id="new_downstream_normal_row">
+      <tr>
+        <td>
+          <b>#x#</b>
+          <%= hidden_field_tag "control_valve_sizing[downstream_normal][#x#][id]", "", :id => "dnor_discharges_id_#x#" %>
+          <%= hidden_field_tag "control_valve_sizing[downstream_normal][#x#][path]", "#x#", :id => "dnor_path_#x#" %>
+          <%= hidden_field_tag "control_valve_sizing[downstream_normal][#x#][downstream_condition_basis]", "normal" %>
+        </td>
+        <td>
+          <%= radio_button_tag "design_circuit", '#x#', false, :id => "dnor_design_circuit_#x#" %>
+          <%= hidden_field_tag "control_valve_sizing[downstream_normal][#x#][design_circuit]", "", :id => "dnor_discharge_design_circuit_#x#" %>
+        </td>
+        <td><%= select_tag "control_valve_sizing[downstream_normal][#x#][process_basis_id]", options_for_select(@company.heat_and_material_balances.collect { |p| [p[:case], p[:id]] }.insert(0, '')), {:id => "dnor_discharge_process_basis_id_#x#", :style => "width:100px;", :row_id => "#x#"} %></td>
+        <td><%= select_tag "control_valve_sizing[downstream_normal][#x#][destination_stream_no]", options_for_select(@streams.collect { |p| [p[:stream_no], p[:display_stream_no]] }.insert(0, '')), :id => "dnor_discharge_destination_stream_no_#x#", :style => "width:100px;", :row_id => "#x#" %></td>
+        <td><input type="button" value="Circuit Piping" class="circuit_piping_btn" row_id="#x#"></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_normal][#x#][destination_pressure]", "", :id => "dnor_discharge_destination_pressure_#x#", :class => "downstream_destination_pressure" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_normal][#x#][fitting_dp]", "", :id => "dnor_discharge_fitting_dp_#x#", :class => "downstream_fitting_dp" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_normal][#x#][equipment_dp]", "", :id => "dnor_discharge_equipment_dp_#x#", :class => "downstream_equipment_dp" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_normal][#x#][control_valve_dp]", "", :id => "dnor_discharge_control_valve_dp_#x#", :class => "downstream_control_valve_dp" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_normal][#x#][orifice_dp]", "", :id => "dnor_discharge_orifice_dp_#x#", :class => "downstream_orifice_dp" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_normal][#x#][total_system_dp]", "", :id => "dnor_discharge_total_system_dp_#x#", :class => "downstream_total_system_dp" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_normal][#x#][pressure_at_outlet_flange]", "", :id => "dnor_discharge_pressure_at_outlet_flange_#x#", :class => "downstream_pressure_at_outlet_flange" %></td>
+        <td><%= link_to "X", "#", :class => "downstream_normal_table_close_tr", :downstream_normal_id => "0", :row_id => "#x#" %></td>
+      </tr>
+    </table>
+
+  </div>
+
+  <div id="downstream_minimum" class="downstream_tables_div" style="display:none;">
+    <b>Minimum</b>
+    <table id="downstream_minimum_table" class="downstream_tables">
+      <tr>
+        <th rowspan="2">S.No</th>
+        <th rowspan="2">Design Circuit</th>
+        <th rowspan="2">Process Basis</th>
+        <th rowspan="2">Destination Stream</th>
+        <th rowspan="2">Circuit Piping</th>
+        <th>Destination Pressure</th>
+        <th>Fitting &Delta;P</th>
+        <th>Equipment &Delta;P</th>
+        <th>Control Valve &Delta;P</th>
+        <th>Orifice &Delta;P</th>
+        <th>Total System &Delta;P</th>
+        <th>Pressure @ Outlet Flange</th>
+        <th rowspan="2"></th>
+      </tr>
+      <tr>
+        <th><label class="downstream_destination_pressure_unit"></label></th>
+        <th><label class="downstream_fitting_dp_unit"></label></th>
+        <th><label class="downstream_equipment_dp_unit"></label></th>
+        <th><label class="downstream_control_valve_dp_unit"></label></th>
+        <th><label class="downstream_orifice_dp_unit"></label>r</th>
+        <th><label class="downstream_total_system_dp_unit"></label></th>
+        <th><label class="downstream_pressure_at_outlet_flange_unit"></label></th>
+      </tr>
+      <% control_valve_sizing.downstream_minimum.each_with_index do |dmin, i| %>
+        <tr>
+          <td>
+            <b><%= i+1 %></b>
+            <%= hidden_field_tag "control_valve_sizing[downstream_minimum][#{i+1}][id]", dmin.id, :id => "dmin_discharges_id_#{i+1}" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_minimum][#{i+1}][path]", "#{i+1}", :id => "dmin_path_#{i+1}" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_minimum][#{i+1}][delete]", false, :id => "dmin_discharges_delete_#{i+1}" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_minimum][#{i+1}][downstream_condition_basis]", dmin.downstream_condition_basis %>
+          </td>
+          <td>
+            <%= radio_button_tag "design_circuit", i+1, dmin.design_circuit, :id => "dmin_design_circuit_#{i+1}" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_minimum][#{i+1}][design_circuit]", dmin.design_circuit, :id => "dmin_discharge_design_circuit_#{i+1}" %>
+          </td>
+          <td><%= select_tag "control_valve_sizing[downstream_minimum][#{i+1}][process_basis_id]", options_for_select(@company.heat_and_material_balances.collect { |p| [p[:case], p[:id]] }.insert(0, ''), dmin.process_basis_id), {:id => "dmin_discharge_process_basis_id_#{i+1}", :style => "width:100px;", :row_id => i+1} %></td>
+          <td><%= select_tag "control_valve_sizing[downstream_minimum][#{i+1}][destination_stream_no]", options_for_select(Stream.get_stream_nos_by_process_basis(dmin.process_basis_id).collect { |p| [p.display_stream_no, p.stream_no] }.insert(0, ''), dmin.destination_stream_no), :id => "dmin_discharge_destination_stream_no_#{i+1}", :style => "width:100px;", :row_id => i+1 %></td>
+          <td><input type="button" value="Circuit Piping" class="circuit_piping_btn" row_id="<%= i+1 %>"></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_minimum][#{i+1}][destination_pressure]", dmin.destination_pressure, :id => "dmin_discharge_destination_pressure_#{i+1}", :class => "downstream_destination_pressure" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_minimum][#{i+1}][fitting_dp]", dmin.fitting_dp, :id => "dmin_discharge_fitting_dp_#{i+1}", :class => "downstream_fitting_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_minimum][#{i+1}][equipment_dp]", dmin.equipment_dp, :id => "dmin_discharge_equipment_dp_#{i+1}", :class => "downstream_equipment_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_minimum][#{i+1}][control_valve_dp]", dmin.control_valve_dp, :id => "dmin_discharge_control_valve_dp_#{i+1}", :class => "downstream_control_valve_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_minimum][#{i+1}][orifice_dp]", dmin.orifice_dp, :id => "dmin_discharge_orifice_dp_#{i+1}", :class => "downstream_orifice_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_minimum][#{i+1}][total_system_dp]", dmin.total_system_dp, :id => "dmin_discharge_total_system_dp_#{i+1}", :class => "downstream_total_system_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_minimum][#{i+1}][pressure_at_outlet_flange]", dmin.pressure_at_outlet_flange, :id => "dmin_discharge_pressure_at_outlet_flange_#{i+1}", :class => "downstream_pressure_at_outlet_flange" %></td>
+          <td><%= link_to "X", "#", :class => "downstream_minimum_table_close_tr", :downstream_minimum_id => dmin.id, :row_id => "#{i+1}" %></td>
+        </tr>
+      <% end %>
+      <% if control_valve_sizing.downstream_minimum.empty? %>
+        <tr>
+          <td>
+            <b>1</b>
+            <%= hidden_field_tag "control_valve_sizing[downstream_minimum][1][id]", "", :id => "dmin_discharges_id_1" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_minimum][1][path]", "1", :id => "dmin_path_1" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_minimum][1][downstream_condition_basis]", "minimum" %>
+          </td>
+          <td>
+            <%= radio_button_tag "design_circuit", '1', false, :id => "dnor_design_circuit_1" %>
+            <%= hidden_field_tag "control_valve_sizing[downstream_minimum][1][design_circuit]", "", :id => "dmin_discharge_design_circuit_1" %>
+          </td>
+          <td><%= select_tag "control_valve_sizing[downstream_minimum][1][process_basis_id]", options_for_select(@company.heat_and_material_balances.collect { |p| [p[:case], p[:id]] }.insert(0, '')), {:id => "dmin_discharge_process_basis_id_1", :style => "width:100px;", :row_id => 1} %></td>
+          <td><%= select_tag "control_valve_sizing[downstream_minimum][1][destination_stream_no]", options_for_select(@streams.collect { |p| [p[:stream_no], p[:display_stream_no]] }.insert(0, '')), :id => "dmin_discharge_destination_stream_no_1", :style => "width:100px;", :row_id => 1 %></td>
+          <td><input type="button" value="Circuit Piping" class="circuit_piping_btn" row_id="1"></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_minimum][1][destination_pressure]", "", :id => "dmin_discharge_destination_pressure_1", :class => "downstream_destination_pressure" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_minimum][1][fitting_dp]", "", :id => "dmin_discharge_fitting_dp_1", :class => "downstream_fitting_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_minimum][1][equipment_dp]", "", :id => "dmin_discharge_equipment_dp_1", :class => "downstream_equipment_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_minimum][1][control_valve_dp]", "", :id => "dmin_discharge_control_valve_dp_1", :class => "downstream_control_valve_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_minimum][1][orifice_dp]", "", :id => "dmin_discharge_orifice_dp_1", :class => "downstream_orifice_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_minimum][1][total_system_dp]", "", :id => "dmin_discharge_total_system_dp_1", :class => "downstream_total_system_dp" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_minimum][1][pressure_at_outlet_flange]", "", :id => "dmin_discharge_pressure_at_outlet_flange_1", :class => "downstream_pressure_at_outlet_flange" %></td>
+          <td><%= link_to "X", "#", :class => "downstream_minimum_table_close_tr", :downstream_minimum_id => "0", :row_id => "1" %></td>
+        </tr>
+      <% end %>
+    </table>
+
+    <%= link_to "Add More", "#", :id => "add_new_downstream_minimum_row", :class => "add_new_downstream_row" %>
+
+    <table class="hidden" id="new_downstream_minimum_row">
+      <tr>
+        <td>
+          <b>#x#</b>
+          <%= hidden_field_tag "control_valve_sizing[downstream_minimum][#x#][id]", "", :id => "dmin_discharges_id_#x#" %>
+          <%= hidden_field_tag "control_valve_sizing[downstream_minimum][#x#][path]", "#x#", :id => "dmin_path_#x#" %>
+          <%= hidden_field_tag "control_valve_sizing[downstream_minimum][#x#][downstream_condition_basis]", "minimum" %>
+        </td>
+        <td>
+          <%= radio_button_tag "design_circuit", '#x#', false, :id => "dnor_design_circuit_#x#" %>
+          <%= hidden_field_tag "control_valve_sizing[downstream_minimum][#x#][design_circuit]", "", :id => "dmin_discharge_design_circuit_#x#" %>
+        </td>
+        <td><%= select_tag "control_valve_sizing[downstream_minimum][#x#][process_basis_id]", options_for_select(@company.heat_and_material_balances.collect { |p| [p[:case], p[:id]] }.insert(0, '')), {:id => "dmin_discharge_process_basis_id_#x#", :style => "width:100px;", :row_id => "#x#"} %></td>
+        <td><%= select_tag "control_valve_sizing[downstream_minimum][#x#][destination_stream_no]", options_for_select(@streams.collect { |p| [p[:stream_no], p[:display_stream_no]] }.insert(0, '')), :id => "dmin_discharge_destination_stream_no_#x#", :style => "width:100px;", :row_id => "#x#" %></td>
+        <td><input type="button" value="Circuit Piping" class="circuit_piping_btn" row_id="#x#"></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_minimum][#x#][destination_pressure]", "", :id => "dmin_discharge_destination_pressure_#x#", :class => "downstream_destination_pressure" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_minimum][#x#][fitting_dp]", "", :id => "dmin_discharge_fitting_dp_#x#", :class => "downstream_fitting_dp" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_minimum][#x#][equipment_dp]", "", :id => "dmin_discharge_equipment_dp_#x#", :class => "downstream_equipment_dp" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_minimum][#x#][control_valve_dp]", "", :id => "dmin_discharge_control_valve_dp_#x#", :class => "downstream_control_valve_dp" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_minimum][#x#][orifice_dp]", "", :id => "dmin_discharge_orifice_dp_#x#", :class => "downstream_orifice_dp" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_minimum][#x#][total_system_dp]", "", :id => "dmin_discharge_total_system_dp_#x#", :class => "downstream_total_system_dp" %></td>
+        <td><%= text_field_tag "control_valve_sizing[downstream_minimum][#x#][pressure_at_outlet_flange]", "", :id => "dmin_discharge_pressure_at_outlet_flange_#x#", :class => "downstream_pressure_at_outlet_flange" %></td>
+        <td><%= link_to "X", "#", :class => "downstream_normal_table_close_tr", :downstream_minimum_id => "0", :row_id => "#x#" %></td>
+      </tr>
+    </table>
+  </div>
+  <br>
+  <%= f.submit 'Save' if !control_valve_sizing.new_record? %>
+  <input type='button' id='downstream_calculate' value="Calculate">
+
+  </div>
+  <div id="tab3" class="tab_content">
+    <!-- CV Specifications -->
+    <table width="100%">
+      <tr>
+        <td colspan="4"><b><u>MECHANICAL DETAILS</u></b></td>
+      </tr>
+      <tr>
+        <td width="25%">Manufacturer</td>
+        <td width="25%"><%= f.text_field :cvs_manufacturer %></td>
+        <td width="25%">Flow Characteristics</td>
+        <td width="25%"><%= f.select :cvs_flow_characteristics, options_for_select(@flow_characteristic, control_valve_sizing.cvs_flow_characteristics), :include_blank => true %></td>
+      </tr>
+      <tr>
+        <td>Model</td>
+        <td><%= f.text_field :cvs_model %></td>
+        <td>Valve Flow Coefficient(Cv)</td>
+        <td><%= f.text_field :cvs_valve_flow_coefficient %></td>
+      </tr>
+      <tr>
+        <td>Line Size</td>
+        <td><%= f.select :cvs_line_size, options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }, control_valve_sizing.cvs_line_size), :include_blank => true %>&nbsp;</td>
+        <td>Valve Pressure Drop Ratio(Xc)</td>
+        <td><%= f.text_field :cvs_valve_pressure_drop_ratio %></td>
+      </tr>
+      <tr>
+        <td>Line Schedule</td>
+        <td><%= f.select :cvs_line_schedule, options_for_select(PipeSizing.pipe_schedules.collect { |p| [raw(p[:name]), p[:name]] }, control_valve_sizing.cvs_line_schedule), :include_blank => true %></td>
+        <td>Valve Liquid Recovery Factor(FL)</td>
+        <td><%= f.text_field :cvs_valve_liquid_recovery_factor %></td>
+      </tr>
+      <tr>
+        <td>Body Size</td>
+        <td><%= f.text_field :cvs_cv_body_size %>&nbsp;<label id="control_valve_sizing_cvs_cv_body_size_unit"></label>
+        </td>
+        <td>Valve Style Modifier(FD)</td>
+        <td><%= f.text_field :cvs_valve_style_modifier %></td>
+      </tr>
+      <tr>
+        <td>Trim Size</td>
+        <td><%= f.text_field :cvs_trim_size %>&nbsp;<label id="control_valve_sizing_cvs_trim_size_unit"></label></td>
+        <td>Attached Fittings Reducer</td>
+        <td><%= f.select :cvs_attached_fittings_reducer, options_for_select(@fittings_reducer, control_valve_sizing.cvs_attached_fittings_reducer), :include_blank => true %></td>
+      </tr>
+      <tr>
+        <td>Travel</td>
+        <td><%= f.text_field :cvs_travel %>&nbsp;<label id="control_valve_sizing_cvs_travel_unit"></label></td>
+        <td>Piping Geometric Factor(FP)</td>
+        <td><%= control_valve_sizing.cvs_piping_geometric_factor %></td>
+      </tr>
+      <tr>
+        <td colspan="4" style="text-align:right;"><input id="control_valve_design_btn" type="button" value="Design">
+        </td>
+      </tr>
+      <tr>
+        <td><b><u>RESULTS</u></b></td>
+        <td><b><u>Minimum</u></b></td>
+        <td><b><u>Normal</u></b></td>
+        <td><b><u>Maximum</u></b></td>
+      </tr>
+      <tr>
+        <td>Differential Pressure</td>
+        <td><%= control_valve_sizing.cvs_min_differential_pressure %>&nbsp;<label class="cvs_min_differential_pressure_unit"></label>
+        </td>
+        <td><%= control_valve_sizing.cvs_nor_differential_pressure %>&nbsp;<label class="cvs_min_differential_pressure_unit"></label>
+        </td>
+        <td><%= control_valve_sizing.cvs_max_differential_pressure %>&nbsp;<label class="cvs_min_differential_pressure_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Reynolds Number Factor</td>
+        <td><%= control_valve_sizing.cvs_min_reynolds_number_factor %></td>
+        <td><%= control_valve_sizing.cvs_nor_reynolds_number_factor %></td>
+        <td><%= control_valve_sizing.cvs_max_reynolds_number_factor %></td>
+      </tr>
+      <tr>
+        <td>Required Flow Coefficient</td>
+        <td><%= control_valve_sizing.cvs_min_required_flow_coefficient %></td>
+        <td><%= control_valve_sizing.cvs_nor_required_flow_coefficient %></td>
+        <td><%= control_valve_sizing.cvs_max_required_flow_coefficient %></td>
+      </tr>
+      <tr>
+        <td>Travel Percentage(%)</td>
+        <td><%= f.text_field :cvs_min_travel_percentage %></td>
+        <td><%= f.text_field :cvs_nor_travel_percentage %></td>
+        <td><%= f.text_field :cvs_max_travel_percentage %></td>
+      </tr>
+      <tr>
+        <td>Choke Condition</td>
+        <td><%= control_valve_sizing.cvs_min_choke_condition %></td>
+        <td><%= control_valve_sizing.cvs_nor_choke_condition %></td>
+        <td><%= control_valve_sizing.cvs_max_choke_condition %></td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab4" class="tab_content">
+    <!-- CV Bypass Calc -->
+    <table>
+      <tr>
+        <td><%= f.check_box :cvb_include_bypass %>&nbsp;Include ByPass</td>
+        <td><%= f.check_box :cvb_control_valve %>&nbsp;Similar Charateristics To Control Valve</td>
+        <td rowspan="3">
+          <fieldset style="border: 1px solid #000000;padding: 5px;">
+            <legend>Bypass Sizing Basis</legend>
+            <ul>
+              <li><%= f.radio_button :cvb_bypass_sizing_basis, "maximum" %>&nbsp;Maximum</li>
+              <li><%= f.radio_button :cvb_bypass_sizing_basis, "normal" %>&nbsp;Normal/Design</li>
+              <li><%= f.radio_button :cvb_bypass_sizing_basis, "minimum" %>&nbsp;Minimum/Turndown</li>
+            </ul>
+          </fieldset>
+        </td>
+      </tr>
+      <tr>
+        <td>Bypass Tag</td>
+        <td><%= f.text_field :cvb_bypass_tag %></td>
+      </tr>
+      <tr>
+        <td>Valve Type</td>
+        <td><%= f.select :cvb_valve_type, options_for_select(StaticData.valve_type.collect { |h| [raw(h), h] }, control_valve_sizing.cvb_valve_type) %></td>
+      </tr>
+      <tr>
+        <td>Line Size</td>
+        <td><%= f.select :cvb_line_size, options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }, control_valve_sizing.cvb_line_size), :include_blank => true %>&nbsp;&nbsp;<label id="control_valve_sizing_cvb_line_size_unit"></label>
+        </td>
+        <td rowspan="54"></td>
+      </tr>
+      <tr>
+        <td>Line Schedule</td>
+        <td><%= f.select :cvb_line_schedule, options_for_select(PipeSizing.pipe_schedules.collect { |p| [raw(p[:name]), p[:name]] }, control_valve_sizing.cvb_line_schedule), :include_blank => true %></td>
+      </tr>
+      <tr>
+        <td>Flow Coefficient(Cv)</td>
+        <td><%= f.text_field :cvb_flow_coefficient %></td>
+      </tr>
+      <tr>
+        <td>Body Size</td>
+        <td>
+          <label id="cvb_body_size"><%= control_valve_sizing.cvb_body_size %></label>
+          <%= f.hidden_field :cvb_body_size %>
+          &nbsp;<label id="control_valve_sizing_cvb_body_size_unit"></label>&nbsp;&nbsp;&nbsp;&nbsp;
+          <input id="bypass_design_calculate" type="button" value="Calculate">
+        </td>
+      </tr>
+      <tr>
+        <td>Administrative Controls</td>
+        <td><%= f.select :cvb_administrative_controls, options_for_select(@administrative_controls, control_valve_sizing.cvb_administrative_controls), :include_blank => true %></td>
+      </tr>
+      <tr>
+        <td colspan="3"><b><u>NOTES</u></b></td>
+      </tr>
+      <tr>
+        <td colspan="3"><%= f.text_area :cvb_notes, :size => "70x5" %></td>
+      </tr>
+    </table>
+  </div>
+  </div>
+  <div class="clear"></div>
+  </div>
+
+  <!-- PIPING -->
+  <div style="display:none;">
+    <div id="piping_box">
+      <div id="suction_piping_basis" style="font-weight:bold;font-size: 16px;"></div>
+      <table id="piping_table">
+        <tr>
+          <th rowspan="2">No.</th>
+          <th rowspan="2">Fitting(s)</th>
+          <th rowspan="2">Fitting Tag</th>
+          <th>Pipe Size</th>
+          <th rowspan="2">Pipe Sch.</th>
+          <th>Pipe ID</th>
+          <th rowspan="2">% Flow</th>
+          <th rowspan="2">Ds/Dl<br>or Cv</th>
+          <th>Length</th>
+          <th>Elev.</th>
+          <th class="delta_p_maximum">&Delta;P</th>
+          <th class="delta_p_normal">&Delta;P</th>
+          <th class="delta_p_minimum">&Delta;P</th>
+          <th>Outlet Pressure</th>
+          <th rowspan="2"></th>
+        </tr>
+        <tr>
+          <th>inches</th>
+          <th><label class="suction_pipings_pipe_id_unit"></label></th>
+          <th><label class="suction_pipings_length_unit"></label></th>
+          <th><label class="suction_pipings_elev_unit"></label></th>
+          <th><label class="suction_pipings_delta_p_unit"></label></th>
+          <th><label class="suction_pipings_outlet_pressure_unit"></label></th>
+        </tr>
+        <% control_valve_sizing.suction_pipings.where(:tab => "upstream").each_with_index do |sp, i| %>
+          <tr>
+            <td>
+              <%= i+1 %>
+              <%= hidden_field_tag "control_valve_sizing[suction_pipings][#{i+1}][id]", sp.id, :id => "suction_pipings_id_#{i+1}" %>
+              <%= hidden_field_tag "control_valve_sizing[suction_pipings][#{i+1}][tab]", "upstream", :id => "suction_pipings_tab_#{i+1}" %>
+            </td>
+            <td><%= select_tag "control_valve_sizing[suction_pipings][#{i+1}][fitting]", options_for_select(PipeSizing.fitting.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, ''), sp.fitting), :id => "suction_pipings_fitting_#{i+1}", :style => "width:150px;" %></td>
+            <td><%= text_field_tag "control_valve_sizing[suction_pipings][#{i+1}][fitting_tag]", sp.fitting_tag, :id => "suction_pipings_fitting_tag_#{i+1}" %></td>
+            <td><%= select_tag "control_valve_sizing[suction_pipings][#{i+1}][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }.insert(0, ''), sp.pipe_size), :id => "suction_pipings_pipe_size_#{i+1}", :class => "suction_pipings_pipe_size", :row_id => "#{i+1}" %></td>
+            <td><%= select_tag "control_valve_sizing[suction_pipings][#{i+1}][pipe_schedule]", options_for_select(PipeSizing.pipe_size_schedules[sp.pipe_size.to_s], sp.pipe_schedule), :id => "suction_pipings_pipe_schedule_#{i+1}", :class => "suction_pipings_pipe_schedule", :row_id => "#{i+1}" %></td>
+            <td><%= text_field_tag "control_valve_sizing[suction_pipings][#{i+1}][pipe_id]", sp.pipe_id, :id => "suction_pipings_pipe_id_#{i+1}", :class => "suction_pipings_pipe_id" %></td>
+            <td><%= text_field_tag "control_valve_sizing[suction_pipings][#{i+1}][per_flow]", sp.per_flow, :id => "suction_pipings_per_flow_#{i+1}" %></td>
+            <td><%= text_field_tag "control_valve_sizing[suction_pipings][#{i+1}][ds_cv]", sp.ds_cv, :id => "suction_pipings_ds_cv_#{i+1}" %></td>
+            <td><%= text_field_tag "control_valve_sizing[suction_pipings][#{i+1}][length]", sp.length, :id => "suction_pipings_length_#{i+1}", :class => "suction_pipings_length" %></td>
+            <td><%= text_field_tag "control_valve_sizing[suction_pipings][#{i+1}][elev]", sp.elev, :id => "suction_pipings_elev_#{i+1}", :class => "suction_pipings_elev" %></td>
+
+            <td class="delta_p_maximum"><%= text_field_tag "control_valve_sizing[suction_pipings][#{i+1}][delta_p_max]", sp.delta_p_max, :id => "suction_pipings_delta_p_max_#{i+1}", :class => "suction_pipings_delta_p" %></td>
+            <td class="delta_p_minimum"><%= text_field_tag "control_valve_sizing[suction_pipings][#{i+1}][delta_p_min]", sp.delta_p_min, :id => "suction_pipings_delta_p_min_#{i+1}", :class => "suction_pipings_delta_p" %></td>
+            <td class="delta_p_normal"><%= text_field_tag "control_valve_sizing[suction_pipings][#{i+1}][delta_p_nor]", sp.delta_p_nor, :id => "suction_pipings_delta_p_nor_#{i+1}", :class => "suction_pipings_delta_p" %></td>
+
+            <td><%= text_field_tag "control_valve_sizing[suction_pipings][#{i+1}][outlet_pressure]", sp.outlet_pressure, :id => "suction_pipings_outlet_pressure_#{i+1}", :class => "suction_pipings_outlet_pressure" %></td>
+            <td><%= link_to "X", "#", :class => "suction_piping_close_tr", :suction_piping_id => "#{i+1}" %></td>
+          </tr>
+        <% end %>
+        <% if control_valve_sizing.suction_pipings.where(:tab => "upstream").empty? %>
+          <tr>
+            <td>
+              1
+              <%= hidden_field_tag "control_valve_sizing[suction_pipings][1][id]", "", :id => "suction_pipings_id_1" %>
+              <%= hidden_field_tag "control_valve_sizing[suction_pipings][1][tab]", "upstream", :id => "suction_pipings_tab_1" %>
+            </td>
+            <td><%= select_tag "control_valve_sizing[suction_pipings][1][fitting]", options_for_select(PipeSizing.fitting.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, '')), :id => "suction_pipings_fitting_1", :style => "width:150px;" %></td>
+            <td><%= text_field_tag "control_valve_sizing[suction_pipings][1][fitting_tag]", "", :id => "suction_pipings_fitting_tag_1" %></td>
+            <td><%= select_tag "control_valve_sizing[suction_pipings][1][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }.insert(0, '')), :id => "suction_pipings_pipe_size_1", :class => "suction_pipings_pipe_size", :row_id => "1" %></td>
+            <td><%= select_tag "control_valve_sizing[suction_pipings][1][pipe_schedule]", options_for_select([]), :id => "suction_pipings_pipe_schedule_1", :class => "suction_pipings_pipe_schedule", :row_id => "1" %></td>
+            <td><%= text_field_tag "control_valve_sizing[suction_pipings][1][pipe_id]", "", :id => "suction_pipings_pipe_id_1", :class => "suction_pipings_pipe_id" %></td>
+            <td><%= text_field_tag "control_valve_sizing[suction_pipings][1][per_flow]", "", :id => "suction_pipings_per_flow_1" %></td>
+            <td><%= text_field_tag "control_valve_sizing[suction_pipings][1][ds_cv]", "", :id => "suction_pipings_ds_cv_1" %></td>
+            <td><%= text_field_tag "control_valve_sizing[suction_pipings][1][length]", "", :id => "suction_pipings_length_1", :class => "suction_pipings_length" %></td>
+            <td><%= text_field_tag "control_valve_sizing[suction_pipings][1][elev]", "", :id => "suction_pipings_elev_1", :class => "suction_pipings_elev" %></td>
+
+            <td class="delta_p_maximum"><%= text_field_tag "control_valve_sizing[suction_pipings][1][delta_p_max]", "", :id => "suction_pipings_delta_p_max_1", :class => "suction_pipings_delta_p" %></td>
+            <td class="delta_p_minimum"><%= text_field_tag "control_valve_sizing[suction_pipings][1][delta_p_min]", "", :id => "suction_pipings_delta_p_min_1", :class => "suction_pipings_delta_p" %></td>
+            <td class="delta_p_normal"><%= text_field_tag "control_valve_sizing[suction_pipings][1][delta_p_nor]", "", :id => "suction_pipings_delta_p_nor_1", :class => "suction_pipings_delta_p" %></td>
+
+            <td><%= text_field_tag "control_valve_sizing[suction_pipings][1][outlet_pressure]", "", :id => "suction_pipings_outlet_pressure_1", :class => "suction_pipings_outlet_pressure" %></td>
+            <td><%= link_to "X", "#", :class => "suction_piping_close_tr", :suction_piping_id => 1 %></td>
+          </tr>
+        <% end %>
+      </table>
+      <br>
+      <%= link_to "Add", "#", :id => "add_new_suction_piping" %>&nbsp;|&nbsp;<%= link_to "Close", "#", :id => "close_suction_piping" %>
+      <!-- new piping tr-->
+      <table id="new_piping_tr" class="hidden">
+        <tr>
+          <td>
+            #x#
+            <%= hidden_field_tag "control_valve_sizing[suction_pipings][#x#][id]", "", :id => "suction_pipings_id_#x#" %>
+            <%= hidden_field_tag "control_valve_sizing[suction_pipings][#x#][tab]", "upstream", :id => "suction_pipings_tab_#x#" %>
+          </td>
+          <td><%= select_tag "control_valve_sizing[suction_pipings][#x#][fitting]", options_for_select(PipeSizing.fitting.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, '')), :id => "suction_pipings_fitting_#x#", :style => "width:150px;" %></td>
+          <td><%= text_field_tag "control_valve_sizing[suction_pipings][#x#][fitting_tag]", "", :id => "suction_pipings_fitting_tag_#x#" %></td>
+          <td><%= select_tag "control_valve_sizing[suction_pipings][#x#][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }.insert(0, '')), :id => "suction_pipings_pipe_size_#x#", :class => "suction_pipings_pipe_size", :row_id => "#x#" %></td>
+          <td><%= select_tag "control_valve_sizing[suction_pipings][#x#][pipe_schedule]", options_for_select([]), :id => "suction_pipings_pipe_schedule_#x#", :class => "suction_pipings_pipe_schedule", :row_id => "#x#" %></td>
+          <td><%= text_field_tag "control_valve_sizing[suction_pipings][#x#][pipe_id]", "", :id => "suction_pipings_pipe_id_#x#", :class => "suction_pipings_pipe_id" %></td>
+          <td><%= text_field_tag "control_valve_sizing[suction_pipings][#x#][per_flow]", "", :id => "suction_pipings_per_flow_#x#" %></td>
+          <td><%= text_field_tag "control_valve_sizing[suction_pipings][#x#][ds_cv]", "", :id => "suction_pipings_ds_cv_#x#" %></td>
+          <td><%= text_field_tag "control_valve_sizing[suction_pipings][#x#][length]", "", :id => "suction_pipings_length_#x#", :class => "suction_pipings_length" %></td>
+          <td><%= text_field_tag "control_valve_sizing[suction_pipings][#x#][elev]", "", :id => "suction_pipings_elev_#x#", :class => "suction_pipings_elev" %></td>
+
+          <td class="delta_p_maximum"><%= text_field_tag "control_valve_sizing[suction_pipings][#x#][delta_p_max]", "", :id => "suction_pipings_delta_p_max_#x#", :class => "suction_pipings_delta_p" %></td>
+          <td class="delta_p_minimum"><%= text_field_tag "control_valve_sizing[suction_pipings][#x#][delta_p_min]", "", :id => "suction_pipings_delta_p_min_#x#", :class => "suction_pipings_delta_p" %></td>
+          <td class="delta_p_normal"><%= text_field_tag "control_valve_sizing[suction_pipings][#x#][delta_p_nor]", "", :id => "suction_pipings_delta_p_nor_#x#", :class => "suction_pipings_delta_p" %></td>
+
+          <td><%= text_field_tag "control_valve_sizing[suction_pipings][#x#][outlet_pressure]", "", :id => "suction_pipings_outlet_pressure_#x#", :class => "suction_pipings_outlet_pressure" %></td>
+          <td><%= link_to "X", "#", :class => "suction_piping_close_tr", :suction_piping_id => 0 %></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- DOWNSTREAM CIRCUIT PIPING -->
+  <div style="display:none;" id="dowmstream_circuit_piping_div">
+    <div id="dowmstream_circuit_piping_box_#x#">
+      <div class="downstream_basis" style="font-weight:bold;font-size: 16px;"></div>
+      <table class="dowmstream_circuit_piping_table">
+        <tr>
+          <th rowspan="2">No.</th>
+          <th rowspan="2">Fitting(s)</th>
+          <th rowspan="2">Fitting Tag</th>
+          <th>Pipe Size</th>
+          <th rowspan="2">Pipe Sch.</th>
+          <th>Pipe ID</th>
+          <th rowspan="2">% Flow</th>
+          <th rowspan="2">Ds/Dl<br>or Cv</th>
+          <th>Length</th>
+          <th>Elev.</th>
+          <th class="downstream_delta_p_maximum">&Delta;P</th>
+          <th class="downstream_delta_p_normal">&Delta;P</th>
+          <th class="downstream_delta_p_minimum">&Delta;P</th>
+          <th>Inlet Pressure</th>
+          <th rowspan="2"></th>
+        </tr>
+        <tr>
+          <th>inches</th>
+          <th><label class="downstream_circuit_piping_pipe_id_unit"></label></th>
+          <th><label class="downstream_circuit_piping_length_unit"></label></th>
+          <th><label class="downstream_circuit_piping_elev_unit"></label></th>
+          <th><label class="downstream_circuit_piping_delta_p_unit"></label></th>
+          <th><label class="downstream_circuit_piping_inlet_pressure_unit"></label></th>
+        </tr>
+        <tr>
+          <td>
+            1
+            <%= hidden_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][1][id]", "", :id => "downstream_circuit_piping_id_1" %>
+          </td>
+          <td><%= select_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][1][fitting]", options_for_select(PipeSizing.fitting.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, '')), :id => "downstream_circuit_piping_fitting_1", :style => "width:200px;" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][1][fitting_tag]", "", :id => "downstream_circuit_piping_fitting_tag_1" %></td>
+          <td><%= select_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][1][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }.insert(0, '')), :id => "downstream_circuit_piping_pipe_size_1", :class => "downstream_circuit_piping_pipe_size", :row_id => "1" %></td>
+          <td><%= select_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][1][pipe_schedule]", options_for_select([]), :id => "downstream_circuit_piping_pipe_schedule_1", :class => "downstream_circuit_piping_pipe_schedule", :row_id => "1" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][1][pipe_id]", "", :id => "downstream_circuit_piping_pipe_id_1", :class => "downstream_circuit_piping_pipe_id", :row_id => "1" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][1][per_flow]", "", :id => "downstream_circuit_piping_per_flow_1" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][1][ds_cv]", "", :id => "downstream_circuit_piping_ds_cv_1" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][1][length]", "", :id => "downstream_circuit_piping_length_1", :class => "downstream_circuit_piping_length", :row_id => "1" %></td>
+          <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][1][elev]", "", :id => "downstream_circuit_piping_elev_1", :class => "downstream_circuit_piping_elev", :row_id => "1" %></td>
+          <td class="downstream_delta_p_maximum"><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][1][delta_p_max]", "", :id => "downstream_circuit_piping_delta_p_max_1", :class => "downstream_circuit_piping_delta_p", :row_id => "1" %></td>
+          <td class="downstream_delta_p_normal"><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][1][delta_p_nor]", "", :id => "downstream_circuit_piping_delta_p_nor_1", :class => "downstream_circuit_piping_delta_p", :row_id => "1" %></td>
+          <td class="downstream_delta_p_minimum"><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][1][delta_p_min]", "", :id => "downstream_circuit_piping_delta_p_min_1", :class => "downstream_circuit_piping_delta_p", :row_id => "1" %></td>
+          <td><%= label_tag "inlet_pressure", "", :class => "downstream_circuit_piping_inlet_pressure" %></td>
+          <td><%= link_to "X", "#", :class => "downstream_circuit_piping_close_tr", :row_id => 1 %></td>
+        </tr>
+      </table>
+
+      <%= link_to "Add More", "#", :class => "downstream_circuit_piping_add_more", :table_id => "#x#" %>&nbsp;|&nbsp;<%= link_to "Close", "#", :class => "downstream_circuit_piping_close" %>
+    </div>
+  </div>
+
+  <table id="downstream_circuit_pipings_tr" class="hidden">
+    <tr>
+      <td>
+        #y#
+        <%= hidden_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][#y#][id]", "", :id => "downstream_circuit_piping_id_#y#" %>
+      </td>
+      <td><%= select_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][#y#][fitting]", options_for_select(PipeSizing.fitting.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, '')), :id => "downstream_circuit_piping_fitting_#y#", :style => "width:200px;" %></td>
+      <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][#y#][fitting_tag]", "", :id => "downstream_circuit_piping_fitting_tag_#y#" %></td>
+      <td><%= select_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][#y#][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }.insert(0, '')), :id => "downstream_circuit_piping_pipe_size_#y#", :class => "downstream_circuit_piping_pipe_size", :row_id => "#y#" %></td>
+      <td><%= select_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][#y#][pipe_schedule]", options_for_select([]), :id => "downstream_circuit_piping_pipe_schedule_#y#", :class => "downstream_circuit_piping_pipe_schedule", :row_id => "#y#" %></td>
+      <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][#y#][pipe_id]", "", :id => "downstream_circuit_piping_pipe_id_#y#", :class => "downstream_circuit_piping_pipe_id", :row_id => "#y#" %></td>
+      <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][#y#][per_flow]", "", :id => "downstream_circuit_piping_per_flow_#y#" %></td>
+      <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][#y#][ds_cv]", "", :id => "downstream_circuit_piping_ds_cv_#y#" %></td>
+      <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][#y#][length]", "", :id => "downstream_circuit_piping_length_#y#", :class => "downstream_circuit_piping_length", :row_id => "#y#" %></td>
+      <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][#y#][elev]", "", :id => "downstream_circuit_piping_elev_#y#", :class => "downstream_circuit_piping_elev", :row_id => "#y#" %></td>
+      <td class="downstream_delta_p_maximum"><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][#y#][delta_p_max]", "", :id => "downstream_circuit_piping_delta_p_max_#y#", :class => "downstream_circuit_piping_delta_p", :row_id => "#y#" %></td>
+      <td class="downstream_delta_p_normal"><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][#y#][delta_p_nor]", "", :id => "downstream_circuit_piping_delta_p_nor_#y#", :class => "downstream_circuit_piping_delta_p", :row_id => "#y#" %></td>
+      <td class="downstream_delta_p_minimum"><%= text_field_tag "control_valve_sizing[downstream_maximum][#x#][downstream_circuit_pipings][#y#][delta_p_min]", "", :id => "downstream_circuit_piping_delta_p_min_#y#", :class => "downstream_circuit_piping_delta_p", :row_id => "#y#" %></td>
+      <td><%= label_tag "inlet_pressure", "", :class => "downstream_circuit_piping_inlet_pressure" %></td>
+      <td><%= link_to "X", "#", :class => "downstream_circuit_piping_close_tr", :row_id => 1 %></td>
+    </tr>
+  </table>
+
+  <!-- list of discharge circuit piping -->
+  <div id="list_of_dowmstream_circuit_piping" class="hidden">
+    <% control_valve_sizing.control_valve_downstreams.where(:downstream_condition_basis => "maximum").each_with_index do |cvd, i| %>
+      <% cvd_row_id = i+1 %>
+      <% if cvd.downstream_circuit_pipings.empty? %>
+        <% next %>
+      <% end %>
+      <div id="dowmstream_circuit_piping_box_<%= cvd_row_id %>">
+        <div class="downstream_basis" style="font-weight:bold;font-size: 16px;"></div>
+        <table class="dowmstream_circuit_piping_table">
+          <tr>
+            <th rowspan="2">No.</th>
+            <th rowspan="2">Fitting(s)</th>
+            <th rowspan="2">Fitting Tag</th>
+            <th>Pipe Size</th>
+            <th rowspan="2">Pipe Sch.</th>
+            <th>Pipe ID</th>
+            <th rowspan="2">% Flow</th>
+            <th rowspan="2">Ds/Dl<br>or Cv</th>
+            <th>Length</th>
+            <th>Elev.</th>
+            <th>&Delta;P</th>
+            <th>Inlet Pressure</th>
+            <th rowspan="2"></th>
+          </tr>
+          <tr>
+            <th>inches</th>
+            <th><label class="downstream_circuit_piping_pipe_id_unit"></label></th>
+            <th><label class="downstream_circuit_piping_length_unit"></label></th>
+            <th><label class="downstream_circuit_piping_elev_unit"></label></th>
+            <th><label class="downstream_circuit_piping_delta_p_unit"></label></th>
+            <th><label class="downstream_circuit_piping_inlet_pressure_unit"></label></th>
+          </tr>
+          <% cvd.downstream_circuit_pipings.each_with_index do |dcp, j| %>
+            <tr>
+              <td>
+                <%= j+1 %>
+                <%= hidden_field_tag "control_valve_sizing[downstream_maximum][#{cvd_row_id}][downstream_circuit_pipings][#{j+1}][id]", dcp.id, :id => "downstream_circuit_piping_id_#{j+1}" %>
+              </td>
+              <td><%= select_tag "control_valve_sizing[downstream_maximum][#{cvd_row_id}][downstream_circuit_pipings][#{j+1}][fitting]", options_for_select(PipeSizing.fitting.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, ''), dcp.fitting), :id => "downstream_circuit_piping_fitting_#{j+1}", :style => "width:200px;" %></td>
+              <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#{cvd_row_id}][downstream_circuit_pipings][#{j+1}][fitting_tag]", dcp.fitting_tag, :id => "downstream_circuit_piping_fitting_tag_#{j+1}" %></td>
+              <td><%= select_tag "control_valve_sizing[downstream_maximum][#{cvd_row_id}][downstream_circuit_pipings][#{j+1}][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }.insert(0, ''), dcp.pipe_size), :id => "downstream_circuit_piping_pipe_size_#{j+1}", :class => "downstream_circuit_piping_pipe_size", :row_id => "#{j+1}" %></td>
+              <td><%= select_tag "control_valve_sizing[downstream_maximum][#{cvd_row_id}][downstream_circuit_pipings][#{j+1}][pipe_schedule]", options_for_select(PipeSizing.pipe_size_schedules[dcp.pipe_size.to_s], dcp.pipe_schedule), :id => "downstream_circuit_piping_pipe_schedule_#{j+1}", :class => "downstream_circuit_piping_schedule", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#{cvd_row_id}][downstream_circuit_pipings][#{j+1}][pipe_id]", dcp.pipe_id, :id => "downstream_circuit_piping_pipe_id_#{j+1}", :class => "downstream_circuit_piping_pipe_id", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#{cvd_row_id}][downstream_circuit_pipings][#{j+1}][per_flow]", dcp.per_flow, :id => "downstream_circuit_piping_per_flow_#{j+1}" %></td>
+              <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#{cvd_row_id}][downstream_circuit_pipings][#{j+1}][ds_cv]", dcp.ds_cv, :id => "downstream_circuit_piping_ds_cv_#{j+1}" %></td>
+              <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#{cvd_row_id}][downstream_circuit_pipings][#{j+1}][length]", dcp.length, :id => "downstream_circuit_piping_length_#{j+1}", :class => "downstream_circuit_piping_length", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "control_valve_sizing[downstream_maximum][#{cvd_row_id}][downstream_circuit_pipings][#{j+1}][elev]", dcp.elev, :id => "downstream_circuit_piping_elev_#{j+1}", :class => "downstream_circuit_piping_elev", :row_id => "#{j+1}" %></td>
+              <td class="downstream_delta_p_maximum"><%= text_field_tag "control_valve_sizing[downstream_maximum][#{cvd_row_id}][downstream_circuit_pipings][#{j+1}][delta_p_max]", dcp.delta_p_max, :id => "downstream_circuit_piping_delta_p_max_#{j+1}", :class => "downstream_circuit_piping_delta_p", :row_id => "#{j+1}" %></td>
+              <td class="downstream_delta_p_normal"><%= text_field_tag "control_valve_sizing[downstream_maximum][#{cvd_row_id}][downstream_circuit_pipings][#{j+1}][delta_p_nor]", dcp.delta_p_nor, :id => "downstream_circuit_piping_delta_p_nor_#{j+1}", :class => "downstream_circuit_piping_delta_p", :row_id => "#{j+1}" %></td>
+              <td class="downstream_delta_p_normal"><%= text_field_tag "control_valve_sizing[downstream_maximum][#{cvd_row_id}][downstream_circuit_pipings][#{j+1}][delta_p_min]", dcp.delta_p_min, :id => "downstream_circuit_piping_delta_p_min_#{j+1}", :class => "downstream_circuit_piping_delta_p", :row_id => "#{j+1}" %></td>
+              <td><%= label_tag "inlet_pressure", "", :class => "downstream_circuit_piping_inlet_pressure" %></td>
+              <td><%= link_to "X", "#", :class => "downstream_circuit_piping_close_tr", :row_id => "#{j+1}" %></td>
+            </tr>
+          <% end %>
+        </table>
+
+        <%= link_to "Add More", "#", :class => "downstream_circuit_piping_add_more", :table_id => "#{cvd_row_id}" %>&nbsp;|&nbsp;<%= link_to "Close", "#", :class => "downstream_circuit_piping_close" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+<% unless control_valve_sizing.new_record? %>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Attachments</legend>
+    <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+    <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+  </fieldset>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Comments</legend>
+    <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+    <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+  </fieldset>
+<% end %>
+
+
+<%= javascript_tag do %>
+  var control_valve_id = "<%= control_valve_sizing.id %>";
+
+  var suction_count = <%= control_valve_sizing.suction_pipings.where(:tab => "upstream").empty? ? 2 : control_valve_sizing.suction_pipings.where(:tab => "upstream").length+1 %>;
+  var dmax_count = <%= control_valve_sizing.downstream_maximum.empty? ? 2 : control_valve_sizing.downstream_maximum.length+1 %>
+  var dnor_count = <%= control_valve_sizing.downstream_normal.empty? ? 2 : control_valve_sizing.downstream_normal.length+1 %>
+  var dmin_count = <%= control_valve_sizing.downstream_minimum.empty? ? 2 : control_valve_sizing.downstream_minimum.length+1 %>
+
+  var pipe_size_schedules = <%= raw PipeSizing.pipe_size_schedules.to_json %>;
+  var pipe_size_pipe_ods = <%= raw PipeSizing.pipe_size_pipe_od.to_json %>;
+  var pipe_size_wall_thinkness = <%= raw PipeSizing.pipe_size_wall_thinkness.to_json %>;
+  var pipe_id_conversion_factor = <%= @project.conversion_factor("Length", "Pipe Tube Diameter") %>;
+
+  <% if !control_valve_sizing.cvb_include_bypass %>
+    $('#tab4 input[type=radio],#tab4 input[type=text],#tab4 select,#control_valve_sizing_cvb_control_valve').attr('disabled', true);
+  <% end %>
+
+  <% if control_valve_sizing.new_record? %>
+    $('#control_valve_sizing_cvs_valve_pressure_drop_ratio').val("<%= @project.default_pressure_drop_ratio_factor %>");
+    $('#control_valve_sizing_cvs_valve_liquid_recovery_factor').val("<%= @project.default_rated_liquid_pressure_recovery_factor %>");
+    $('#control_valve_sizing_cvb_include_bypass').attr('checked', true);
+  <% else %>
+    var upstream_condition_basis = "<%= control_valve_sizing.upstream_condition_basis %>";
+    $('.upstream_coditions_table').hide();
+    $('#upstream_conditions_'+upstream_condition_basis).show();
+
+    var downstream_condition_basis = "<%= control_valve_sizing.downstream_condition_basis %>";
+    $('.downstream_tables_div').hide();
+    $('#downstream_'+downstream_condition_basis).show();
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+set_project_unit_and_decimals()
+  $('.delta_p_maximum, .delta_p_normal, .delta_p_minimum').hide();
+  $('.downstream_delta_p_maximum, .downstream_delta_p_normal, .downstream_delta_p_minimum').hide();
+  //config units and decimals
+  var unit_decimals = {
+    ".upstream_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    ".upstream_temperature":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    ".upstream_mass_flow_rate":{"measurement":"Mass Flow Rate", "measurement_sub_type":"General"},
+    ".upstream_vp_density":{"measurement":"Density", "measurement_sub_type":"General"},
+    ".upstream_vp_viscosity":{"measurement":"Viscosity", "measurement_sub_type":"General"},
+    ".upstream_lp_density":{"measurement":"Density", "measurement_sub_type":"General"},
+    ".upstream_lp_viscosity":{"measurement":"Viscosity", "measurement_sub_type":"General"},
+    ".upstream_lp_surface_tension":{"measurement":"Surface Tension", "measurement_sub_type":"General"},
+    ".upstream_lp_critical_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    ".upstream_lp_vapor_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+
+    "#control_valve_sizing_up_max_fitting_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#control_valve_sizing_up_max_equipment_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#control_valve_sizing_up_max_control_valve_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#control_valve_sizing_up_max_orifice_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#control_valve_sizing_up_max_total_upstream_dp":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#control_valve_sizing_up_max_pressure_at_inlet_flange":{"measurement":"Pressure", "measurement_sub_type":"General"},
+
+    "#control_valve_sizing_up_min_fitting_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#control_valve_sizing_up_min_equipment_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#control_valve_sizing_up_min_control_valve_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#control_valve_sizing_up_min_orifice_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#control_valve_sizing_up_min_total_upstream_dp":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#control_valve_sizing_up_min_pressure_at_inlet_flange":{"measurement":"Pressure", "measurement_sub_type":"General"},
+
+    "#control_valve_sizing_up_nor_fitting_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#control_valve_sizing_up_nor_equipment_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#control_valve_sizing_up_nor_control_valve_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#control_valve_sizing_up_nor_orifice_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#control_valve_sizing_up_nor_total_upstream_dp":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#control_valve_sizing_up_nor_pressure_at_inlet_flange":{"measurement":"Pressure", "measurement_sub_type":"General"},
+
+    ".suction_pipings_pipe_id":{"measurement":"Length", "measurement_sub_type":"Pipe Tube Diameter"},
+    ".suction_pipings_length":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".suction_pipings_elev":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".suction_pipings_delta_p":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    ".suction_pipings_outlet_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+
+    ".downstream_destination_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    ".downstream_fitting_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    ".downstream_equipment_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    ".downstream_control_valve_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    ".downstream_orifice_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    ".downstream_total_system_dp":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    ".downstream_pressure_at_outlet_flange":{"measurement":"Pressure", "measurement_sub_type":"General"},
+
+    ".downstream_circuit_piping_pipe_id":{"measurement":"Length", "measurement_sub_type":"Pipe Tube Diameter"},
+    ".downstream_circuit_piping_length":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".downstream_circuit_piping_elev":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".downstream_circuit_piping_delta_p":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    ".downstream_circuit_piping_inlet_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+
+    "#control_valve_sizing_cvs_cv_body_size":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    "#control_valve_sizing_cvs_trim_size":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    "#control_valve_sizing_cvs_travel":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    ".cvs_min_differential_pressure":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+
+    "#control_valve_sizing_cvb_line_size":{"measurement":"Length", "measurement_sub_type":"Pipe Tube Diameter"},
+    "#control_valve_sizing_cvb_body_size":{"measurement":"Length", "measurement_sub_type":"Pipe Tube Diameter"}
+  };
+
+  $('form.form_control_valve').dirtyForms();
+
+  $("ul.simple-tabs li a").click(function () {
+    $('#tab').val($(this).attr('tab'));
+  });
+
+  function form_validations() {
+    var alert_msg = '';
+
+    if ($('#control_valve_sizing_cvb_include_bypass').is(':checked')) {
+      if ($('#control_valve_sizing_cvb_valve_type').val() == "") {
+        alert_msg += "Please make a selection valve type.\n";
+      }
+      if ($('#control_valve_sizing_cvb_line_size').val() == "") {
+        alert_msg += "Please make a selection line size.\n";
+      }
+      if ($('#control_valve_sizing_cvb_line_schedule').val() == "") {
+        alert_msg += "Please make a selection line schedule.\n";
+      }
+      if ($('#control_valve_sizing_cvb_flow_coefficient').val() == "") {
+        alert_msg += "Please enter a value for the bypass desired Cv.\n";
+      }
+    }
+    var column = {maximum:'max', normal:'nor', minimum:'min'};
+    var upstream_col = column[$('#control_valve_sizing_upstream_condition_basis').val()];
+    if ($('#control_valve_sizing_up_' + upstream_col + '_pressure').val() == "") {
+      alert_msg += "Please enter a value for the upstream pressure.\n";
+    }
+    if ($('#control_valve_sizing_up_' + upstream_col + '_temperature').val() == "") {
+      alert_msg += "Please enter a value for the upstream temperature.\n";
+    }
+    if ($('#control_valve_sizing_up_' + upstream_col + '_stream_phase').val() == "") {
+      alert_msg += "Please enter a value for the upstream phase.\n";
+    }
+    if ($('#control_valve_sizing_up_' + upstream_col + '_mass_vapor_fraction').val() == "") {
+      alert_msg += "Please enter a value for the upstream mass vapor fraction.\n";
+    }
+    if ($('#control_valve_sizing_up_' + upstream_col + '_mass_flow_rate').val() == "") {
+      alert_msg += "Please enter a value for the upstream mass flow rate.\n";
+    }
+    if ($('#control_valve_sizing_up_' + upstream_col + '_lp_density').val() == "") {
+      alert_msg += "Please enter a value for the upstream liquid density.\n";
+    }
+    if ($('#control_valve_sizing_up_' + upstream_col + '_lp_viscosity').val() == "") {
+      alert_msg += "Please enter a value for the upstream liquid viscosity.\n";
+    }
+    if ($('#control_valve_sizing_up_' + upstream_col + '_lp_surface_tension').val() == "") {
+      alert_msg += "Please enter a value for the upstream liquid surface tension.\n";
+    }
+    if ($('#control_valve_sizing_up_' + upstream_col + '_lp_critical_pressure').val() == "") {
+      alert_msg += "Please enter a value for the upstream liquid critical pressure.\n";
+    }
+    if ($('#control_valve_sizing_up_' + upstream_col + '_lp_vapor_pressure').val() == "") {
+      alert_msg += "Please enter a value for the upstream liquid vapor pressure.\n";
+    }
+    if ($('#control_valve_sizing_up_' + upstream_col + '_vp_density').val() == "") {
+      alert_msg += "Please enter a value for the upstream vapor density.\n";
+    }
+    if ($('#control_valve_sizing_up_' + upstream_col + '_vp_viscosity').val() == "") {
+      alert_msg += "Please enter a value for the upstream vapor viscosity.\n";
+    }
+    if ($('#control_valve_sizing_up_' + upstream_col + '_vp_cp_cv').val() == "") {
+      alert_msg += "Please enter a value for the upstream vapor Cp/Cv.\n";
+    }
+    if ($('#control_valve_sizing_up_' + upstream_col + '_vp_mw').val() == "") {
+      alert_msg += "Please enter a value for the upstream vapor MW.\n";
+    }
+    if ($('#control_valve_sizing_up_' + upstream_col + '_vp_z').val() == "") {
+      alert_msg += "Please enter a value for the upstream vapor Z.\n";
+    }
+
+
+    if (alert_msg != '') {
+      alert(alert_msg);
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  $('#control_valve_sizing_upstream_condition_basis').change(function (e) {
+    $('.upstream_coditions_table').hide();
+    $('#upstream_conditions_' + $(this).val()).show();
+    $('#upstream_conditions_' + $(this).val() + ' td').glow('', 2000);
+    $('.upstream_loss_table').hide();
+    $('#upstream_loss_' + $(this).val()).show();
+    $('#upstream_loss_' + $(this).val() + ' td').glow('', 2000);
+  });
+
+  $('#control_valve_sizing_up_process_basis_id').change(function (e) {
+    $('#control_valve_sizing_up_max_stream_no >option, #control_valve_sizing_up_nor_stream_no >option, #control_valve_sizing_up_min_stream_no >option').remove();
+    $('#control_valve_sizing_up_max_stream_no,#control_valve_sizing_up_nor_stream_no,#control_valve_sizing_up_min_stream_no').append($('<option></option>').val("").html("Please select"));
+    $("#tab1 table input[type=text]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/heat_and_material_balances/get_stream_nos', {process_basis_id:$(this).val()}, function (data) {
+      $(data).each(function (k, v) {
+        $('#control_valve_sizing_up_max_stream_no,#control_valve_sizing_up_nor_stream_no,#control_valve_sizing_up_min_stream_no').append(
+          $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+        );
+      });
+    }, 'json');
+  });
+
+  $('#control_valve_sizing_up_max_stream_no').change(function (e) {
+    $("#tab1 upstream_conditions_maximum input[type=text]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/control_valve_sizings/get_stream_values',
+      {process_basis_id:$('#control_valve_sizing_up_process_basis_id').val(), stream_no:$('#control_valve_sizing_up_max_stream_no').val()},
+      function (data) {
+        $('#control_valve_sizing_up_max_pressure').val(get_project_field_value(".upstream_pressure", data['pressure'], unit_decimals));
+        $('#control_valve_sizing_up_max_temperature').val(get_project_field_value(".upstream_temperature", data['temperature'], unit_decimals));
+        $('#control_valve_sizing_up_max_mass_flow_rate').val(get_project_field_value(".upstream_mass_flow_rate", data['mass_flow_rate'], unit_decimals));
+        $('#control_valve_sizing_up_max_mass_vapor_fraction').val(get_project_field_value1("mass_vapor_fraction_dimensionless", data['mass_vapour_fraction'], unit_decimals));
+        $('#control_valve_sizing_up_max_vp_density').val(get_project_field_value(".upstream_vp_density", data['vp_density'], unit_decimals));
+        $('#control_valve_sizing_up_max_vp_viscosity').val(get_project_field_value(".upstream_vp_viscosity", data['vp_viscosity'], unit_decimals));
+        $('#control_valve_sizing_up_max_lp_density').val(get_project_field_value(".upstream_lp_density", data['lp_density'], unit_decimals));
+        $('#control_valve_sizing_up_max_lp_viscosity').val(get_project_field_value(".upstream_lp_viscosity", data['lp_viscosity'], unit_decimals));
+        $('#control_valve_sizing_up_max_lp_surface_tension').val(get_project_field_value(".upstream_lp_surface_tension", data['lp_surface_tension'], unit_decimals));
+      },
+      'json');
+  });
+
+  $('#control_valve_sizing_up_nor_stream_no').change(function (e) {
+    $("#tab1 upstream_conditions_normal input[type=text]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/control_valve_sizings/get_stream_values',
+      {process_basis_id:$('#control_valve_sizing_up_process_basis_id').val(), stream_no:$('#control_valve_sizing_up_nor_stream_no').val()},
+      function (data) {
+        $('#control_valve_sizing_up_nor_pressure').val(get_project_field_value(".upstream_pressure", data['pressure'], unit_decimals));
+        $('#control_valve_sizing_up_nor_temperature').val(get_project_field_value(".upstream_temperature", data['temperature'], unit_decimals));
+        $('#control_valve_sizing_up_nor_mass_flow_rate').val(get_project_field_value(".upstream_mass_flow_rate", data['mass_flow_rate'], unit_decimals));
+        $('#control_valve_sizing_up_nor_mass_vapor_fraction').val(get_project_field_value1("mass_vapor_fraction_dimensionless", data['mass_vapour_fraction'], unit_decimals));
+        $('#control_valve_sizing_up_nor_vp_density').val(get_project_field_value(".upstream_vp_density", data['vp_density'], unit_decimals));
+        $('#control_valve_sizing_up_nor_vp_viscosity').val(get_project_field_value(".upstream_vp_viscosity", data['vp_viscosity'], unit_decimals));
+        $('#control_valve_sizing_up_nor_lp_density').val(get_project_field_value(".upstream_lp_density", data['lp_density'], unit_decimals));
+        $('#control_valve_sizing_up_nor_lp_viscosity').val(get_project_field_value(".upstream_lp_viscosity", data['lp_viscosity'], unit_decimals));
+        $('#control_valve_sizing_up_nor_lp_surface_tension').val(get_project_field_value(".upstream_lp_surface_tension", data['lp_surface_tension'], unit_decimals));
+      },
+      'json');
+  });
+
+  $('#control_valve_sizing_up_min_stream_no').change(function (e) {
+    $("#tab1 upstream_conditions_minimum input[type=text]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/control_valve_sizings/get_stream_values',
+      {process_basis_id:$('#control_valve_sizing_up_process_basis_id').val(), stream_no:$('#control_valve_sizing_up_min_stream_no').val()},
+      function (data) {
+        $('#control_valve_sizing_up_min_pressure').val(get_project_field_value(".upstream_pressure", data['pressure'], unit_decimals));
+        $('#control_valve_sizing_up_min_temperature').val(get_project_field_value(".upstream_temperature", data['temperature'], unit_decimals));
+        $('#control_valve_sizing_up_min_mass_flow_rate').val(get_project_field_value(".upstream_mass_flow_rate", data['mass_flow_rate'], unit_decimals));
+        $('#control_valve_sizing_up_min_mass_vapor_fraction').val(get_project_field_value1("mass_vapor_fraction_dimensionless", data['mass_vapour_fraction'], unit_decimals));
+        $('#control_valve_sizing_up_min_vp_density').val(get_project_field_value(".upstream_vp_density", data['vp_density'], unit_decimals));
+        $('#control_valve_sizing_up_min_vp_viscosity').val(get_project_field_value(".upstream_vp_viscosity", data['vp_viscosity'], unit_decimals));
+        $('#control_valve_sizing_up_min_lp_density').val(get_project_field_value(".upstream_lp_density", data['lp_density'], unit_decimals));
+        $('#control_valve_sizing_up_min_lp_viscosity').val(get_project_field_value(".upstream_lp_viscosity", data['lp_viscosity'], unit_decimals));
+        $('#control_valve_sizing_up_min_lp_surface_tension').val(get_project_field_value(".upstream_lp_surface_tension", data['lp_surface_tension'], unit_decimals));
+      },
+      'json');
+  });
+
+  //enter_piping
+  $('#enter_piping').click(function (e) {
+    $.colorbox({
+      href:'#piping_box',
+      inline:true,
+      width:'100%',
+      height:'100%',
+      onOpen:function () {
+        $('#suction_piping_basis').text($('#control_valve_sizing_upstream_condition_basis option:selected').text());
+        $('.delta_p_' + $('#control_valve_sizing_upstream_condition_basis').val()).show();
+      },
+      onClosed:function () {
+        $('.delta_p_' + $('#control_valve_sizing_upstream_condition_basis').val()).hide();
+      }
+    });
+  });
+
+  $('#add_new_suction_piping').click(function (e) {
+    var new_piping_tr = $('#new_piping_tr').html().replace(/#x#/g, suction_count);
+    $('#piping_table').append($(new_piping_tr));
+    suction_count++;
+    set_project_unit_decimal('.suction_pipings_pipe_id', unit_decimals);
+    set_project_unit_decimal('.suction_pipings_length', unit_decimals);
+    set_project_unit_decimal('.suction_pipings_elev', unit_decimals);
+    set_project_unit_decimal('.suction_pipings_delta_p', unit_decimals);
+    set_project_unit_decimal('.suction_pipings_outlet_pressure', unit_decimals);
+    return false;
+  });
+
+  $('#close_suction_piping').click(function (e) {
+    $.colorbox.close();
+    return false;
+  });
+
+  $('.suction_piping_close_tr').live('click', function (e) {
+    $('#suction_pipings_fitting_' + $(this).attr('suction_piping_id')).val('');
+    $(this).parents('tr').hide();
+    return false;
+  });
+
+  //Downstream tab
+  $('#control_valve_sizing_downstream_condition_basis').click(function (e) {
+    $('.downstream_tables_div').hide();
+    $('#downstream_' + $(this).val()).show();
+  });
+
+  //maximum
+  $('select[id^="dmax_discharge_process_basis_id_"]').live('change', function (e) {
+    var row_id = $(this).attr('row_id');
+    $('#dmax_discharge_destination_stream_no_' + row_id + ' >option').remove();
+    $('#dmax_discharge_destination_stream_no_' + row_id).append($('<option></option>').val("").html(""));
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/heat_and_material_balances/get_stream_nos',
+      {process_basis_id:$(this).val()},
+      function (data) {
+        $(data).each(function (k, v) {
+          $('#dmax_discharge_destination_stream_no_' + row_id).append(
+            $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+          );
+        });
+      },
+      'json'
+    );
+  });
+
+  $('select[id^="dmax_discharge_destination_stream_no_"]').live('change', function (e) {
+    var row_id = $(this).attr('row_id');
+    $('#dmax_discharge_destination_pressure_' + row_id).val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/control_valve_sizings/get_discharge_stream_nos',
+      {process_basis_id:$('#dmax_discharge_process_basis_id_' + row_id).val(), stream_no:$(this).val()},
+      function (data) {
+        $('#dmax_discharge_destination_pressure_' + row_id).val(get_project_field_value('.downstream_destination_pressure', data["pressure"], unit_decimals));
+      },
+      'json'
+    );
+  });
+
+  $('.add_new_downstream_row').click(function (e) {
+    var new_downstream_maximum_row = $('#new_downstream_maximum_row').html().replace(/#x#/g, dmax_count);
+    $('#downstream_maximum_table').append($(new_downstream_maximum_row));
+
+    var new_downstream_normal_row = $('#new_downstream_normal_row').html().replace(/#x#/g, dmax_count);
+    $('#downstream_normal_table').append($(new_downstream_normal_row));
+
+    var new_downstream_minimum_row = $('#new_downstream_minimum_row').html().replace(/#x#/g, dmax_count);
+    $('#downstream_minimum_table').append($(new_downstream_minimum_row));
+
+    set_project_unit_decimal('.downstream_destination_pressure', unit_decimals);
+    set_project_unit_decimal('.downstream_fitting_dp', unit_decimals);
+    set_project_unit_decimal('.downstream_equipment_dp', unit_decimals);
+    set_project_unit_decimal('.downstream_control_valve_dp', unit_decimals);
+    set_project_unit_decimal('.downstream_orifice_dp', unit_decimals);
+    set_project_unit_decimal('.downstream_total_system_dp', unit_decimals);
+    set_project_unit_decimal('.downstream_pressure_at_outlet_flange', unit_decimals);
+
+    dmax_count++;
+    return false;
+  });
+
+  $('.downstream_maximum_table_close_tr,.downstream_normal_table_close_tr,.downstream_minimum_table_close_tr').live('click', function (e) {
+    var row_id = $(this).attr('row_id');
+    $('#dmax_discharges_delete_' + row_id).val('true');
+    $('#dnor_discharges_delete_' + row_id).val('true');
+    $('#dmin_discharges_delete_' + row_id).val('true');
+    deleted_tr($(this).parents('tr'));
+    return false;
+  });
+
+  $('#downstream_maximum_table input[name=design_circuit]').live('click', function (e) {
+    $("input[id^=dmax_discharge_design_circuit_]").val("");
+    $('#dmax_discharge_design_circuit_' + $(this).val()).val(true);
+  });
+
+  //normal
+  $('select[id^="dnor_discharge_process_basis_id_"]').live('change', function (e) {
+    var row_id = $(this).attr('row_id');
+    $('#dnor_discharge_destination_stream_no_' + row_id + ' >option').remove();
+    $('#dnor_discharge_destination_stream_no_' + row_id).append($('<option></option>').val("").html(""));
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/heat_and_material_balances/get_stream_nos',
+      {process_basis_id:$(this).val()},
+      function (data) {
+        $(data).each(function (k, v) {
+          $('#dnor_discharge_destination_stream_no_' + row_id).append(
+            $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+          );
+        });
+      },
+      'json'
+    );
+  });
+
+  $('select[id^="dnor_discharge_destination_stream_no_"]').live('change', function (e) {
+    var row_id = $(this).attr('row_id');
+    $('#dnor_discharge_destination_pressure_' + row_id).val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/control_valve_sizings/get_discharge_stream_nos',
+      {process_basis_id:$('#dnor_discharge_process_basis_id_' + row_id).val(), stream_no:$(this).val()},
+      function (data) {
+        $('#dnor_discharge_destination_pressure_' + row_id).val(get_project_field_value('.downstream_destination_pressure', data["pressure"], unit_decimals));
+      },
+      'json'
+    );
+  });
+
+  $('#downstream_normal_table input[name=design_circuit]').live('click', function (e) {
+    $("input[id^=dnor_discharge_design_circuit_]").val("");
+    $('#dnor_discharge_design_circuit_' + $(this).val()).val(true);
+  });
+
+  //minimum
+  $('select[id^="dmin_discharge_process_basis_id_"]').live('change', function (e) {
+    var row_id = $(this).attr('row_id');
+    $('#dmin_discharge_destination_stream_no_' + row_id + ' >option').remove();
+    $('#dmin_discharge_destination_stream_no_' + row_id).append($('<option></option>').val("").html(""));
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/heat_and_material_balances/get_stream_nos',
+      {process_basis_id:$(this).val()},
+      function (data) {
+        $(data).each(function (k, v) {
+          $('#dmin_discharge_destination_stream_no_' + row_id).append(
+            $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+          );
+        });
+      },
+      'json'
+    );
+  });
+
+  $('select[id^="dmin_discharge_destination_stream_no_"]').live('change', function (e) {
+    var row_id = $(this).attr('row_id');
+    $('#dmin_discharge_destination_pressure_' + row_id).val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/control_valve_sizings/get_discharge_stream_nos',
+      {process_basis_id:$('#dmin_discharge_process_basis_id_' + row_id).val(), stream_no:$(this).val()},
+      function (data) {
+        $('#dmin_discharge_destination_pressure_' + row_id).val(get_project_field_value('.downstream_destination_pressure', data["pressure"], unit_decimals));
+      },
+      'json'
+    );
+  });
+
+  $('#downstream_minimum_table input[name=design_circuit]').live('click', function (e) {
+    $("input[id^=dmin_discharge_design_circuit_]").val("");
+    $('#dmin_discharge_design_circuit_' + $(this).val()).val(true);
+  });
+
+  //downstream_circuit_pipings
+  $('.circuit_piping_btn').live('click', function (e) {
+    var row_id = $(this).attr('row_id');
+    if (control_valve_id == "") {
+      alert("Before entering circuit piping values, Please create control valve sizing.")
+      return false;
+    }
+    if ($("#dmax_discharges_id_" + row_id).val() == "" || $("#dnor_discharges_id_" + row_id).val() == "" || $("#dmin_discharges_id_" + row_id).val() == "") {
+      alert("Please save the data before entering the circuit piping.")
+      return false;
+    }
+
+    if ($('#dowmstream_circuit_piping_box_' + row_id).text() == "") {
+      var downstream_circuit_piping_box = $('#dowmstream_circuit_piping_div').html().replace(/#x#/g, row_id);
+      $('#list_of_dowmstream_circuit_piping').append(downstream_circuit_piping_box);
+    }
+
+    $.colorbox({
+      href:'#dowmstream_circuit_piping_box_' + row_id,
+      inline:true,
+      width:'100%',
+      height:'100%',
+      onOpen:function () {
+        $('.downstream_basis').text($('#control_valve_sizing_downstream_condition_basis option:selected').text());
+        $('.downstream_delta_p_' + $('#control_valve_sizing_downstream_condition_basis').val()).show();
+      },
+      onClosed:function () {
+        $('.downstream_delta_p_' + $('#control_valve_sizing_downstream_condition_basis').val()).hide();
+      },
+      onComplete:function () {
+        var tr_row_id = parseInt($('#dowmstream_circuit_piping_box_' + row_id + ' table tr:last td:last a').attr('row_id')) + 1;
+        $('#dowmstream_circuit_piping_box_' + row_id).data({tr_row_id:tr_row_id});
+        return false;
+      }
+    });
+    set_project_unit_decimal('.downstream_circuit_piping_pipe_id', unit_decimals);
+    set_project_unit_decimal('.downstream_circuit_piping_length', unit_decimals);
+    set_project_unit_decimal('.downstream_circuit_piping_elev', unit_decimals);
+    set_project_unit_decimal('.downstream_circuit_piping_delta_p', unit_decimals);
+    return false;
+  });
+
+  $('.downstream_circuit_piping_add_more').live('click', function (e) {
+    var table_id = $(this).attr('table_id');
+    var tr_row_id = $('#dowmstream_circuit_piping_box_' + table_id).data()['tr_row_id'];
+    var new_downstream_circuit_pipings_tr = $('#downstream_circuit_pipings_tr').html().replace(/#x#/g, table_id);
+    new_downstream_circuit_pipings_tr = new_downstream_circuit_pipings_tr.replace(/#y#/g, tr_row_id);
+    $('#dowmstream_circuit_piping_box_' + table_id + ' table').append($(new_downstream_circuit_pipings_tr));
+    $('#dowmstream_circuit_piping_box_' + table_id).data()['tr_row_id'] = tr_row_id + 1;
+    set_project_unit_decimal('.downstream_circuit_piping_pipe_id', unit_decimals);
+    set_project_unit_decimal('.downstream_circuit_piping_length', unit_decimals);
+    set_project_unit_decimal('.downstream_circuit_piping_elev', unit_decimals);
+    set_project_unit_decimal('.downstream_circuit_piping_delta_p', unit_decimals);
+    return false;
+  });
+
+  $('.downstream_circuit_piping_close').live('click', function (e) {
+    $.colorbox.close();
+    return false;
+  });
+
+  $('.downstream_circuit_piping_close_tr').live('click', function (e) {
+    $(this).parents('tr').find('#downstream_circuit_piping_fitting_' + $(this).attr('row_id')).val("");
+    deleted_tr($(this).parents('tr'));
+    return false;
+  });
+
+  //Control Valve Design
+
+  //Bypass Design Tab
+  $('#control_valve_sizing_cvb_include_bypass').click(function (e) {
+    if (!$(this).is(':checked')) {
+      $('#tab4 input[type=radio],#tab4 input[type=text],#tab4 select,#control_valve_sizing_cvb_control_valve').attr('disabled', true);
+    } else {
+      $('#tab4 input[type=radio],#tab4 input[type=text],#tab4 select,#control_valve_sizing_cvb_control_valve').attr('disabled', false);
+    }
+  });
+
+  $('#control_valve_sizing_cvb_control_valve').click(function (e) {
+    if ($(this).is(':checked')) {
+      $('#control_valve_sizing_cvb_flow_coefficient').val($('#control_valve_sizing_cvs_valve_pressure_drop_ration').val());
+    }
+  });
+
+  // Suction_piping
+  $('.suction_pipings_pipe_size').live('change', function (k) {
+    var row_id = $(this).attr('row_id');
+    $('#suction_pipings_pipe_id_' + row_id).val('');
+    $('#suction_pipings_pipe_schedule_' + row_id + '>option').remove();
+    $('#suction_pipings_pipe_schedule_' + row_id).append($('<option></option>').val("").html(""));
+    $(pipe_size_schedules[$(this).val()]).each(function (k, v) {
+      $('#suction_pipings_pipe_schedule_' + row_id).append($('<option></option>').val(v).html(v));
+    });
+  });
+
+  $('.suction_pipings_pipe_schedule').live('change', function (k) {
+    var row_id = $(this).attr('row_id');
+    $('#suction_pipings_pipe_id_' + row_id).val('');
+    if ($(this).val() == '') {
+      return false;
+    }
+    var pipe_od = pipe_size_pipe_ods[$('#suction_pipings_pipe_size_' + row_id).val()] / pipe_id_conversion_factor;
+    var wall_thickness = pipe_size_wall_thinkness[$('#suction_pipings_pipe_size_' + row_id).val()][$(this).val()] / pipe_id_conversion_factor;
+    var pipe_id = pipe_od - (2 * wall_thickness);
+    $('#suction_pipings_pipe_id_' + row_id).val(get_project_field_value('.suction_pipings_pipe_id', pipe_id, unit_decimals));
+  });
+
+  // downstream_circuit_piping
+  $('.downstream_circuit_piping_pipe_size').live('change', function (k) {
+    var row_id = $(this).attr('row_id');
+    $('#downstream_circuit_piping_pipe_id_' + row_id).val('');
+    $('#downstream_circuit_piping_pipe_schedule_' + row_id + '>option').remove();
+    $('#downstream_circuit_piping_pipe_schedule_' + row_id).append($('<option></option>').val("").html(""));
+    $(pipe_size_schedules[$(this).val()]).each(function (k, v) {
+      $('#downstream_circuit_piping_pipe_schedule_' + row_id).append($('<option></option>').val(v).html(v));
+    });
+  });
+
+  $('.downstream_circuit_piping_pipe_schedule').live('change', function (k) {
+    var row_id = $(this).attr('row_id');
+    $('#downstream_circuit_piping_pipe_id_' + row_id).val('');
+    if ($(this).val() == '') {
+      return false;
+    }
+    var pipe_od = pipe_size_pipe_ods[$('#downstream_circuit_piping_pipe_size_' + row_id).val()] / pipe_id_conversion_factor;
+    var wall_thickness = pipe_size_wall_thinkness[$('#downstream_circuit_piping_pipe_size_' + row_id).val()][$(this).val()] / pipe_id_conversion_factor;
+    var pipe_id = pipe_od - (2 * wall_thickness);
+    $('#downstream_circuit_piping_pipe_id_' + row_id).val(get_project_field_value('.downstream_circuit_piping_pipe_id', pipe_id, unit_decimals));
+  });
+
+  //bypass design calculate
+  $('#bypass_design_calculate').click(function (e) {
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('bypass_design_calculate');
+    if (form_validations() == false) {
+      return false;
+    }
+
+    if (control_valve_id == "" || $('form.form_control_valve').isDirty()) {
+      $('form.form_control_valve').submit();
+      return false;
+    }
+
+    $.get('/admin/control_valve_sizings/bypass_design_calculation',
+      {control_valve_id:control_valve_id},
+      function (data) {
+        var cvb_body_size = get_project_field_value('#control_valve_sizing_cvb_body_size', data["lbl_by_pass_body_size"], unit_decimals);
+        $('#cvb_body_size').html(cvb_body_size);
+        $('#control_valve_sizing_cvb_body_size').val(cvb_body_size);
+
+        $('#control_valve_sizing_cvb_notes').val(data["txt_notes"]);
+      },
+      'json'
+    );
+  });
+
+  //control valve design calculation
+  $('#control_valve_design_btn').click(function (e) {
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('control_valve_design_btn');
+
+    if (control_valve_id == "" || $('form.form_control_valve').isDirty()) {
+      $('form.form_control_valve').submit();
+      return false;
+    }
+
+    $.get('/admin/control_valve_sizings/control_valve_design_calculation',
+      {control_valve_id:control_valve_id},
+      function (data) {
+        if (data.success) {
+          window.location = location.pathname
+        }
+        else {
+          alert("Error\n" + data.error)
+        }
+      },
+      'json'
+    );
+
+  });
+  //upstream calculate
+  $("#upstream_calculate").click(function () {
+    if ($('form.form_control_valve').isDirty()) {
+      alert("Please save the form before calculate");
+    }
+    ;
+
+    $.get('/admin/control_valve_sizings/upstream_calculate',
+      {control_valve_id:control_valve_id},
+      function (data) {
+        if (data.success) {
+          window.location = location.pathname
+        }
+        else {
+          alert("Error\n" + data.error)
+        }
+      },
+      'json'
+    );
+
+  });
+  //downstream calculate
+  $("#downstream_calculate").click(function () {
+    if ($('form.form_control_valve').isDirty()) {
+      alert("Please save the form before calculate");
+    }
+    ;
+
+    $.get('/admin/control_valve_sizings/downstream_calculate',
+      {control_valve_id:control_valve_id},
+      function (data) {
+        if (data.success) {
+          window.location = location.pathname
+        }
+        else {
+          alert("Error\n" + data.error)
+        }
+      },
+      'json'
+    );
+
+  });
+</script>
+<%= javascript_tag do %>
+  //hit calculate button
+  var calculate_btn = "<%= params[:calculate_btn] %>";
+  if(calculate_btn == "bypass_design_calculate") {
+  $('#bypass_design_calculate').trigger('click');
+  }
+<% end %>

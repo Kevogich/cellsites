@@ -1,0 +1,15 @@
+<% title @company.name << " details"%>
+<%= stylesheet("/javascripts/tablecloth/tablecloth.css")%>
+
+<table style="width:auto;">
+	<tr><td>Name</td><td><%= @company.name%></td></tr>
+	<tr><td>License</td><td><%= @company.license%></td></tr>
+	<tr><td>Contact Person</td><td><%= @company.contact_person%></td></tr>
+	<tr><td>Phone</td><td><%= @company.phone%></td></tr>
+	<tr><td>Email</td><td><%= @company.email%></td></tr>
+	<tr><td>Website</td><td><%= @company.website%></td></tr>
+	<tr><td>Users Limit</td><td><%= @company.users_limit%></td></tr>
+	<tr><td>Clients Limit</td><td><%= @company.clients_limit%></td></tr>	
+</table>
+
+<%= link_to 'Edit', edit_superadmin_company_path(@company) %>

@@ -1,0 +1,31 @@
+<tr>
+  <% if sizing_status.status == 'new' %>    
+    <td>
+      <i><%= sizing_status.action_perform_name %></i> has created <%= sizing_status.status.humanize %> <%= sizing_status.sizing_type.titleize %> on <%= sizing_status.created_at.strftime("%d-%m-%Y")%>
+    </td>
+  <% elsif sizing_status.status == 'pending_review' %>
+    <td>
+      <i><%= sizing_status.requester_name %></i> has requested <i><%= sizing_status.action_perform_name %></i> to review on <%= sizing_status.created_at.strftime("%d-%m-%Y")%>
+    </td>
+  <% elsif sizing_status.status == 'reviewed' %>
+    <td>
+      <i><%= sizing_status.action_perform_name %></i> has reviewed at <%= sizing_status.created_at.strftime("%d-%m-%Y")%>
+    </td>
+  <% elsif sizing_status.status == 'pending_approval' %>
+    <td>
+      <i><%= sizing_status.requester_name %></i> has requested <i><%= sizing_status.action_perform_name %></i> to approve on <%= sizing_status.created_at.strftime("%d-%m-%Y")%>
+    </td>
+  <% elsif sizing_status.status == 'approved' %>
+    <td>
+      <i><%= sizing_status.action_perform_name %></i> has approved on <%= sizing_status.created_at.strftime("%d-%m-%Y")%>
+    </td>
+  <% elsif sizing_status.status == 'reject_review' %>
+    <td>
+      <i><%= sizing_status.requester_name %></i> has rejected to review on <%= sizing_status.created_at.strftime("%d-%m-%Y")%>
+    </td>
+  <% elsif sizing_status.status == 'reject_approval' %>
+    <td>
+      <i><%= sizing_status.requester_name %></i> has rejected to approve on <%= sizing_status.created_at.strftime("%d-%m-%Y")%>
+    </td>
+  <% end %>
+</tr>

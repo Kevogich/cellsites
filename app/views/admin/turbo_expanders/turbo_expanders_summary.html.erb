@@ -1,0 +1,79 @@
+<% title 'Turbo Expander Summary' %>Download: <%= link_to "Pdf", admin_sizing_summary_pdf_path("turbo_expander") %>
+<% stylesheet("/javascripts/tablecloth/tablecloth.css")%>
+
+<style>
+	.tab-header td {
+		font-size: 16px;
+		font-weight: bold;
+		text-align: center;
+	}
+	
+	.column-header td {
+		font-weight: bold;
+	}
+</style>
+
+<div style="margin-top:10px;">
+	<table class="turbo_expander_summary" style="width:auto;">
+		<tr class="tab-header">
+			<td colspan="2"></td>
+			<td colspan="4">ASSOCIATED ROTATING EQUIPMENT</td>
+			<td colspan="2">INLET CONDITIONS</td>
+			<td colspan="2">OUTLET CONDITIONS</td>
+			<td colspan="5">TURBO EXPANDER RATING</td>
+		</tr>
+		<tr class="column-header">		
+			<td>Count</td>
+			<td>Preliminary Tag</td>
+			<td>Equipment Type</td>
+			<td>Equipment Tag</td>
+			<td>Horsepower</td>
+			<td>Speed</td>
+			<td>Source Pressure</td>
+			<td>Source Temperature</td>
+			<td>Exhaust Pressure</td>
+			<td>Exhaust Temperature</td>
+			<td>Basis Flow Rate</td>
+			<td>Basis Efficiency</td>
+			<td>Work Produced</td>
+			<td>Horsepower Produced</td>
+			<td>Net Horsepower</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td>inches</td>
+			<td></td>
+			<td>kW</td>
+			<td>RPM</td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>lb/hr</td>
+			<td>kg/hr</td>
+			<td>HP</td>
+		</tr>
+		<% @turbo_expanders.each_with_index do |turbo_expander, i|%>
+		<tr>
+			<td><%= i+1%></td>
+			<td><%= turbo_expander.turbo_expander_tag%></td>
+			<td><%= turbo_expander.ed_equipment_type%></td>
+			<td><%= turbo_expander.ed_equipment_tag%></td>
+			<td><%= turbo_expander.ed_horsepower%></td>
+			<td><%= turbo_expander.ed_speed%></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td><%= turbo_expander.ed_basis_flow_rate%></td>
+			<td></td>
+			<td><%= turbo_expander.ed_work_produced%></td>
+			<td><%= turbo_expander.ed_horsepower_produced%></td>
+			<td><%= turbo_expander.ed_net_horsepower%></td>
+		</tr>
+		<% end%>
+	</table>
+</div>	

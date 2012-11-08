@@ -1,0 +1,18 @@
+<%= fields_for @low_pressure_vent_relief_device do |f| %>
+    <tr id=<%= "row_#{@unique_id}"%> >
+      <td id=<%= "sequence_low_pressure_vent_relief_device_#{@unique_id}"%>>1</td>
+      <%= f.hidden_field :id, :name =>  "low_pressure_vent_relief_device_attributes[#{@unique_id}][id]" %>
+      <%= f.hidden_field :_destroy, :name =>  "low_pressure_vent_relief_device_attributes[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_#{@unique_id}" %>
+      <td><%= f.text_field :venttag, :name =>  "low_pressure_vent_relief_device_attributes[#{@unique_id}][venttag]" , :style => "width:50px;" , :id => "venttag_#{@unique_id}"%></td>
+      <td><%= select_tag "low_pressure_vent_relief_device_attributes[#{@unique_id}][protectiontype]",options_for_select(StaticData.protection_type,@low_pressure_vent_relief_device.protectiontype),:class => 'low_pressure_vent_protectiontype', :id => "protectiontype_#{@unique_id}"%></td>
+      <td><%= select_tag "low_pressure_vent_relief_device_attributes[#{@unique_id}][venttype]",options_for_select({},@low_pressure_vent_relief_device.venttype),:class => 'venttype', :id => "venttype_#{@unique_id}"%></td>
+      <td><%= select_tag "low_pressure_vent_relief_device_attributes[#{@unique_id}][pressuresize]",options_for_select(PipeSizing.pipe_sizes(@fitting_pipe_size_unit).collect { |p| [raw(p[:name]), p[:value]] }.insert(0, ''),@low_pressure_vent_relief_device.pressuresize),:class => 'pressuresize', :id => "pressuresize_#{@unique_id}"%></td>
+      <td><%= select_tag "low_pressure_vent_relief_device_attributes[#{@unique_id}][vacuumsize]",options_for_select(PipeSizing.pipe_sizes(@fitting_pipe_size_unit).collect { |p| [raw(p[:name]), p[:value]] }.insert(0, ''),@low_pressure_vent_relief_device.vacuumsize),:class => 'vacuumsize', :id => "vacuumsize_#{@unique_id}"%></td>
+      <td><%= f.text_field :setpressure, :name =>  "low_pressure_vent_relief_device_attributes[#{@unique_id}][setpressure]" , :style => "width:50px;" , :id => "setpressure_#{@unique_id}"%></td>
+      <td><%= f.text_field :setvacumm, :name =>  "low_pressure_vent_relief_device_attributes[#{@unique_id}][setvacumm]" , :style => "width:50px;" , :id => "setvacumm_#{@unique_id}"%></td>
+      <td><%= f.text_field :pressurecapacity, :name =>  "low_pressure_vent_relief_device_attributes[#{@unique_id}][pressurecapacity]" , :style => "width:50px;" , :id => "pressurecapacity_#{@unique_id}"%></td>
+      <td><%= f.text_field :vacuumcapacity, :name =>  "low_pressure_vent_relief_device_attributes[#{@unique_id}][vacuumcapacity]" , :style => "width:50px;" , :id => "vacuumcapacity_#{@unique_id}"%></td>
+      <td><%= link_to "View", "#", :id => "low_pressure_vent_relief_device_link_#{@unique_id}", :class => "view_low_pressure_vent_relief_device"%></td>
+      <td><%= link_to "X", "#", :id => "#{@unique_id}", :class => "delete_low_pressure_vent_relief_device" %></td>
+    </tr>
+<% end %>

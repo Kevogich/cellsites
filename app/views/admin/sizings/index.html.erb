@@ -1,0 +1,75 @@
+<% title 'List of Sizing', false%>
+
+<div id="user_project_setting">
+	<%= form_for @user_project_setting,:url=>admin_user_project_setting_path(@user_project_setting), :remote => true, :html => {:style => 'width:auto;'} do |f| %>
+		<%= f.error_messages %>
+		<div class="form-element-last">
+			<span style="float:left;margin-right:40px;">
+				<%= f.label :client_id%><br>
+				<%= f.collection_select :client_id, @clients, :id, :name, :prompt => true %>
+			</span>
+			<span style="float:left;margin-right:40px;">
+				<%= f.label :project_id%><br>
+				<%= f.collection_select :project_id, @projects, :id, :project_num, :prompt => true %>	
+			</span>
+			<span style="float:left;margin-right:40px;">
+				<%= f.label :process_unit_id%><br>
+				<%= f.collection_select :process_unit_id, @process_units, :id, :name, :prompt => true %>	
+			</span>
+			<span style="float:left;margin-right:40px;">
+				<br>
+				<%= f.submit "Save My Project Details"%>
+			</span>
+			<div class="clear"></div>
+		</div>
+	<% end%>
+</div>
+
+<ul class="unstyled">
+  <li><%= link_to 'Line', admin_line_sizings_path%></li>
+  <li><%= link_to 'Vessel', admin_vessel_sizings_path%></li>
+  <li><%= link_to 'Pump', admin_pump_sizings_path%></li>
+  <li><%= link_to 'Compressor', admin_compressor_sizings_path%></li>
+  <li><%= link_to 'Driver', admin_driver_sizings_path%></li>
+  <li><%= link_to 'Control Valve', admin_control_valve_sizings_path%></li>
+  <li><%= link_to 'Flow Element', admin_flow_element_sizings_path%></li>
+  <li><%= link_to 'Storage Tank', admin_storage_tank_sizings_path%></li>
+  <li><%= link_to 'Column', admin_column_sizings_path%></li>
+  <li><%= link_to 'Heat Exchanger', admin_heat_exchanger_sizings_path%></li>
+  <li><%= link_to 'Relief Device', admin_relief_device_sizings_path %></li>
+</ul>
+
+<%= javascript_tag do %>
+	$('body').data('client_projects', <%= raw @client_projects.to_json %>);
+	$('body').data('project_process_units', <%= raw @project_process_units.to_json %>);	
+<% end %>
+
+<script type="text/javascript">
+	$('#user_project_setting_client_id').change(function(e){
+		$('#user_project_setting_project_id >option, #user_project_setting_process_unit_id >option').remove();
+		$('#user_project_setting_project_id,#user_project_setting_process_unit_id').append($('<option></option>').val("").html("Please select"));
+		if($(this).val() == "") {
+			return false;
+		}
+		
+		$($('body').data('client_projects')[$(this).val()]).each(function(i, data){
+			$('#user_project_setting_project_id').append(
+				$('<option></option>').val(data.id).html(data.project_num)
+			);			
+		});
+	});
+	
+	$('#user_project_setting_project_id').change(function(e){
+		$('#user_project_setting_process_unit_id >option').remove();
+		$('#user_project_setting_process_unit_id').append($('<option></option>').val("").html("Please select"));
+		if($(this).val() == "") {
+			return false;
+		}		
+		$($('body').data('project_process_units')[$(this).val()]).each(function(i, data){
+			$('#user_project_setting_process_unit_id').append(
+				$('<option></option>').val(data.id).html(data.name)
+			);			
+		});
+	});
+	
+</script>

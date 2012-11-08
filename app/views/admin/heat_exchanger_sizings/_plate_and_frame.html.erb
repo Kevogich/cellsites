@@ -1,0 +1,106 @@
+<div id="plat_and_frame_tab" class="tab_content">
+  <!-- Plate & Frame -->
+  <table >
+    <tr>
+      <td colspan="2"><label class="sub_title">Process Specifications</label></td>
+      <td colspan="2"><label class="sub_title">Mechanical Data</label></td>
+    </tr>
+    <tr>
+      <td>Heat Duty</td>
+      <td><%= f.text_field :pf_ps_heat_duty, :class => "small-text-100" %>&nbsp;
+          </td>
+      <td>Manufacture</td>
+      <td><%= f.text_field :pf_md_manufacture, :class => "small-text-100" %>&nbsp;
+           </td>
+    </tr>
+    <tr>
+      <td>LMTD</td>
+      <td><%= f.text_field :pf_ps_lmtd, :class => "small-text-100" %>&nbsp;
+         </td>
+      <td>Model Number</td>
+      <td><%= f.text_field :pf_md_model_number, :class => "small-text-100" %>&nbsp;
+           </td>
+    </tr>
+    <tr>
+      <td>Flow Orientation</td>
+      <td>
+        <%= f.select :pf_ps_flow_orientation, options_for_select([], heat_exchanger_sizing.pf_ps_flow_orientation), :include_blank => true %>&nbsp;
+      </td>
+      <td>Frame Size</td>
+      <td><%= f.text_field :pf_md_frame_size, :class => "small-text-100" %>&nbsp;
+             </td>
+    </tr>
+    <tr>
+      <td>Corrected LMTD</td>
+      <td><%= f.text_field :pf_ps_corrected_lmtd, :class => "small-text-100" %>&nbsp;
+           </td>
+      <td>NO.Of Units</td>
+      <td><%= f.text_field :pf_md_no_of_units, :class => "small-text-100" %>&nbsp;
+         </td>
+    </tr>
+    <tr>
+      <td>Calculated Overall Service U</td>
+      <td><%= f.text_field :pf_ps_calculated_overall_service_u, :class => "small-text-100" %>&nbsp;
+            </td>
+      <td>NO.Of Plates Per Units</td>
+      <td><%= f.text_field :pf_md_no_of_plates_per_unit, :class => "small-text-100" %>&nbsp;
+         </td>
+    </tr>
+    <tr>
+      <td>Calculated Overall Clean U</td>
+      <td><%= f.text_field :pf_ps_calculated_overall_clean_u, :class => "small-text-100" %>&nbsp;
+             </td>
+      <td>Surface Area Per Plate</td>
+      <td><%= f.text_field :pf_md_surface_area_per_plate, :class => "small-text-100" %>&nbsp;
+          </td>
+    </tr>
+    <tr>
+      <td>Heat Transfer Area</td>
+      <td><%= f.text_field :pf_ps_heat_transfer_area, :class => "small-text-100" %>&nbsp;
+      </td>
+      <td>Surface Area Per Units</td>
+      <td><%= f.text_field :pf_md_surface_area_per_unit, :class => "small-text-100" %>&nbsp;
+             </td>
+    </tr>
+    <tr>
+      <td><label class="sub_title">Design Conditions</label></td>
+      <td><label class="sub_title">Hot Side</label></td>
+      <td colspan="2"><label class="sub_title">Cold Side</label></td>
+    </tr>
+    <tr>
+      <td>NO.Of Passes</td>
+      <td ><%= f.text_field :pf_dc_hs_no_of_passes, :class => "small-text-100" %>&nbsp;
+              </td>
+      <td colspan="2"><%= f.text_field :pf_dc_cs_no_of_passes, :class => "small-text-100" %>&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>Passages Per Pass</td>
+      <td><%= f.text_field :pf_dc_hs_passages_per_pass, :class => "small-text-100" %>&nbsp;
+              </td>
+      <td colspan="2"><%= f.text_field :pf_dc_cs_passages_per_pass, :class => "small-text-100" %>&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>Allowable Pressure Drop</td>
+      <td><%= f.text_field :pf_dc_hs_allowable_pressure_drop, :class => "small-text-100" %>&nbsp;
+         </td>
+      <td colspan="2"><%= f.text_field :pf_dc_cs_allowable_pressure_drop, :class => "small-text-100" %>&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>Calculated Pressure Drop</td>
+      <td><%= f.text_field :pf_dc_hs_calculated_pressure_drop, :class => "small-text-100" %>&nbsp;
+         </td>
+      <td colspan="2"><%= f.text_field :pf_dc_cs_calculated_pressure_drop, :class => "small-text-100" %>&nbsp;
+            </td>
+    </tr>
+    <tr>
+      <td>Fouling Resistance</td>
+      <td><%= f.text_field :pf_dc_hs_fouling_resistance, :class => "small-text-100" %>&nbsp;
+           </td>
+      <td colspan="2"><%= f.text_field :pf_dc_cs_fouling_resistance, :class => "small-text-100" %>&nbsp;
+            </td>
+    </tr>
+  </table>
+</div>

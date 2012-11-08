@@ -1,0 +1,104 @@
+<%= form_for company_user, :url => company_user.new_record? ? admin_company_users_path : admin_company_user_path(company_user), :html => {:style => "width:400px;"} do |f| %>
+  <%= f.error_messages %>
+  <div class="form-element">
+    <%= f.label :group_id %>
+    <br>
+    <%= f.select :group_id, Group.all.collect { |p| [p.name, p.id] }, {:include_blank => true} %>
+  </div>
+  <%= f.fields_for :user do |u| %>
+    <div class="form-element">
+      <%= u.label :name %>
+      <br>
+      <%= u.text_field :name %>
+    </div>
+    <div class="form-element">
+      <%= u.label :email %>
+      <span class="required-label">*</span><br>
+      <%= u.text_field :email %>
+    </div>
+    <div class="form-element">
+      <%= u.label :username %>
+      <br>
+      <%= u.text_field :username %>
+    </div>
+    <% if company_user.new_record? %>
+      <div class="form-element">
+        <%= u.label :password %>
+        <br>
+        <%= u.text_field :password %>
+      </div>
+      <div class="form-element">
+        <%= u.label :password_confirmation %>
+        <br>
+        <%= u.text_field :password_confirmation %>
+      </div>
+    <% end %>
+    <div class="form-element">
+      <%= u.label :role_ids %>
+      <br>
+	  <%= u.select :role_ids, Role.general.collect { |p| [p.name, p.id] } %>
+    </div>
+  <% end %>
+  <div class="form-element">
+    <%= f.label :function %>
+    <br>
+    <%= f.select :title_id, Title.all.collect { |t| [t.name, t.id] }, {:include_blank => true} %>
+  </div>
+  <div class="form-element">
+    <%= f.label :official_title %>
+    <br>
+    <%= f.text_field :official_title %>
+  </div>
+  <div class="form-element">
+    <%= f.label :location %>
+    <br>
+    <%= f.text_field :location %>
+  </div>
+  <div class="form-element">
+    <%= f.label :address %>
+    <br>
+    <%= f.text_field :address %>
+  </div>
+  <div class="form-element">
+    <%= f.label :official_tel %>
+    <br>
+    <%= f.text_field :official_tel %>
+  </div>
+  <div class="form-element">
+    <%= f.label :cell %>
+    <br>
+    <%= f.text_field :cell %>
+  </div>
+  <div class="form-element">
+    <%= f.label :fax %>
+    <br>
+    <%= f.text_field :fax %>
+  </div>
+  <div class="form-element" style="border-bottom: 1px solid #AAAE85;">
+    <%= f.label :access_type_id %>
+    <br>
+    <%= f.select :access_type_id, [["Read Only", 0], ["Read/Write", 1]], {:include_blank => true} %>
+  </div>
+  <!--
+   <div class="form-element" style="border-bottom: 1px solid #AAAE85;">
+     < f.label :unit_ids ><br>
+     < f.select :unit_ids, Unit.all.collect{|p| [ p.name, p.id ] }, {}, {:multiple => true, :size => 5} >
+   </div>
+   -->
+  <div class="form-buttons">
+    <%= f.submit company_user.new_record? ? 'Create Company User' : 'Update' %>
+  </div>
+<% end %>
+
+<% unless company_user.new_record? %>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Attachments</legend>
+    <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+    <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+  </fieldset>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Comments</legend>
+    <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+    <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+  </fieldset>
+<% end %>

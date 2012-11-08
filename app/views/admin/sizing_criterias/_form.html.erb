@@ -1,0 +1,50 @@
+<%= form_for sizing_criteria, :url => sizing_criteria.new_record? ? admin_sizing_criterias_path : admin_sizing_criteria_path(sizing_criteria), :remote=>true, :html => {:style => "width:500px;"} do |f| %>
+	<%= f.error_messages %>	
+	<%= f.hidden_field :sizing_criteria_category_id%>
+	<%= f.hidden_field :sizing_criteria_category_type_id%>
+	<div class="form-element">
+		<%= f.label :name%><br>
+		<%= f.text_field :name%>
+	</div>
+	<div class="form-element">
+		<%= f.label :code%><br>
+		<%= f.text_field :code%>
+	</div>
+	<div class="form-element">
+	<label>Velocity (ft/s)</label>
+		<table>
+			<tr>
+				<td>Minimum</td>
+				<td>Maximum</td>
+				<td>Selected</td>
+			</tr>	
+			<tr>
+				<td><%= f.text_field :velocity_min, {:class => "small-text-50"}%></td>
+				<td><%= f.text_field :velocity_max, {:class => "small-text-50"}%></td>
+				<td><%= f.text_field :velocity_sel, {:class => "small-text-50"}%></td>
+			</tr>
+		</table>		
+	</div>
+	<div class="form-element">
+		<label>&Delta;P/100ft (psi)</label>
+		<table>
+			<tr>
+				<td>Minimum</td>
+				<td>Maximum</td>
+				<td>Selected</td>
+			</tr>	
+			<tr>
+				<td><%= f.text_field :delta_per_100ft_min, {:class => "small-text-50"}%></td>
+				<td><%= f.text_field :delta_per_100ft_max, {:class => "small-text-50"}%></td>
+				<td><%= f.text_field :delta_per_100ft_sel, {:class => "small-text-50"}%></td>
+			</tr>
+		</table>		
+	</div>
+	<div class="form-element-last">
+		<%= f.label :user_notes%><br>
+		<%= f.text_area :user_notes, {:size=>"50x3"}%>
+	</div>
+	<div class="form-buttons">
+		<%= f.submit sizing_criteria.new_record? ? 'Create' : 'Update'%>		
+  	</div>
+<% end%>

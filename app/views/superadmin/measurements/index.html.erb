@@ -1,0 +1,26 @@
+<% title 'Units of Measurements'%>
+<br>
+<%= link_to 'Add New Measurement', new_superadmin_measurement_path, :class => 'new_measurement' %>
+
+<table id="measurements">
+  <tr>
+    <th>Measurement Name</th>
+    <th>Edit</th>
+    <th>Delete</th>
+    <th>Sub Types</th>
+  </tr>
+  <% @measurements.each_with_index do |measurement, i|%>
+    <tr>
+      <td><%= measurement.name.capitalize%></td>
+      <td><%= link_to 'Edit', edit_superadmin_measurement_path(measurement), :class => 'edit_measurement'%></td>
+      <td><%= link_to 'Delete', superadmin_measurement_path(measurement), :method=>"delete", :confirm => "Are you sure?"%></td>
+      <td><%= link_to 'Sub Types', superadmin_measurement_sub_types_path(:measurement_id => measurement.id), {:id=>"sub_type_#{measurement.id}", :class => 'measurement_sub_types'}%></td>
+    </tr>
+  <% end%>
+</table>
+
+<script type="text/javascript">
+  $('.new_measurement').colorbox();
+  $('.edit_measurement').colorbox();
+  $('.measurement_sub_types').colorbox();
+</script>

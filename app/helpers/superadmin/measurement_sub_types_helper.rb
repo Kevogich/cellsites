@@ -1,0 +1,2 @@
+module Superadmin::MeasurementSubTypesHelper
+end

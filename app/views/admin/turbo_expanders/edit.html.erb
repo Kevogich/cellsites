@@ -1,0 +1,8 @@
+<% title 'Edit Turbo Expander'%>
+
+<% stylesheet("/javascripts/tablecloth/tablecloth.css", "validationEngine.jquery")%>
+<% javascript("languages/jquery.validationEngine-en", "jquery.validationEngine")%>
+
+<div>	
+	<%= render :partial => 'form', :locals => {:turbo_expander => @turbo_expander}%>
+</div>

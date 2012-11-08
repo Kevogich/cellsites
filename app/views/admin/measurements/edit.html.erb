@@ -1,0 +1,12 @@
+<% title 'Edit Measurement'%>
+
+<%= form_for @measurement, :url => admin_measurement_path do |f|%>
+	<%= f.error_messages %>
+	<div class="form-element-last">
+		<%= f.label :name, "Measurement"%><br>
+		<%= f.text_field :name%>
+	</div>	
+	<div class="form-buttons">
+		<%= f.submit "Update" %>
+  	</div>
+<% end%>

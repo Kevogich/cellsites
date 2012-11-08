@@ -1,0 +1,62 @@
+<style>
+	.tab-header td {
+		font-size: 16px;
+		font-weight: bold;
+		text-align: center;
+	}
+	
+	.column-header td {
+		font-weight: bold;
+	}
+</style>
+
+<%= render :partial => "shared/summary_client_header", :locals => {:client => client} %>
+
+<div style="margin-top:10px;">
+	<table class="flow_element_sizing_summary" style="width:auto;">
+		<tr class="tab-header">
+			<td colspan="8"></td>
+			<td colspan="9">Flow Element Design</td>
+		</tr>
+		<tr class="column-header">
+			<td>Calc Count</td>
+			<td>Flow Element Tag</td>
+			<td>Upstream Phase</td>
+			<td>Phase Change</td>
+			<td>Inlet Pressure</td>
+			<td>Outlet Pressure</td>
+			<td>&Delta;P</td>
+			<td>Stream Flowrate</td>
+			<td>Manufacturer</td>
+			<td>Model</td>
+			<td>Pipe ID</td>
+			<td>Selected Orifice</td>
+			<td>Beta</td>
+			<td>Rated Orifice</td>
+			<td>Rated Beta</td>
+			<td>Orifice Disch. Coefficient, Co</td>
+			<td>Orifice Range</td>
+		</tr>
+		<% flow_element_sizings.each_with_index do |flow_element_sizing, i|%>
+		<tr>
+			<td><%= i+1%></td>
+			<td><%= flow_element_sizing.flow_element_tag%></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>			
+			<td></td>
+			<td><%= flow_element_sizing.os_manufacturer%></td>
+			<td><%= flow_element_sizing.os_model%></td>
+			<td><%= flow_element_sizing.os_pipe_id%></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>			
+			<td></td>
+			<td></td>					
+		</tr>
+		<% end%>	
+	</table>
+</div>		

@@ -1,0 +1,35 @@
+<% title 'Flow Element Sizing'%>
+
+<%= render :partial => '/admin/user_project_settings/project_filter' %>
+
+<br>
+<%= link_to 'Add Flow Element sizing', new_admin_flow_element_sizing_path%>&nbsp;|&nbsp;
+<%= link_to 'Flow Element Sizing Summary', flow_element_sizing_summary_admin_flow_element_sizings_path%>
+<br>
+
+<table width="auto">
+	<tr>
+		<th>Flow element tag</th>
+		<th>By</th>
+		<th>Reviewer</th>
+		<th>Approver</th>
+		<th>Created at</th>
+		<th>Updated at</th>
+		<th>Edit</th>
+		<th>Delete</th>
+		<th>Clone</th>
+	</tr>
+	<% for flow_element_sizing in @flow_element_sizings%>
+		<tr>
+			<td><%= flow_element_sizing.flow_element_tag%></td>
+			<td><%= flow_element_sizing.sizing_status_activities.created_by%></td>
+			<td><%= flow_element_sizing.sizing_status_activities.reviewer%></td>
+			<td><%= flow_element_sizing.sizing_status_activities.approver%></td>
+			<td><%= flow_element_sizing.created_at.strftime("%d-%m-%Y")%></td>
+			<td><%= flow_element_sizing.updated_at.strftime("%d-%m-%Y")%></td>
+			<td><%= link_to "Edit", edit_admin_flow_element_sizing_path(flow_element_sizing)%></td>
+			<td><%= link_to "Delete", admin_flow_element_sizing_path(flow_element_sizing), :method=>"delete", :confirm => "Are you sure?"%></td>
+			<td><%= link_to "Clone", clone_admin_flow_element_sizing_path(flow_element_sizing), :class => "clone_sizing" %></td>
+		</tr>
+	<% end%>
+</table>

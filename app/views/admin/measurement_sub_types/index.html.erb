@@ -1,0 +1,28 @@
+<% title @measurement.name << ' Sub Types'%>
+<%= stylesheet("/javascripts/tablecloth/tablecloth.css")%>
+
+<br>
+<%= link_to "Add Sub Type", new_admin_measurement_sub_type_path(:measurement_id=>params[:measurement_id]) %><br><br>
+
+<table id="measurement_sub_types_list">
+	<tr>
+		<th>Name</th>
+		<th>Edit</th>
+		<th>Delete</th>		
+	</tr>
+	<% i = 1%>
+	<% for measurement_sub_type in @measurement_sub_types%>
+	<% i = i+1%>	
+	<tr class="<%= (i%2)==0 ? 'odd':'even'%>">
+		<td>
+			<%= measurement_sub_type.name%>
+		</td>
+		<td>
+			<%= link_to 'Edit', edit_admin_measurement_sub_type_path(measurement_sub_type)%>
+		</td>
+		<td>
+			<%= link_to 'Delete', admin_measurement_sub_type_path(measurement_sub_type), :method=>"delete", :confirm => "Are you sure?"%>
+		</td>		
+	</tr>
+	<% end%>	
+</table>

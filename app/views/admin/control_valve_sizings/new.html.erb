@@ -1,0 +1,8 @@
+<% title 'New Control Valve sizing'%>
+<% stylesheet("simple-tabs", "/javascripts/tablecloth/tablecloth", "colorbox")%>
+<% javascript("simple-tabs", "jquery.colorbox-min", "jquery.glow", "jquery.dirtyforms") %>
+<% javascript("jquery.format.1.05", "/admin/sizing_data.js")%>
+
+<div>	
+	<%= render :partial => 'form', :locals => {:control_valve_sizing => @control_valve_sizing}%>
+</div>

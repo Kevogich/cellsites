@@ -1,0 +1,19 @@
+<%= fields_for @discharge do |f| %>
+<tr id=<%= "row_#{@unique_id}"%>>
+	<td id=<%= "sequence_#{@unique_id}"%>><%= @index %></td>
+	<%= f.hidden_field :id, :name => "discharges[#{@unique_id}][id]" %>
+	<%= f.hidden_field :_destroy, :name => "discharges[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_#{@unique_id}" %>
+	<td><%= f.radio_button :design_circuit, "discharges[#{@unique_id}][design_circuit]" %> </td>
+	<td> <%= select_tag "discharges[#{@unique_id}][process_basis_id]", options_for_select(@company.heat_and_material_balances.collect {|p| [p[:case], p[:id]]}.insert(0, ''), @discharge.process_basis_id), :id => "process_basis:#{@unique_id}", :class => "discharge_process_basis discharge_process_basis_#{@unique_id}" %></td>
+	<td><%= select_tag "discharges[#{@unique_id}][destination_stream_no]", options_for_select(Stream.get_stream_nos_by_process_basis(@discharge.process_basis_id).collect{|p| [p.display_stream_no, p.stream_no]}.insert(0, ''), @discharge.destination_stream_no), :id => "stream_no:#{@unique_id}", :class => "discharge_stream_no_#{@unique_id} discharge_stream_no", :style=>"width:100px;"%></td>
+	<td><input type="button" value="Circuit Piping" class="discharge_circuit_piping_btn" id=<%= "dc_cp:#{@unique_id}"%>></td>
+	<td><%= f.text_field :destination_pressure, :name => "discharges[#{@unique_id}][destination_pressure]", :id => "discharge_destination_pressure_#{@unique_id}"%></td>
+	<td><%= f.text_field :fitting_dp, :name => "discharges[#{@unique_id}][fitting_dp]",:id => "discharge_fitting_dp_#{@unique_id}"%></td>
+	<td><%= f.text_field :equipment_dp, :name => "discharges[#{@unique_id}][equipment_dp]",  :id => "discharge_equipment_dp_#{@unique_id}"%></td>
+	<td><%= f.text_field :control_valve_dp, :name => "discharges[#{@unique_id}][control_valve_dp]", :id => "discharge_control_valve_dp_#{@unique_id}"%></td>
+	<td><%= f.text_field :orifice_dp, :name => "discharges[#{@unique_id}][orifice_dp]", :id => "discharge_orifice_dp_#{@unique_id}"%></td>
+	<td><%= f.text_field :total_system_dp, :name => "discharges[#{@unique_id}][total_system_dp]", :id => "discharge_total_system_dp_#{@unique_id}"%></td>
+	<td><%= f.text_field :pressure_at_discharge_nozzle_dp, :name => "discharges[#{@unique_id}][pressure_at_discharge_nozzle_dp]", :id => "discharge_pressure_at_discharge_nozzle_dp_dp_#{@unique_id}"%></td>
+	<td><%= link_to "X", "#", :class=>"delete_discharge", :id => "delete_discharge:#{@unique_id}" %></td>
+</tr>
+<% end %>

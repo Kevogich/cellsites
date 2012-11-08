@@ -1,0 +1,20 @@
+<div class="form-element">
+	<%= f.label :client_id%><br>
+	<%= collection_select(:project, :client_id, @company.clients, :id, :name)%>	
+</div>
+<div class="form-element">
+	<%= f.label :location%><br>
+	<%= f.text_field :location%>
+</div>
+<div class="form-element">
+	<%= f.label :title%><br>
+	<%= f.text_field :title%>
+</div>
+<div class="form-element">
+	<%= f.label :project_num, "Project Number"%><br>
+	<%= f.text_field :project_num%>
+</div>
+<div class="form-element-last">
+	<%= f.label :document_num, "Client Project Number"%><br>
+	<%= f.text_field :document_num%>
+</div>

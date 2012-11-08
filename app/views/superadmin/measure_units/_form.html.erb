@@ -1,0 +1,55 @@
+<%= form_for measure_unit, :url => measure_unit.new_record? ? superadmin_measure_units_path : superadmin_measure_unit_path(measure_unit), :remote => true, :html => {:class => 'measure_unit_form'} do |f| %>
+  <div class="form-element">
+    <%= f.label :measurement_id %>
+    <br>
+    <%= f.select(:measurement_id, measurements.collect { |p| [p.name.capitalize, p.id] }, {:prompt => "--Select--"}) %>
+  </div>
+  <div class="form-element">
+    <%= f.label :measurement_sub_type %>
+    <br>
+    <%= f.select(:measurement_sub_type_id, measurement_sub_types.collect { |p| [p.name.capitalize, p.id] }) %>
+  </div>
+  <div class="form-element">
+    <%= f.label :unit_type %>
+    <br>
+    <%= f.radio_button :unit_type_id, 1, :checked => true %>&nbsp;<%= f.label "&nbsp;", "US Customary" %>&nbsp;
+    <%= f.radio_button :unit_type_id, 2 %>&nbsp;<%= f.label "&nbsp;", "SI" %>
+  </div>
+  <div class="form-element">
+    <%= f.label :unit_name %>
+    <br>
+    <%= f.text_field :unit_name %>
+  </div>
+  <div class="form-element">
+    <%= f.label :unit %>
+    <br>
+    <%= f.text_field :unit %>
+  </div>
+  <div class="form-element">
+    <%= f.label :conversion_factor %>
+    <br>
+    <%= f.text_field :conversion_factor %>
+  </div>
+  <div class="form-element-last">
+    <%= f.label :base_unit, "Base Unit" %>
+    <br>
+    <%= f.text_field :base_unit %>
+  </div>
+
+  <!--
+  <div class="form-element-last">
+    <%= f.label :decimal_places %>
+    <br>
+    <%= f.text_field :decimal_places %>
+  </div>
+  -->
+  <div class="form-buttons">
+    <%= f.submit measure_unit.new_record? ? 'Create' : 'Update' %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $('#measure_unit_measurement_id').change(function (e) {
+    $.get('/superadmin/measure_units/get_measurement_sub_types', {id:$(this).val()}, null, 'script');
+  });
+</script>

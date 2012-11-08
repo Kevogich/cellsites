@@ -1,0 +1,35 @@
+<% title 'Control Valve Sizing' %>
+<%= stylesheet("/javascripts/tablecloth/tablecloth.css") %>
+
+<%= render :partial => '/admin/user_project_settings/project_filter' %>
+<br>
+<%= link_to 'Add Control Valve sizing', new_admin_control_valve_sizing_path %>&nbsp;|&nbsp;
+<%= link_to 'Control Valve Sizing Summary', control_valve_sizing_summary_admin_control_valve_sizings_path %>
+<br>
+
+<table width="auto">
+  <tr>
+    <th>Control valve tag</th>
+    <th>By</th>
+    <th>Reviewer</th>
+    <th>Approver</th>
+    <th>Created at</th>
+    <th>Updated at</th>
+    <th>Edit</th>
+    <th>Delete</th>
+    <th>Clone</th>
+  </tr>
+  <% for control_valve_sizing in @control_valve_sizings %>
+    <tr>
+      <td><%= control_valve_sizing.control_valve_tag %></td>
+      <td><%= control_valve_sizing.sizing_status_activities.created_by %></td>
+      <td><%= control_valve_sizing.sizing_status_activities.reviewer %></td>
+      <td><%= control_valve_sizing.sizing_status_activities.approver %></td>
+      <td><%= control_valve_sizing.created_at.strftime("%d-%m-%Y") %></td>
+      <td><%= control_valve_sizing.updated_at.strftime("%d-%m-%Y") %></td>
+      <td><%= link_to "Edit", edit_admin_control_valve_sizing_path(control_valve_sizing) %></td>
+      <td><%= link_to "Delete", admin_control_valve_sizing_path(control_valve_sizing), :method => "delete", :confirm => "Are you sure?" %></td>
+      <td><%= link_to "Clone", clone_admin_control_valve_sizing_path(control_valve_sizing), :class => "clone_sizing" %></td>
+    </tr>
+  <% end %>
+</table>

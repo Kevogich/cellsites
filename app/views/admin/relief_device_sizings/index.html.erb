@@ -1,0 +1,33 @@
+<% title 'Relief Device Sizing'%>
+
+<%= render :partial => '/admin/user_project_settings/project_filter' %>
+
+<br>
+<%= link_to 'Add Relief Device sizing', new_admin_relief_device_sizing_path%>&nbsp;|&nbsp;
+<%= link_to 'Relief Device Sizing Summary', "#" %>
+<br><br>
+
+<table width="auto">
+	<tr>
+		<th>Systems</th>
+		<th>By</th>
+		<th>Reviewer</th>
+		<th>Approver</th>
+		<th>Created at</th>
+		<th>Updated at</th>
+		<th>Edit</th>
+		<th>Delete</th>
+	</tr>
+	<% for relief_device_sizing in @relief_device_sizings%>
+		<tr>
+			<td><%= relief_device_sizing.system_description %></td>
+			<td><%= relief_device_sizing.sizing_status_activities.created_by%></td>
+			<td><%= relief_device_sizing.sizing_status_activities.reviewer%></td>
+			<td><%= relief_device_sizing.sizing_status_activities.approver%></td>
+			<td><%= relief_device_sizing.created_at.strftime("%d-%m-%Y")%></td>
+			<td><%= relief_device_sizing.updated_at.strftime("%d-%m-%Y")%></td>
+			<td><%= link_to "Edit", edit_admin_relief_device_sizing_path(relief_device_sizing)%></td>
+			<td><%= link_to "Delete", admin_relief_device_sizing_path(relief_device_sizing), :method=>"delete", :confirm => "Are you sure?"%></td>
+		</tr>
+	<% end%>
+</table>

@@ -1,0 +1,3 @@
+$.colorbox.close();
+var new_unit = '<tr id="unit_<%=@unit.id%>"><td><%= @unit.name%></td><td><%= link_to 'delete', admin_unit_path(@unit), :method => :delete, :remote => true, :confirm => 'Are you sure?' %></td></tr>';
+$('#units_list').append(new_unit);

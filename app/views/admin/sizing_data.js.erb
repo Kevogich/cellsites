@@ -1,0 +1,69 @@
+var project_units = <%= raw @project_units.to_json%>;
+
+function set_project_unit_decimals(unit_decimals) {
+	$.each(unit_decimals, function(k, v) {	    
+		if(project_units[v['measurement']] != undefined && project_units[v['measurement']][v['measurement_sub_type']] != undefined) {						
+			$(k).format({precision: project_units[v['measurement']][v['measurement_sub_type']]['decimal_places'],autofix:true});
+		}		
+	});
+}
+
+function set_project_unit_decimal(field, unit_decimals) {
+	var unit = unit_decimals[field];	
+	if(project_units[unit['measurement']] != undefined && project_units[unit['measurement']][unit['measurement_sub_type']] != undefined) {		
+		$(field).format({precision: project_units[unit['measurement']][unit['measurement_sub_type']]['decimal_places'],autofix:true});
+	}
+}
+
+function set_project_unit_labels(unit_decimals) {
+	$.each(unit_decimals, function(k, v) {
+		 if(project_units[v['measurement']] != undefined && project_units[v['measurement']][v['measurement_sub_type']] != undefined) {		 							
+			$(k+'_unit').html(project_units[v['measurement']][v['measurement_sub_type']]['unit']);
+		}
+	});
+}
+
+function set_project_field_value(field, value, unit_decimals) {
+	var unit = unit_decimals[field];
+	if (unit != undefined) {
+		if(project_units[unit['measurement']] != undefined && project_units[unit['measurement']][unit['measurement_sub_type']] != undefined) {
+			value = value.toFixed(project_units[unit['measurement']][unit['measurement_sub_type']]['decimal_places']);
+		}		 		
+	} 
+	$(field).val(value);		
+}
+
+function get_project_field_value(field, value, unit_decimals) {
+	var unit = unit_decimals[field];	
+	if (unit != undefined) {
+		if(value != undefined && value != null && value !="" && project_units[unit['measurement']] != undefined && project_units[unit['measurement']][unit['measurement_sub_type']] != undefined) {
+			value = value.toFixed(project_units[unit['measurement']][unit['measurement_sub_type']]['decimal_places']);
+		}		 		
+	}	
+	return value;
+}
+
+//TODO new decimal conversion methods
+var project_units1 = <%= raw @project_units1.to_json%>;
+
+function set_project_unit_and_decimals() {
+	$.each(project_units1, function(k, v) {
+		$('.'+k).format({precision: v["decimal_places"],autofix:true});
+		$('.'+k+'_unit').html(v["unit"]);
+	});
+}
+
+function set_project_unit_decimal1(field) {    
+	var unit = project_units1[field];	
+	if (unit != undefined) {		
+		$('.'+field).format({precision: unit["decimal_places"],autofix:true});
+	}	
+}
+
+function get_project_field_value1(unit, value) {
+	var unit = project_units1[unit];	
+	if (unit != undefined && value != undefined && value != null && value !="") {
+			value = value.toFixed(unit['decimal_places']);
+	}	
+	return value;
+}

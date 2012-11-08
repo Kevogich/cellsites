@@ -1,0 +1,157 @@
+<% spc =  @stream_property_changer.nil? ? stream_property_changer : @stream_property_changer %>
+<% row_id = @row_id.nil? ? row_id : @row_id %>
+<% sizing_type = @sizing_type.nil? ? sizing_type : @sizing_type %>
+<% piping_type = @piping_type.nil? ? piping_type : @piping_type %>
+<% tab = @tab.nil? ? tab : @tab %>
+
+<% if tab == 'suction' %>
+<td colspan='9' id='stream_property_changer_<%= row_id %>'>
+	<table>
+	<tr>
+		<td> 
+			<label>Process Basis</label><br>
+       		<%= select_tag  "#{sizing_type}[#{piping_type}][#{row_id}][stream_property_changer_attributes][process_basis_id]", options_for_select(@project.heat_and_material_balances.collect { |p| [p[:case], p[:id]] }.insert(0, ''), spc.process_basis_id), :style => 'width:110px;', :id => "stream_property_process_basis_#{row_id}"   %>
+		</td>
+		<td> 
+			<label>Stream No</label><br>
+       		<%= select_tag  "#{sizing_type}[#{piping_type}][#{row_id}][stream_property_changer_attributes][stream_no]", options_for_select(@streams.collect { |s| [s.display_stream_no, s.stream_no]}.insert(0,''),spc.stream_no), :style => 'width:110px;', :class => 'stream_property_stream_no', :id => "streamch_#{row_id}"  %>
+		</td>
+		<td> 
+			<label>Pressure</label><br>
+       	<%= text_field_tag "#{sizing_type}[#{piping_type}][#{row_id}][stream_property_changer_attributes][pressure]", spc.pressure  %>
+       	<label class='stream_property_changer_pressure_unit'></label>
+       	</td>
+		<td> 
+			<label>Temperature</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{piping_type}][#{row_id}][stream_property_changer_attributes][temperature]", spc.temperature  %>
+       		<label class='stream_property_changer_temperature_unit'></label>
+       	</td>
+		</td>
+		<td> 
+			<label>Vapor Fraction</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{piping_type}][#{row_id}][stream_property_changer_attributes][vapor_fraction]", spc.vapor_fraction  %>
+       	</td>
+		</td>
+		<td> 
+			<label>Vapor Density</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{piping_type}][#{row_id}][stream_property_changer_attributes][vapor_density]", spc.vapor_density  %>
+       		<label class='stream_property_changer_vapor_density_unit'></label>
+       	</td>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			 <label>Vapor Viscosity</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{piping_type}][#{row_id}][stream_property_changer_attributes][vapor_viscosity]", spc.vapor_viscosity  %>
+       		<label class='stream_property_changer_vapor_viscosity_unit'></label>
+       	</td>
+		 </td>
+		<td>
+			<label>Vapor MW</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{piping_type}][#{row_id}][stream_property_changer_attributes][vapor_mw]", spc.vapor_mw  %>
+       	</td>
+		</td>
+		<td>
+			<label>Vapor Cp/Cv</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{piping_type}][#{row_id}][stream_property_changer_attributes][vapor_cp_cv]", spc.vapor_cp_cv  %>
+       	</td>
+		</td>
+		<td>
+			<label>Liquid Density</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{piping_type}][#{row_id}][stream_property_changer_attributes][liquid_density]", spc.liquid_density  %>
+       		<label class='stream_property_changer_liquid_density_unit'></label>
+		</td>
+		<td>
+			<label>Liquid Viscosity</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{piping_type}][#{row_id}][stream_property_changer_attributes][liquid_viscosity]", spc.liquid_viscosity  %>
+       		<label class='stream_property_changer_liquid_viscosity_unit'></label>
+       	</td>
+		</td>
+		<td> 
+			<label>Liquid Surface Tension</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{piping_type}][#{row_id}][stream_property_changer_attributes][liquid_surface_tension]", spc.liquid_surface_tension  %>
+       		<label class='stream_property_changer_liquid_surface_tension_unit'></label>
+       	</td><br>
+		</td>
+	</tr>
+	</table>
+</td>
+<% else %>
+
+<% discharge_type = @discharge_type.nil? ? discharge_type : @discharge_type %>
+<% discharge_row = @discharge_row.nil? ? discharge_row : @discharge_row %>
+
+<td colspan='10' id='stream_property_changer_<%= row_id %>'>
+	<table>
+	<tr>
+		<td> 
+			<label>Process Basis</label><br>
+       		<%= select_tag  "#{sizing_type}[#{discharge_type}][#{discharge_row}][#{piping_type}][#{row_id}][stream_property_changer_attributes][process_basis_id]", options_for_select(@project.heat_and_material_balances.collect { |p| [p[:case], p[:id]] }.insert(0, ''), spc.process_basis_id), :style => 'width:110px;', :id => "stream_property_process_basis_#{row_id}"  %>
+		</td>
+		<td> 
+			<label>Steam No</label><br>
+       		<%= select_tag  "#{sizing_type}[#{discharge_type}][#{discharge_row}][#{piping_type}][#{row_id}][stream_property_changer_attributes][stream_no]", options_for_select(@streams.collect { |s| [s.display_stream_no, s.stream_no]}.insert(0,''),spc.stream_no), :style => 'width:110px;', :class => 'stream_property_stream_no', :id => "streamch_#{row_id}"  %>
+		</td>
+		<td> 
+			<label>Pressure</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{discharge_type}][#{discharge_row}][#{piping_type}][#{row_id}][stream_property_changer_attributes][pressure]", spc.pressure  %>
+       		<label class='stream_property_changer_pressure_unit'></label>
+       	</td>
+		<td> 
+			<label>Temperature</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{discharge_type}][#{discharge_row}][#{piping_type}][#{row_id}][stream_property_changer_attributes][temperature]", spc.temperature  %>
+       			<label class='stream_property_changer_temperature_unit'></label>
+       		</td>
+		</td>
+		<td> 
+			<label>Vapor Fraction</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{discharge_type}][#{discharge_row}][#{piping_type}][#{row_id}][	stream_property_changer_attributes][vapor_fraction]", spc.vapor_fraction  %>
+       	</label>
+       	</td>
+		</td>
+		<td> 
+			<label>Vapor Density</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{discharge_type}][#{discharge_row}][#{piping_type}][#{row_id}][stream_property_changer_attributes][vapor_density]", spc.vapor_density  %>
+       		<label class='stream_property_changer_vapor_density_unit'></label>
+       	</td>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			 <label>Vapor Viscosity</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{discharge_type}][#{discharge_row}][#{piping_type}][#{row_id}][stream_property_changer_attributes][vapor_viscosity]", spc.vapor_viscosity  %>
+       		<label class='stream_property_changer_vapor_viscosity_unit'></label>
+       	</td>
+		 </td>
+		<td>
+			<label>Vapor MW</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{discharge_type}][#{discharge_row}][#{piping_type}][#{row_id}][stream_property_changer_attributes][vapor_mw]", spc.vapor_mw  %>
+       	</td>
+		</td>
+		<td>
+			<label>Vapor Cp/Cv</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{discharge_type}][#{discharge_row}][#{piping_type}][#{row_id}][stream_property_changer_attributes][vapor_cp_cv]", spc.vapor_cp_cv  %>
+       	</td>
+		</td>
+		<td>
+			<label>Liquid Density</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{discharge_type}][#{discharge_row}][#{piping_type}][#{row_id}][stream_property_changer_attributes][liquid_density]", spc.liquid_density  %>
+       		<label class='stream_property_changer_liquid_density_unit'></label>
+       	</td>
+		</td>
+		<td>
+			<label>Liquid Viscosity</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{discharge_type}][#{discharge_row}][#{piping_type}][#{row_id}][stream_property_changer_attributes][liquid_viscosity]", spc.liquid_viscosity  %>
+       		<label class='stream_property_changer_liquid_viscosity_unit'></label>
+       	</td>
+		</td>
+		<td> 
+			<label>Liquid Surface Tension</label><br>
+       		<%= text_field_tag "#{sizing_type}[#{discharge_type}][#{discharge_row}][#{piping_type}][#{row_id}][stream_property_changer_attributes][liquid_surface_tension]", spc.liquid_surface_tension  %>
+       		<label class='stream_property_changer_liquid_surface_tension_unit'></label>
+       	</td>
+		</td>
+	</tr>
+</table>
+</td>
+<% end %>

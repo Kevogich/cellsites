@@ -1,0 +1,361 @@
+<% title "#{@project.project_num} Project Details", false%>
+<% stylesheet("/javascripts/tablecloth/tablecloth.css")%>
+
+<h3><%= "#{@project.project_num} Project Details"%>&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0), edit_admin_project_path(@project), :title => "Edit Project Details"%></h3>
+<br><br>
+
+<fieldset class="project">
+	<legend>Information&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_admin_project_path(@project), :title => "Edit Basic information"%></legend>	
+	<table style="width:auto;">
+		<tr>
+			<td>Client Name</td><td><%= @project.client.name%></td>
+		</tr>
+		<tr>
+			<td>Location</td><td><%= @project.location%></td>
+		</tr>
+		<tr>
+			<td>Title</td><td><%= @project.title%></td>
+		</tr>
+		<tr>
+			<td>Project Number</td><td><%= @project.project_num%></td>
+		</tr>
+		<tr>
+			<td>Client Project Number</td><td><%= @project.document_num%></td>
+		</tr>
+	</table>  	
+</fieldset>
+
+<fieldset class="project">
+	<legend>Selected Units of Measurement&nbsp;<b><%= @project.units_of_measurement%></b>&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'measurement_unit'), :title => "Edit Measure Units"%></legend>
+	<table style="width:auto;">	
+	<tr>
+		<th>Measurement</th>
+		<th>Measurement Sub Type</th>
+		<th>Unit name</th>
+		<th>Selected Unit</th>
+		<th>Base Unit</th>
+		<th>Conversion Factor</th>
+		<th>Decimal Places</th>
+	</tr>
+	<% for unit_of_measurement in @project.unit_of_measurements.order("measurement_id ASC")%>
+	<tr>
+		<td><%= unit_of_measurement.measurement.name%></td>
+		<td><%= unit_of_measurement.measurement_sub_type.name%></td>
+		<td><%= unit_of_measurement.measure_unit.unit_name rescue "-"%></td>
+		<td><%= unit_of_measurement.measure_unit.unit rescue "-"%></td>
+		<td><%= unit_of_measurement.measure_unit.base_unit rescue "-"%></td>
+		<td><%= unit_of_measurement.measure_unit.conversion_factor rescue "-"%></td>		
+		<td><%= unit_of_measurement.decimal_places rescue "-"%></td>
+	</tr>
+	<% end%>
+	</table>
+</fieldset>	
+
+<fieldset class="project" style="margin-top:15px;">
+	<legend>Process Units&nbsp;<%= link_to (image_tag 'edit.png', :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'process_units'), :title => "Edit Process Units"%></legend>
+	<table style="width:auto;">
+		<tr>
+			<th>Process Unit</th>
+		</tr>
+		<% @project.process_units.each do |process_unit|%>
+		<tr>
+			<td><%= process_unit.name%></td>
+		</tr>
+		<% end%>
+	</table>
+</fieldset>
+
+<fieldset class="project" style="margin-top:15px;">	
+	<legend>Pipe Roughness&nbsp;<%= link_to (image_tag 'edit.png', :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'pipe_roughness'), :title => "Edit Pipe Roughness"%></legend>
+	<table>
+		<tr>
+			<th width=260>Material</th>
+	      	<th>Conditions</th>
+	      	<th>Roughness Range (<%= @project.unit('Length', 'Small Dimension Length')%>)</th>
+	      	<th>Recommended Roughness (<%= @project.unit('Length', 'Small Dimension Length')%>)</th>
+	      	<th>Selected (<%= @project.unit('Length', 'Small Dimension Length')%>)</th>
+		</tr>
+		<% project_pipes = @project.project_pipes.collect {|p| p.pipe_id} %>
+	    <% Pipe.all.each do |pipe| %>
+        <tr>
+        	<td><%= pipe.material %></td>
+        	<td><%= pipe.conditions %></td>
+			<td><%= "#{(pipe.roughness_min * @pipe_r_cf[:factor]).round(@pipe_r_cf[:decimals]) rescue nil} - #{(pipe.roughness_max * @pipe_r_cf[:factor]).round(@pipe_r_cf[:decimals]) rescue nil}" %></td>
+			<td><%= (pipe.roughness_recommended * @pipe_r_cf[:factor]).round(@pipe_r_cf[:decimals]) %></td>
+			<% if project_pipes.include?(pipe.id) %>
+				<td>Selected</td>
+			<% else %>
+				<td>&nbsp;</td>
+			<% end %>
+			<!-- <td>< roughness ></td> -->
+      	</tr>
+		<% end%>
+  	</table>
+</fieldset>
+
+<fieldset class="project" style="margin-top:15px;">
+  <legend>Heat &amp; Material Balance Setup&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'heat_and_material_balance'), :title => "Edit Heat & Material Balance"%></legend>
+  <table class="list full_width">
+    <tr>
+      <th width="260">Case</th>
+      <th>Value</th>
+    </tr>
+    <% @project.heat_and_material_balances.each_with_index do |case_item,index| %>
+      <tr>
+        <td><%= "Case #{index}" %></td>
+        <td><%= case_item.case %></td>
+      </tr>
+	<% end%>  
+  </table>
+</fieldset>
+
+<fieldset class="project" style="margin-top:15px;">
+	<legend>Sizing Criteria&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'sizing_criteria'), :title => "Edit Sizing Criterias"%></legend>
+	<table class="full_width sizing_criteria">
+		<tr>
+			<th rowspan="2">Liquid</th>
+	      	<th colspan=3>Velocity</th>
+	      	<th colspan=3>Maximum dP/100ft</th>
+	      	<th rowspan="2">User Notes</th>
+	    </tr>	
+	    <tr>
+	    	<th>Min (<%= @project.unit('Velocity', 'General')%>)</th>
+	      	<th>Max (<%= @project.unit('Velocity', 'General')%>)</th>
+	      	<th>Selected (<%= @project.unit('Velocity', 'General')%>)</th>
+	      	<th>Min (<%= @project.unit('Pressure', 'Differential')%>)</th>
+	      	<th>Max (<%= @project.unit('Pressure', 'Differential')%>)</th>
+	      	<th>Selected (<%= @project.unit('Pressure', 'Differential')%>)</th>      
+	    </tr>
+		<% for sizing_criteria_category in @project.sizing_criteria_categories.uniq%>
+			<tr>
+				<td colspan="8"><b><%= sizing_criteria_category.name%></b></td>
+			</tr>
+			<% for sizing_criteria_category_type in sizing_criteria_category.sizing_criteria_category_types%>
+				<% next if sizing_criteria_category_type.sizing_criterias.length == 0 %>
+				<tr>
+					<td colspan="8">
+						<%= image_tag "gnome_go_next.png", :border=>0, :size=>"12x12"%><b><%= sizing_criteria_category_type.name%></b>
+					</td>
+				</tr>
+				<% for psc in @project.project_sizing_criterias.where(:sizing_criteria_category_type_id => sizing_criteria_category_type.id)%>
+					<tr>
+						<td width="25%"><%= psc.sizing_criteria.name%></td>
+						<td width="10%"><%= psc.velocity_min%></td>
+						<td width="10%"><%= psc.velocity_max%></td>
+						<td width="10%"><%= psc.velocity_sel%></td>
+						<td width="10%"><%= psc.delta_per_100ft_min%></td>
+						<td width="10%"><%= psc.delta_per_100ft_max%></td>
+						<td width="10%"><%= psc.delta_per_100ft_sel%></td>
+						<td width="15%"><%= psc.user_notes%></td>
+					</tr>
+				<% end%>
+			<% end%>
+		<% end%>
+	</table>
+</fieldset>
+
+<fieldset class="project" style="margin-top:15px;">
+	<legend>Flow Model&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'flow_model'), :title => "Edit Flow Model"%></legend>
+	<table style="width:auto;">
+		<tr><td>Vapor flow model</td><td width="50%"><%= @project.vapor_flow_model%></td></tr>
+		<tr><td>Two phase flow model</td><td><%= @project.two_phase_flow_model%></td></tr>
+  	</table>  
+</fieldset>
+
+<fieldset class="project" style="margin-top:15px;">
+	<legend>Piping and Instrumentation Design Parameters&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'piping_and_instrumentation_design_parameters'), :title => "Edit Piping and Instrumentation Design Parameters"%></legend>
+	<table style="width:auto;">
+		<tr>
+			<td>Barometric pressure</td>
+			<td width="50%"><%= @project.barometric_pressure.to_s + " " + @project.unit("Pressure", "Absolute").to_s %> </td>
+		</tr>
+		<tr>
+			<td>Standard Temperature</td>
+			<td width="50%"><%= @project.standard_temperature.to_s + " " + @project.unit("Temperature", "General").to_s %> </td>
+		</tr>
+		<tr>
+			<td>Standard Pressure</td>
+			<td width="50%"><%= @project.standard_pressure.to_s + " " + @project.unit("Pressure", "General").to_s %> </td>
+		</tr>
+		<tr>
+			<td>Hydraulic sizing overdesign factor</td>
+			<td><%= @project.hydraulic_sizing_overdesign_factor%>&nbsp;%</td>
+		</tr>
+		<tr>
+			<td>Maximum operating pressure allowance</td>
+			<td><%= @project.maximum_operating_pressure_allowance%>&nbsp;<%= @project.unit("Pressure", "Differential").to_s%></td>
+		</tr>
+		<tr>
+			<td>Maximum operating temperature allowance</td>
+			<td><%= @project.maximum_operating_temperature_allowance%>&nbsp;<%= @project.unit("Temperature", "General").to_s%></td>
+		</tr>
+		<tr>
+			<td>Design pressure allowance</td>
+			<td><%= @project.design_pressure_allowance%>&nbsp;<%= @project.unit("Pressure", "Differential").to_s%></td>
+		</tr>
+		<tr>
+			<td>Design temperature allowance</td>
+			<td><%= @project.design_temperature_allowance%>&nbsp;<%= @project.unit("Temperature", "General").to_s%></td>
+		</tr>
+		<tr>
+			<td>Default flow element pressure drop</td>
+			<td><%= @project.default_flow_element_pressure_drop.to_s + " " + @project.unit("Pressure", "Differential").to_s%></td>
+		</tr>
+		<tr>
+			<td>Default Minimum control valve pressure drop</td>
+			<td><%= @project.minimum_control_value_pressure_drop.to_s + " " + @project.unit("Pressure", "Differential").to_s%></td>
+		</tr>		
+		<tr>
+			<td>Control Valve/Flow Element Flow Basis</td>
+			<td><%=raw "Min: #{@project.control_flow_bias_min}%&nbsp;&nbsp;Normal: #{@project.control_flow_bias_normal}%&nbsp;&nbsp;Max: #{@project.control_flow_bias_max}%"%></td>
+		</tr>		
+		<tr>
+			<td>Default control valve pressure drop ratio factor</td>
+			<td><%= @project.default_pressure_drop_ratio_factor%></td>
+		</tr>
+		<tr>
+			<td>Default control valve rated liquid pressure recovery factor</td>
+			<td><%= @project.default_rated_liquid_pressure_recovery_factor%></td>
+		</tr>		
+		<tr>
+			<td>Restriction orifice meter default type</td>
+			<td><%= @project.restriction_orifice_meter_default_type %></td>
+		</tr>		
+		<tr>
+			<td>Flange fitting test pressure factor</td>
+			<td><%= @project.flange_fitting_test_pressure_factor %></td>
+		</tr>
+	</table>
+</fieldset>
+
+<fieldset class="project" style="margin-top:15px;">
+	<legend>Rotating Equiment Design Parameters&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'rotating_equiment_design_parameters'), :title => "Edit Rotating equiment design parameters"%></legend>
+	<table style="width:auto;">
+		<tr>
+			<td>Centrifugal pump design safety factor</td>
+			<td width="50%"><%= "#{@project.centrifugal_pump_design_safety_factor} %" %></td>
+		</tr>
+		<tr>
+			<td>Default centrifugal pump efficiency</td>
+			<td><%= "#{@project.default_centrifugal_pump_efficiency} %"%></td>
+		</tr>
+		<tr>
+			<td>Centrifugal pump shut off factor</td>
+			<td><%= "#{@project.centrifugal_pump_shut_off_factor} %"%></td>
+		</tr>
+		<tr>
+			<td>Positive displacement mechanical efficiency</td>
+			<td><%= "#{@project.positive_displacement_mechanical_efficiency} %"%></td>
+		</tr>
+		<tr>
+			<td>Positive displacement pump design safety factor</td>
+			<td><%= "#{@project.positive_displacement_pump_design_safety_factor} %"%></td>
+		</tr>
+		<tr>
+			<td>Compression path</td>
+			<td><%= @project.compression_path%></td>
+		</tr>
+		<tr>
+			<td>Compressor design safety factor</td>
+			<td><%= @project.compressor_design_safety_factor%>&nbsp;%</td>
+		</tr>
+		<tr>
+			<td>Allowable centrifugal compressor MAWT</td>
+			<td><%= @project.allowable_centrifugal_compressor_mawt.to_s + " " + @project.unit("Temperature", "General").to_s%></td>
+		</tr>
+		<tr>
+			<td>Allowable Compression Ratio Per Reciprocating Compressor Stage</td>
+			<td>"<%= @project.allowable_compression_ratio_per_recip_comp_stage_start%>" - "<%= @project.allowable_compression_ratio_per_recip_comp_stage_end%>"&nbsp;<%= @project.unit("Temperature", "General").to_s%></td>
+		</tr>		
+	</table>
+</fieldset>
+
+<fieldset class="project" style="margin-top:15px;">
+	<legend>Mechanical Driver Design Parameters&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'mechanical_driver_design_parameters'), :title => "Edit Mechanical Driver Design Parameters"%></legend>
+	<table style="width:auto;">
+		<tr>
+			<td>Hydraulic power recovery turbine efficiency</td>
+			<td width="50%"><%= "#{@project.hydraulic_power_recovery_turbine_efficiency} %"%></td>
+		</tr>
+		<tr>
+			<td>Hydraulic power recovery turbine design safety factor</td>
+			<td><%= "#{@project.hydraulic_power_recovery_turbine_design_safety_factor} %"%></td>
+		</tr>
+		<tr>
+			<td>Turbo expander efficiency</td>
+			<td><%= "#{@project.turbo_expander_efficiency} %"%></td>
+		</tr>				
+	</table>
+</fieldset>
+
+<fieldset class="project" style="margin-top:15px;">
+	<legend>Fixed Equipment Design Parameters&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'fixed_equipment_design_parameters'), :title => "Edit Fixed Equipment Design Parameters"%></legend>
+	<table style="width:auto;">
+		<tr>
+			<td>Default optimal reflux ratio factor</td>
+			<td width="50%"><%= @project.default_optimal_reflux_ratio_factor%>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>k factor for wire mesh design</td>
+			<td><%= @project.k_factor_for_wire_mesh_design%>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>Default Vessel Design L/D Ratio for Gas-Liquid Separator</td>
+			<td><%= @project.default_vessel_design_g_lq_ratio%>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>Vertical Seperator</td>
+			<td><%= @project.vertical_seperator%>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>Max liquid level</td>
+			<td><%= @project.max_liquid_level%>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>Default Vessel Design L/D Ratio for Liquid-Liquid Separator</td>
+			<td><%= @project.default_vessel_design_ld_ratio%>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>Minimum Pressure Vessel Design Pressure</td>
+			<td><%= @project.min_pressure_vessel_design_pressure%>&nbsp;<%= @project.unit("Pressure", "General").to_s%></td>
+		</tr>
+		<tr>
+			<td>Minimum exchanger design pressure</td>
+			<td><%= @project.minimum_exchanger_design_pressure%>&nbsp;<%= @project.unit("Pressure", "General").to_s%></td>
+		</tr>
+		<tr>
+			<td>Maximum collection header back pressure</td>
+			<td><%= @project.maximum_collection_header_back_pressure%>&nbsp;<%= @project.unit("Pressure", "General").to_s%></td>
+		</tr>
+		<tr>
+			<td>Minimum ambient design temperature</td>
+			<td><%= @project.minimum_ambient_design_temperature%>&nbsp;<%= @project.unit("Temperature", "General").to_s%></td>
+		</tr>
+		<tr>
+			<td>Test pressure factor</td>
+			<td><%= @project.test_pressure_factor%>&nbsp;</td>
+		</tr>		
+		<tr>
+			<td>Storage Tank Vapor Space Capacity Above Maximum Level</td>
+			<td><%= @project.storage_tank_vapor_space_capacity_above_maximum_level %>&nbsp;</td>
+		</tr>
+	</table>
+</fieldset>
+
+<%= render :partial => "pressure_relief_system_design_parameter" %>
+
+
+<fieldset class="project" style="margin-top:15px;">
+  <legend>Attachments</legend>
+  <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+  <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+</fieldset>
+
+<fieldset class="project" style="margin-top:15px;">
+  <legend>Comments</legend>
+  <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+  <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+</fieldset>
+
+
+

@@ -1,0 +1,17 @@
+<%= fields_for @rupture_location do |f| %>
+<tr id=<%= "row_#{@unique_id}"%> >
+	<td id=<%= "sequence_rupture_location_#{@unique_id}"%>>1</td>
+	<%= f.hidden_field :id, :name =>  "rupture_location_attributes[#{@unique_id}][id]" %>
+	<%= f.hidden_field :_destroy, :name =>  "rupture_location_attributes[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_#{@unique_id}" %>
+    <td><%= f.text_field :location, :name =>  "rupture_location_attributes[#{@unique_id}][location]" , :style => "width:100px;" , :id => "location_#{@unique_id}"%></td>
+    <td><%= f.text_field :limiting_fitting, :name =>  "rupture_location_attributes[#{@unique_id}][limiting_fitting]" , :style => "width:100px;" , :id => "limiting_fitting_#{@unique_id}"%></td>
+    <td><%= select_tag "rupture_location_attributes[#{@unique_id}][size]",options_for_select(PipeSizing.pipe_sizes(@fitting_pipe_size_unit).collect { |p| [raw(p[:name]), p[:value]] }.insert(0, ''),@rupture_location.size),:class => 'designation', :id => "pipe_size_#{@unique_id}"%></td>
+    <td><%= select_tag "rupture_location_attributes[#{@unique_id}][contact_fluid_phase]",options_for_select(StaticData.relief_phase,@rupture_location.contact_fluid_phase),:class => 'designation', :id => "contact_fluid_phase_#{@unique_id}"%></td>
+    <td><%= select_tag "rupture_location_attributes[#{@unique_id}][acidic_conditions]",options_for_select(StaticData.yes_no,@rupture_location.acidic_conditions),:class => 'designation', :id => "acidic_conditions_#{@unique_id}"%></td>
+    <td><%= select_tag "rupture_location_attributes[#{@unique_id}][high_temp_conditions]",options_for_select(StaticData.yes_no,@rupture_location.high_temp_conditions),:class => 'designation', :id => "high_temp_conditions_#{@unique_id}"%></td>
+    <td><%= select_tag "rupture_location_attributes[#{@unique_id}][h2s_environment]",options_for_select(StaticData.yes_no,@rupture_location.h2s_environment),:class => 'designation', :id => "h2s_environment_#{@unique_id}"%></td>
+    <td><%= select_tag "rupture_location_attributes[#{@unique_id}][acceptability]",options_for_select(StaticData.yes_no,@rupture_location.acceptability),:class => 'designation', :id => "acceptability_#{@unique_id}"%></td>
+    <td><%= radio_button "relief_device_sizing", "rupture_disk_location", "#{@rupture_location.location}"%></td>
+	<td><%= link_to "X", "#", :id => "#{@unique_id}", :class => "delete_rupture_location" %></td>
+</tr>
+<% end %>

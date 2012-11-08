@@ -1,0 +1,264 @@
+<style type="text/css">
+  #system_definition_image {
+    background-image: url("/images/column_sizing/column_system.jpg");
+    background-repeat: no-repeat;
+    height: 493px;
+    width: 774px;
+    position: relative;
+    margin: 0 auto;
+  }
+
+  #process_basis_div {
+    position: absolute;
+    top: 200px;
+    left: 600px;
+  }
+
+  #process_basis_div ul {
+    float: right;
+  }
+
+  #process_basis_div li {
+    margin-bottom: 2px;
+  }
+
+  #process_basis_div li .field_label {
+    float: left;
+    width: 120px;
+  }
+
+  #process_basis_div li .field {
+    float: right;
+  }
+
+  .streams li {
+    margin-bottom: 2px;
+  }
+
+  #streams_1 {
+    position: absolute;
+    top: 215px;
+    left: 25px;
+  }
+
+  #streams_2 {
+    position: absolute;
+    top: 375px;
+    left: 55px;
+  }
+
+  #streams_3 {
+    position: absolute;
+    top: 325px;
+    left: 225px;
+  }
+
+  #streams_4 {
+    position: absolute;
+    top: 50px;
+    left: 225px;
+  }
+
+  #streams_5 {
+    position: absolute;
+    top: 50px;
+    left: 425px;
+  }
+
+  #streams_6 {
+    position: absolute;
+    top: 50px;
+    left: 665px;
+  }
+
+  #review table td {
+    vertical-align: top;
+  }
+
+  #column_design input[type="text"] {
+    width: 150px;
+  }
+
+  #minimum_column_stages_div [type="text"] {
+    width: 150px;
+  }
+
+  #minimum_column_stages_winn_modified_div [type="text"] {
+    width: 150px;
+  }
+
+  #no_of_trays_div input[type="text"] {
+    width: 150px;
+  }
+
+  #tray_design_table input[type="text"] {
+    width: 100px;
+  }
+
+</style>
+
+<%= form_for column_sizing, :url => column_sizing.new_record? ? admin_column_sizings_path : admin_column_sizing_path(column_sizing), :html => {:style => 'width:auto;', :class => "form_column_sizing"} do |f| %>
+  <%= f.error_messages %>
+  <% if column_sizing.new_record? %>
+    <%= f.hidden_field :company_id %>
+    <%= f.hidden_field :client_id, :value => @user_project_settings.client_id %>
+    <%= f.hidden_field :project_id, :value => @user_project_settings.project_id %>
+    <%= f.hidden_field :process_unit_id, :value => @user_project_settings.process_unit_id %>
+  <% end %>
+  <div class="form-element-last">
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :client_id %><br>
+      <%= f.label :client_id, (column_sizing.client.name rescue @user_project_settings.client.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :project_id %><br>
+      <%= f.label :project_id, (column_sizing.project.project_num rescue @user_project_settings.project.project_num), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :process_unit_id %><br>
+      <%= f.label :process_unit_id, (column_sizing.process_unit.name rescue @user_project_settings.process_unit.name), :style => "font-weight:bold" %>
+		</span>
+    <span style="float:left;margin-right:40px;">
+			<%= f.label :column_system %><br>
+      <%= f.text_field :column_system %>
+		</span>
+    <% unless column_sizing.new_record? %>
+      <span style="float:left;margin-right:40px;">
+        <%= label_tag :status %><br>
+        <strong><%= sizing_status(column_sizing) %></strong>
+      </span>
+      <span style="float:left;margin-right:40px;">
+        <br>
+        <%= sizing_status_request_button(column_sizing) %>
+      </span>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+  <div class="hidden">
+    <%= hidden_field_tag :tab %>
+    <%= hidden_field_tag :calculate_btn %>
+  </div>
+  <div class="form-buttons">
+    <%= f.submit column_sizing.new_record? ? 'Create' : 'Update' %>
+  </div>
+  <!-- tabs -->
+  <div>
+    <ul class="simple-tabs">
+      <li><a href="#system_definition" tab="system_definition">System Definition</a></li>
+      <li><a href="#tray_specification" tab="system_definition">Tray/Packing Specification</a></li>
+      <li><a href="#column_dimension" tab="column_dimension">Column Dimension</a></li>
+      <li><a href="#column" tab="column">Column</a></li>
+      <li><a href="#column_detail" tab="column_detail">Column Detail</a></li>
+      <li><a href="#review" tab="review">Review</a></li>
+    </ul>
+    <div class="tab_container">
+      <%= render :partial => "system_definition", :locals => {:f => f, :column_sizing => column_sizing} %>
+      <%= render :partial => "tray_specification", :locals => {:f => f, :column_sizing => column_sizing} %>
+      <%= render :partial => "column_dimension", :locals => {:f => f, :column_sizing => column_sizing} %>
+      <%= render :partial => "column", :locals => {:f => f, :column_sizing => column_sizing} %>
+      <%= render :partial => "column_detail", :locals => {:f => f, :column_sizing => column_sizing} %>
+      <%= render :partial => "review", :locals => {:f => f, :column_sizing => column_sizing} %>
+    </div>
+    <div class="clear"></div>
+  </div>
+<% end %>
+
+<% unless column_sizing.new_record? %>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Attachments</legend>
+    <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+    <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+  </fieldset>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Comments</legend>
+    <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+    <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+  </fieldset>
+<% end %>
+
+
+<%= javascript_tag do %>
+  var column_sizing_id = "<%= column_sizing.id %>";
+  <% if column_sizing.new_record? %>
+    $('#column_sizing_cd_mcs_basis_molar_flowrate').attr('checked', 'checked');
+  <% else %>
+  <% end %>
+<% end %>
+
+<script type="text/javascript">
+
+  set_project_unit_and_decimals();
+  $('form.form_column_sizing').livequery(function () {
+    $(this).dirtyForms();
+  });
+
+  $("ul.simple-tabs li a").click(function () {
+    $('#tab').val($(this).attr('tab'));
+  });
+
+
+  $('#column_sizing_sd_process_basis_id').change(function (e) {
+    $('.sd_stream_no >option').remove();
+    $('.sd_stream_no').append($('<option></option>').val("").html(""));
+    $("#system_definition li input[type=text]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/heat_and_material_balances/get_stream_nos', {process_basis_id:$(this).val()}, function (data) {
+      $(data).each(function (k, v) {
+        $('.sd_stream_no').append(
+          $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+        );
+      });
+    }, 'json');
+  });
+
+  $('.sd_stream_no').change(function (e) {
+    var sno = $(this).attr("sno");
+    $("#tab1 div#streams_" + sno + " input[type=text]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/column_sizings/get_stream_values',
+      {process_basis_id:$('#column_sizing_sd_process_basis_id').val(), stream_no:$(this).val()},
+      function (data) {
+        $('#column_sizing_sd_pressure_' + sno).val(get_project_field_value1('pressure_general', data['pressure']));
+        $('#column_sizing_sd_temperature_' + sno).val(get_project_field_value1('temperature_general', data['temperature']));
+      },
+      'json');
+  });
+
+  /*//system_definition_calculation
+   $("#system_definition_calculation").click(function () {
+   $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+   $('#calculate_btn').val('system_definition_calculation');
+
+   if (!$('#system_definition').validateTab()) {
+   return false;
+   }
+
+   if (column_sizing_id == "" || $('form.form_column_sizing').isDirty()) {
+   $('form.form_column_sizing').submit();
+   return false;
+   }
+
+   $.get("/admin/column_sizings/system_definition_calculation",
+   {column_sizing_id:column_sizing_id},
+   function (data) {
+   alert('Calculation is completed successfully');
+   window.location = location.pathname
+   },
+   'json'
+   );
+   }); */
+</script>
+<%= javascript_tag do %>
+  //hit calculate button
+  var calculate_btn = "<%= params[:calculate_btn] %>";
+  if(calculate_btn == "system_definition_calculation") {
+  $('#system_definition_calculation').trigger('click');
+  }
+
+<% end %>

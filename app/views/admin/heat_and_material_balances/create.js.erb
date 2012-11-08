@@ -1,0 +1,6 @@
+$("#project_cases_<%= @row_no%>").val("<%= @hnm.case%>");
+$("#project_case_id_<%= @row_no%>").val("<%= @hnm.id%>");
+$("#detail_case_<%= @row_no%>").attr("case_id","<%= @hnm.id%>");
+$("#view_detail_case_<%= @row_no%>").attr("case_id","<%= @hnm.id%>");
+alert('Saved Successfully.');
+$.colorbox.close();

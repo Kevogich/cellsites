@@ -1,0 +1,3 @@
+$.colorbox.close();
+var new_title = '<tr id="title_<%=@title.id%>"><td><%= @title.name%></td><td><%= link_to 'delete', admin_title_path(@title), :method => :delete, :remote => true, :confirm => 'Are you sure?' %></td></tr>';
+$('#titles_list').append(new_title);

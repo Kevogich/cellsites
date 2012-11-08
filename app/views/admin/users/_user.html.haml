@@ -1,0 +1,9 @@
+%tr{:class => cycle('odd', 'even')}
+  %td= link_to user.name, admin_user_path( user )
+  %td= user.group.try(:name)
+  %td= user.title.try(:name)
+  %td= user.official_title
+  %td= user.address
+  %td= user.role_names
+  %td= user.unit_names
+  %td= link_to 'delete', admin_user_path( user ), :method => :delete, :confirm => 'Are you sure?' unless user.has_role?('superadmin')

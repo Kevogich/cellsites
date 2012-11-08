@@ -1,0 +1,24 @@
+<% @unique_id2 = @discharge_circuit_piping.object_id %>
+<%= fields_for @discharge_circuit_piping do |f| %>
+	<tr id=<%= "row_#{@unique_id2}"%> >
+		<td id=<%= "sequence_#{@unique_id2}"%>><%= @index %></td>
+		<%= f.hidden_field :id, :name => "discharges[#{@unique_id}][circuit_piping][#{@unique_id2}][id]" %>
+		<%= f.hidden_field :_destroy, :name => "discharges[#{@unique_id}][circuit_piping][#{@unique_id2}][_destroy]", :value => 0, :id => "destroy_#{@unique_id2}" %>
+		<td><%= select_tag "discharges[#{@unique_id}][circuit_piping][#{@unique_id2}][fitting]",options_for_select(PipeSizing.fitting.collect {|p| [raw(p[:value]), p[:id]]}.insert(0,' '),@discharge_circuit_piping.fitting), :style => "width:200px;" %></td>
+		<td><%= f.text_field :fitting_tag, :name => "discharges[#{@unique_id}][circuit_piping][#{@unique_id2}][fitting_tag]"%></td>
+		<td><%= select_tag "discharges[#{@unique_id}][circuit_piping][#{@unique_id2}][pipe_size]",options_for_select(PipeSizing.pipe_sizes.collect {|p| [raw(p[:name]), p[:value]]}.insert(0,' '),@discharge_circuit_piping.pipe_size), :class => "discharge_circuit_piping_pipe_size pipe_size_#{@unique_id2}", :id => "pipe_size:#{@unique_id2}" %></td>
+		<% if @discharge_circuit_piping.pipe_schedule.nil? %>
+			<td><%= select_tag "discharges[#{@unique_id}][circuit_piping][#{@unique_id2}][pipe_schedule]",options_for_select([]), :class => "discharge_circuit_piping_pipe_schedule pipe_schedule_#{@unique_id2}", :id => "pipe_schedule:#{@unique_id2}" %></td>
+		<% else %>
+			<td><%= select_tag "discharges[#{@unique_id}][circuit_piping][#{@unique_id2}][pipe_schedule]",options_for_select(PipeSizing.pipe_schedules.collect {|p|[raw(p[:name]),p[:name]]}.insert(0,' '),@discharge_circuit_piping.pipe_schedule), :class => "discharge_circuit_piping_pipe_schedule pipe_schedule_#{@unique_id2}", :id => "pipe_schedule:#{@unique_id2}" %></td>
+		<% end %>
+		<td><%= f.text_field :pipe_id, :name => "discharges[#{@unique_id}][circuit_piping][#{@unique_id2}][pipe_id]", :class => "discharge_circuit_piping_pipe_id", :id => "discharge_circuit_piping_pipe_id_#{@unique_id2}" %></td>
+		<td><%= f.text_field :per_flow, :name => "discharges[#{@unique_id}][circuit_piping][#{@unique_id2}][per_flow]" %></td>
+		<td><%= f.text_field :ds_cv, :name => "discharges[#{@unique_id}][circuit_piping][#{@unique_id2}][ds_cv]" %></td>
+		<td><%= f.text_field :length, :name => "discharges[#{@unique_id}][circuit_piping][#{@unique_id2}][length]", :class => "suction_pipings_length"%></td>
+		<td><%= f.text_field :elev, :name => "discharges[#{@unique_id}][circuit_piping][#{@unique_id2}][elev]", :class => "suction_pipings_elev"%></td>
+		<td><%= f.text_field :delta_p, :name => "discharges[#{@unique_id}][circuit_piping][#{@unique_id2}][delta_p]", :class => "suction_pipings_delta_p"%></td>
+		<td><%= f.text_field :inlet_pressure, :name => "discharges[#{@unique_id}][circuit_piping][#{@unique_id2}][inlet_pressure]", :class => "suction_pipings_delta_p"%></td>
+		<td><%= link_to "X", "#", :class => "delete_discharge_circuit_pipe", :id => "delete_dc_pv:#{@unique_id2}" %></td>
+	</tr>
+<% end %>

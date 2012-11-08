@@ -1,0 +1,185 @@
+// This import applies a global reset to any page that imports this stylesheet.
+@import "blueprint/reset";
+
+// To configure blueprint, edit the partials/base.sass file.
+@import "partials/base";
+
+// Import all the default blueprint modules so that we can access their mixins.
+@import "blueprint";
+@import "compass";
+
+// Combine the partials into a single screen stylesheet.
+@import "partials/page";
+@import "partials/form";
+@import "partials/two_col";
+@import "partials/base";
+@import "partials/formtastic";
+
+#header{
+  background: #EEE;
+  .header_top{
+    height: 80px;
+    text-align: right;
+    padding:2px 5px 5px 5px;
+    background: $header_color;
+  }
+  #logo{
+    float: left;
+  }
+}
+
+#container{
+  width: 990px;
+  margin: 0 auto;
+  height: 100%;
+}
+
+#content{
+  min-height: 400px;
+  padding-top: 10px;
+}
+
+#footer{
+  text-align: right;
+  padding-right: 10px;
+  font-size: 10px;
+  color: $quiet_color;
+  padding: 5px;
+  background: url('/images/breadcrumb_bg.png');
+  margin-top: 10px;
+  height: 14px;
+}
+
+#flash{
+  margin: 0 20px;
+  div{
+    margin: 5px 0;
+    padding: 4px;
+    border: 1px solid $notice_border_color;
+    background-color: $notice_bg_color;
+    @include border-radius(4px, 4px);
+  }
+  .error, .warning{
+    border: 1px solid $error_border_color;
+    background-color: $error_bg_color;
+  }
+}
+
+
+ul.breadcrumbs{
+  font-size: 12px;
+  a{
+    text-decoration: none;
+  }
+  @include horizontal-list-container;
+  padding-left: 5px;
+  margin-bottom: 10px;
+  background: url('/images/breadcrumb_bg.png');
+  li{
+    margin-left: 10px;
+    @include horizontal-list-item;
+    height: 24px;
+    background: url('/images/breadcrumb_separator.png') no-repeat 0 0;
+    padding-left: 20px;
+    a{
+      height: 24px;
+      line-height: 24px;
+      display: inline-block;
+    }
+  }
+  li.first, li:first-child{
+    background:none;
+  }
+}
+
+table.list{
+  @include table-scaffolding;
+  $table-color: #ccc;
+  @include alternating-rows-and-columns( #bbb, #ddd, #111, #999);
+  @include outer-table-borders(1px);
+}
+table.full_width{
+  width: 100%;
+}
+
+form.formtastic{
+  @include float-form(600px,200px,400px);
+  .inline-errors{
+    color: $error_color;
+  }
+}
+form.formtastic li{
+  margin: 5px 0;
+  ol{
+    padding-top: 20px;
+  }
+}
+input.small{
+  width: 100px !important;
+}
+
+.field_values{
+  .label{
+    float: left;
+    width: 260px;
+  }
+  .value{
+    float: left;
+  }
+  margin-bottom: 6px;
+  clear: both;
+}
+
+.clear{
+  @include pie-clearfix;
+}
+.hidden{
+  display: none;
+}
+
+
+// Roles
+.roles_div{
+  float: left;
+  margin-left: 10px;
+}
+
+// Projects
+
+.uom_details{
+  table{
+    @include table-scaffolding;
+    $table-color: #ccc;
+    @include alternating-rows-and-columns( #bbb, #ddd, #111, #999);
+    @include outer-table-borders(1px);
+  }
+}
+.uom_option{
+  p.name{
+    display: inline-block;
+    width: 200px;
+  }
+  .uom_details_link{
+    font-size: 12px;
+  }
+}
+
+form.project{
+  margin-top: 20px;
+  fieldset.buttons{
+    margin-top: 20px;
+  }
+}
+
+fieldset.project{
+  margin: 5px 0;
+  legend{
+    font-weight: bold;
+  }
+}
+
+table.sizing_criteria{
+  input{
+    background: inherit;
+  }
+}

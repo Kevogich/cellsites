@@ -1,0 +1,30 @@
+<% title 'Company Users'%>
+<%= stylesheet("/javascripts/tablecloth/tablecloth.css")%>
+<%#= javascript("tablecloth/tablecloth.js")%>
+
+<%= link_to 'Add User', new_admin_company_user_path %>
+<br>
+<table id="company-users-table" cellspacing="0" cellpadding="0">
+	<tr>
+		<th>User Name</th>
+		<th>Group</th>
+		<th>Function</th>
+		<th>Official Title</th>
+		<th>Access</th>
+		<th>Clearance</th>
+		<th></th>
+		<th></th>
+	</tr>
+	<% for company_user in @company_users%>
+	<tr>
+		<td><%= company_user.name %></td>
+		<td><%= company_user.group.name rescue nil%></td>
+		<td><%= @titles[company_user.title_id] %></td>
+		<td><%= company_user.official_title%></td>
+		<td><%= company_user.access_type%></td>
+		<td><%= company_user.user.role_names%></td>
+		<td><%= link_to 'Edit', edit_admin_company_user_path(company_user) unless company_user.user.has_role?('superadmin') %></td>
+		<td><%= link_to 'Delete', admin_company_user_path(company_user), :method => :delete, :confirm => 'Are you sure?' unless company_user.user.has_role?('superadmin') %></td>
+	</tr>
+	<% end%>
+</table>

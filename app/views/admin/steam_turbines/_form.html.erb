@@ -1,0 +1,1237 @@
+<%= form_for steam_turbine, :url => steam_turbine.new_record? ? admin_steam_turbines_path : admin_steam_turbine_path(steam_turbine), :html => {:class => "form_steam_turbine", :style => 'width:auto;'} do |f| %>
+  <%= f.error_messages %>
+  <% if steam_turbine.new_record? %>
+    <%= f.hidden_field :company_id %>
+    <%= f.hidden_field :client_id, :value => @user_project_settings.client_id %>
+    <%= f.hidden_field :project_id, :value => @user_project_settings.project_id %>
+    <%= f.hidden_field :process_unit_id, :value => @user_project_settings.process_unit_id %>
+    <%= f.hidden_field :driver_type, :value => "steam_turbine" %>
+  <% end %>
+
+  <div class="form-element-last">
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :client_id %><br>
+      <%= f.label :client_id, (steam_turbine.client.name rescue @user_project_settings.client.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :project_id %><br>
+      <%= f.label :project_id, (steam_turbine.project.project_num rescue @user_project_settings.project.project_num), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :process_unit_id %><br>
+      <%= f.label :process_unit_id, (steam_turbine.process_unit.name rescue @user_project_settings.process_unit.name), :style => "font-weight:bold" %>
+		</span>		
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :steam_turbine_tag %><br>
+      <%= f.text_field :steam_turbine_tag %>
+		</span>
+    <% unless steam_turbine.new_record? %>
+      <span style="float:left;margin-right:40px;">
+        <%= label_tag :status %><br>
+        <strong><%= sizing_status(steam_turbine) %></strong>
+      </span>
+      <span style="float:left;margin-right:40px;">
+        <br>
+        <%= sizing_status_request_button(steam_turbine) %>
+      </span>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+  <div class="hidden">
+    <%= hidden_field_tag :tab %>
+    <%= hidden_field_tag :calculate_btn %>
+  </div>
+  <div class="form-buttons">
+    <%= f.submit steam_turbine.new_record? ? 'Create' : 'Update' %>
+  </div>
+  <!-- tabs -->
+  <div>
+  <ul class="simple-tabs">
+    <li><a href="#tab1" tab="tab1">Steam Supply Conditions</a></li>
+    <li><a href="#tab2" tab="tab2">Steam Exhaust Conditions</a></li>
+    <li><a href="#tab3" tab="tab3">Steam Turbine Design</a></li>
+    <li><a href="#tab4" tab="tab4">Review</a></li>
+  </ul>
+  <div class="tab_container">
+  <div id="tab1" class="tab_content">
+    <!-- Steam Supply Conditions -->
+    <div class="form-element-last" style="width:200px;">
+      <%= f.label :ssc_process_basis_id, "Process Basis" %>
+      <br>
+      <%= f.collection_select :ssc_process_basis_id, @company.heat_and_material_balances, :id, :case, :prompt => true %>
+    </div>
+    <table width="100%" id="steam_supply_conditions_table">
+      <tr>
+        <td width="30%"></td>
+        <td width="20%">
+          <b><u>Mininum</u></b>&nbsp;<%= f.check_box :ssc_mininum, :class => "steam_supply_check_box", :col => "min" %>
+        </td>
+        <td width="20%">
+          <b><u>Normal</u></b>&nbsp;<%= f.check_box :ssc_normal, :class => "steam_supply_check_box", :col => "nor" %>
+        </td>
+        <td width="20%">
+          <b><u>Maximum</u></b>&nbsp;<%= f.check_box :ssc_maximum, :class => "steam_supply_check_box", :col => "max" %>
+        </td>
+        <td width="10%"></td>
+      </tr>
+      <tr>
+        <td>Stream No</td>
+        <td><%= f.collection_select :ssc_min_stream_no, @streams, :stream_no, :display_stream_no, {:prompt => true}, {:class => "ssc_stream_no", :col => "min"} %></td>
+        <td><%= f.collection_select :ssc_nor_stream_no, @streams, :stream_no, :display_stream_no, {:prompt => true}, {:class => "ssc_stream_no", :col => "nor"} %></td>
+        <td><%= f.collection_select :ssc_max_stream_no, @streams, :stream_no, :display_stream_no, {:prompt => true}, {:class => "ssc_stream_no", :col => "max"} %></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Steam Supply Pressure</td>
+        <td><%= f.text_field :ssc_min_steam_supply_pressure, :class => "steam_supply_pressure pressure_general" %></td>
+        <td><%= f.text_field :ssc_nor_steam_supply_pressure, :class => "steam_supply_pressure pressure_general" %></td>
+        <td><%= f.text_field :ssc_max_steam_supply_pressure, :class => "steam_supply_pressure pressure_general" %></td>
+        <td><label class="pressure_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Steam Supply Temperature</td>
+        <td><%= f.text_field :ssc_min_steam_supply_temperature, :class => "ssc_steam_phase_calc steam_supply_temperature temperature_general", :col => "min" %></td>
+        <td><%= f.text_field :ssc_nor_steam_supply_temperature, :class => "ssc_steam_phase_calc steam_supply_temperature temperature_general", :col => "nor" %></td>
+        <td><%= f.text_field :ssc_max_steam_supply_temperature, :class => "ssc_steam_phase_calc steam_supply_temperature temperature_general", :col => "max" %></td>
+        <td><label class="temperature_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Steam Saturation Temperature</td>
+        <td><%= f.text_field :ssc_min_steam_saturation_temperature, :class => "ssc_steam_phase_calc steam_supply_saturation_temperature temperature_general", :col => "min" %></td>
+        <td><%= f.text_field :ssc_nor_steam_saturation_temperature, :class => "ssc_steam_phase_calc steam_supply_saturation_temperature temperature_general", :col => "nor" %></td>
+        <td><%= f.text_field :ssc_max_steam_saturation_temperature, :class => "ssc_steam_phase_calc steam_supply_saturation_temperature temperature_general", :col => "max" %></td>
+        <td><label class="temperature_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Steam Density</td>
+        <td><%= f.text_field :ssc_min_steam_density, :class => "steam_supply_density density_general" %></td>
+        <td><%= f.text_field :ssc_nor_steam_density, :class => "steam_supply_density density_general" %></td>
+        <td><%= f.text_field :ssc_max_steam_density, :class => "steam_supply_density density_general" %></td>
+        <td><label class="density_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Steam Entropy</td>
+        <td><%= f.text_field :ssc_min_steam_entropy, :class => "steam_supply_entropy exhaust_phase_calc entropy_general" %></td>
+        <td><%= f.text_field :ssc_nor_steam_entropy, :class => "steam_supply_entropy exhaust_phase_calc entropy_general" %></td>
+        <td><%= f.text_field :ssc_max_steam_entropy, :class => "steam_supply_entropy exhaust_phase_calc entropy_general" %></td>
+        <td><label class="entropy_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Steam Enthalpy</td>
+        <td><%= f.text_field :ssc_min_steam_enthalpy, :class => "steam_supply_enthalpy enthalpy_general" %></td>
+        <td><%= f.text_field :ssc_nor_steam_enthalpy, :class => "steam_supply_enthalpy enthalpy_general" %></td>
+        <td><%= f.text_field :ssc_max_steam_enthalpy, :class => "steam_supply_enthalpy enthalpy_general" %></td>
+        <td><label class="enthalpy_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <label id="lbl_supply_steam_phase_min"><%= steam_turbine.ssc_steam_phase_min %></label>
+          <%= f.hidden_field :ssc_steam_phase_min %>
+        </td>
+        <td>
+          <label id="lbl_supply_steam_phase_nor"><%= steam_turbine.ssc_steam_phase_nor %></label>
+          <%= f.hidden_field :ssc_steam_phase_nor %>
+        </td>
+        <td>
+          <label id="lbl_supply_steam_phase_max"><%= steam_turbine.ssc_steam_phase_max %></label>
+          <%= f.hidden_field :ssc_steam_phase_max %>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab2" class="tab_content">
+    <!-- Steam Exhaust Conditions -->
+    <table width="100%" id="steam_exhaust_conditions_table">
+      <tr>
+        <td width="30%"></td>
+        <td width="20%">
+          <b><u>Mininum</u></b>&nbsp;<%= f.check_box :sec_mininum, :class => "steam_exhaust_check_box", :col => "min" %>
+        </td>
+        <td width="20%">
+          <b><u>Normal</u></b>&nbsp;<%= f.check_box :sec_normal, :class => "steam_exhaust_check_box", :col => "nor" %>
+        </td>
+        <td width="20%">
+          <b><u>Maximum</u></b>&nbsp;<%= f.check_box :sec_maximum, :class => "steam_exhaust_check_box", :col => "max" %>
+        </td>
+        <td width="10%"></td>
+      </tr>
+      <tr>
+        <td>Stream No</td>
+        <td><%= f.collection_select :sec_min_stream_no, @streams, :stream_no, :display_stream_no, {:prompt => true}, {:class => "sec_stream_no", :col => "min"} %></td>
+        <td><%= f.collection_select :sec_nor_stream_no, @streams, :stream_no, :display_stream_no, {:prompt => true}, {:class => "sec_stream_no", :col => "nor"} %></td>
+        <td><%= f.collection_select :sec_max_stream_no, @streams, :stream_no, :display_stream_no, {:prompt => true}, {:class => "sec_stream_no", :col => "max"} %></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Steam Exhaust Pressure</td>
+        <td><%= f.text_field :sec_min_steam_exhaust_pressure, :class => "steam_exhaust_pressure pressure_general", :col => "min" %></td>
+        <td><%= f.text_field :sec_nor_steam_exhaust_pressure, :class => "steam_exhaust_pressure pressure_general", :col => "nor" %></td>
+        <td><%= f.text_field :sec_max_steam_exhaust_pressure, :class => "steam_exhaust_pressure pressure_general", :col => "max" %></td>
+        <td><label class="pressure_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Steam Exhaust Temperature</td>
+        <td><%= f.text_field :sec_min_steam_exhaust_temperature, :class => "steam_exhaust_temperature temperature_general", :col => "min" %></td>
+        <td><%= f.text_field :sec_nor_steam_exhaust_temperature, :class => "steam_exhaust_temperature temperature_general", :col => "nor" %></td>
+        <td><%= f.text_field :sec_max_steam_exhaust_temperature, :class => "steam_exhaust_temperature temperature_general", :col => "max" %></td>
+        <td><label class="temperature_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Steam Saturation Temperature</td>
+        <td><%= f.text_field :sec_min_steam_saturation_temperature, :class => "steam_exhaust_saturation_temperature temperature_general", :col => "min" %></td>
+        <td><%= f.text_field :sec_nor_steam_saturation_temperature, :class => "steam_exhaust_saturation_temperature temperature_general", :col => "nor" %></td>
+        <td><%= f.text_field :sec_max_steam_saturation_temperature, :class => "steam_exhaust_saturation_temperature temperature_general", :col => "max" %></td>
+        <td><label class="temperature_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Steam Density</td>
+        <td><%= f.text_field :sec_min_steam_density, :class => "steam_exhaust_density density_general" %></td>
+        <td><%= f.text_field :sec_nor_steam_density, :class => "steam_exhaust_density density_general" %></td>
+        <td><%= f.text_field :sec_max_steam_density, :class => "steam_exhaust_density density_general" %></td>
+        <td><label class=" density_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Steam Entropy</td>
+        <td><%= f.text_field :sec_min_steam_entropy, :class => "steam_exhaust_entropy exhaust_phase_calc entropy_general", :col => "min" %></td>
+        <td><%= f.text_field :sec_nor_steam_entropy, :class => "steam_exhaust_entropy exhaust_phase_calc entropy_general", :col => "nor" %></td>
+        <td><%= f.text_field :sec_max_steam_entropy, :class => "steam_exhaust_entropy exhaust_phase_calc entropy_general", :col => "max" %></td>
+        <td><label class=" entropy_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Steam Enthalpy</td>
+        <td><%= f.text_field :sec_min_steam_enthalpy, :class => "steam_exhaust_enthalpy enthalpy_general" %></td>
+        <td><%= f.text_field :sec_nor_steam_enthalpy, :class => "steam_exhaust_enthalpy enthalpy_general" %></td>
+        <td><%= f.text_field :sec_max_steam_enthalpy, :class => "steam_exhaust_enthalpy enthalpy_general" %></td>
+        <td><label class="enthalpy_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Water Entropy</td>
+        <td><%= f.text_field :sec_min_water_entropy, :class => "water_exhaust_entropy exhaust_phase_calc entropy_general", :col => "min" %></td>
+        <td><%= f.text_field :sec_nor_water_entropy, :class => "water_exhaust_entropy exhaust_phase_calc entropy_general", :col => "nor" %></td>
+        <td><%= f.text_field :sec_max_water_entropy, :class => "water_exhaust_entropy exhaust_phase_calc entropy_general", :col => "max" %></td>
+        <td><label class="entropy_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Water Enthalpy</td>
+        <td><%= f.text_field :sec_min_water_enthalpy, :class => "water_exhaust_enthalpy enthalpy_general" %></td>
+        <td><%= f.text_field :sec_nor_water_enthalpy, :class => "water_exhaust_enthalpy enthalpy_general" %></td>
+        <td><%= f.text_field :sec_max_water_enthalpy, :class => "water_exhaust_enthalpy enthralls_general" %></td>
+        <td><label class="enthalpy_general_unit"></label></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <label id="lbl_exhaust_steam_phase_min"><%= steam_turbine.sec_steam_phase_min %></label>
+          <%= f.hidden_field :sec_steam_phase_min %>
+        </td>
+        <td>
+          <label id="lbl_exhaust_steam_phase_nor"><%= steam_turbine.sec_steam_phase_nor %></label>
+          <%= f.hidden_field :sec_steam_phase_nor %>
+        </td>
+        <td>
+          <label id="lbl_exhaust_steam_phase_max"><%= steam_turbine.sec_steam_phase_max %></label>
+          <%= f.hidden_field :sec_steam_phase_max %>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab3" class="tab_content">
+    <!-- Steam Turbine Design -->
+    <table width="100%">
+      <tr>
+        <td colspan="2" width="50%"><b><u>Rotating Equipment Details</u></b></td>
+        <td colspan="2" width="50%"><b><u>Number of Stages</u></b></td>
+      </tr>
+      <tr>
+        <td width="25%">Equipment Type</td>
+        <td width="25%"><%= f.select :std_equipment_type, options_for_select(StaticData.equipment_type, steam_turbine.std_equipment_type), :include_blank => true %></td>
+        <td width="25%">Isentropic Enthalpy Change</td>
+        <td>
+          <label id="lbl_isentropic_enthalpy_change"><%= steam_turbine.std_isentropic_enthalpy_change %></label>
+          <%= f.hidden_field :std_isentropic_enthalpy_change %>
+          &nbsp;<label class="enthalpy_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Equipment Tag</td>
+        <td><%= f.select :std_equipment_tag, options_for_select(@equipment_tag.collect { |h| [raw(h[:tag]), h[:id]] }, steam_turbine.std_equipment_tag), :include_blank => true %></td>
+        <td>Approximate No. of Stages</td>
+        <td>
+          <div style="float:left;">
+            <label id="lbl_std_no_of_stages"><%= steam_turbine.std_no_of_stages %></label>
+            <%= f.hidden_field :std_approximate_no_of_stages %>
+            &nbsp;
+          </div>
+          <div style="float:right;">
+            <input id="approximate_no_of_stages" type="button" style="background-color: #59E423;width:24px;">
+          </div>
+          <div class="clear"></div>
+        </td>
+      </tr>
+      <tr>
+        <td>Capacity</td>
+        <td><%= f.text_field :std_capacity, :class => "small-text-100 volumetric_flow_rate_liquid" %>&nbsp;<label class="volumetric_flow_rate_liquid_unit"></label>
+        </td>
+        <td colspan="2" rowspan="4"></td>
+      </tr>
+      <tr>
+        <td>Differential Pressure</td>
+        <td><%= f.text_field :std_differential_pressure, :class => "small-text-100 pressure_differential" %>&nbsp;<label class="pressure_differential_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Horsepower</td>
+        <td><%= f.text_field :std_horsepower, :class => "small-text-100 power_general" %>&nbsp;<label class="power_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Speed</td>
+        <td><%= f.text_field :std_speed, :class => "small-text-100 revolution_speed_general" %>&nbsp;<label class="revolution_speed_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2"><b><u>Estimated Steam Rate</u></b></td>
+        <td colspan="2"><b><u>Estimated Nozzle Sizes</u></b></td>
+      </tr>
+      <tr>
+        <td>Turbine Exhaust Type</td>
+        <td>
+          <label id="lbl_std_turbine_type"><%= steam_turbine.std_turbine_type %></label>
+          <%= f.hidden_field :std_turbine_type %>&nbsp;
+        </td>
+        <td>Inlet Nozzle Diameter</td>
+        <td>
+          <label id="lbl_inlet_nozzle_diameter"><%= steam_turbine.std_inlet_nozzle_diameter %></label>
+          <%= f.hidden_field :std_inlet_nozzle_diameter %>
+          &nbsp;<label class="length_small_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Theoretical Steam Rate</td>
+        <td>
+          <label id="lbl_theoretical_steam_rate"><%= steam_turbine.std_theoretical_steam_rate %></label>
+          <%= f.hidden_field :std_theoretical_steam_rate %>
+          &nbsp;<label class="steam_rate_general_unit"></label>
+        </td>
+        <td>Exhaust Nozzle Diameter</td>
+        <td>
+          <label id="lbl_exhaust_nozzle_diameter"><%= steam_turbine.std_exhaust_nozzle_diameter %></label>
+          <%= f.hidden_field :std_exhaust_nozzle_diameter %>
+          &nbsp;<label class="length_small_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Efficiency</td>
+        <td>
+          <%= f.text_field :std_efficiency, :class => "small-text-100" %>&nbsp;%
+          <input type="button" id="estimate_efficiency" value="Estimate Efficiency" style="float:right;">
+        </td>
+        <td>Max Velocity At Inlet Nozzle</td>
+        <td>
+          <label id="lbl_max_velocity_at_inlet_nozzle"><%= steam_turbine.std_max_velocity_at_inlet_nozzle %></label>
+          <%= f.hidden_field :std_max_velocity_at_inlet_nozzle %>
+          &nbsp;<label class="velocity_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Actual Steam Rate</td>
+        <td>
+          <label id="lbl_actual_steam_rate"><%= steam_turbine.std_actual_steam_rate %></label>
+          <%= f.hidden_field :std_actual_steam_rate %>
+          &nbsp;<label class="steam_rate_general_unit"></label>
+        </td>
+        <td>Max Velocity At Exhaust Nozzle</td>
+        <td>
+          <label id="lbl_max_velocity_at_exhaust_nozzle"><%= steam_turbine.std_max_velocity_at_exhaust_nozzle %></label>
+          <%= f.hidden_field :std_max_velocity_at_exhaust_nozzle %>
+          &nbsp;<label class="velocity_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Steam Flow Rate</td>
+        <td>
+          <label id="lbl_steam_flow_rate"><%= steam_turbine.std_steam_flow_rate %></label>
+          <%= f.hidden_field :std_steam_flow_rate %>
+          &nbsp;<label class="mass_flow_rate_general_unit"></label>
+          <input id="steam_turbine_design_calculate" type="button" value="Calculate" style="float:right;">
+        </td>
+        <td colspan="2"></td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab4" class="tab_content">
+    <!-- Heuristics Review-->
+    <table>
+      <tr>
+        <td><b>1.</b></td>
+        <td>
+          Efficiency is greater for larger machines. Motors, 85-95%; steam turbines, 42-78%; gas
+          engines and turbines, 28-38%.
+        </td>
+        <td width="150px">
+          <%= f.radio_button :st_sizing_review_1, "yes" %>&nbsp;Yes&nbsp;
+          <%= f.radio_button :st_sizing_review_1, "no" %>&nbsp;No&nbsp;
+          <%= f.radio_button :st_sizing_review_1, "na" %>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+
+      <!--
+					<tr>
+						<td><b>2.</b></td>
+						<td>
+							For under 74.6 kW(100 hp), electric motors are used almost exclusively. They are made for up
+							to 14,900 kW (20,000 hp).	
+						</td>
+						<td width="150px">
+							<%= f.radio_button :st_sizing_review_2, "yes" %>&nbsp;Yes&nbsp;
+							<%= f.radio_button :st_sizing_review_2, "no" %>&nbsp;No&nbsp;
+							<%= f.radio_button :st_sizing_review_2, "na" %>&nbsp;N/A&nbsp;
+						</td>						
+					</tr>
+					<tr>
+						<td><b>3.</b></td>
+						<td>
+							Induction motors are most popular. Synchronous motors are made for speeds as low as 150
+							rpm and are thus suited, for example, for low speed reciprocating compressors, but are not
+							made smaller than 50 hp. A variety of enclosures are available from weather-proof to 
+							explosion-proof.
+						</td>
+						<td width="150px">
+							<%= f.radio_button :st_sizing_review_3, "yes" %>&nbsp;Yes&nbsp;
+							<%= f.radio_button :st_sizing_review_3, "no" %>&nbsp;No&nbsp;
+							<%= f.radio_button :st_sizing_review_3, "na" %>&nbsp;N/A&nbsp;
+						</td>
+					</tr>
+					-->
+
+      <tr>
+        <td><b>2.</b></td>
+        <td>
+          Steam turbines are competitive above 76.6 kW (100 hp). They are speed-controllable. They
+          are frequently used as spares in case of power failure.
+        </td>
+        <td width="150px">
+          <%= f.radio_button :st_sizing_review_4, "yes" %>&nbsp;Yes&nbsp;
+          <%= f.radio_button :st_sizing_review_4, "no" %>&nbsp;No&nbsp;
+          <%= f.radio_button :st_sizing_review_4, "na" %>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <!--
+					<tr>
+						<td><b>5.</b></td>
+						<td>
+							Combustion engines and turbines are restricted to mobile and remote locations.
+						</td>
+						<td width="150px">
+							<%= f.radio_button :st_sizing_review_5, "yes" %>&nbsp;Yes&nbsp;
+							<%= f.radio_button :st_sizing_review_5, "no" %>&nbsp;No&nbsp;
+							<%= f.radio_button :st_sizing_review_5, "na" %>&nbsp;N/A&nbsp;
+						</td>
+					</tr>
+					<tr>
+						<td><b>6.</b></td>
+						<td>
+							Gas expanders for power recovery may be justified at capacities of several hundred hp;
+							otherwise any pressure reduction in a process is done with throttling valves.
+						</td>
+						<td width="150px">
+							<%= f.radio_button :st_sizing_review_6, "yes" %>&nbsp;Yes&nbsp;
+							<%= f.radio_button :st_sizing_review_6, "no" %>&nbsp;No&nbsp;
+							<%= f.radio_button :st_sizing_review_6, "na" %>&nbsp;N/A&nbsp;
+						</td>
+					</tr>
+
+			-->
+      <!--		<tr>
+						<td><b>3.</b></td>
+						<td>
+							The following useful definition are give:<br><br>
+							<div style="margin-bottom:15px;">
+								<span style="float:left;margin-right:5px;padding-top:25px;">
+									shaft power = 	
+								</span>
+								<span style="float:left;">
+									<span>theoretical power to pump fluid (liquid or gas)</span><br>
+									<span>____________________________________</span><br><br>
+									<span>efficiency of pump or compressor, e sh</span>
+								</span>
+								<div class="clear"></div>								 
+							</div>			
+							<div>
+								<span style="float:left;margin-right:5px;padding-top:25px;">
+									shaft power = 	
+								</span>
+								<span style="float:left;">
+									<span>theoretical power to pump fluid (liquid or gas)</span><br>
+									<span>____________________________________</span><br><br>
+									<span>efficiency of pump or compressor, e dr</span>
+								</span>
+								<div class="clear"></div>								 
+							</div><br>
+							Overall efficiency = eiv = esh * edr											
+						</td>
+						<td width="150px">
+							<%= f.radio_button :st_sizing_review_7, "yes" %>&nbsp;Yes&nbsp;
+							<%= f.radio_button :st_sizing_review_7, "no" %>&nbsp;No&nbsp;
+							<%= f.radio_button :st_sizing_review_7, "na" %>&nbsp;N/A&nbsp;
+						</td>
+					</tr> -->
+      <tr>
+        <td>&nbsp;</td>
+        <td colspan="2"><b><u>NOTES</u></b></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td colspan="2"><%= f.text_area :st_notes, :size => "140x8" %></td>
+      </tr>
+    </table>
+  </div>
+  </div>
+  <div class="clear"></div>
+  </div>
+
+  <!-- Estimate efficiency-->
+  <div class="hidden">
+    <div id="estimate_efficiency_div">
+      <table>
+        <tr>
+          <td>Turbine Type</td>
+          <td><%= f.select :std_ee_turbine_type, options_for_select(StaticData.turbine_type, steam_turbine.std_ee_turbine_type), :include_blank => true %></td>
+        </tr>
+        <tr>
+          <td>Basic Efficiency</td>
+          <td><%= f.text_field :std_ee_basic_efficiency %>&nbsp;%</td>
+        </tr>
+        <tr>
+          <td>Degree of Superheat</td>
+          <td>
+            <%= f.text_field :std_ee_degree_of_superheat %>
+            &nbsp;<label class="temperature_general_unit"></label>
+          </td>
+        </tr>
+        <tr>
+          <td>Superheat Efficiency CF</td>
+          <td>
+            <%= f.text_field :std_ee_superheat_efficiency_cf %>
+            <%= f.hidden_field :std_ee_superheat_efficiency_cf %>&nbsp;
+          </td>
+        </tr>
+        <tr>
+          <td>Speed Efficiency CF</td>
+          <td>
+            <%= f.text_field :std_ee_speed_efficiency_cf %>
+            <%= f.hidden_field :std_ee_speed_efficiency_cf %>&nbsp;
+          </td>
+        </tr>
+        <tr>
+          <td>Pressure Ratio CF</td>
+          <td>
+            <%= f.text_field :std_ee_pressure_ratio_cf %>
+            <%= f.hidden_field :std_ee_pressure_ratio_cf %>&nbsp;
+          </td>
+        </tr>
+        <tr>
+          <td>Corrected Efficiency</td>
+          <td>
+            <%= f.text_field :std_ee_corrected_efficiency_cf %>
+            <%= f.hidden_field :std_ee_corrected_efficiency_cf %>&nbsp;%
+          </td>
+        </tr>
+        <tr>
+          <td>Approximate Steam Rate</td>
+          <td><input id="approximate_steam_rate" type="text"/></td>
+        </tr>
+        <tr>
+          <td colspan="2" style="text-align:center;">
+            <input id="estimate_efficiency_calculation" type="button" value="Calculate">
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="appro_no_of_stages">
+      <table>
+        <tr>
+          <td colspan="2">Stages Required Per 100 Btu/lb of Availble Energy</td>
+        </tr>
+        <tr>
+          <td colspan="2"><img src="/images/stages.jpg"/></td>
+        </tr>
+        <tr>
+          <td>
+            Turbine Speed
+            &nbsp;
+            <label id="lbl_std_turbine_speed"><%= steam_turbine.std_turbine_speed %></label>
+          </td>
+          <td>
+            No. Of Stages Per 100 Btu/lb&nbsp;
+            <%= f.text_field :std_no_of_stages, :class => "small-text-100" %>&nbsp;
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+<% end %>
+<% unless steam_turbine.new_record? %>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Attachments</legend>
+    <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+    <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+  </fieldset>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Comments</legend>
+    <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+    <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+  </fieldset>
+<% end %>
+
+<%= javascript_tag do %>
+  var steam_turbine_id = "<%= params[:id] %>";
+  var barometric_pressure = "<%= @project.barometric_pressure %>";
+  $('#steam_supply_conditions_table,#steam_exhaust_conditions_table').find('input[type=text],select').attr('disabled', true);
+  <% if !steam_turbine.new_record? %>
+    var supply_col = $('#steam_supply_conditions_table').find('input[type=checkbox]:checked').closest('td').index();
+    $('#steam_supply_conditions_table').column(supply_col).find('input[type=text],select').attr('disabled', false);
+    var exhaust_col = $('#steam_exhaust_conditions_table').find('input[type=checkbox]:checked').closest('td').index();
+    $('#steam_exhaust_conditions_table').column(exhaust_col).find('input[type=text],select').attr('disabled', false);
+  <% else %>
+
+  <% end %>
+
+<% end %>
+
+<script type="text/javascript">
+
+  set_project_unit_and_decimals();
+
+  $('form.form_steam_turbine').dirtyForms();
+
+  //validation
+  function form_validations() {
+    var alert_msg = '';
+
+    //Steam Supply Conditions
+    var supply_col = $('.steam_supply_check_box:checked').attr('col');
+    if ($('.steam_supply_check_box:checked').val() == undefined) {
+      alert_msg = alert_msg + 'Please select any column in supply conditions tab.\n';
+    }
+    if ($('#steam_turbine_ssc_' + supply_col + '_steam_supply_pressure').val() == '') {
+      alert_msg = alert_msg + 'Please enter steam supply pressure.\n';
+    }
+    if ($('#steam_turbine_ssc_' + supply_col + '_steam_supply_temperature').val() == '') {
+      alert_msg = alert_msg + 'Please enter steam supply temperature.\n';
+    }
+    if ($('#steam_turbine_ssc_' + supply_col + '_steam_saturation_temperature').val() == '') {
+      alert_msg = alert_msg + 'Please enter steam saturation temperature.\n';
+    }
+    if ($('#steam_turbine_ssc_' + supply_col + '_steam_density').val() == '') {
+      alert_msg = alert_msg + 'Please enter steam density.\n';
+    }
+    if ($('#steam_turbine_ssc_' + supply_col + '_steam_entropy').val() == '') {
+      alert_msg = alert_msg + 'Please enter steam entropy.\n';
+    }
+    if ($('#steam_turbine_ssc_' + supply_col + '_steam_enthalpy').val() == '') {
+      alert_msg = alert_msg + 'Please enter steam enthalpy.\n';
+    }
+
+    //Steam Exhaust Conditions
+    if (alert_msg != '') {
+
+    }
+    var exhaust_col = $('.steam_exhaust_check_box:checked').attr('col');
+    if ($('.steam_exhaust_check_box:checked').val() == undefined) {
+      alert_msg = alert_msg + 'Please select any column in exhaust conditions.\n';
+    }
+    if ($('#steam_turbine_sec_' + exhaust_col + '_steam_exhaust_pressure').val() == '') {
+      alert_msg = alert_msg + 'Please enter steam exhaust pressure.\n';
+    }
+    if ($('#steam_turbine_sec_' + exhaust_col + '_steam_exhaust_temperature').val() == '') {
+      alert_msg = alert_msg + 'Please enter steam exhaust temperature.\n';
+    }
+    if ($('#steam_turbine_sec_' + exhaust_col + '_steam_saturation_temperature').val() == '') {
+      alert_msg = alert_msg + 'Please enter steam exhaust saturation temperature.\n';
+    }
+    if ($('#steam_turbine_sec_' + exhaust_col + '_steam_density').val() == '') {
+      alert_msg = alert_msg + 'Please enter steam exhaust density.\n';
+    }
+    if ($('#steam_turbine_sec_' + exhaust_col + '_steam_entropy').val() == '') {
+      alert_msg = alert_msg + 'Please enter steam exhaust entropy.\n';
+    }
+    if ($('#steam_turbine_sec_' + exhaust_col + '_steam_enthalpy').val() == '') {
+      alert_msg = alert_msg + 'Please enter steam exhaust enthalpy.\n';
+    }
+    if ($('#steam_turbine_sec_' + exhaust_col + '_water_entropy').val() == '') {
+      alert_msg = alert_msg + 'Please enter water exhaust entropy.\n';
+    }
+    if ($('#steam_turbine_sec_' + exhaust_col + '_water_enthalpy').val() == '') {
+      alert_msg = alert_msg + 'Please enter water exhaust enthalpy.\n';
+    }
+
+    if ($('#steam_turbine_std_horsepower').val() == '') {
+      alert_msg = alert_msg + 'Please enter rotating equipment details horsepower.\n';
+    }
+    if ($('#steam_turbine_std_speed').val() == '') {
+      alert_msg = alert_msg + 'Please enter rotating equipment speed.\n';
+    }
+
+    if (alert_msg != '') {
+      alert(alert_msg);
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  if ($('#steam_turbine_std_isentropic_enthalpy_change').val() == '') {
+    $('#approximate_no_of_stages').attr('disabled', true);
+    $('#steam_turbine_std_no_of_stages, #steam_turbine_std_approximate_no_of_stages').val(3);
+    $('#lbl_std_no_of_stages').text(3);
+  }
+
+  $('.steam_supply_check_box').click(function () {
+    $('.steam_supply_check_box').attr('checked', false);
+    $(this).attr('checked', true);
+    var col = $(this).closest('td').index();
+    $('#steam_supply_conditions_table').find('input[type=text],select').attr('disabled', true);
+    $('#steam_supply_conditions_table').column(col).find('input[type=text],select').attr('disabled', false);
+  });
+
+  $('#steam_turbine_ssc_process_basis_id').change(function (e) {
+    $('.ssc_stream_no >option, .sec_stream_no >option').remove();
+    $('.ssc_stream_no,.sec_stream_no').append($('<option></option>').val("").html("Please select"));
+    $("#tab1 table input[type=text],#tab2 table input[type=text]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/heat_and_material_balances/get_stream_nos', {process_basis_id:$(this).val()}, function (data) {
+      $(data).each(function (k, v) {
+        $('.ssc_stream_no,.sec_stream_no').append(
+          $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+        );
+      });
+    }, 'json');
+  });
+
+  $('.ssc_stream_no').change(function (e) {
+    var col = $(this).attr('col');
+    $("#tab1 table input[type=text][id*=" + col + "]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/steam_turbines/get_stream_values',
+      {process_basis_id:$('#steam_turbine_ssc_process_basis_id').val(), stream_no:$(this).val()},
+      function (data) {
+        $('#steam_turbine_ssc_' + col + '_steam_supply_pressure').val(get_project_field_value1('pressure_general', data["pressure"]));
+        $('#steam_turbine_ssc_' + col + '_steam_supply_temperature').val(get_project_field_value1('temperature_general', data["temperature"]));
+        $('#steam_turbine_ssc_' + col + '_steam_density').val(get_project_field_value1('density_general', data["density"]));
+        $('#steam_turbine_ssc_' + col + '_steam_enthalpy').val(get_project_field_value1('enthalpy_general', data["enthalpy"]));
+        $('#lbl_supply_steam_phase_' + col).text('');
+        $('#steam_turbine_ssc_steam_phase_' + col).val('');
+      },
+      'json');
+  });
+
+  $('.steam_exhaust_check_box').click(function () {
+    $('.steam_exhaust_check_box').attr('checked', false);
+    $(this).attr('checked', true);
+    var col = $(this).closest('td').index();
+    $('#steam_exhaust_conditions_table').find('input[type=text],select').attr('disabled', true);
+    $('#steam_exhaust_conditions_table').column(col).find('input[type=text],select').attr('disabled', false);
+  });
+
+
+  $('.sec_stream_no').change(function (e) {
+    var col = $(this).attr('col');
+    $("#tab2 table input[type=text][id*=" + col + "]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/turbo_expanders/get_stream_values',
+      {process_basis_id:$('#steam_turbine_ssc_process_basis_id').val(), stream_no:$(this).val()},
+      function (data) {
+
+        $('#steam_turbine_sec_' + col + '_steam_exhaust_pressure').val(get_project_field_value1('pressure_general', data["pressure"]));
+        $('#steam_turbine_sec_' + col + '_steam_exhaust_temperature').val(get_project_field_value1('temperature_general', data["temperature"]));
+        $('#steam_turbine_sec_' + col + '_steam_density').val(get_project_field_value1('density_general', data["density"]));
+        $('#steam_turbine_sec_' + col + '_steam_enthalpy').val(get_project_field_value1('enthalpy_general', data["enthalpy"]));
+
+        //setting turbine type
+        setting_turbine_type(col);
+        $('#lbl_exhaust_steam_phase_' + col).text('');
+        $('#steam_turbine_sec_steam_phase_' + col).val('');
+      },
+      'json');
+  });
+
+  $('#estimate_efficiency').click(function () {
+    show_estimate_efficiency();
+  });
+
+  function show_estimate_efficiency() {
+    $.colorbox({
+      href:'#estimate_efficiency_div',
+      inline:true,
+      onOpen:function () {
+
+      }
+    });
+  }
+
+  $('#approximate_no_of_stages').click(function () {
+    $.colorbox({
+      href:'#appro_no_of_stages',
+      inline:true,
+      onClosed:function () {
+        $('form.form_steam_turbine').setDirty();
+      },
+      onOpen:function () {
+        $('#lbl_std_turbine_speed').text($('#steam_turbine_std_speed').val());
+      }
+    });
+  });
+
+  //getting pump sizing and compressor sizing values in equipment tag
+  $('#steam_turbine_std_equipment_type').change(function (e) {
+    $('#steam_turbine_std_equipment_tag >option').remove();
+    $('#steam_turbine_std_equipment_tag').append($('<option></option>').val('').html(''));
+    if ($(this).val() == "") {
+      return false;
+    }
+    $.get('/admin/steam_turbines/get_equiment_tag_by_equiment_type',
+      {project_id:$('#steam_turbine_project_id').val(),
+        equipment_type:$(this).val()},
+      function (data) {
+        $.each(data, function (k, v) {
+          $('#steam_turbine_std_equipment_tag').append(
+            $('<option></option>').val(v.id).html(v.tag)
+          );
+        });
+      },
+      'json'
+    );
+  });
+
+  $('#steam_turbine_std_equipment_tag').change(function (e) {
+    if ($('#steam_turbine_std_equipment_type').val() == "" || $(this).val() == "") {
+      alert('Select equipement type and equipment tag');
+      return false;
+    }
+
+    $.get('/admin/steam_turbines/get_rotating_equipment_details',
+      {equipment_type:$('#steam_turbine_std_equipment_type').val(),
+        equipment_tag:$(this).val()},
+      function (data) {
+        $('#steam_turbine_std_capacity').val(data['capacity']);
+        $('#steam_turbine_std_differential_pressure').val(data['differential_pressure']);
+        $('#steam_turbine_std_horsepower').val(data['horsepower']);
+        $('#steam_turbine_std_speed').val(data['speed']);
+      },
+      'json'
+    );
+  });
+
+  //setting Turbine Type
+  $('.steam_exhaust_pressure').change(function (e) {
+    setting_turbine_type($(this).attr('col'));
+  });
+
+  $('ul.simple-tabs > li:eq(2)').click(function (e) {
+    setting_turbine_type($('.steam_exhaust_check_box:checked').attr('col'));
+  });
+
+  function setting_turbine_type(col) {
+    if ($('#steam_turbine_sec_' + col + '_steam_exhaust_pressure').val() < 0) {
+      $('#lbl_std_turbine_type').text('Condensing');
+      $('#steam_turbine_std_turbine_type').val('Condensing');
+    } else if ($('#steam_turbine_sec_' + col + '_steam_exhaust_pressure').val() >= 0) {
+      $('#lbl_std_turbine_type').text('Non-Condensing');
+      $('#steam_turbine_std_turbine_type').val('Non-Condensing');
+    }
+  }
+
+  $('.ssc_steam_phase_calc').change(function (e) {
+    setting_ssc_steam_phase($(this).attr('col'));
+  });
+
+  function setting_ssc_steam_phase(col) {
+    var steam_phase = "";
+    var steam_supply_temperature = parseFloat($('#steam_turbine_ssc_' + col + '_steam_supply_temperature').val()).toFixed(0);
+    var steam_saturation_temperature = parseFloat($('#steam_turbine_ssc_' + col + '_steam_saturation_temperature').val()).toFixed(0);
+    if (steam_supply_temperature > steam_saturation_temperature) {
+      steam_phase = "Superheated";
+    }
+    else if (steam_supply_temperature < steam_saturation_temperature) {
+      steam_phase = "Subcooled";
+    }
+    else if (steam_supply_temperature == steam_saturation_temperature) {
+      steam_phase = "Saturated";
+    }
+
+    $('#lbl_supply_steam_phase_' + col).text(steam_phase);
+    $('#steam_turbine_ssc_steam_phase_' + col).val(steam_phase);
+  }
+
+  $('.exhaust_phase_calc').change(function (e) {
+    var exhaust_phase = "";
+    var inlet_entropy = $('.steam_supply_entropy:enabled').val();
+    if (inlet_entropy == "") {
+      inlet_entropy = 0;
+    }
+    inlet_entropy = parseFloat(inlet_entropy).toFixed(0);
+
+    var col = $('.steam_exhaust_entropy:enabled').attr('col');
+    var exhaust_vapor_entropy = $('.steam_exhaust_entropy:enabled').val();
+    if (exhaust_vapor_entropy == "") {
+      exhaust_vapor_entropy = 0;
+    }
+    exhaust_vapor_entropy = parseFloat(exhaust_vapor_entropy).toFixed(0);
+
+    var exhaust_liquid_entropy = $('.water_exhaust_entropy:enabled').val();
+    if (exhaust_liquid_entropy == "") {
+      exhaust_liquid_entropy = 0;
+    }
+    exhaust_liquid_entropy = parseFloat(exhaust_liquid_entropy).toFixed(0);
+
+    //Determine Exhaust Phase
+    if (inlet_entropy == exhaust_vapor_entropy) {
+      exhaust_phase = "Vapor - Saturated"
+    } else if (inlet_entropy > exhaust_vapor_entropy) {
+      exhaust_phase = "Vapor - Superheated"
+    } else if (inlet_entropy < exhaust_vapor_entropy) {
+      exhaust_phase = "Two Phase"
+    } else if (inlet_entropy == exhaust_liquid_entropy) {
+      col = $('.water_exhaust_entropy:enabled').attr('col');
+      exhaust_phase = "Saturated Liquid"
+    }
+
+    $('#lbl_exhaust_steam_phase_' + col).text(exhaust_phase);
+    $('#steam_turbine_sec_steam_phase_' + col).val(exhaust_phase);
+  });
+
+  $('#steam_turbine_std_ee_turbine_type').change(function (e) {
+    if ($(this).val() == "Multi-Stage, Multiple Valves" || $(this).val() == "Multi-Stage, Single Valve") {
+      $('#approximate_no_of_stages').attr('disabled', false);
+    } else if ($(this).val() == "Single Stage, Single Valve" || $(this).val() == "Single Stage, Multiple Valves") {
+      $('#approximate_no_of_stages').attr('disabled', true);
+      $('#lbl_std_no_of_stages').text("1");
+      $('#steam_turbine_std_no_of_stages').val("1");
+    }
+  });
+
+  //calculation button
+  $('#steam_turbine_design_calculate').click(function (e) {
+    if (steam_turbine_id == '') {
+      alert('Please save the form before you calculate');
+      return false;
+    }
+
+    if (form_validations() == false) {
+      return false;
+    }
+
+    if ($('form.form_steam_turbine').isDirty()) {
+      //alert('Form Values is changed Please save the form before you calculate');
+      $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+      $('#calculate_btn').val('steam_turbine_design_calculate');
+      $('form.form_steam_turbine').submit();
+      return false;
+    }
+
+    $.get('/admin/steam_turbines/steam_turbine_design_calculate',
+      {steam_turbine_id:steam_turbine_id},
+      function (data) {
+        var theoretical_steam_rate = get_project_field_value('.std_theoretical_steam_rate', data["lbl_theoretical_steam_rate"], unit_decimals);
+        $('#lbl_theoretical_steam_rate').html(theoretical_steam_rate);
+        $('#steam_turbine_std_theoretical_steam_rate').val(theoretical_steam_rate);
+
+        var actual_steam_rate = get_project_field_value('.std_actual_steam_rate', data["lbl_actual_steam_rate"], unit_decimals);
+        $('#lbl_actual_steam_rate').html(actual_steam_rate);
+        $('#steam_turbine_std_actual_steam_rate').val(actual_steam_rate);
+
+        var steam_flow_rate = get_project_field_value('.std_steam_flow_rate', data["lbl_steam_flow_rate"], unit_decimals);
+        $('#lbl_steam_flow_rate').html(steam_flow_rate);
+        $('#steam_turbine_std_steam_flow_rate').val(steam_flow_rate);
+
+        var inlet_nozzle_diameter = get_project_field_value('.std_inlet_nozzle_diameter', data["lbl_inlet_nozzle_diameter"], unit_decimals);
+        $('#lbl_inlet_nozzle_diameter').html(inlet_nozzle_diameter);
+        $('#steam_turbine_std_inlet_nozzle_diameter').val(inlet_nozzle_diameter);
+
+        var exhaust_nozzle_diameter = get_project_field_value('.std_exhaust_nozzle_diameter', data["lbl_exhaust_nozzle_diameter"], unit_decimals);
+        $('#lbl_exhaust_nozzle_diameter').html(exhaust_nozzle_diameter);
+        $('#steam_turbine_std_exhaust_nozzle_diameter').val(exhaust_nozzle_diameter);
+
+        var max_velocity_at_inlet_nozzle = get_project_field_value('.std_max_velocity_at_inlet_nozzle', data["lbl_max_velocity_at_inlet_nozzle"], unit_decimals);
+        $('#lbl_max_velocity_at_inlet_nozzle').html(max_velocity_at_inlet_nozzle);
+        $('#steam_turbine_std_max_velocity_at_inlet_nozzle').val(max_velocity_at_inlet_nozzle);
+
+        var max_velocity_at_exhaust_nozzle = get_project_field_value('.std_max_velocity_at_exhaust_nozzle', data["lbl_max_velocity_at_exhaust_nozzle"], unit_decimals);
+        $('#lbl_max_velocity_at_exhaust_nozzle').html(max_velocity_at_exhaust_nozzle);
+        $('#steam_turbine_std_max_velocity_at_exhaust_nozzle').val(max_velocity_at_exhaust_nozzle);
+
+        var isentropic_enthalpy_change = get_project_field_value('.std_isentropic_enthalpy_change', data["lbl_isentropic_enthalpy_change"], unit_decimals);
+        $('#lbl_isentropic_enthalpy_change').html(isentropic_enthalpy_change);
+        $('#steam_turbine_std_isentropic_enthalpy_change').val(isentropic_enthalpy_change);
+
+        //Number of Stages
+        if ($('#steam_turbine_std_isentropic_enthalpy_change').val() == "") {
+          $('#approximate_no_of_stages').attr('disabled', true);
+        } else {
+          $('#approximate_no_of_stages').attr('disabled', false);
+        }
+
+        var no_of_stages_per = 0;
+        if ($('#steam_turbine_std_no_of_stages').val() != 0 || $('#steam_turbine_std_no_of_stages').val() != "") {
+          no_of_stages_per = parseInt($('#steam_turbine_std_no_of_stages').val()) + 0;
+        }
+
+        var enthalpy_change = Math.abs($('#steam_turbine_std_isentropic_enthalpy_change').val() + 0);
+        if ($('#steam_turbine_std_ee_turbine_type').val() == "Multi-Stage, Single Valve" || $('#steam_turbine_std_ee_turbine_type').val() == "Multi-Stage, Multiple Valves") {
+          no_of_stages = ((enthalpy_change * no_of_stages_per) / 100).toFixed(0);
+          $('#lbl_std_no_of_stages').html(no_of_stages);
+          $('#steam_turbine_std_approximate_no_of_stages').val(no_of_stages);
+        } else {
+          $('#lbl_std_no_of_stages').html(1);
+          $('#steam_turbine_std_approximate_no_of_stages').val(1);
+        }
+
+        alert('Steam turbine design calculate is completed');
+      },
+      'json'
+    );
+  });
+
+  $('#estimate_efficiency_calculation').click(function (e) {
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('estimate_efficiency_calculation');
+    if (form_validations() == false) {
+      return false;
+    }
+
+    if (steam_turbine_id == "" || $('form.form_steam_turbine').isDirty()) {
+      $('form.form_steam_turbine').submit();
+      return false;
+    }
+
+    //popup validation
+    var std_ee_turbine_type = $('#steam_turbine_std_ee_turbine_type').val();
+    var std_turbine_type = $('#steam_turbine_std_turbine_type').val();
+    if (std_ee_turbine_type == '') {
+      alert('Please select any turbine type.');
+      $('#steam_turbine_std_ee_turbine_type').focus();
+      return false;
+    }
+
+    var supply_col = $('.steam_supply_check_box:checked').attr('col');
+    var inlet_pressure = $('#steam_turbine_ssc_' + supply_col + '_steam_supply_pressure').val();
+    var inlet_pressure_unit = $('.steam_supply_pressure_unit').text();
+
+    var exhaust_col = $('.steam_exhaust_check_box:checked').attr('col');
+    var exhaust_pressure = $('#steam_turbine_sec_' + exhaust_col + '_steam_exhaust_pressure').val();
+
+    var degree_of_super_heat = $('#steam_turbine_ssc_' + supply_col + '_steam_supply_temperature').val() - $('#steam_turbine_ssc_' + supply_col + '_steam_saturation_temperature').val();
+    degree_of_super_heat = Math.abs(degree_of_super_heat);
+    var degree_of_super_heat_unit = $('.steam_supply_temperature_unit').text();
+
+    var horsepower = $('#steam_turbine_std_horsepower').val();
+    var horsepower_unit = $('#steam_turbine_std_horsepower_unit').text();
+
+    var speed = $('#steam_turbine_std_speed').val();
+    var speed_unit = $('#steam_turbine_std_speed_unit').text();
+
+    inlet_steam_pressure = parseFloat(inlet_pressure) + parseFloat(barometric_pressure);
+    exhaust_steam_pressure = parseFloat(exhaust_pressure) + parseFloat(barometric_pressure);
+    pressure_ratio = exhaust_steam_pressure / inlet_steam_pressure;
+
+    //TODO change the logic after review
+    if (std_ee_turbine_type == "Multi-Stage, Multiple Valves" || std_ee_turbine_type == "Multi-Stage, Single Valve") {
+      if (std_ee_turbine_type == "Multi-Stage, Multiple Valves") {
+        if (std_turbine_type == "Non-Condensing") {
+          if (inlet_pressure < 100 || inlet_pressure > 1800) {
+            var alert_msg = "The listed steam pressure (" + inlet_pressure + " " + inlet_pressure_unit + ") is outside the range allowable " +
+              "for Fig 15-13 in the GPSA Manual for determining the basis efficiency for multi-valve, multi-stage non-condensing turbines." +
+              "Please enter a value for the basis efficiency for the steam turbine at the list steam pressure." +
+              "Basis Efficiency For Multi-Valve, Multi-Stage Non-Condensing Turbines!";
+            if ($('#steam_turbine_std_ee_basic_efficiency') == "" || $('#steam_turbine_std_ee_basic_efficiency').val() == 0) {
+              alert(alert_msg);
+              return false;
+            }
+          }
+
+          if (horsepower < 300 || horsepower > 15000) {
+            var alert_msg = "The listed horsepower (" + horsepower + " " + horsepower_unit + ") is outside the range allowable " +
+              "for Fig 15-13 in the GPSA Manual for determining the basis efficiency for multi-valve, multi-stage non-condensing turbines. " +
+              "Please enter a value for the basis efficiency for the steam turbine at the listed horsepower." +
+              "Basis Efficiency For Multi-Valve, Multi-Stage Non-Condensing Turbines!";
+            if ($('#steam_turbine_std_ee_basic_efficiency') == "" || $('#steam_turbine_std_ee_basic_efficiency').val() == 0) {
+              alert(alert_msg);
+              return false;
+            }
+          }
+        } else if (std_turbine_type == "Condensing") {
+          if (inlet_pressure < 100 || inlet_pressure > 1800) {
+            var alert_msg = "The listed steam pressure (" + inlet_pressure + " " + inlet_pressure_unit + ") is outside the range allowable " +
+              "for Fig 15-13 in the GPSA Manual for determining the basis efficiency for multi-valve, multi-stage non-condensing turbines." +
+              "Please enter a value for the basis efficiency for the steam turbine at the list steam pressure." +
+              "Basis Efficiency For Multi-Valve, Multi-Stage Condensing Turbines!";
+            if ($('#steam_turbine_std_ee_basic_efficiency').val() == "" || $('#steam_turbine_std_ee_basic_efficiency').val() == 0) {
+              alert(alert_msg);
+              return false;
+            }
+          }
+
+          if (horsepower < 300 || horsepower > 15000) {
+            var alert_msg = "The listed horsepower (" + horsepower + " " + horsepower_unit + ") is outside the range allowable " +
+              "for Fig 15-13 in the GPSA Manual for determining the basis efficiency for multi-valve, multi-stage non-condensing turbines. " +
+              "Please enter a value for the basis efficiency for the steam turbine at the listed horsepower." +
+              "Basis Efficiency For Multi-Valve, Multi-Stage Condensing Turbines!";
+            if ($('#steam_turbine_std_ee_basic_efficiency').val() == "" || $('#steam_turbine_std_ee_basic_efficiency').val() == 0) {
+              alert(alert_msg);
+              return false;
+            }
+          }
+        }
+      } else if (std_ee_turbine_type == "Multi-Stage, Single Valve") {
+        if ($('#steam_turbine_std_ee_basic_efficiency').val() == "" || $('#steam_turbine_std_ee_basic_efficiency').val() == 0) {
+          alert("The basis efficiency for the multi-stage, single valve is not provided in Section 15 of GPSA Manual (12th Edition). " +
+            "Please enter a value (%) for the basis efficiency for this turbine." +
+            "Basis Efficiency For Multi-Stage, Single Valve Turbine.");
+          return false;
+        }
+      }
+
+      if (std_turbine_type == "Non-Condensing") {
+        if (degree_of_super_heat > 400) {
+          if ($('#steam_turbine_std_ee_superheat_efficiency_cf').val() == "" || $('#steam_turbine_std_ee_superheat_efficiency_cf').val() == 0) {
+            alert("The determined degree of superheat (" + degree_of_super_heat + " " + degree_of_super_heat_unit + ") is outside the range " +
+              "allowable for Fig 15-15 in the GPSA Manual for determining the superheat efficiency correction factor for non-condensing turbines. " +
+              "Please enter a value for the superheat efficiency correction factor for the steam turbine at the degree of superheat." +
+              "Superheat Efficiency Correction Factor for Non-Condensing Turbines!");
+            return false;
+          }
+        }
+      } else if (std_turbine_type == "Condensing") {
+        if (degree_of_super_heat > 450) {
+          if ($('#steam_turbine_std_ee_superheat_efficiency_cf').val() == "" || $('#steam_turbine_std_ee_superheat_efficiency_cf').val() == 0) {
+            alert("The determined degree of superheat (" + degree_of_super_heat + " " + degree_of_super_heat_unit + ") is outside the range " +
+              "allowable for Fig 15-14 in the GPSA Manual for determining the superheat efficiency correction factor for condensing turbines. " +
+              "Please enter a value for the superheat efficiency correction factor for the steam turbine at the degree of superheat." +
+              "Superheat Efficiency Correction Factor for Condensing Turbines!");
+            return false;
+          }
+        }
+      }
+
+      if (horsepower < 1000 || horsepower > 15000) {
+        if ($('#steam_turbine_std_ee_speed_efficiency_cf').val() == "" || $('#steam_turbine_std_ee_speed_efficiency_cf').val() == 0) {
+          alert("The listed horsepower (" + horsepower + " " + horsepower_unit + ") is outside the range " +
+            "allowable for Fig 15-16 in the GPSA Manual for determining the speed efficiency correction factor for condensing and non-condensing turbines. " +
+            "Please enter a value for the speed efficiency correction factor for the steam turbine at the listed horsepower." +
+            "Speed Efficiency Correction Factor for Condensing and Non-Condensing Turbines!");
+          return false;
+        }
+      }
+
+      if (speed < 3500 || speed > 10000) {
+        if ($('#steam_turbine_std_ee_speed_efficiency_cf').val() == "" || $('#steam_turbine_std_ee_speed_efficiency_cf').val() == 0) {
+          alert("The listed speed (" + speed + " " + speed_unit + ") is outside the range " +
+            "allowable for Fig 15-16 in the GPSA Manual for determining the speed efficiency correction factor for condensing and non-condensing turbines. " +
+            "Please enter a value for the speed efficiency correction factor for the steam turbine at the listed speed." +
+            "Speed Efficiency Correction Factor for Condensing and Non-Condensing Turbines!");
+          return false;
+        }
+      }
+
+      if (std_turbine_type == "Non-Condensing") {
+        if (pressure_ratio < 0 || pressure_ratio > 0.5) {
+          if ($('#steam_turbine_std_ee_pressure_ratio_cf').val() == "" || $('#steam_turbine_std_ee_pressure_ratio_cf').val() == 0) {
+            alert("The determined pressure ratio (" + pressure_ratio.toFixed(3) + ") is outside the range allowable " +
+              "for Fig 15-17 in the GPSA Manual for determining the pressure ratio efficiency correction factor for non-condensing turbines. " +
+              "Please enter a value for the pressure ratio efficiency correction factor for the steam turbine at the pressure ratio." +
+              "Pressure Ratio Efficiency Correction Factor for Non-Condensing Turbines!");
+            return false;
+          }
+        }
+      } else if (std_turbine_type == "Condensing") {
+
+      }
+    } else if (std_ee_turbine_type == "Single Stage, Single Valve" || std_ee_turbine_type == "Single Stage, Multiple Valves") {
+      if (pressure_ratio < 0 || pressure_ratio > 0.55) {
+        if ($('#approximate_steam_rate').val() == "" || $('#approximate_steam_rate').val() == 0) {
+          alert("The determined pressure ratio (" + pressure_ratio.toFixed(3) + ") is outside the range " +
+            "allowable for Fig 15-19 in the GPSA Manual for determining the approximate steam rate for single stage turbines. " +
+            "Please enter a value for the approximate steam rate for the steam turbine at the pressure ratio." +
+            "Approximate Steam Rate For Single Stage Turbines!");
+          return false;
+        }
+      }
+
+      if (speed < 1000 || speed > 10000) {
+        if ($('#approximate_steam_rate').val() == "" || $('#approximate_steam_rate').val() == 0) {
+          alert("The listed speed (" + speed + " " + speed_unit + ") is outside the range allowable " +
+            "for Fig 15-19 in the GPSA Manual for determining the approximate steam rate for single stage turbines. " +
+            "Please enter a value for the approximate steam rate for the steam turbine at the listed speed." +
+            "Approximate Steam Rate For Single Stage Turbines!");
+          return false;
+        }
+      }
+
+      if (degree_of_super_heat > 0 && degree_of_super_heat < 200) {
+
+      } else {
+        if ($('#steam_turbine_std_ee_superheat_efficiency_cf').val() == "" || $('#steam_turbine_std_ee_superheat_efficiency_cf').val() == 0) {
+          alert("The degree of superheat (" + degree_of_super_heat + " " + degree_of_super_heat_unit + ") for this operation falls outside " +
+            "the published range in Fig. 15-19 in the GPSA Manual for determining the superheat correction factor for single-stage turbine." +
+            "Please enter a value for the superheat correction factor at the degree of superheat." +
+            "Superheated Correction Factor For Single Stage Turbines");
+          return false;
+        }
+      }
+    }
+
+    $.get('/admin/steam_turbines/estimate_efficiency_calculation',
+      {steam_turbine_id:steam_turbine_id,
+        std_ee_turbine_type:$('#steam_turbine_std_ee_turbine_type').val(),
+        std_ee_basic_efficiency:$('#steam_turbine_std_ee_basic_efficiency').val(),
+        std_ee_superheat_efficiency_cf:$('#steam_turbine_std_ee_superheat_efficiency_cf').val(),
+        std_ee_speed_efficiency_cf:$('#steam_turbine_std_ee_speed_efficiency_cf').val(),
+        std_ee_pressure_ratio_cf:$('#steam_turbine_std_ee_pressure_ratio_cf').val(),
+        approximate_steam_rate:$('#approximate_steam_rate').val()},
+      function (data) {
+        $('#steam_turbine_std_ee_basic_efficiency').val(data['lbl_basic_efficiency']);
+
+        var degree_of_superheat = get_project_field_value('.std_ee_degree_of_superheat', data["lbl_degree_of_superheat"], unit_decimals);
+        $('#steam_turbine_std_ee_degree_of_superheat').val(degree_of_superheat);
+
+        $('#steam_turbine_std_ee_superheat_efficiency_cf').val(data['lbl_superheat_efficiency_cf']);
+
+        $('#steam_turbine_std_ee_speed_efficiency_cf').val(data['lbl_speed_efficiency_cf']);
+
+        $('#steam_turbine_std_ee_pressure_ratio_cf').val(data['lbl_pressure_ratio_cf']);
+
+        $('#steam_turbine_std_ee_corrected_efficiency_cf').val(data['lbl_corrected_efficiency']);
+
+        $('#steam_turbine_std_efficiency').val(data['lbl_corrected_efficiency']);
+
+        alert('Estimate efficiency calculation is completed');
+      },
+      'json');
+
+  });
+
+</script>
+<%= javascript_tag do %>
+  //hit calculate button
+  var calculate_btn = "<%= params[:calculate_btn] %>";
+  if(calculate_btn == "steam_turbine_design_calculate") {
+  $('#steam_turbine_design_calculate').trigger('click');
+  } else if (calculate_btn == "estimate_efficiency_calculation") {
+  //$('#estimate_efficiency_calculation').trigger('click');
+  }
+
+<% end %>

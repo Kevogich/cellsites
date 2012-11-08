@@ -1,0 +1,46 @@
+<%= fields_for compressor_sizing do |cs|%>
+<table width="100%">
+	<tr>
+		<td colspan="2"><b><u>Suction Side</u></b></td>
+		<td colspan="2"><b><u>Discharge Side</u></b></td>
+	</tr>
+	<tr>
+		<td width="25%">Total Volume</td>
+		<td width="25%"><%= compressor_sizing.so_ss_total_volume%>&nbsp;m&sup3;</td>
+		<td width="25%">Total Volume</td>
+		<td width="25%"><%= compressor_sizing.so_ds_total_volume%>&nbsp;m&sup3;</td>
+	</tr>
+	<tr>
+		<td>Total Moles</td>
+		<td><%= compressor_sizing.so_ss_total_moles%>&nbsp;mol</td>
+		<td>Total Moles</td>
+		<td><%= compressor_sizing.so_ds_total_moles%>&nbsp;mol</td>
+	</tr>
+	<tr>
+		<td colspan="4"><b><u>Design Conditions</u></b></td>						
+	</tr>
+	<tr>
+		<td>System Volume</td>
+		<td><%= compressor_sizing.so_system_volume%>&nbsp;m&sup3;</td>
+		<td>Settle Out Pressure</td>
+		<td><%= compressor_sizing.so_settle_out_pressure%>&nbsp;barg</td>
+	</tr>
+	<tr>
+		<td>System Mole</td>
+		<td><%= compressor_sizing.so_system_mole%>&nbsp;mol</td>
+		<td>Settle Out Temperature</td>
+		<td><%= compressor_sizing.so_settle_out_temperature%>&nbsp;&deg;C</td>
+	</tr>
+	<tr>
+		<td colspan="2"></td>
+		<td><input type="button" value="Enter System Piping"></td>
+		<td><input type="button" value="Calculate"></td>
+	</tr>
+	<tr>
+		<td colspan="4"><b><u>Note</u></b></td>
+	</tr>
+	<tr>
+		<td colspan="4"><%= cs.text_area :so_notes, :size=>"158x6"%></td>
+	</tr>
+</table>
+<% end%>

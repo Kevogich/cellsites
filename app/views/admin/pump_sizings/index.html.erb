@@ -1,0 +1,38 @@
+<% title 'Pump Sizing'%>
+
+<%= render :partial => '/admin/user_project_settings/project_filter' %>
+
+<%= link_to 'Add Pump sizing', new_admin_pump_sizing_path%>&nbsp;|&nbsp;
+<%= link_to 'Pump Sizing Summary', pump_sizing_summary_admin_pump_sizings_path%>
+<br>
+
+<table width="auto">
+	<tr>
+		<th>Centrifugal pump tag</th>
+		<th>By</th>
+		<th>Reviewer</th>
+		<th>Approver</th>
+		<th>Created at</th>
+		<th>Updated at</th>
+		<th>Edit</th>
+		<th>Delete</th>
+		<th>Clone</th>
+	</tr>
+	<% for pump_sizing in @pump_sizings%>
+		<tr>
+			<td><%= pump_sizing.centrifugal_pump_tag%></td>
+			<td><%= pump_sizing.sizing_status_activities.created_by%></td>
+			<td><%= pump_sizing.sizing_status_activities.reviewer%></td>
+			<td><%= pump_sizing.sizing_status_activities.approver%></td>
+			<td><%= pump_sizing.created_at.strftime("%d-%m-%Y")%></td>
+			<td><%= pump_sizing.updated_at.strftime("%d-%m-%Y")%></td>
+			<td><%= link_to "Edit", edit_admin_pump_sizing_path(pump_sizing)%></td>
+			<td><%= link_to "Delete", admin_pump_sizing_path(pump_sizing), :method=>"delete", :confirm => "Are you sure?"%></td>
+			<td><%= link_to "Clone", clone_admin_pump_sizing_path(pump_sizing), :class => "clone_sizing" %></td>
+		</tr>
+	<% end%>
+</table>
+
+<script type="text/javascript">
+
+</script>

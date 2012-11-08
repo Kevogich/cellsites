@@ -1,0 +1,253 @@
+<div id="aerial_cooler_tab" class="tab_content">
+<!-- Aerial Cooler -->
+<table style="width:100%;">
+  <tr>
+    <td width="25%">
+      <fieldset class="form_fieldset">
+        <legend>Exchanger Type</legend>
+        <ul class="unstyled">
+          <li>
+            <%= f.radio_button :ac_exchanger_type, "forced_draft" %>Forced Draft
+          </li>
+          <li>
+            <%= f.radio_button :ac_exchanger_type, "induced_draft" %>Induced Draft
+          </li>
+        </ul>
+      </fieldset>
+    </td>
+    <td width="25%">
+      <fieldset class="form_fieldset">
+        <legend>Orientation</legend>
+        <ul class="unstyled">
+          <li>
+            <%= f.radio_button :ac_orientation, "Horizontal" %>Horizontal
+          </li>
+          <li>
+            <%= f.radio_button :ac_orientation, "Vertical" %>Vertical
+          </li>
+        </ul>
+      </fieldset>
+    </td>
+    <td width="27%">
+      <fieldset class="form_fieldset" style="float:left;">
+        <legend>Exchanger Flow Type</legend>
+        <ul class="unstyled">
+          <li><%= f.radio_button :ac_exchanger_flow_type, "co-current_flow" %>Co-Current Flow</li>
+          <li><%= f.radio_button :ac_exchanger_flow_type, "counter-current_flow" %>Counter-Current Flow</li>
+          <li><%= f.radio_button :ac_exchanger_flow_type, "cross_flow" %>Cross Flow</li>
+        </ul>
+      </fieldset>
+    </td>
+    <td width="23%">
+      <fieldset class="form_fieldset">
+        <legend>Tube Type</legend>
+        <ul class="unstyled">
+          <li>
+            <%= f.radio_button :ac_exchanger_tt_tube_type, "bare_tube" %>&nbsp;Bare Tube
+          </li>
+          <li>
+            <%= f.radio_button :ac_exchanger_tt_tube_type, "fin_tube" %>&nbsp;Fin Tube
+          </li>
+        </ul>
+      </fieldset>
+    </td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td colspan="2"><b><label class="sub_title">Design Process Specifications</label></b></td>
+    <td colspan="2"><b><label class="sub_title">Unit Count</label></b></td>
+  </tr>
+  <tr>
+    <td>Heat Duty</td>
+    <td> <%= f.text_field :ac_dps_heat_duty, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td>No Of Units</td>
+    <td> <%= f.text_field :ac_uc_no_of_units, :class => "small-text-100" %>&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td>LMTD</td>
+    <td><%= f.text_field :ac_dps_lmtd, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td>No Of Bays/Unit</td>
+    <td><%= f.text_field :ac_uc_no_of_bays_unit, :class => "small-text-100" %>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>F Factor</td>
+    <td><%= f.text_field :ac_dps_f_factor, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td>No Of Bundle/Bays</td>
+    <td><%= f.text_field :ac_uc_no_of_bundle_bay, :class => "small-text-100" %>&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td>Corrected LMTD</td>
+    <td><%= f.text_field :ac_dps_corrected_lmtb, :class => "small-text-100" %>&nbsp;&nbsp;
+    </td>
+    <td colspan="2"><b><label class="sub_title">Dimensions</label></b></td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <input class="pull-right" id="aerial_cooler_calculate" type="button" value="Design">
+    </td>
+    <td>Heat Transfer Area</td>
+    <td><%= f.text_field :ac_d_heat_transfer_area, :class => "small-text-100" %>&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2"><b><label class="sub_title">Air Side</label></b></td>
+    <td>Bare Tube Area</td>
+    <td><%= f.text_field :ac_d_bare_tube_area, :class => "small-text-100" %>&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td>Air Quantity/Item</td>
+    <td><%= f.text_field :ac_as_air_quantity_item, :class => "small-text-100" %>&nbsp;&nbsp;
+    </td>
+    <td>Finned Tube Area</td>
+    <td><%= f.text_field :ac_d_finned_tube_area, :class => "small-text-100" %>&nbsp;&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td>Air Quantity/fan</td>
+    <td><%= f.text_field :ac_as_air_quantity_fan, :class => "small-text-100" %>&nbsp;&nbsp;
+    </td>
+    <td>Tube OD</td>
+    <td><%= f.select :ac_d_tube_od, options_for_select([], heat_exchanger_sizing.ac_d_tube_od), :include_blank => true %>&nbsp;
+  </tr>
+  <tr>
+    <td>Air Quantity In</td>
+    <td><%= f.text_field :ac_as_air_temperature_in, :class => "small-text-100" %>&nbsp
+    </td>
+    <td>Tube Thickness</td>
+    <td><%= f.select :ac_d_tube_thickness, options_for_select([], heat_exchanger_sizing.ac_d_tube_thickness), :include_blank => true %>&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td>Air Quantity Out</td>
+    <td><%= f.text_field :ac_as_air_temperature_out, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td>Tube ID</td>
+    <td><%= f.text_field :ac_d_tube_id, :class => "small-text-100" %>&nbsp;
+  </tr>
+  <tr>
+    <td>Altitude</td>
+    <td><%= f.text_field :ac_as_altitude, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td>Tube Length</td>
+    <td><%= f.text_field :ac_d_tube_length, :class => "small-text-100" %>&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2"><b><label class="sub_title">Heat Transfer Coefficients </label></b></td>
+    <td>Tube Pitch</td>
+    <td><%= f.select :ac_d_tube_pitch, options_for_select([], heat_exchanger_sizing.ac_d_tube_pitch), :include_blank => true %>&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td>Tube Material</td>
+    <td><%= f.select :ac_d_tube_material, options_for_select([], heat_exchanger_sizing.ac_d_tube_material), :include_blank => true %>&nbsp;
+    </td>
+    <td> No Of Tubes</td>
+    <td><%= f.text_field :ac_d_no_of_tubes, :class => "small-text-100" %>&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td> Metal Temperature</td>
+    <td><%= f.text_field :ac_htc_metal_temperature, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td>Orientation</td>
+    <td><%= f.select :ac_d_orientation, options_for_select([], heat_exchanger_sizing.ac_d_orientation), :include_blank => true %>&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td> Metal Resistance</td>
+    <td><%= f.text_field :ac_htc_metal_resistance, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td> No Of Tube Row</td>
+    <td><%= f.text_field :ac_d_no_of_tube_row, :class => "small-text-100" %>&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td> Film Resistance (Tube Side)</td>
+    <td><%= f.text_field :ac_htc_film_resistance_tube_side, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td> Rows/Pass</td>
+    <td><%= f.text_field :ac_d_rows_pass, :class => "small-text-100" %>&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td> Film Resistance (Air Side)</td>
+    <td><%= f.text_field :ac_htc_film_resistance_air_side, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td colspan="2"><b><label class="sub_title"> Fin </label></b></td>
+  </tr>
+  <tr>
+    <td> Overall Service U (Bare)</td>
+    <td><%= f.text_field :ac_htc_overall_service_u_bare, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td> Type</td>
+    <td><%= f.text_field :ac_f_type, :class => "small-text-100" %>&nbsp;
+         </td>
+  </tr>
+  <tr>
+    <td> Overall Clean U (Bare)</td>
+    <td><%= f.text_field :ac_htc_overall_clean_u_bare, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td> Material</td>
+    <td><%= f.text_field :ac_f_material, :class => "small-text-100" %>&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td> Overall U (Extended)</td>
+    <td><%= f.text_field :ac_htc_overall_u_extended, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td> Fin Height</td>
+    <td><%= f.text_field :ac_f_fin_height, :class => "small-text-100" %>&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2"><b><label class="sub_title"> Pressure Drop </label></b></td>
+    <td> Fin Thickness</td>
+    <td><%= f.text_field :ac_f_fin_thickness, :class => "small-text-100" %>&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td> Tube Side Allowable Pressure Drop</td>
+    <td><%= f.text_field :ac_pd_allowable_pressure_drop_tube_side, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td> Fin Spacing</td>
+    <td><%= f.text_field :ac_f_fin_spacing, :class => "small-text-100" %>&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td> Tube Side Calculated Pressure Drop</td>
+    <td><%= f.text_field :ac_pd_calculated_pressure_drop_tube_side, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td colspan="2"><b><label class="sub_title"> Fan </label></b></td>
+  </tr>
+  <tr>
+    <td colspan="2"><b><label class="sub_title"> Velocity </label></b></td>
+    <td> Diameter</td>
+    <td><%= f.text_field :ac_fan_diameter, :class => "small-text-100" %>&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td> Tube Side Allowable Velocity</td>
+    <td><%= f.text_field :ac_v_allowable_velocity_tube_side, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td> Fan/Bay</td>
+    <td><%= f.text_field :ac_fan_fan_bay, :class => "small-text-100" %>&nbsp;
+    </td>
+  </tr>
+  <tr>
+    <td> Tube Side Calculated Velocity</td>
+    <td><%= f.text_field :ac_v_calculated_velocity_tube_side, :class => "small-text-100" %>&nbsp;
+    </td>
+    <td> Power/Fan</td>
+    <td><%= f.text_field :ac_fan_power_fan, :class => "small-text-100" %>&nbsp;
+    </td>
+  </tr>
+</table>
+</div>

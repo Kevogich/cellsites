@@ -1,0 +1,1142 @@
+<style type="text/css">
+  #nozzle_sizing input[type=text] {
+    width: 150px;
+  }
+
+  #vertical_separator input[type=text] {
+    width: 150px;
+  }
+
+  #tab8 input[type=text] {
+    width: 150px;
+  }
+</style>
+
+<%= form_for vessel_sizing, :url => vessel_sizing.new_record? ? admin_vessel_sizings_path : admin_vessel_sizing_path(vessel_sizing), :html => {:class => "form_vessel_sizing", :style => 'width:auto;'} do |f| %>
+  <%= f.error_messages %>
+  <% if vessel_sizing.new_record? %>
+    <%= f.hidden_field :company_id %>
+    <%= f.hidden_field :client_id, :value => @user_project_settings.client_id %>
+    <%= f.hidden_field :project_id, :value => @user_project_settings.project_id %>
+    <%= f.hidden_field :process_unit_id, :value => @user_project_settings.process_unit_id %>
+  <% end %>
+  <div class="form-element-last">
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :client_id %><br>
+      <%= f.label :client_id, (vessel_sizing.client.name rescue @user_project_settings.client.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :project_id %><br>
+      <%= f.label :project_id, (vessel_sizing.project.project_num rescue @user_project_settings.project.project_num), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :process_unit_id %><br>
+      <%= f.label :process_unit_id, (vessel_sizing.process_unit.name rescue @user_project_settings.process_unit.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :name %><br>
+      <%= f.text_field :name %>
+		</span>
+    <% unless vessel_sizing.new_record? %>
+      <span style="float:left;margin-right:40px;">
+        <%= label_tag :status %><br>
+        <strong><%= sizing_status(vessel_sizing) %></strong>
+      </span>
+      <span style="float:left;margin-right:40px;">
+        <br>
+        <%= sizing_status_request_button(vessel_sizing) %>
+      </span>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+  <div class="hidden">
+    <%= hidden_field_tag :tab %>
+    <%= hidden_field_tag :calculate_btn %>
+  </div>
+  <div class="form-buttons">
+    <%= f.submit vessel_sizing.new_record? ? 'Create' : 'Update' %>
+  </div>
+  <!-- tabs -->
+  <div>
+  <ul class="simple-tabs">
+    <li><a href="#tab1" tab="tab1">Streams</a></li>
+    <li><a href="#nozzle_sizing" tab="nozzle_sizing">Nozzle Sizing</a></li>
+    <li><a href="#vertical_separator" tab="vertical_separator">Vertical Separator</a></li>
+    <li><a href="#horizontal_separator" tab="horizontal_separator">Horizontal Separator</a></li>
+    <li><a href="#decanter" tab="decanter">Decanter</a></li>
+    <li><a href="#settler" tab="settler">Settler</a></li>
+    <li><a href="#tab6" tab="tab6">Filter</a></li>
+    <li><a href="#tab7" tab="tab7">Reactor</a></li>
+    <li><a href="#tab8" tab="tab8">Design Conditions</a></li>
+    <li><a href="#tab9" tab="tab9">Mechanical Design</a></li>
+    <li><a href="#review" tab="review">Review</a></li>
+  </ul>
+  <div class="tab_container">
+  <div id="tab1" class="tab_content">
+    <div style="float:left;margin-right:10px;">
+      <table style="width:auto;">
+        <tr>
+          <td><b><u>Process Basis</u></b></td>
+        </tr>
+        <tr>
+          <td>
+            <%= f.collection_select :process_basis_id, @project.heat_and_material_balances, :id, :case, :prompt => true %>
+          </td>
+        </tr>
+      </table>
+
+      <table style="width:auto;">
+        <tr>
+          <td colspan="2"><b><u>FEED STREAM</u></b></td>
+        </tr>
+        <tr>
+          <td>Stream</td>
+          <td><%= f.collection_select :feed_stream_stream_no, @streams, :stream_no, :display_stream_no, :prompt => true %></td>
+        </tr>
+        <tr>
+          <td>Pressure</td>
+          <td><%= f.text_field :feed_stream_pressure %>&nbsp;<label class="pressure_general_unit"></label></td>
+        </tr>
+        <tr>
+          <td>Temperature</td>
+          <td><%= f.text_field :feed_stream_temperature %>&nbsp;&deg;C</td>
+        </tr>
+        <tr>
+          <td>Mass Vapor Fraction</td>
+		  <td><%= f.text_field :feed_stream_mass_vapor_fraction, :class => "mass_vapor_fraction_dimensionless" %>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>Flow Rate</td>
+          <td><%= f.text_field :feed_stream_flow_rate %>&nbsp;kg/hr</td>
+        </tr>
+        <tr>
+          <td>Density</td>
+          <td><%= f.text_field :feed_stream_density %>&nbsp;<label class="density_general_unit"></label></td>
+        </tr>
+        <tr>
+          <td>Viscosity</td>
+          <td><%= f.text_field :feed_stream_viscosity %>&nbsp;<label class="viscosity_general_unit"></label></td>
+        </tr>
+      </table>
+    </div>
+    <div style="float:left;">
+      <table style="width:auto;">
+        <tr>
+          <td colspan="2"><label class="sub_title">TOP OUTLET STREAM</label></td>
+        </tr>
+        <tr>
+          <td>Stream</td>
+          <td><%= f.collection_select :top_outlet_stream_stream_no, @streams, :stream_no, :display_stream_no, :prompt => true %></td>
+        </tr>
+        <tr>
+          <td>Flow Rate</td>
+          <td><%= f.text_field :top_outlet_stream_flow_rate %>&nbsp;kg/hr</td>
+        </tr>
+        <tr>
+          <td>Mass Vapor Fraction</td>
+		  <td><%= f.text_field :top_outlet_stream_mass_vapor_fraction, :class => "mass_vapor_fraction_dimensionless" %></td>
+        </tr>
+        <tr>
+          <td>Pressure</td>
+          <td><%= f.text_field :top_outlet_stream_pressure %>&nbsp;barg</td>
+        </tr>
+        <tr>
+          <td>Temperature</td>
+          <td><%= f.text_field :top_outlet_stream_temperature %>&nbsp;&nbsp;&deg;C</td>
+        </tr>
+        <tr>
+          <td>Density</td>
+          <td><%= f.text_field :top_outlet_stream_density %>&nbsp;kg/m&sup3;</td>
+        </tr>
+        <tr>
+          <td>Viscosity</td>
+          <td><%= f.text_field :top_outlet_stream_viscosity %>&nbsp;cP</td>
+        </tr>
+      </table>
+      <table style="width:auto;float:right;">
+        <tr>
+          <td colspan="2"><b><u>BOTTOM OUTLET STREAM</u></b></td>
+        </tr>
+        <tr>
+          <td>Stream</td>
+          <td><%= f.collection_select :bottom_outlet_stream_stream_no, @streams, :stream_no, :display_stream_no, :prompt => true %></td>
+        </tr>
+        <tr>
+          <td>Flow Rate</td>
+          <td><%= f.text_field :bottom_outlet_stream_flow_rate %>&nbsp;kg/hr</td>
+        </tr>
+        <tr>
+          <td>Mass Vapor Fraction</td>
+		  <td><%= f.text_field :bottom_outlet_stream_mass_vapor_fraction, :class => "mass_vapor_fraction_dimensionless" %></td>
+        </tr>
+        <tr>
+          <td>Pressure</td>
+          <td><%= f.text_field :bottom_outlet_stream_pressure %>&nbsp;barg</td>
+        </tr>
+        <tr>
+          <td>Temperature</td>
+          <td><%= f.text_field :bottom_outlet_stream_temperature %>&nbsp;&deg;C</td>
+        </tr>
+        <tr>
+          <td>Density</td>
+          <td><%= f.text_field :bottom_outlet_stream_density %>&nbsp;kg/m&sup3;</td>
+        </tr>
+        <tr>
+          <td>Viscosity</td>
+          <td><%= f.text_field :bottom_outlet_stream_viscosity %>&nbsp;cP</td>
+        </tr>
+      </table>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <%= render :partial => "nozzle_sizing", :locals => {:f => f, :vessel_sizing => vessel_sizing} %>
+  <%= render :partial => "vertical_separator", :locals => {:f => f, :vessel_sizing => vessel_sizing} %>
+  <%= render :partial => "horizontal_separator", :locals => {:f => f, :vessel_sizing => vessel_sizing} %>
+  <%= render :partial => "decanter", :locals => {:f => f, :vessel_sizing => vessel_sizing} %>
+  <%= render :partial => "settler", :locals => {:f => f, :vessel_sizing => vessel_sizing} %>
+  <div id="tab6" class="tab_content">
+    <!-- Filter -->
+    <table>
+      <tr>
+        <td>
+          <fieldset style="padding:5px;border:1px solid #000000;">
+            <legend><b>Filter Type</b></legend>
+            <%= f.radio_button :ft_filter_type, "Fitler Separator" %>&nbsp;Fitler
+            Separator&nbsp;&nbsp;&nbsp;&nbsp;<%= f.radio_button :ft_filter_type, "Particulate Fitler" %>&nbsp;Particulate
+            Fitler
+            <p>&nbsp;</p>
+            <%= f.radio_button :ft_filter_type, "Coalescing Filter" %>Coalescing
+            Filter&nbsp;&nbsp;&nbsp;<%= f.radio_button :ft_filter_type, "Others" %>&nbsp;Others
+          </fieldset>
+        </td>
+        <td colspan="3"></td>
+      </tr>
+      <tr>
+        <td colspan="2"><label class="sub_title">Manufacturer Specifications</label></td>
+        <td rowspan="3" colspan="2"></td>
+      </tr>
+      <tr>
+        <td>Manufacturer</td>
+        <td><%= f.text_field :ft_manufacture %></td>
+      </tr>
+      <tr>
+        <td>Model</td>
+        <td><%= f.text_field :ft_model %></td>
+      </tr>
+      <tr>
+        <td>Filtration Rating</td>
+        <td><%= f.text_field :ft_filtration_rating_min, :class => "small-text-50" %>
+          - <%= f.text_field :ft_filtration_rating_max, :class => "small-text-50" %></td>
+        <td>microns</td>
+        <td><%= f.select :ft_microns, StaticData.microns, :include_blank => true %></td>
+      </tr>
+      <tr>
+        <td>Filtration Efficiency</td>
+        <td><%= f.text_field :ft_filtration_efficiency %>&nbsp;%</td>
+        <td colspan="2" rowspan="2"></td>
+      </tr>
+      <tr>
+        <td>Max Allowable Dirty &Delta;P</td>
+        <td><%= f.text_field :ft_max_allowable_dirty_dp, :class => "pressure_general" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Normal &Delta;P</td>
+        <td><%= f.text_field :ft_normal_dp, :class => "pressure_general" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+        <td colspan="2" rowspan="2">
+          <button type="button" id="filter_transfer_data">Transfer Data</button>
+        </td>
+      </tr>
+      <tr>
+        <td>Capcity</td>
+        <td><%= f.text_field :ft_capcity, :class => "volume_general" %>&nbsp;<label class="volume_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Pressure Rating</td>
+        <td><%= f.text_field :ft_pressure_rating, :class => "required pressure_general" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+        <td colspan="2"><label class="sub_title">NOTES</label></td>
+      </tr>
+      <tr>
+        <td>Temperature Rating</td>
+        <td><%= f.text_field :ft_temperature_rating, :class => "required temperature_general" %>&nbsp;<label class="temperature_general_unit"></label>
+        </td>
+        <td colspan="2" rowspan="3"><%= f.text_area :ft_notes, :size => "60x5" %></td>
+      </tr>
+      <tr>
+        <td>Shell Diameter</td>
+        <td><%= f.text_field :ft_shell_diameter, :class => "required length_small_dimension_length" %>&nbsp;<label class="length_small_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Shell Length</td>
+        <td><%= f.text_field :ft_shell_length, :class => "required length_small_dimension_length" %>&nbsp;<label class="length_small_dimension_length_unit"></label>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab7" class="tab_content">
+    <!--Reactor -->
+    <table style="width:100%;">
+      <tr>
+        <td>
+          <fieldset style="border:1px solid #000000;padding:5px;">
+            <legend><b>Design Code</b></legend>
+            <%= f.radio_button :re_design_code, "ASME" %>&nbsp;ASME
+            &nbsp;&nbsp;&nbsp;
+            <%= f.radio_button :re_design_code, "Others" %>&nbsp;Others
+          </fieldset>
+        </td>
+        <td colspan="3"></td>
+      </tr>
+      <tr>
+        <td colspan="2"><label class="sub_title">Manufacturer Specifications</label></td>
+        <td colspan="2" rowspan="4"></td>
+      </tr>
+      <tr>
+        <td>Max Allowable &Delta;P</td>
+        <td><%= f.text_field :re_max_allowable_dp, :class => "pressure_general" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Normal &Delta;P</td>
+        <td><%= f.text_field :re_normal_dp, :class => "pressure_general" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Capacity</td>
+        <td><%= f.text_field :re_capacity, :class => "volume_general" %>&nbsp;<label class="volume_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Pressure Rating</td>
+        <td><%= f.text_field :re_pressure_rating, :class => "required pressure_general" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+        <td colspan="2">
+          <button type="button" id="reactor_transfer_data">Transfer Data</button>
+        </td>
+      </tr>
+      <tr>
+        <td>Temperature Rating</td>
+        <td><%= f.text_field :re_temperature_rating, :class => "required temperature_general" %>&nbsp;<label class="temperature_general_unit"></label>
+        </td>
+        <td colspan="2" rowspan="5"></td>
+      </tr>
+      <tr>
+        <td>Shell Diameter</td>
+        <td><%= f.text_field :re_shell_diameter, :class => "required length_small_dimension_length" %>&nbsp;<label class="length_small_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Shell Length</td>
+        <td><%= f.text_field :re_shell_length, :class => "required length_small_dimension_length" %>&nbsp;<label class="length_small_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2"><b><u>NOTES</u></b></td>
+      </tr>
+      <tr>
+        <td colspan="2"><%= f.text_area :re_notes, :size => "60x8" %></td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab8" class="tab_content">
+    <!--Design Conditions-->
+    <table width="100%">
+      <tr>
+        <td width="25%">Design Code</td>
+        <td><%= f.select :dc_design_code, StaticData.design_code, :include_blank => true %></td>
+        <td width="50%" colspan="2"><b><u>DESIGN EXTERNAL PRESSURE</u></b></td>
+      </tr>
+      <tr>
+        <td>Stamped?</td>
+        <td><%= f.select :dc_stamped, StaticData.stamped, {:include_blank => true}, :style => 'width:100px;' %></td>
+        <td>Max. Vacuum Pressure</td>
+        <td width="25%"><%= f.text_field :dc_max_vacuum_pressure, :class => "required pressure_general" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Min. Pressure Vessel Design Press.</td>
+        <td><%= f.text_field :dc_min_pressure_vessel_design_press, :class => "pressure_general" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+        <td>Atmospheric Pressure</td>
+        <td><%= f.text_field :dc_atmospheric_pressure, :class => "required pressure_differential" %>&nbsp;<label class="pressure_differential_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2"><label class="sub_title">DESIGN INTERNAL PRESSURE</label></td>
+        <td colspan="2"><label class="sub_title">DESIGN TEMPERATURE</label></td>
+      </tr>
+      <tr>
+        <td>Normal Operating Pressure</td>
+        <td><%= f.text_field :dc_normal_operating_pressure, :class => "pressure_general" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+        <td>Max Temp(Relief Temp, Manufacturer Rating Temp, etc)</td>
+        <td><%= f.text_field :dc_max_design_temperature, :class => "required temperature_general" %>&nbsp;<label class="temperature_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Normal Operating Temperature</td>
+        <td><%= f.text_field :dc_normal_operating_temperature, :class => "required temperature_general" %>&nbsp;<label class="temperature_general_unit"></label>
+        </td>
+        <td>Minimum Operating Temperature</td>
+        <td><%= f.text_field :dc_minimum_operating_temperature, :class => "required temperature_general" %>&nbsp;<label class="temperature_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Maximum Operation Pressure</td>
+        <td><%= f.text_field :dc_maximum_operating_pressure, :class => "required pressure_general" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+        <td>Minimum Amb. Design Temperature</td>
+        <td><%= f.text_field :dc_minimum_amb_design_temperature, :class => "temperature_general" %>&nbsp;<label class="temperature_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Maximum Operation Temperature</td>
+        <td><%= f.text_field :dc_maximum_operating_temperature, :class => "required temperature_general" %>&nbsp;<label class="temperature_general_unit"></label>
+        </td>
+        <td colspan="2"><%= f.check_box :dc_equipment_subject_to_steam_out %>&nbsp;Equipment subject to steam out</td>
+      </tr>
+      <tr>
+        <td rowspan="2">
+          Max possible supply pressure to vessel
+          (Pump shut off, compressor shut off, max header supply,
+          upstream vessel design pressure, settle out pressure, limiting design,
+          pressure etc.)
+        </td>
+        <td rowspan="2"><%= f.text_field :dc_max_possible_supply_pressure_to_vessel, :class => "pressure_general" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+        <td colspan="2"><%= f.check_box :dc_equipment_subject_to_dry_out %>&nbsp;Equipment subject to dry out</td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align:right;">
+          <button type="button" id="design_conditions_calculate">Calculate</button>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2"><label class="sub_title">Relief System</label></td>
+        <td colspan="2"><label class="sub_title">RESULTS</label></td>
+      </tr>
+      <tr>
+        <td colspan="2"><%= f.check_box :dc_relief_to_collection_header_system %>&nbsp;Relief To Collection Header
+          System
+        </td>
+        <td>Design Pressure</td>
+        <td>
+          <label class="dc_design_pressure"><%= vessel_sizing.dc_design_pressure %></label>
+          <%= f.hidden_field :dc_design_pressure %>&nbsp;
+          <label class="pressure_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Collection System Back Pressure</td>
+        <td><%= f.text_field :dc_collection_system_back_pressure, :class => "pressure_general" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+        <td>Design Temperature</td>
+        <td>
+          <label class="dc_design_temperature"><%= vessel_sizing.dc_design_temperature %></label>
+          <%= f.hidden_field :dc_design_temperature %>&nbsp;
+          <label class="temperature_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" rowspan="3">
+          <fieldset style="padding:5px;border:1px solid #000000;">
+            <legend><b>Relief Device Type</b></legend>
+            <%= f.radio_button :dc_relief_device_type, "Conventional" %>&nbsp;Conventional&nbsp;
+            <%= f.radio_button :dc_relief_device_type, "Balanced Bellows" %>&nbsp;Balanced Bellows&nbsp;
+            <%= f.radio_button :dc_relief_device_type, "Pilot Operated" %>&nbsp;Pilot Operated&nbsp;
+          </fieldset>
+        </td>
+        <td>Design Vacuum</td>
+        <td>
+          <label class="dc_design_vacuum"><%= vessel_sizing.dc_design_vacuum %></label>
+          <%= f.hidden_field :dc_design_vacuum %>&nbsp;
+          <label class="pressure_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Minimum Design Temperature</td>
+        <td>
+          <label class="dc_minimum_design_temperature"><%= vessel_sizing.dc_minimum_design_temperature %></label>
+          <%= f.hidden_field :dc_minimum_design_temperature %>&nbsp;
+          <label class="temperature_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Test Pressure</td>
+        <td>
+          <label class="dc_test_pressure"><%= vessel_sizing.dc_test_pressure %></label>
+          <%= f.hidden_field :dc_test_pressure %>&nbsp;
+          <label class="pressure_general_unit"></label>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab9" class="tab_content">
+    <!--Mechanical Design-->
+    <table>
+      <tr>
+        <td colspan="2"><label class="sub_title">VESSEL THICKNESS</label></td>
+        <td colspan="2"><label class="sub_title">RESULTS</label></td>
+      </tr>
+      <tr>
+        <td>Design Pressure</td>
+        <td>
+          <label id="md_design_pressure"><%= vessel_sizing.md_design_pressure %></label>
+          <%= f.hidden_field :md_design_pressure %>&nbsp;
+          <label class="pressure_differential_unit"></label>
+        </td>
+        <td>Vessel Type</td>
+        <td><%= f.select :md_vessel_type, StaticData.vessel_type %></td>
+      </tr>
+      <tr>
+        <td>Design Temperature</td>
+        <td>
+          <label id="md_design_temperature"><%= vessel_sizing.md_design_temperature %></label>
+          <%= f.hidden_field :md_design_temperature %>&nbsp;
+          <label class="temperature_general_unit"></label>
+        </td>
+        <td>Shell Diameter</td>
+        <td>
+          <label id="md_shell_diameter"><%= vessel_sizing.md_shell_diameter %></label>
+          <%= f.hidden_field :md_shell_diameter %>&nbsp;
+          <label class="length_pipe_tube_diameter_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Minimum Temperature</td>
+        <td>
+          <label id="md_minimum_temperature"><%= vessel_sizing.md_minimum_temperature %></label>
+          <%= f.hidden_field :md_minimum_temperature %>&nbsp;
+          <label class="temperature_general_unit"></label>
+        </td>
+        <td>Shell Length</td>
+        <td>
+          <label id="md_shell_length"><%= vessel_sizing.md_shell_length %></label>
+          <%= f.hidden_field :md_shell_length %>&nbsp;
+          <label class="length_large_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Vessel Orientation</td>
+        <td><%= f.select :md_vessel_orientation, StaticData.vessel_orientation %></td>
+        <td>Shell Thickness</td>
+        <td>
+          <label id="md_shell_thickness"><%= vessel_sizing.md_shell_thickness %></label>
+          <%= f.hidden_field :md_shell_thickness %>&nbsp;
+          <label class="length_small_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Material of Construction</td>
+        <td><%= f.text_field :md_material_of_construction %></td>
+        <td>Head Thickness</td>
+        <td>
+          <label id="md_head_thickness"><%= vessel_sizing.md_head_thickness %></label>
+          <%= f.hidden_field :md_head_thickness %>&nbsp;
+          <label class="length_small_dimension_length_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Allowable Stress</td>
+        <td><%= f.text_field :md_allowable_stress, :class => "required pressure_general" %>&nbsp;<label class="pressure_general_unit"></label>
+        </td>
+        <td>Weight Empty Vessel</td>
+        <td>
+          <label id="md_weight_empty_vessel"><%= vessel_sizing.md_weight_empty_vessel %></label>
+          <%= f.hidden_field :md_weight_empty_vessel %>&nbsp;
+          <label class="_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Shell Corrosion Allowance</td>
+        <td><%= f.text_field :md_shell_corrosion_allowance, :class => 'required length_small_dimension_length' %>&nbsp;<label class="length_small_dimension_length_unit"></label>
+        </td>
+        <td>Weight Full Vessel</td>
+        <td>
+          <label id="md_weight_full_vessel"><%= vessel_sizing.md_weight_full_vessel %></label>
+          <%= f.hidden_field :md_weight_full_vessel %>&nbsp;
+          <label class="_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Head Type</td>
+        <td><%= f.select :md_head_type, StaticData.head_type %></td>
+        <td>Total Capacity</td>
+        <td>
+          <label id="md_total_capacity"><%= vessel_sizing.md_total_capacity %></label>
+          <%= f.hidden_field :md_total_capacity %>&nbsp;
+          <label class="_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Head Corrosion Allowance</td>
+        <td><%= f.text_field :md_head_corrosion_allowance, :class => 'required length_small_dimension_length' %>&nbsp;<label class="length_small_dimension_length_unit"></label>
+        </td>
+        <td colspan="2" style="text-align:right;">
+          <button type="button" id="mechanical_design_calculate">Calculate</button>
+          &nbsp;
+          <button type="button">Review</button>
+        </td>
+      </tr>
+      <tr>
+        <td>Shell/Head Joint Efficiency</td>
+        <td><%= f.text_field :md_shell_head_joint_efficiency, :class => 'required' %>&nbsp;%</td>
+        <td colspan="2"><b><u>NOTES</u></b></td>
+      </tr>
+      <tr>
+        <td>Straight Flange</td>
+        <td><%= f.text_field :md_straight_flange, :class => 'length_small_dimension_length' %>&nbsp;<label class="length_small_dimension_length_unit"></label>
+        </td>
+        <td colspan="2" rowspan="4"><%= f.text_area :md_notes, :size => '60x8' %></td>
+      </tr>
+      <tr>
+        <td>Vessel Material Density</td>
+        <td><%= f.text_field :md_vessel_material_density, :class => 'density_general' %>&nbsp;<label class="density_general_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Vessel Weight Allowance</td>
+        <td><%= f.text_field :md_vessel_weight_allowance %>&nbsp;%</td>
+      </tr>
+      <tr>
+        <td>Vessel Content Density</td>
+        <td><%= f.text_field :md_vessel_content_density, :class => 'density_general' %>&nbsp;<label class="density_general_unit"></label>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <%= render :partial => "review", :locals => {:f => f, :vessel_sizing => vessel_sizing} %>
+  </div>
+  <div class="clear"></div>
+  </div>
+<% end %>
+
+<% unless vessel_sizing.new_record? %>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Attachments</legend>
+    <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+    <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+  </fieldset>
+
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Comments</legend>
+    <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+    <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+  </fieldset>
+<% end %>
+
+<%= javascript_tag do %>
+  var vessel_sizing_id = "<%= vessel_sizing.id %>";
+  var hs_consider_water_settling = <%= vessel_sizing.hs_consider_water_settling||false %>;
+
+  <% if vessel_sizing.new_record? %>
+
+  <% else %>
+  <% end %>
+<% end %>
+<script type="text/javascript">
+
+  set_project_unit_and_decimals();
+
+  $('form.form_vessel_sizing').dirtyForms();
+
+  $("ul.simple-tabs li a").click(function () {
+    $('#tab').val($(this).attr('tab'));
+  });
+
+  function form_validations() {
+
+  }
+
+  $('#vessel_sizing_process_basis_id').change(function (e) {
+    $('#vessel_sizing_feed_stream_stream_no >option').remove();
+    $('#vessel_sizing_feed_stream_stream_no').append($('<option></option>').val("").html("Please select"));
+    $('#vessel_sizing_top_outlet_stream_stream_no >option').remove();
+    $('#vessel_sizing_top_outlet_stream_stream_no').append($('<option></option>').val("").html("Please select"));
+    $('#vessel_sizing_bottom_outlet_stream_stream_no >option').remove();
+    $('#vessel_sizing_bottom_outlet_stream_stream_no').append($('<option></option>').val("").html("Please select"));
+    $('#vessel_sizing_hs_water_stream >option').remove();
+    $('#vessel_sizing_hs_water_stream').append($('<option></option>').val("").html("Please select"));
+    clear_feed_stream_values();
+    clear_top_outlet_stream_values();
+    clear_bottom_outlet_stream_values();
+    if ($(this).val() == "") {
+      return false;
+    }
+    $.get('/admin/heat_and_material_balances/get_stream_nos', {process_basis_id:$(this).val()}, function (data) {
+      $(data).each(function (k, v) {
+        $('#vessel_sizing_feed_stream_stream_no').append(
+          $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+        );
+        $('#vessel_sizing_top_outlet_stream_stream_no').append(
+          $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+        );
+        $('#vessel_sizing_bottom_outlet_stream_stream_no').append(
+          $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+        );
+        $('#vessel_sizing_hs_water_stream').append(
+          $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+        );
+      });
+    }, 'json');
+  });
+
+  $('#vessel_sizing_feed_stream_stream_no').change(function (e) {
+    if ($(this).val() == "") {
+      clear_feed_stream_values();
+      return false;
+    }
+    $.get('/admin/vessel_sizings/get_feed_stream_nos',
+      {process_basis_id:$('#vessel_sizing_process_basis_id').val(), stream_no:$('#vessel_sizing_feed_stream_stream_no').val()},
+      function (data) {
+        $('#vessel_sizing_feed_stream_pressure').val(data['pressure_value']);
+        $('#vessel_sizing_feed_stream_temperature').val(data['temperature_value']);
+        $('#vessel_sizing_feed_stream_mass_vapor_fraction').val(data['vapour_fraction_value']);
+        $('#vessel_sizing_feed_stream_flow_rate').val(data['flow_rate_value']);
+        $('#vessel_sizing_feed_stream_density').val(get_project_field_value1('density_general', data['density_value']));
+        $('#vessel_sizing_feed_stream_viscosity').val(get_project_field_value1('viscosity_general', data['viscosity_value']));
+        $('#vessel_sizing_de_normal_operating_pressure').val(data['pressure_value']);
+        $('#vessel_sizing_de_normal_operating_temperature').val(data['temperature_value']);
+      },
+      'json'
+    );
+  });
+
+  $('#vessel_sizing_top_outlet_stream_stream_no').change(function (e) {
+    if ($(this).val() == "") {
+      clear_top_outlet_stream_values();
+      return false;
+    }
+    $.get('/admin/vessel_sizings/get_top_outlet_stream_nos',
+      {process_basis_id:$('#vessel_sizing_process_basis_id').val(), stream_no:$('#vessel_sizing_top_outlet_stream_stream_no').val()},
+      function (data) {
+        $('#vessel_sizing_top_outlet_stream_flow_rate').val(data['flow_rate_value']);
+        $('#vessel_sizing_top_outlet_stream_mass_vapor_fraction').val(data['vapor_fraction_value']);
+        $('#vessel_sizing_top_outlet_stream_pressure').val(data['pressure_value']);
+        $('#vessel_sizing_top_outlet_stream_temperature').val(data['temperature_value']);
+        $('#vessel_sizing_top_outlet_stream_density').val(data['density_value']);
+        $('#vessel_sizing_top_outlet_stream_viscosity').val(data['viscosity_value']);
+      },
+      'json'
+    );
+  });
+
+  $('#vessel_sizing_bottom_outlet_stream_stream_no').change(function (e) {
+    if ($(this).val() == "") {
+      clear_bottom_outlet_stream_values();
+      return false;
+    }
+    $.get('/admin/vessel_sizings/get_bottom_outlet_stream_nos',
+      {process_basis_id:$('#vessel_sizing_process_basis_id').val(), stream_no:$('#vessel_sizing_bottom_outlet_stream_stream_no').val()},
+      function (data) {
+        $('#vessel_sizing_bottom_outlet_stream_flow_rate').val(data['flow_rate_value']);
+        $('#vessel_sizing_bottom_outlet_stream_mass_vapor_fraction').val(data['vapor_fraction_value']);
+        $('#vessel_sizing_bottom_outlet_stream_pressure').val(data['pressure_value']);
+        $('#vessel_sizing_bottom_outlet_stream_temperature').val(data['temperature_value']);
+        $('#vessel_sizing_bottom_outlet_stream_density').val(data['density_value']);
+        $('#vessel_sizing_bottom_outlet_stream_viscosity').val(data['viscosity_value']);
+      },
+      'json'
+    );
+  });
+
+  //Horizontal Separator
+  $('#vessel_sizing_hs_consider_water_settling').change(function (e) {
+    if (!$(this).is(':checked')) {
+      $('#vessel_sizing_hs_water_stream').attr("disabled", true);
+      $('#vessel_sizing_hs_water_flowRate').attr("disabled", true);
+      $('#vessel_sizing_hs_water_density').attr("disabled", true);
+    } else {
+      $('#vessel_sizing_hs_water_stream').attr("disabled", false);
+      $('#vessel_sizing_hs_water_flowRate').attr("disabled", false);
+      $('#vessel_sizing_hs_water_density').attr("disabled", false);
+
+    }
+  });
+
+  if (!hs_consider_water_settling) {
+    $('#vessel_sizing_hs_water_stream').attr("disabled", true);
+    $('#vessel_sizing_hs_water_flowRate').attr("disabled", true);
+    $('#vessel_sizing_hs_water_density').attr("disabled", true);
+  }
+
+  function clear_feed_stream_values() {
+    $('#vessel_sizing_feed_stream_pressure').val('');
+    $('#vessel_sizing_feed_stream_temperature').val('');
+    $('#vessel_sizing_feed_stream_mass_vapor_fraction').val('');
+    $('#vessel_sizing_feed_stream_flow_rate').val('');
+    $('#vessel_sizing_feed_stream_liquid_density').val('');
+    $('#vessel_sizing_feed_stream_liquid_viscosity').val('');
+    $('#vessel_sizing_feed_stream_vapor_density').val('');
+    $('#vessel_sizing_feed_stream_vapor_viscosity').val('');
+  }
+
+  function clear_top_outlet_stream_values() {
+    $('#vessel_sizing_top_outlet_stream_flow_rate').val('');
+    $('#vessel_sizing_top_outlet_stream_mass_vapor_fraction').val('');
+    $('#vessel_sizing_top_outlet_stream_pressure').val('');
+    $('#vessel_sizing_top_outlet_stream_temperature').val('');
+    $('#vessel_sizing_top_outlet_stream_density').val('');
+    $('#vessel_sizing_top_outlet_stream_viscosity').val('');
+  }
+
+  function clear_bottom_outlet_stream_values() {
+    $('#vessel_sizing_bottom_outlet_stream_flow_rate').val('');
+    $('#vessel_sizing_bottom_outlet_stream_mass_vapor_fraction').val('');
+    $('#vessel_sizing_bottom_outlet_stream_pressure').val('');
+    $('#vessel_sizing_bottom_outlet_stream_temperature').val('');
+    $('#vessel_sizing_bottom_outlet_stream_density').val('');
+    $('#vessel_sizing_bottom_outlet_stream_viscosity').val('');
+  }
+
+  //Nozzle Sizing
+  $('#vessel_sizing_ns_fn_inlet_device').change(function () {
+    var sizing_criteria = $('#vessel_sizing_ns_fn_fluid_momentum_sizing_criteria').val();
+    if ($(this).val() == "No Inlet Device") {
+      sizing_criteria = 672;
+    } else if ($(this).val() == "Half Open Pipe") {
+      sizing_criteria = 1008;
+    }
+    $('#vessel_sizing_ns_fn_fluid_momentum_sizing_criteria').val(sizing_criteria);
+  });
+
+  $('#vessel_sizing_ns_fn_nozzle_size').change(function () {
+    set_nozzle_od('vessel_sizing_ns_fn_nozzle_od', 'ns_fn_nozzle_od', $(this).val());
+  });
+
+  $('#vessel_sizing_ns_ton_nozzle_diameter').change(function () {
+    set_nozzle_od('vessel_sizing_ns_ton_nozzle_od', 'ns_ton_nozzle_od', $(this).val());
+  });
+
+  $('#vessel_sizing_ns_bon_nozzle_diameter').change(function () {
+    set_nozzle_od('vessel_sizing_ns_bon_nozzle_od', 'ns_bon_nozzle_od', $(this).val());
+  });
+
+  function set_nozzle_od(nozzle_od, nozzle_od_label, nozzle_size) {
+    $.get('/admin/vessel_sizings/get_nozzle_od',
+      {nozzle_size:nozzle_size},
+      function (data) {
+        $('#' + nozzle_od).val(data['nozzle_od']);
+        $('#' + nozzle_od_label).text(data['nozzle_od']);
+      },
+      'json'
+    );
+  }
+
+  $('#feed_nozzle_calculation').click(function () {
+
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('feed_nozzle_calculation');
+
+    if (!$('#nozzle_sizing').validateTab()) {
+      return false;
+    }
+
+    if (vessel_sizing_id == "" || $('form.form_vessel_sizing').isDirty()) {
+      $('form.form_vessel_sizing').submit();
+      return false;
+    }
+
+    $.get("/admin/vessel_sizings/feed_nozzle_calculation",
+      {vessel_sizing_id:vessel_sizing_id},
+      function (data) {
+        alert('Calculation is completed successfully');
+        window.location = location.pathname;
+      },
+      'json'
+    );
+
+  });
+
+  $('#top_outlet_nozzle_calculation').click(function () {
+
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('top_outlet_nozzle_calculation');
+
+    if (!$('#nozzle_sizing').validateTab()) {
+      return false;
+    }
+
+    if (vessel_sizing_id == "" || $('form.form_vessel_sizing').isDirty()) {
+      $('form.form_vessel_sizing').submit();
+      return false;
+    }
+
+    $.get("/admin/vessel_sizings/top_outlet_nozzle_calculation",
+      {vessel_sizing_id:vessel_sizing_id},
+      function (data) {
+        alert('Calculation is completed successfully');
+        window.location = location.pathname;
+      },
+      'json'
+    );
+
+  });
+
+  $('#bottom_outlet_nozzle_calculation').click(function () {
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('bottom_outlet_nozzle_calculation');
+
+    if (!$('#nozzle_sizing').validateTab()) {
+      return false;
+    }
+
+    if (vessel_sizing_id == "" || $('form.form_vessel_sizing').isDirty()) {
+      $('form.form_vessel_sizing').submit();
+      return false;
+    }
+
+    $.get("/admin/vessel_sizings/bottom_outlet_nozzle_calculation",
+      {vessel_sizing_id:vessel_sizing_id},
+      function (data) {
+        alert('Calculation is completed successfully');
+        window.location = location.pathname;
+      },
+      'json'
+    );
+
+  });
+
+  //horizontal_separator_calculation
+  $('#vessel_sizing_hs_water_stream').change(function () {
+    if ($(this).val() == "") {
+      return false;
+    }
+    $.get('/admin/vessel_sizings/get_vessel_sizing_hs_water_stream_nos',
+      {process_basis_id:$('#vessel_sizing_process_basis_id').val(), stream_no:$('#vessel_sizing_bottom_outlet_stream_stream_no').val()},
+      function (data) {
+        $('#vessel_sizing_hs_water_flowRate').val(get_project_field_value1('fl49.5317146474128ow_rate_general', data['flow_rate_value']));
+        $('#vessel_sizing_hs_water_density').val(get_project_field_value1('density_general', data['density_value']));
+      },
+      'json'
+    );
+
+  });
+
+  $('#vs_calculation').click(function () {
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('vs_calculation');
+
+    if (!$('#vertical_separator').validateTab()) {
+      return false;
+    }
+
+    if (vessel_sizing_id == "" || $('form.form_vessel_sizing').isDirty()) {
+      $('form.form_vessel_sizing').submit();
+      return false;
+    }
+
+    $.get("/admin/vessel_sizings/vertical_separator_calculation",
+      {vessel_sizing_id:vessel_sizing_id},
+      function (data) {
+        alert('Calculation is completed successfully');
+        window.location = location.pathname;
+      },
+      'json'
+    );
+  });
+
+  $('#horizontal_separator_calculation').click(function () {
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('horizontal_separator_calculation');
+
+    if (!$('#horizontal_separator').validateTab()) {
+      return false;
+    }
+
+    if (vessel_sizing_id == "" || $('form.form_vessel_sizing').isDirty()) {
+      $('form.form_vessel_sizing').submit();
+      return false;
+    }
+
+    $.get("/admin/vessel_sizings/horizontal_separator_calculation",
+      {vessel_sizing_id:vessel_sizing_id},
+      function (data) {
+        alert('Calculation is completed successfully');
+        window.location = location.pathname;
+      },
+      'json'
+    );
+
+  });
+
+  //decanter calculation
+  $('#decanter_calculation').click(function () {
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('filter_transfer_data');
+
+    if (!$('#decanter').validateTab()) {
+      return false;
+    }
+
+    if (vessel_sizing_id == "" || $('form.form_vessel_sizing').isDirty()) {
+      $('form.form_vessel_sizing').submit();
+      return false;
+    }
+
+    $.get("/admin/vessel_sizings/decanter_calculation",
+      {vessel_sizing_id:vessel_sizing_id},
+      function (data) {
+        alert('Calculation is completed successfully');
+        window.location = location.pathname;
+      },
+      'json'
+    );
+
+  });
+
+  $('#settler_calculate').click(function () {
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('settler_calculate');
+
+    if (!$('#settler').validateTab()) {
+      return false;
+    }
+
+    if (vessel_sizing_id == "" || $('form.form_vessel_sizing').isDirty()) {
+      $('form.form_vessel_sizing').submit();
+      return false;
+    }
+
+    $.get("/admin/vessel_sizings/settler_calculation",
+      {vessel_sizing_id:vessel_sizing_id},
+      function (data) {
+        alert('Calculation is completed successfully');
+        window.location = location.pathname;
+      },
+      'json'
+    );
+
+  });
+
+  //filter_transfer_data
+  $('#filter_transfer_data').click(function () {
+
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('filter_transfer_data');
+
+    if (!$('#tab6').validateTab()) {
+      return false;
+    }
+
+    if (vessel_sizing_id == "" || $('form.form_vessel_sizing').isDirty()) {
+      $('form.form_vessel_sizing').submit();
+      return false;
+    }
+
+    $.get("/admin/vessel_sizings/filter_transfer_data",
+      {vessel_sizing_id:vessel_sizing_id},
+      function (data) {
+        alert('Calculation is completed successfully');
+        window.location = location.pathname + '#tab6'
+      },
+      'json'
+    );
+
+  });
+
+  //reactor_transfer_data
+  $('#reactor_transfer_data').click(function () {
+
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('reactor_transfer_data');
+
+    if (!$('#tab7').validateTab()) {
+      return false;
+    }
+
+    if (vessel_sizing_id == "" || $('form.form_vessel_sizing').isDirty()) {
+      $('form.form_vessel_sizing').submit();
+      return false;
+    }
+
+    $.get("/admin/vessel_sizings/reactor_transfer_data",
+      {vessel_sizing_id:vessel_sizing_id},
+      function (data) {
+        alert('Calculation is completed successfully');
+        window.location = location.pathname + '#tab7'
+      },
+      'json'
+    );
+
+  });
+
+  //design_conditions_calculate
+  $('#design_conditions_calculate').click(function () {
+
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('design_conditions_calculate');
+
+    if (!$('#tab8').validateTab()) {
+      return false;
+    }
+
+    if (vessel_sizing_id == "" || $('form.form_vessel_sizing').isDirty()) {
+      $('form.form_vessel_sizing').submit();
+      return false;
+    }
+
+    $.get("/admin/vessel_sizings/design_conditions_calculate",
+      {vessel_sizing_id:vessel_sizing_id},
+      function (data) {
+        alert('Calculation is completed successfully');
+        window.location = location.pathname + '#tab8'
+      },
+      'json'
+    );
+
+  });
+
+  //mechanical_design_calculate
+  $('#mechanical_design_calculate').click(function () {
+
+    $('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+    $('#calculate_btn').val('mechanical_design_calculate');
+
+    if (!$('#tab9').validateTab()) {
+      return false;
+    }
+
+    if (vessel_sizing_id == "" || $('form.form_vessel_sizing').isDirty()) {
+      $('form.form_vessel_sizing').submit();
+      return false;
+    }
+
+    $.get("/admin/vessel_sizings/mechanical_design_calculate",
+      {vessel_sizing_id:vessel_sizing_id},
+      function (data) {
+        alert('Calculation is completed successfully');
+        window.location = location.pathname + '#tab9'
+      },
+      'json'
+    );
+  });
+
+</script>
+<%= javascript_tag do %>
+  //hit calculate button
+  var calculate_btn = "<%= params[:calculate_btn] %>";
+  if(calculate_btn == "mechanical_design_calculate") {
+  $('#mechanical_design_calculate').trigger('click');
+  } else if (calculate_btn == "design_conditions_calculate") {
+  $('#design_conditions_calculate').trigger('click');
+  } else if (calculate_btn == "reactor_transfer_data") {
+  $('#reactor_transfer_data').trigger('click');
+  } else if (calculate_btn == "filter_transfer_data") {
+  $('#filter_transfer_data').trigger('click');
+  } else if (calculate_btn == "feed_nozzle_calculation") {
+  $('#feed_nozzle_calculation').trigger('click');
+  } else if (calculate_btn == "top_outlet_nozzle_calculation") {
+  $('#top_outlet_nozzle_calculation').trigger('click');
+  } else if (calculate_btn == "horizontal_separator_calculation") {
+  $('#horizontal_separator_calculation').trigger('click');
+  } else if (calculate_btn == "settler_calculate") {
+  $('#settler_calculate').trigger('click');
+  } else if (calculate_btn == "vs_calculation") {
+  $('#vs_calculation').trigger('click');
+  }
+<% end %>

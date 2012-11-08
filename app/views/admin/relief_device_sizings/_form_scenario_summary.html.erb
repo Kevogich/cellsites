@@ -1,0 +1,183 @@
+<%= link_to "Add Scenario", "#", :class => "add_scenario"%>
+
+<table class="scenario_summaries_table" xmlns="http://www.w3.org/1999/html">
+	<tr>
+		<th>No.</th>
+		<th>Scenario</th>
+		<th>Identifier</th>
+		<th>Applicability</th>
+		<th>Relief Rate</th>
+		<th>Required Orifice</th>
+		<th></th>
+		<th></th>
+	</tr>
+	<tr>
+		<th colspan="4"></th>
+		<th><span class="mass_flow_rate_general_unit"></span></th>
+		<th><span class="area_orifice_unit"></span></th>
+		<th colspan="2"></th>
+	</tr>
+	<%= f.fields_for :scenario_summaries do |ss| %>
+		<%= render :partial => 'scenario', :locals => {:ss => ss} %>
+	<% end %>
+	<% if @scenario_summaries.size == 0 %>
+		<%= f.fields_for :scenario_summaries_attributes, :index => "0" do |ss|%>
+			<tr>
+				<td>
+					<span class="index_counter"><%= "1" %></span>
+					<%= ss.hidden_field :id, :class => "scenario_summary_id"%>
+					<%= ss.hidden_field :scenario_no, :value => 1, :class => "scenario_no" %>
+				</td>
+				<td style="width: 250px;">
+					<%= ss.select :scenario,
+												options_for_select(StaticData.scenario),
+												{},
+												:class => 'scenario_name'%>
+				</td>
+				<td style="width: 225px;">
+					<%= ss.text_field :identifier, :class => "scenario_identifier" %>
+				</td>
+				<td>
+					<%=  %>
+				</td>
+				<td>
+					<%=  %>
+				</td>
+				<td>
+					<%=  %>
+				</td>
+				<td>
+					<%= link_to "View Details", "#", :class => "scenario_view_details" %>
+				</td>
+				<td>
+					<%= link_to "Delete", "#", :class => "delete_scenario" %>
+					<%= ss.hidden_field '_destroy' %>
+				</td>
+			</tr>
+		<% end %>
+	<% end %>
+</table>
+
+<table class="new_scenario_tr hide">
+	<%= f.fields_for :scenario_summaries_attributes, :index => "#x#" do |ss|%>
+		<tr>
+			<td>
+				<span class="index_counter"><%= "#x#"%></span>
+				<%= ss.hidden_field :id, :class => "scenario_summary_id"%>
+				<%= ss.hidden_field :scenario_no, :value => "#x#", :class => "scenario_no" %>
+			</td>
+			<td style="width: 250px;">
+				<%= ss.select :scenario,
+											options_for_select(StaticData.scenario),
+											{},
+											:class => 'scenario_name'%>
+			</td>
+			<td style="width: 225px;">
+				<%= ss.text_field :identifier, :class => "scenario_identifier" %>
+			</td>
+			<td>
+				<%=  %>
+			</td>
+			<td>
+				<%=  %>
+			</td>
+			<td>
+				<%=  %>
+			</td>
+			<td>
+				<%= link_to "View Details", "#", :class => "scenario_view_details" %>
+			</td>
+			<td>
+				<%= link_to "Delete", "#", :class => "delete_scenario" %>
+				<%= ss.hidden_field '_destroy' %>
+			</td>
+		</tr>
+	<% end %>
+</table>
+
+<script type="text/javascript">
+
+	//Add new row
+	$('.add_scenario').click(function(){
+
+		var last_scenario_no = $('.scenario_summaries_table .scenario_no:last').val();
+		if(last_scenario_no == undefined) {
+			last_scenario_no = 0;
+		}
+		var scenario_no = parseInt(last_scenario_no)+1;
+		var new_scenario_tr = $('.new_scenario_tr tbody').html().replace(/#x#/g, scenario_no);
+
+		$('.scenario_summaries_table tr:last').after($(new_scenario_tr));
+		//reorder sequence
+		$('.scenario_summaries_table span.index_counter:visible').each(function(index){
+			$(this).text(index+1);
+			$(this).nextAll('.scenario_no').val(index+1);
+		});
+		return false;
+	});
+
+	//Delete row
+	$('.delete_scenario').live('click', function(){
+		var tr = $(this).parents('tr');
+		tr.hide();
+		$(this).next().val(true);
+
+		//reorder sequence
+		$('.scenario_summaries_table span.index_counter:visible').each(function(index){
+			$(this).text(index+1);
+			$(this).nextAll('.scenario_no').val(index+1);
+		});
+
+		return false;
+	});
+
+	//unique Identifies
+	$('.scenario_identifier').live('change', function(){
+		validate_unique_identifiers($(this).parents('tr').children('td:nth(1)').find('select.scenario_name'), $(this));
+	});
+
+	$('select.scenario_name').live('change', function(){
+		validate_unique_identifiers($(this), $(this).parents('tr').children('td:nth(2)').find('.scenario_identifier'));
+	});
+
+	function validate_unique_identifiers (scenario, identifier){
+		$('.scenario_identifier').removeClass('error_field');
+
+		if(scenario.val() == undefined) {
+			return false;
+		}
+
+		var identifiers = $('.scenario_identifier').filter(function(i){
+			var scenario1 = $(this).parents('tr').children('td:nth(1)').find('select.scenario_name');
+			if($(this).val() == identifier.val() && scenario1.val() == scenario.val()) {
+				return $(this);
+			}
+		});
+		if(identifiers.length > 1) {
+			identifier.addClass('error_field');
+			alert('You entered same identifier under ' + scenario.val() + ' scenario');
+		}
+	}
+
+	//view details
+	$('.scenario_view_details').live('click', function(){
+		var id = $(this).parents('tr').find('.scenario_summary_id').val();
+		var scenario = $(this).parents('tr').find('.scenario_name').val();
+		var href = $(this).attr('href');
+		if(href == "#") {
+			href = ""
+		}
+
+		if(id == "" && scenario == "") {
+			return false;
+		}
+
+		if ($('form.relief_device_sizing_form').isDirty()) {
+			$('#tab').val($("ul.simple-tabs li.active a").attr('tab'));
+			$('#redirect_to').val(href);
+			$('form.relief_device_sizing_form').submit();
+			return false;
+		}
+
+	});
+</script>

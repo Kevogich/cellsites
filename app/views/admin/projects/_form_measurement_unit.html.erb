@@ -1,0 +1,33 @@
+<div class="form-element">
+  <%= f.radio_button :units_of_measurement_id, 1, :class=>"uom_details_radio" %>&nbsp;&nbsp;
+  <label>US Customary</label>&nbsp;&nbsp;
+  <%= link_to "Details", admin_unit_of_measurements_path(:project_id => f.object.id, :unit_type_id => 1), :class => 'uom_1 uom_details_link' %>
+</div>
+<div class="form-element-last">
+  <%= f.radio_button :units_of_measurement_id, 2, :class=>"uom_details_radio" %>&nbsp;&nbsp;
+  <label>SI</label>&nbsp;&nbsp;
+  <%= link_to "Details", admin_unit_of_measurements_path(:project_id => f.object.id, :unit_type_id => 2), :class => 'uom_2 uom_details_link' %>
+</div>
+
+<%= javascript_tag do %>
+  <% if project.units_of_measurement_id == 1 %>
+    $('.uom_2').hide();
+  <% else %>
+    $('.uom_1').hide();
+  <% end %>
+<% end %>
+
+<script type="text/javascript">  
+  
+  $('.uom_details_radio').change(function(){
+    if($(this).val() == 1) {
+      $('.uom_1').show();
+      $('.uom_2').hide();
+    } else {
+      $('.uom_2').show();
+      $('.uom_1').hide();
+    }
+  });
+
+	$(".uom_details_link").colorbox({height: '100%', width: '100%'});
+</script>

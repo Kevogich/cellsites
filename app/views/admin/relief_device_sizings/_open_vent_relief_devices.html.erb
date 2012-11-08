@@ -1,0 +1,15 @@
+<%= fields_for @open_vent_relief_device do |f| %>
+<tr id=<%= "row_#{@unique_id}"%> >
+	<td id=<%= "sequence_open_vent_relief_device_#{@unique_id}"%>>1</td>
+	<%= f.hidden_field :id, :name =>  "open_vent_relief_device_attributes[#{@unique_id}][id]" %>
+	<%= f.hidden_field :_destroy, :name =>  "open_vent_relief_device_attributes[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_#{@unique_id}" %>
+    <td><%= f.text_field :optag, :name =>  "open_vent_relief_device_attributes[#{@unique_id}][optag]" , :style => "width:50px;" , :id => "optag_#{@unique_id}"%></td>
+    <td><%= select_tag "open_vent_relief_device_attributes[#{@unique_id}][bodysize]",options_for_select(PipeSizing.pipe_sizes(@fitting_pipe_size_unit).collect { |p| [raw(p[:name]), p[:value]] }.insert(0, ''),@open_vent_relief_device.bodysize),:class => 'open_vent_bodysize', :id => "bodysize_#{@unique_id}"%></td>
+    <td><%= select_tag "open_vent_relief_device_attributes[#{@unique_id}][pipesch]",options_for_select({},@open_vent_relief_device.pipesch),:class => 'pipesch', :id => "pipesch_#{@unique_id}"%></td>
+    <td><%= f.text_field :netflowarea, :name =>  "open_vent_relief_device_attributes[#{@unique_id}][netflowarea]" , :style => "width:50px;" , :id => "netflowarea_#{@unique_id}"%></td>
+    <td><%= select_tag "open_vent_relief_device_attributes[#{@unique_id}][inletflange]",options_for_select(StaticData.flange_type,@open_vent_relief_device.inletflange),:class => 'inletflange', :id => "inletflange_#{@unique_id}"%></td>
+    <td><%= select_tag "open_vent_relief_device_attributes[#{@unique_id}][outletflange]",options_for_select(StaticData.flange_type,@open_vent_relief_device.outletflange),:class => 'outletflange', :id => "outletflange_#{@unique_id}"%></td>
+    <td><%= link_to "View", "#", :id => "open_vent_relief_device_link_#{@unique_id}", :class => "view_open_vent_relief_device"%></td>
+	<td><%= link_to "X", "#", :id => "#{@unique_id}", :class => "delete_open_vent_relief_device" %></td>
+</tr>
+<% end %>

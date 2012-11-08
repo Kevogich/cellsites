@@ -1,0 +1,1704 @@
+<style type="text/css">
+#tab1 input[type="text"] {
+  width: 150px;
+}
+.line-sizing-table {
+  width: auto;
+}
+#pipe_sizing_table input[type="text"] {
+  width: 100px;
+}
+</style>
+
+<%= form_for line_sizing, :url => line_sizing.new_record? ? admin_line_sizings_path : admin_line_sizing_path(line_sizing), :html => {:class => "line_sizing_form", :style => 'width:auto;'} do |f| %>
+<%= f.error_messages %>
+<% if line_sizing.new_record? %>
+<%= f.hidden_field :company_id %>
+<%= f.hidden_field :client_id, :value => @user_project_settings.client_id %>
+<%= f.hidden_field :project_id, :value => @user_project_settings.project_id %>
+<%= f.hidden_field :process_unit_id, :value => @user_project_settings.process_unit_id %>
+<% end %>
+<div class="form-element-last">
+  <span style="float:left;margin-right:40px;">
+   <%= f.label :client_id %><br>
+   <%= f.label :client_id, (line_sizing.client.name rescue @user_project_settings.client.name), :style => "font-weight:bold" %>
+ </span>
+ <span style="float:left;margin-right:40px;">
+   <%= f.label :project_id %><br>
+   <%= f.label :project_id, (line_sizing.project.project_num rescue @user_project_settings.project.project_num), :style => "font-weight:bold" %>
+ </span>
+ <span style="float:left;margin-right:40px;">
+   <%= f.label :process_unit_id %><br>
+   <%= f.label :process_unit_id, (line_sizing.process_unit.name rescue @user_project_settings.process_unit.name), :style => "font-weight:bold" %>
+ </span>
+ <span style="float:left;margin-right:40px;">
+   <%= f.label :line_number %><br>
+   <%= f.text_field :line_number %>
+ </span>
+ <% unless line_sizing.new_record? %>
+ <span style="float:left;margin-right:40px;">
+  <%= label_tag :status %><br>
+  <strong><%= sizing_status(line_sizing) %></strong>
+</span>
+<span style="float:left;margin-right:40px;">
+  <br>
+  <%= sizing_status_request_button(line_sizing) %>
+</span>
+<% end %>
+<div class="clear"></div>
+</div>
+<div class="form-buttons">
+  <%= f.submit line_sizing.new_record? ? 'Create' : 'Update' %>
+</div>
+<!-- tabs -->
+<div>
+  <ul class="simple-tabs">
+    <li><a href="#tab1">Stream Properties</a></li>
+    <li><a href="#tab2">Sizing Criteria</a></li>
+    <li><a href="#tab3">Design Conditions</a></li>
+    <li><a href="#tab4">Review</a></li>
+  </ul>
+  <div class="tab_container">
+    <div id="tab1" class="tab_content">
+      <table class="line-sizing-table">
+        <tr>
+          <td><u><b>Process Basis</b></u></td>
+          <td><%= f.collection_select :process_basis_id, @project.heat_and_material_balances, :id, :case, :prompt => true %></td>
+          <td colspan="2"></td>
+        </tr>
+        <tr>
+          <td><%= f.label :stream_no %></td>
+          <td><%= f.collection_select :stream_no, @streams, :stream_no, :display_stream_no, :prompt => true %></td>
+          <td><%= f.label :description %></td>
+          <td><%= f.text_field :description %></td>
+        </tr>
+        <tr>
+          <td><%= f.label :pressure %></td>
+          <td><%= f.text_field :pressure %>&nbsp;<label id="line_sizing_pressure_unit"></label></td>
+          <td><%= f.label :vapour_fraction %></td>
+          <td><%= f.text_field :vapour_fraction, :class => "mass_vapor_fraction_dimensionless" %></td>
+        </tr>
+        <tr>
+          <td><%= f.label :temperature %></td>
+          <td><%= f.text_field :temperature %>&nbsp;<label id="line_sizing_temperature_unit"></label></td>
+          <td><%= f.label :flowrate %></td>
+          <td><%= f.text_field :flowrate %>&nbsp;<label id="line_sizing_flowrate_unit"></label></td>
+        </tr>
+        <tr>
+          <td colspan="2"><u><b>Upstream Vapor Properties</b></u></td>
+          <td colspan="2"><u><b>Upstream Liquid Properties</b></u></td>
+        </tr>
+        <tr>
+          <td><%= f.label :vapor_density, "Density" %></td>
+          <td><%= f.text_field :vapor_density %>&nbsp;<label id="line_sizing_vapor_density_unit"></label></td>
+          <td><%= f.label :liquid_density, "Density" %></td>
+          <td><%= f.text_field :liquid_density %>&nbsp;<label id="line_sizing_liquid_density_unit"></label></td>
+        </tr>
+        <tr>
+          <td><%= f.label :vapor_viscosity, "Viscosity" %></td>
+          <td><%= f.text_field :vapor_viscosity %>&nbsp;<label id="line_sizing_vapor_viscosity_unit"></label></td>
+          <td><%= f.label :liquid_viscosity, "Viscosity" %></td>
+          <td><%= f.text_field :liquid_viscosity %>&nbsp;<label id="line_sizing_liquid_viscosity_unit"></label></td>
+        </tr>
+        <tr>
+          <td><%= f.label :vapor_mw, "MW" %></td>
+          <td><%= f.text_field :vapor_mw, :class => "molecular_weight_dimensionless" %></td>
+          <td><%= f.label :liquid_mw, "MW" %></td>
+          <td><%= f.text_field :liquid_mw, :class => "molecular_weight_dimensionless" %></td>
+        </tr>
+        <tr>
+          <td><%= f.label :vapor_cp_cv, "Cp/Cv" %></td>
+          <td><%= f.text_field :vapor_cp_cv, :class => "specific_heat_capacity_ratio_dimensionless" %></td>
+          <td><%= f.label :liquid_surface_tension, "Surface Tension" %></td>
+          <td><%= f.text_field :liquid_surface_tension %>&nbsp;<label id="line_sizing_liquid_surface_tension_unit"></label>
+          </td>
+        </tr>
+        <tr>
+          <td><%= f.label :vapor_z, "Z" %></td>
+          <td><%= f.text_field :vapor_z, :class => "vapor_compressibility_dimensionless" %></td>
+          <td colspan="2" rowspan="3">
+            <fieldset id="down_stream_vaporization_fieldset" class="form-fieldset">
+              <legend><u><b>Downstream Vaporization</b></u></legend>
+              <div>
+                <%= f.radio_button :downstream_vaporization_id, 1 %>&nbsp;Homogeneous Flow Model
+                <br><br>
+                <%= f.radio_button :downstream_vaporization_id, 2 %>&nbsp;Separated Flow Model
+              </div>
+            </fieldset>
+          </td>
+        </tr> 
+        <tr>
+          <td colspan="2">&nbsp;</td>
+        </tr>
+        <tr>
+          <td colspan="2" rowspan="1">&nbsp;</td>
+        </tr>
+      </table>
+    </div>
+    <div id="tab2" class="tab_content">
+      <!--Sizing Criteria-->
+      <table style="width:auto;">
+        <tr>
+          <td colspan="2"><b><u>SIZING CRITERIA</u></b></td>
+        </tr>
+        <tr>
+          <td>Category</td>
+          <td width="50%"><%= f.collection_select :sizing_criteria_category_id, @company.sizing_criteria_categories, :id, :name, :prompt => true %></td>
+        </tr>
+        <tr>
+          <td>General Service Type</td>
+          <td><%= f.collection_select :sizing_criteria_category_type_id, @sizing_criteria_category_types, :id, :name, :prompt => true %></td>
+        </tr>
+        <tr>
+          <td>Specific Service Type</td>
+          <td><%= f.collection_select :sizing_criteria_id, @sizing_criterias, :id, :name, :prompt => true %></td>
+        </tr>
+        <tr>
+          <td>System Equivalent Length</td>
+          <td><%= f.text_field :system_equivalent_length, :class => "sizing-data-fields" %>&nbsp;<label id="line_sizing_system_equivalent_length_unit"></label>
+          </td>
+        </tr>
+        <tr>
+          <td>System
+            Maximum &Delta;P<span style="float:right;">&nbsp;&nbsp;&nbsp;<label id="conversion_factor_label"></label></span>
+          </td>
+          <td><%= f.text_field :system_maximum_deltaP, :class => "sizing-data-fields" %>&nbsp;<label id="line_sizing_system_maximum_deltaP_unit"></label>
+          </td>
+        </tr>
+        <tr>
+          <td>Target Two Phase Flow Regime</td>
+          <td>
+           <%= f.select :target_two_phase_flow_regime, [], :prompt => true, :disabled => 'disabled' %>
+           <label id="line_sizing_target_two_phase_flow_regime_unit"></label>
+           <input type="button" id="target_estimate" value="Estimate"/>
+         </td>
+       </tr>
+       <tr>
+        <td>Pipe Material</td>
+        <td><%= f.select :pipe_id, @pipes.collect{|p| ["#{p["material"]} - #{p["conditions"]}", p["id"]]}, :prompt => true %></td>
+      </tr>
+      <tr>
+        <td>Pipe Roughness</td>
+        <td><%= f.text_field :pipe_roughness %>&nbsp;<label id="line_sizing_pipe_roughness_unit"></label></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <%= f.check_box :include_design_factor %>&nbsp;<label>Include Design Factor</label>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2"><b><u>PIPING CONFIGURATION</u></b></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <%= f.radio_button :dc_calculate_type, "stream_sizing" %>&nbsp;Stream sizing&nbsp;&nbsp;&nbsp;
+          <%= f.radio_button :dc_calculate_type, "segment_sizing" %>&nbsp;Segment sizing
+        </td>
+      </tr>
+      <tr>
+        <td><input type="button" class="btn" id="pipe_sizing_button" value="Enter Segment Piping" style="float:left;"/></td>
+        <td><input type="button" class="btn" id="sizing_criteria_calculate_btn" value="Calculate" style="float:right;"/></td>
+      </tr>
+    </table>
+
+    <table style="width:auto;">
+      <tr>
+        <td><b><u>LINE SIZE RESULTS</u></b></td>
+        <td><b><u>Pipe Size Down</u></b></td>
+        <td><b><u>Proposed </u></b></td>
+        <td><b><u>Pipe Size Up</u></b></td>
+        <td>&nbsp;</td>
+       </tr>
+       <tr>
+        <td>&nbsp;</td>
+        <td>
+          <select id='down' class='results_select'>
+           <option>Please select</option>
+           <% if !@calculated_results.nil? %>
+           <% proposed = @calculated_results[:proposed_iteration] %>
+           <% @calculated_results.each do |k,v| %>
+           <% if k.class == Fixnum and k < proposed %>
+           <option value='<%= v[:pipe_size] %>'><%= raw (PipeSizing.pipe_size_to_fraction[v[:pipe_size].to_f]) %></option>
+           <% end %>
+           <% end %>
+           <% end %>
+         </select>
+       </td>
+       <td>&nbsp;</td>
+       <td>
+        <select id='up' class='results_select'>
+          <option>Please select</option>
+          <% if !@calculated_results.nil? %>
+          <% proposed = @calculated_results[:proposed_iteration] %>
+          <% @calculated_results.each do |k,v| %>
+          <% if k.class == Fixnum and k > proposed %>
+          <option value='<%= v[:pipe_size] %>'><%= v[:pipe_size] %></option>
+          <% end %>
+          <% end %>
+          <% end %>
+        </select>
+      </td>
+       <td>&nbsp;</td>
+     </tr>
+     <tr>
+      <td>Selected</td>
+      <td><%= f.radio_button :sc_selected_pipe_size, 1,:id => 'down_iteration', :style => 'margin-left:30px;' %></td>
+      <td><%= f.radio_button :sc_selected_pipe_size, @calculated_results[proposed][:nominal_pipe_size], :checked => 'checked', :style => 'margin-left:30px;' %></td>
+      <td><%= f.radio_button :sc_selected_pipe_size, 1, :id => 'up_iteration', :style => 'margin-left:30px;' %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>
+        Required ID
+      </td>
+      <td><label id='down_rupture_diameter'></label></td>
+      <td>
+        <%= label_tag "sc_required_id", "#{line_sizing.sc_required_id}", :id => "sc_required_id" %>
+        <%= f.hidden_field :sc_required_id, :value => line_sizing.sc_required_id %>
+      </td>
+      <td><label id='up_rupture_diameter'></label></td>
+      <td>&nbsp;<label id="line_sizing_sc_required_id_unit"></label></td>
+    </tr>
+    <tr>
+      <td>
+        Proposed ID
+      </td>
+      <td><label id='down_proposed_diameter'></label></td>
+      <td>
+        <%= label_tag "sc_proposed_id", "#{line_sizing.sc_proposed_id}", :id => "sc_proposed_id" %>
+        <%= f.hidden_field :sc_proposed_id, :value => line_sizing.sc_proposed_id %>
+        <td><label id='up_proposed_diameter'></label></td>
+        <td>&nbsp;<label id="line_sizing_sc_proposed_id_unit"></label></td>
+      </tr>
+      <tr>
+        <td>
+          Pipe Size
+        </td>
+        <td><label id='down_nominal_pipe_size'></label></td>
+        <td>
+          <%= label_tag "sc_pipe_size", "#{line_sizing.sc_pipe_size.to_i}", :id => "sc_pipe_size" %>
+          <%= f.hidden_field :sc_pipe_size, :value => line_sizing.sc_pipe_size %>
+          <td><label id='up_nominal_pipe_size'></label></td>
+          <td>&nbsp;<label id="line_sizing_sc_pipe_size_unit"></label></td>
+        </tr>
+        <tr>
+          <td>Pipe Schedule</td>
+          <td><label id='down_pipe_schedule'></label></td>
+          <td>
+            <%= label_tag "sc_pipe_schedule", "#{line_sizing.sc_pipe_schedule}", :id => "sc_pipe_schedule" %>
+            <%= f.hidden_field :sc_pipe_schedule, :value => line_sizing.sc_pipe_schedule %>
+          </td>
+          <td><label id='up_pipe_schedule'></label></td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>
+            Calculated System &Delta;P
+          </td>
+          <td><label id='down_fitting_pressure_drop'></label></td>
+          <td>
+            <%= label_tag "sc_calculated_system_dp", "#{line_sizing.sc_calculated_system_dp}", :id => "sc_calculated_system_dp" %>
+            <%= f.hidden_field :sc_calculated_system_dp, :value => line_sizing.sc_calculated_system_dp %>
+            <td><label id='up_fitting_pressure_drop'></label></td>
+            <td>&nbsp;<label id="line_sizing_sc_calculated_system_dp_unit"></label></td>
+          </tr>
+          <tr>
+            <td>
+              Calculated Velocity
+            </td>
+            <td><label id='down_um'></label></td>
+            <td>
+              <%= label_tag "sc_calculated_velocity", "#{line_sizing.sc_calculated_velocity}", :id => "sc_calculated_velocity" %>
+              <%= f.hidden_field :sc_calculated_velocity, :value => line_sizing.sc_calculated_velocity %>
+              <td><label id='up_um'></label></td>
+              <td>&nbsp;<label id="line_sizing_sc_calculated_velocity_unit"></label></td>
+            </tr>
+            <tr>
+              <td>
+                System Equivalent Length
+              </td>
+              <td><label id='down_total_equivalent_length'></label></td>
+              <td>
+                <%= label_tag "sc_system_equivalent_length", "#{line_sizing.sc_system_equivalent_length}", :id => "sc_system_equivalent_length" %>
+                <%= f.hidden_field :sc_system_equivalent_length, :value => line_sizing.sc_system_equivalent_length %>
+                <td><label id='up_total_equivalent_length'></label></td>
+                <td>&nbsp;<label id="line_sizing_sc_system_equivalent_length_unit"></label></td>
+              </tr>
+              <tr>
+                <td>Pressure Loss Percentage</td>
+                <td><label id='down_pressure_drop_percentage'></label></td>
+                <td>
+                  <%= label_tag "sc_pressure_loss_percentage", "#{line_sizing.sc_pressure_loss_percentage}", :id => "sc_pressure_loss_percentage" %>
+                  <%= f.hidden_field :sc_pressure_loss_percentage, :value => line_sizing.sc_pressure_loss_percentage %>
+                </td>
+                <td><label id='up_pressure_drop_percentage'></label></td>
+                <td>%</td>
+              </tr>
+              <tr>
+                <td>Flow Regime</td>
+                <td><label id='down_flow_regime'></label></td>
+                <td>
+                  <%= label_tag "sc_flow_regime", "#{line_sizing.sc_flow_regime}", :id => "sc_flow_regime" %>
+                  <%= f.hidden_field :sc_flow_regime, :value => line_sizing.sc_flow_regime %>
+                </td>
+                <td><label id='up_flow_regime'></label></td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>Erosion-Corrosion Index</td>
+                <td><label id='down_erosion_corrosion_index'></label></td>
+                <td>
+                  <%= label_tag "sc_erosion_corrosion_index", "#{line_sizing.sc_erosion_corrosion_index}", :id => "sc_erosion_corrosion_index" %>
+                  <%= f.hidden_field :sc_erosion_corrosion_index, :value => line_sizing.sc_erosion_corrosion_index %>
+                </td>
+                <td><label id='up_erosion_corrosion_index'></label></td>
+              <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>
+                  Fluid Momentum(&rho;V&sup2;)
+                </td>
+                <td><label id='down_fluid_momentum'></label></td>
+                <td>
+                  <%= label_tag "sc_fluid_momentum", "#{line_sizing.sc_fluid_momentum}", :id => "sc_fluid_momentum" %>
+                  <%= f.hidden_field :sc_fluid_momentum, :value => line_sizing.sc_fluid_momentum %>
+                </td>
+                <td><label id='up_fluid_momentum'></label></td>
+                <td>&nbsp;<label id="line_sizing_sc_fluid_momentum_unit"></label></td>
+                </tr>
+              </table>
+
+              <table>
+                <tr>
+                  <td><b><u>NOTES</u></b></td>
+                </tr>
+                <tr>
+                  <td><%= f.text_area :sizing_criteria_notes, :size => "140x4" %></td>
+                </tr>
+              </table>
+            </div>
+            <div id="tab3" class="tab_content">
+              <!-- Design Conditions-->
+              <table>
+                <tr>
+                  <td colspan="2"><b><u>SOURCE DETAILS</u></b></td>
+                  <td colspan="2"><b><u>DESTINATION DETAILS</u></b></td>
+                </tr>
+                <tr>
+                  <td>Source Item Type</td>
+                  <td><%= f.select :dc_source_item_type, options_for_select(StaticData.segment_type, line_sizing.dc_source_item_type), :include_blank => true %></td>
+                  <td>Destination Item Type</td>
+                  <td><%= f.select :dc_destination_item_type, options_for_select(StaticData.segment_type, line_sizing.dc_destination_item_type), :include_blank => true %></td>
+                </tr>
+                <tr>
+                  <td>Source Item Tag</td>
+                  <td><select style="width:100px;"></select></td>
+                  <td>Destination Item Tag</td>
+                  <td><select style="width:100px;"></select></td>
+                </tr>
+                <tr>
+                  <td>Source Design Pressure</td>
+                  <td><%= f.text_field :dc_source_design_pressure, :class => 'source_required' %>
+                    &nbsp;<label id="line_sizing_dc_source_design_pressure_unit"></label>
+                  </td>
+                  <td>Destination Design Pressure</td>
+                  <td><%= f.text_field :dc_destination_design_pressure, :class => 'destination_required' %>&nbsp;<label id="line_sizing_dc_destination_design_pressure_unit"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Source Design Temperature</td>
+                  <td><%= f.text_field :dc_source_design_temperature, :class => 'source_required' %>
+                    &nbsp;<label id="line_sizing_dc_source_design_temperature_unit"></label>
+                  </td>
+                  <td>Destination Design Temperature</td>
+                  <td><%= f.text_field :dc_destination_design_temperature, :class => 'destination_required' %>
+                    &nbsp;<label id="line_sizing_dc_destination_design_temperature_unit"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Static & Frictional &Delta;P</td>
+                  <td><%= f.text_field :dc_source_statice_frictional_dp, :class => 'source_required' %>&nbsp;<label id="line_sizing_dc_source_statice_frictional_dp_unit"></label>
+                  </td>
+                  <td>Static & Frictional &Delta;P</td>
+                  <td><%= f.text_field :dc_destination_statice_frictional_dp, :class => 'destination_required' %>&nbsp;<label id="line_sizing_dc_destination_statice_frictional_dp_unit"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <fieldset style="border:1px solid #000000;padding:5px;">
+                      <legend>Design Basis</legend>
+                      <div>
+                        <%= f.radio_button :dc_design_basis, "source" %>&nbsp;Source
+                        <br>
+                        <%= f.radio_button :dc_design_basis, "destination" %>&nbsp;Destination
+                        <br>
+                        <%= f.radio_button :dc_design_basis, "none" %>&nbsp;None
+                      </div>
+                    </fieldset>
+                  </td>
+                  <td colspan="2"></td>
+                </tr>
+                <tr>
+                  <td colspan="4"><b><u>DESIGN CONDITIONS</u></b></td>
+                </tr>
+                <tr>
+                  <td>Maximum Operating Pressure</td>
+                  <td><%= f.text_field :dc_maximum_operating_pressure, :class => "small-text-100 source_destination_required" %>&nbsp;<label id="line_sizing_dc_maximum_operating_pressure_unit"></label>
+                  </td>
+                  <td>Design Pressure</td>
+                  <td><%= f.text_field :dc_design_pressure, :class => "small-text-100 line_sizing_dc_destination_design_pressure" %>&nbsp;<label id="line_sizing_dc_design_pressure_unit"></label>&nbsp;<input type="button" id="design_condition_design" value="Design">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Maximum Operating Temperature</td>
+                  <td><%= f.text_field :dc_maximum_operating_temperature, :class => "small-text-100 source_destination_required" %>&nbsp;<label id="line_sizing_dc_maximum_operating_temperature_unit"></label>
+                  </td>
+                  <td>Design Temperature</td>
+                  <td><%= f.text_field :dc_design_temperature, :class => "small-text-100 line_sizing_dc_design_temperature" %>&nbsp;<label id="line_sizing_dc_design_temperature_unit"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Pressure Allowance</td>
+                  <td><%= f.text_field :dc_pressure_allowance, :class => "small-text-100 source_destination_required" %>&nbsp;<label id="line_sizing_dc_pressure_allowance_unit"></label>
+                  </td>
+                  <td>Design Vacuum</td>
+                  <td><%= f.text_field :dc_design_vaccum, :class => "small-text-100" %>&nbsp;<label id="line_sizing_dc_design_vaccum_unit"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Temperature Allowance</td>
+                  <td><%= f.text_field :dc_temperature_allowance, :class => "small-text-100 source_destination_required" %>&nbsp;<label id="line_sizing_dc_temperature_allowance_unit"></label>
+                  </td>
+                  <td>Min. Design Temperature</td>
+                  <td><%= f.text_field :dc_min_design_temperature, :class => "small-text-100 line_sizing_dc_min_design_temperature" %>&nbsp;<label id="line_sizing_dc_min_design_temperature_unit"></label>
+                  </td>
+                </tr>
+              </table>
+
+              <table>
+                <tr>
+                  <td colspan="2"><b><u>STRAIGHT PIPE THICKNESS</u></b></td>
+                </tr>
+                <tr>
+                  <td>Design Pressure</td>
+                  <td><%= f.text_field :dc_spt_design_perssure, :class => 'spt_required' %>&nbsp;
+                   <label class="line_sizing_dc_destination_design_pressure_unit"></label>
+                 </td>
+               </tr>
+               <tr>
+                <td>Design Temperature</td>
+                  <td><%= f.text_field :dc_spt_design_temperature, :class => 'spt_required' %></label>&nbsp;
+                  <label class="line_sizing_dc_destination_design_temperature_unit"></label></td>
+              </tr>
+              <tr>
+                <td>Minimum Temperature</td>
+                <td><label class="line_sizing_dc_min_design_temperature_unit"></label></td>
+              </tr>
+
+              <tr>
+                <td>Material of Construction</td>
+                <td><%= f.text_field :dc_spt_material_of_construction %></td>
+              </tr>
+              <tr>
+                <td>Pipe Outer Diameter</td>
+                <td><%= f.text_field :dc_spt_pipe_outer_diameter, :class => 'spt_required' %>
+                  <input type='button' class='btn' id='outer_diameter_calc' value='Calculate Outer Diameter'>
+                </td>
+              </tr>
+              <tr>
+                <td>Allowable Stress</td>
+                <td><%= f.text_field :dc_spt_allowable_stress, :class => 'spt_required' %>
+                  &nbsp;<label id="line_sizing_dc_spt_allowable_stress_unit"></label>
+                </td>
+              </tr>
+              <tr>
+                <td>L. Weld Joint Factor</td>
+                <td><%= f.text_field :dc_spt_lweld_joint_factor, :class => 'spt_required' %></td>
+              </tr>
+              <tr>
+                <td>Coefficient, Y</td>
+                <td><%= f.text_field :dc_spt_coefficient_y, :class => 'spt_required' %></td>
+              </tr>
+              <tr>
+                <td>Mechanical Thickness Allowance</td>
+                <td><%= f.text_field :dc_spt_mechanical_thickness_allowance %>&nbsp;<label id="line_sizing_dc_spt_mechanical_thickness_allowance_unit"></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Erosion & Corrosion Allowance</td>
+                <td><%= f.text_field :dc_spt_erosion_corrosion_allowance %>&nbsp;<label id="line_sizing_dc_spt_erosion_corrosion_allowance_unit"></label>
+                </td>
+              </tr>
+              <tr>
+                <td>Pressure Design Thickness</td>
+                <td align="right">
+                 <label id="pressure_design_thickness"></label>
+                 <label id="line_sizing_dc_spt_pressure_design_thickness_unit"></label></td>
+               </tr>
+               <tr>
+                <td>Minimum Required Thickness</td>
+                <td align="right">
+                  <label id="minimum_required_thickness"></label>
+                  <label id="line_sizing_dc_spt_minimum_required_thickness_unit"></label><input type="button" id="straight_pipe_thickness_design" value="Design" style="float:right;">
+                </td>
+              </tr>
+            </table>
+
+            <table style="width:auto;">
+              <tr>
+                <td colspan="4"><b><u>PIPING COMPONENT</u></b></td>
+              </tr>
+              <tr>
+                <td>Design Pressure</td>
+                <td align="right"> <%= f.text_field :dc_pc_design_pressure %>
+                  &nbsp;<label class="line_sizing_dc_destination_design_pressure_unit"></label></td>
+                <td colspan="2" rowspan="3">
+                  <fieldset style="padding:5px;border:1px solid #000000">
+                    <legend>Tracing</legend>
+                    <%= f.radio_button :dc_pc_tracing, "steam_tracing" %>&nbsp;Steam Tracing
+                    <br>
+                    <%= f.radio_button :dc_pc_tracing, "electrical_tracing" %>&nbsp;Electrical Tracing
+                     <br>
+                    <%= f.radio_button :dc_pc_tracing, "none" %>&nbsp;None
+                  </fieldset>
+                </td>
+              </tr>
+              <tr>
+                <td>Design Temperature</td>
+                <td align="right"><%= f.text_field :dc_pc_design_temperature %>
+                  &nbsp;<label class="line_sizing_dc_destination_design_temperature_unit"></label></td>
+              </tr>
+              <tr>
+                <td>Material Group</td>
+                <td><%= f.select :dc_pc_material_group, options_for_select(StaticData.material_group, line_sizing.dc_pc_material_group), :include_blank => true %></td>
+
+              </tr>
+              <tr>
+                <td>Material Designation</td>
+                <td><%= f.select :dc_pc_material_designation, options_for_select(StaticData.get_material_designation(line_sizing.dc_pc_material_group), line_sizing.dc_pc_material_designation), :include_blank => true %></td>
+                <td colspan="2"></td>
+              </tr>
+              <tr>
+                <td>Material Description</td>
+                <td><%= f.text_field :dc_pc_material_description %></td>
+                <td colspan="2" rowspan="8"></td>
+              </tr>
+              <tr>
+                <td>Selected Flange Class</td>
+                <td><%= f.select :dc_pc_flange_class, options_for_select(StaticData.flange_classes, line_sizing.dc_pc_flange_class), :include_blank => true %>&nbsp;#</td>
+              </tr>
+              <tr>
+                <td>Flange Pressure Rating</td>
+                <td align="right"><label id="line_sizing_dc_pc_flange_pressure_rating_unit"></label></td>
+              </tr>
+              <tr>
+                <td>Flange Temperature Rating</td>
+                <td align="right"><label id="line_sizing_dc_pc_flange_temperature_rating_unit"></label></td>
+              </tr>
+              <tr>
+                <td>Flange Facing</td>
+                <td><%= f.select :dc_pc_flange_facing, options_for_select(StaticData.flange_facing, line_sizing.dc_pc_flange_facing), :include_blank => true %></td>
+              </tr>
+              <tr>
+                <td>Insulation Type</td>
+                <td><%= f.select :dc_pc_insulation_type, options_for_select(StaticData.insulation_type, line_sizing.dc_pc_insulation_type), :include_blank => true %></td>
+              </tr>
+              <tr>
+                <td>Insulation Material</td>
+                <td><%= f.text_field :dc_pc_insulation_material %></td>
+              </tr>
+              <tr>
+                <td>Insulation Thickness</td>
+                <td><%= f.text_field :dc_pc_insulation_thickness %>&nbsp;<label id="line_sizing_dc_pc_insulation_thickness_unit"></label>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="4"><b><u>FLANGE RATING NOTES</u></b></td>
+              </tr>
+              <tr>
+                <td colspan="4"><textarea name="name" rows="8" cols="40"></textarea></td>
+              </tr>
+            </table>
+          </div>
+          <div id="tab4" class="tab_content">
+            <!-- Review -->
+            <table width='100%'>
+              <tr>
+                <td valign="top">1</td>
+                <td>
+                  <p>Line velocities (v) and pressure drops (&Delta;P):</p>
+                  <p>(a) For a liquid pump discharge, v = (5+D/3) ft/s and &Delta;P = 0.45 bar/100 m(2.0 psi/100 ft):</p>
+                  <p>(b) For liquid pump suction, v = (1.3+D/6) ft/s, &Delta;P = 0.09 bar/100 m (0.4 psi/100 ft):</p>
+                  <p>(c) For steam or gas flow: v = 20D fts/s and &Delta;P = 0.113 bar/100 m (0.5 psi/100 ft)</p>
+                  <p>D = diameter of pipe in inches</p>
+                </td>
+                <td width=15%>
+                  <input type='radio' name='option1' value='yes'>&nbsp;Yes&nbsp;
+                  <input type='radio' name='option1' value='no'>&nbsp;No&nbsp;
+                  <input type='radio' name='option1' value='na'>&nbsp;N/A&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Gas/Steam line velocity = 61 m/s (200 ft/s) and pressure drop = 0.1 bar/100 m (0.5 psi/100 ft)</td>
+                <td>
+                  <input type='radio' name='option2' value='yes'>&nbsp;Yes&nbsp;
+                  <input type='radio' name='option2' value='no'>&nbsp;No&nbsp;
+                  <input type='radio' name='option2' value='na'>&nbsp;N/A&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>In preliminary estimate, set line pressure drops for an equivalent length of 30.5 m (100 ft) of
+                  pipe between each piece of equipment.
+                </td>
+                <td>
+                  <input type='radio' name='option3' value='yes'>&nbsp;Yes&nbsp;
+                  <input type='radio' name='option3' value='no'>&nbsp;No&nbsp;
+                  <input type='radio' name='option3' value='na'>&nbsp;N/A&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>Control valves require at least 0.69 bar (10 psi) pressure drop for good control
+                </td>
+                <td>
+                  <input type='radio' name='option4' value='yes'>&nbsp;Yes&nbsp;
+                  <input type='radio' name='option4' value='no'>&nbsp;No&nbsp;
+                  <input type='radio' name='option4' value='na'>&nbsp;N/A&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>Globe valves are used for gases, control and wherever tight shut-off is required. Gate valves
+                  are for most other services
+                </td>
+                <td>
+                  <input type='radio' name='option5' value='yes'>&nbsp;Yes&nbsp;
+                  <input type='radio' name='option5' value='no'>&nbsp;No&nbsp;
+                  <input type='radio' name='option5' value='na'>&nbsp;N/A&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>Screwed fittings are used only on sizes 38 mm (1.5 in) or less, flanges or welding used otherwise
+                </td>
+                <td>
+                  <input type='radio' name='option6' value='yes'>&nbsp;Yes&nbsp;
+                  <input type='radio' name='option6' value='no'>&nbsp;No&nbsp;
+                  <input type='radio' name='option6' value='na'>&nbsp;N/A&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td>Flanges and fittings are rated for 10,20,40,103,175 bar (150,300,600,900,1500, or 2500 psig)
+                </td>
+                <td>
+                  <input type='radio' name='option7' value='yes'>&nbsp;Yes&nbsp;
+                  <input type='radio' name='option7' value='no'>&nbsp;No&nbsp;
+                  <input type='radio' name='option7' value='na'>&nbsp;N/A&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td>Approximate schedule number required = 1000P/S, where P is the internal pressure psig
+                  and S is allowable working stress [about 690 bar (10,000 psi)] for A 120 carbon steel
+                  at 260 &deg;C (500 &deg;F ). Schedule (sch.) 40 is most common.
+                </td>
+                <td>
+                  <input type='radio' name='option8' value='yes'>&nbsp;Yes&nbsp;
+                  <input type='radio' name='option8' value='no'>&nbsp;No&nbsp;
+                  <input type='radio' name='option8' value='na'>&nbsp;N/A&nbsp;
+                </td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td><u><b>NOTES</b></u></td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+                <td><textarea style="width:900px;height:100px;"></textarea></td>
+                <td>&nbsp;</td>
+              </tr>
+            </table>
+            <!--Review -->
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+
+      <div style="display:none;">
+        <div id="pipe_sizing_box">
+          <!-- Pipe sizing -->
+          <table id="pipe_sizing_table">
+            <tr>
+              <th rowspan="2">No.</th>
+              <th rowspan="2">Fitting(s)</th>
+              <th rowspan="2">Fitting Tag</th>
+              <th>Pipe Size</th>
+              <th rowspan="2">Pipe Sch</th>
+              <th>Pipe ID</th>
+              <th rowspan="2">Ds/Dl<br>or Cv or Cd</th>
+              <th>Lenght</th>
+              <th>Elev</th>
+              <th>P @ Outlet</th>
+              <th rowspan="2"></th>
+            </tr>
+            <tr>
+              <th>inches</th>
+              <th><label class="pipe_sizings_pipe_id_unit"></label></th>
+              <th><label class="pipe_sizings_length_unit"></label></th>
+              <th><label class="pipe_sizings_elev_unit"></label></th>
+              <th><label class="pipe_sizings_p_outlet_unit"></label></th>
+            </tr>
+            <% ps_count = 1 %>
+            <% line_sizing.pipe_sizings.each_with_index do |ps, i| %>
+            <tr>
+              <td>
+                <%= i+1 %>
+                <%= hidden_field_tag "line_sizing[pipe_sizings][#{i+1}][id]", ps.id, :id => "pipe_sizings_id_#{i+1}" %>
+              </td>
+              <td><%= select_tag "line_sizing[pipe_sizings][#{i+1}][fitting_id]", options_for_select(PipeSizing.fitting.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, ''), ps.fitting_id), :id => "pipe_sizings_fitting_id_#{i+1}", :style => "width:200px;", :class => "pipe_sizings_fitting" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][#{i+1}][fitting_tag]", ps.fitting_tag, :id => "pipe_sizings_fitting_tag_#{i+1}" %></td>
+              <td><%= select_tag "line_sizing[pipe_sizings][#{i+1}][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }.insert(0, ''), ps.pipe_size), :id => "pipe_sizings_pipe_size_#{i+1}", :class => "pipe_sizings_pipe_size", :row_id => "#{i+1}" %></td>
+              <td><%= select_tag "line_sizing[pipe_sizings][#{i+1}][pipe_schedule]", options_for_select(PipeSizing.pipe_size_schedules[ps.pipe_size.to_s], ps.pipe_schedule), :id => "pipe_sizings_pipe_schedule_#{i+1}", :class => "pipe_sizings_pipe_schedule", :row_id => "#{i+1}" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][#{i+1}][pipe_id]", ps.pipe_id, :id => "pipe_sizings_pipe_id_#{i+1}", :class => "pipe_sizings_pipe_id" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][#{i+1}][ds_cv]", ps.ds_cv, :id => "pipe_sizings_ds_cv_#{i+1}" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][#{i+1}][length]", ps.length, :id => "pipe_sizings_length_#{i+1}", :class => "pipe_sizings_length" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][#{i+1}][elev]", ps.elev, :id => "pipe_sizings_elev_#{i+1}", :class => "pipe_sizings_elev" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][#{i+1}][p_outlet]", ps.p_outlet, :id => "pipe_sizings_p_outlet_#{i+1}", :class => "pipe_sizings_p_outlet" %></td>
+              <td><%= link_to "x", "#", :class => "pipe_sizing_delete" %>
+              </td>
+            </tr>
+            <% ps_count += 1 %>
+            <% end %>
+            <% if line_sizing.pipe_sizings.empty? %>
+            <tr>
+              <td>
+                1
+                <%= hidden_field_tag 'line_sizing[pipe_sizings][1][id]', "", :id => "pipe_sizings_id_1" %>
+              </td>
+              <td><%= select_tag "line_sizing[pipe_sizings][1][fitting_id]", options_for_select(PipeSizing.fitting.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, '')), :id => "pipe_sizings_fitting_id_1", :style => "width:200px;", :class => 'pipe_sizings_fitting' %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][1][fitting_tag]", "", :id => "pipe_sizings_fitting_tag_1" %></td>
+              <td><%= select_tag "line_sizing[pipe_sizings][1][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }.insert(0, '')), :id => "pipe_sizings_pipe_size_1", :class => "pipe_sizings_pipe_size", :row_id => "1" %></td>
+              <td><%= select_tag "line_sizing[pipe_sizings][1][pipe_schedule]", options_for_select([]), :id => "pipe_sizings_pipe_schedule_1", :class => "pipe_sizings_pipe_schedule", :row_id => "1" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][1][pipe_id]", "", :id => "pipe_sizings_pipe_id_1", :class => "pipe_sizings_pipe_id" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][1][ds_cv]", "", :id => "pipe_sizings_ds_cv_1" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][1][length]", "", :id => "pipe_sizings_length_1", :class => "pipe_sizings_length" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][1][elev]", "", :id => "pipe_sizings_elev_1", :class => "pipe_sizings_elev" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][1][p_outlet]", "", :id => "pipe_sizings_p_outlet_1", :class => "pipe_sizings_p_outlet" %></td>
+              <td><%= link_to "x", "#", :class => "pipe_sizing_delete" %>
+              </td>
+            </tr>
+            <% end %>
+          </table>
+          <br>
+          <%= link_to "Add", "#", :id => "add_new_pipe_sizing" %>&nbsp;|&nbsp;<%= link_to "Close", "#", :id => "close_pipe_sizing" %>
+          <!-- new pipe sizing form-->
+          <table id="new_pipe_sizing_tr" class="hidden">
+            <tr>
+              <td>
+                #x#
+                <%= hidden_field_tag 'line_sizing[pipe_sizings][#x#][id]', "", :id => "pipe_sizings_id_#x#" %>
+              </td>
+              <td><%= select_tag "line_sizing[pipe_sizings][#x#][fitting_id]", options_for_select(PipeSizing.fitting.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, '')), :id => "pipe_sizings_fitting_id_#x#", :style => "width:200px;", :class => 'pipe_sizings_fitting' %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][#x#][fitting_tag]", "", :id => "pipe_sizings_fitting_tag_#x#" %></td>
+              <td><%= select_tag "line_sizing[pipe_sizings][#x#][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect { |p| [raw(p[:name]), p[:value]] }.insert(0, '')), :id => "pipe_sizings_pipe_size_#x#", :class => "pipe_sizings_pipe_size", :row_id => "#x#" %></td>
+              <td><%= select_tag "line_sizing[pipe_sizings][#x#][pipe_schedule]", options_for_select([]), :id => "pipe_sizings_pipe_schedule_#x#", :class => "pipe_sizings_pipe_schedule", :row_id => "#x#" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][#x#][pipe_id]", "", :id => "pipe_sizings_pipe_id_#x#", :class => "pipe_sizings_pipe_id" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][#x#][ds_cv]", "", :id => "pipe_sizings_ds_cv_#x#" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][#x#][length]", "", :id => "pipe_sizings_length_#x#", :class => "pipe_sizings_length" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][#x#][elev]", "", :id => "pipe_sizings_elev_#x#", :class => "pipe_sizings_elev" %></td>
+              <td><%= text_field_tag "line_sizing[pipe_sizings][#x#][p_outlet]", "", :id => "pipe_sizings_p_outlet_#x#", :class => "pipe_sizings_p_outlet" %></td>
+              <td><%= link_to "x", "#", :class => "pipe_sizing_delete" %>
+              </td>
+            </tr>
+          </table>
+          <%= hidden_field_tag 'ps_count', ps_count %>
+        </div>
+      </div>
+      <% end %>
+
+      <% unless line_sizing.new_record? %>
+      <fieldset class="project" style="margin-top:15px;">
+        <legend>Attachments</legend>
+        <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+        <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+      </fieldset>
+
+      <fieldset class="project" style="margin-top:15px;">
+        <legend>Comments</legend>
+        <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+        <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+      </fieldset>
+      <% end %>
+
+
+      <div class="hidden">
+        <div id="flow_regime_baker">
+          <table>
+            <tr>
+              <td><b>Process Basis</b></td>
+              <td><label id="frb_process_basis"></label></td>
+            </tr>
+            <tr>
+              <td><b>Stream No.</b></td>
+              <td><label id="frb_stream_no"></label></td>
+            </tr>
+            <tr>
+              <td><b>Bx</b></td>
+              <td><label id="frb_bx"></label></td>
+            </tr>
+          </table>
+          <div>
+            <img src="/images/baker.png" alt="baker"/>
+            <b>Target By @ Bx</b>
+            <%= text_field_tag "target_by" %>
+          </div>
+          <table id="flow_regime_baker_table">
+            <tbody>
+              <tr>
+                <td><b>Pipe ID</b></td>
+                <td><b>By</b></td>
+                <td><b>Erosion Index</b></td>
+                <td><b>Vapor Superficial Velocity</b></td>
+                <td><b>Liquid Superficial Velocity</b></td>
+                <td><b>Desired Flow Regime</b></td>
+                <td><b>Current Flow Regime</b></td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr>
+                <td><%= label_tag "", "", :id => "frb_pipe_id_32" %></td>
+                <td><%= label_tag "", "", :id => "frb_by_32" %></td>
+                <td><%= label_tag "", "", :id => "frb_errosion_index_32" %></td>
+                <td><%= label_tag "", "", :id => "frb_vapor_superficial_velocity_32" %></td>
+                <td><%= label_tag "", "", :id => "frb_liquid_superficial_velocity_32" %></td>
+                <td><%= select_tag "desired_flow_regime_32", options_for_select(StaticData.flow_regime) %></td>
+                <td><%= select_tag "current_flow_regime_32", options_for_select(StaticData.flow_regime) %></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="hidden">
+        <div id="orifice_coefficient">
+          <table>
+            <tr>
+              <td><b>Pipe No</b></td>
+              <td><b>Pipe Reynolds Number</b></td>
+              <td><b>&beta;</b></td>
+              <td><b>Flow Coefficient,C</b></td>
+            </tr>
+            <% prn = PipeSizing.reynold_number(params[:id]) unless line_sizing.new_record? %>
+            <% ps = line_sizing.pipe_sizings.where("fitting_id =?", "51") %>
+            <% (0..32).each do |i| %>
+            <tr>
+              <td><%= i+1 %></td>
+              <td><%= prn[i] unless prn.nil? %></td>
+              <td><%= ps.first.ds_cv / PipeSizing.pipe_size_cycle[i][:diameter].to_f unless ps.empty? %></td>
+              <td><%= text_field_tag "flow_c_text_#{i}" %></td>
+            </tr>
+            <% end %>
+          </table>
+          <div>
+            <img src="/images/user_form_orfice_coefficent_hr.png" alt="orfice_coefficent_hr"/>
+            <img src="/images/user_form_orfice_coefficent_lr.png" alt="orfice_coefficent_lr"/>
+          </div>
+        </div>
+      </div>
+
+      <%= javascript_tag do %>
+
+      var line_sizing_id = "<%= params[:id] %>";
+
+      var line_sizing_project_id = "<%= @project.id %>";
+
+      var project_maximum_operating_pressure_allowance = <%= @project.maximum_operating_pressure_allowance.to_f %>
+
+      $('body').data('process_units', <%= raw @process_units_obj.to_json %>);
+
+      var sizing_criterias = <%= raw @sizing_criterias.to_json %>;
+
+      var sizing_criterias_json = {};
+      $(sizing_criterias).each(function(k, v){ sizing_criterias_json[v.id] = v;});
+
+      $('body').data('sizing_criteria', sizing_criterias_json);
+
+      var pipes = <%= raw @pipes.to_json %>;
+      var pipes_json = {};
+      $(pipes).each(function(k, v){
+      pipes_json[v.id] = v;
+    });
+    $('body').data('pipes', pipes_json);
+
+    project_pipes = <%= raw @project_pipes.to_json %>
+
+    var ps_count = <%= line_sizing.pipe_sizings.empty? ? 2 : line_sizing.pipe_sizings.length.to_i+1 %>;
+
+    var uom = <%= raw @uom.to_json %>;
+
+    $('body').data('uom', uom);
+
+    $('body').data('conversion_factor', 0);
+
+    <% if line_sizing.new_record? %>
+    $('#line_sizing_dc_pressure_allowance').val("<%= @project.design_pressure_allowance %>");
+    $('#line_sizing_dc_temperature_allowance').val("<%= @project.design_temperature_allowance %>");
+    $('#line_sizing_dc_calculate_type_stream_sizing').attr("checked", true);
+    <% end %>
+
+    //material_designation
+    var material_designation = <%= raw StaticData.material_designation.to_json %>
+
+    //pipe_size_schedules
+    var pipe_size_schedules = <%= raw PipeSizing.pipe_size_schedules.to_json %>;
+    var pipe_size_pipe_ods = <%= raw PipeSizing.pipe_size_pipe_od.to_json %>;
+    var pipe_size_wall_thinkness = <%= raw PipeSizing.pipe_size_wall_thinkness.to_json %>;
+    var pipe_id_conversion_factor = <%= @project.conversion_factor("Length", "Pipe Tube Diameter") %>;
+
+    var flow_regimes = <%= raw StaticData.flow_regime.to_json %>
+
+    var system_equivalent_length_unit = "<%= @project.unit("Length", "Large Dimension Length") %>";
+
+    var sizing_criteria_category_types_data = <%= raw @sizing_criteria_category_types_data.to_json %>;
+
+    var project = <%= raw @project.to_json %>;
+    var pipes_orifice = <%= raw @line_sizing.pipe_sizings.where("fitting_id =?", "51").to_json %>;
+
+    var calculated_results = <%= raw @calculated_results.to_json %>
+
+    <% end %>
+
+    <script type="text/javascript">
+
+    set_project_unit_and_decimals();
+
+  //config text box decimals
+  var unit_decimals = {
+    "#line_sizing_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#line_sizing_temperature":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    "#line_sizing_flowrate":{"measurement":"Mass Flow Rate", "measurement_sub_type":"General"},
+    "#line_sizing_vapor_density":{"measurement":"Density", "measurement_sub_type":"General"},
+    "#line_sizing_vapor_viscosity":{"measurement":"Viscosity", "measurement_sub_type":"Dynamic"},
+    "#line_sizing_vapour_fraction":{"measurement":"Mass Vapor Fraction", "measurement_sub_type":"Dimensionless"},
+    "#line_sizing_vapor_mw":{"measurement":"Molecular Weight", "measurement_sub_type":"Dimensionless"},
+    "#line_sizing_vapor_cp_cv":{"measurement":"Specific Heat Capacity Ratio", "measurement_sub_type":"Dimensionless"},
+    "#line_sizing_vapor_z":{"measurement":"Vapor Compressibility", "measurement_sub_type":"Dimensionless"},
+    "#line_sizing_liquid_density":{"measurement":"Density", "measurement_sub_type":"General"},
+    "#line_sizing_liquid_viscosity":{"measurement":"Viscosity", "measurement_sub_type":"Dynamic"},
+    "#line_sizing_liquid_mw":{"measurement":"Molecular Weight", "measurement_sub_type":"Dimensionless"},
+    "#line_sizing_liquid_surface_tension":{"measurement":"Surface Tension", "measurement_sub_type":"General"},
+    "#line_sizing_system_equivalent_length":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    "#line_sizing_system_maximum_deltaP":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#line_sizing_pipe_roughness":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    "#line_sizing_sc_required_id":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    "#line_sizing_sc_proposed_id":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    "#line_sizing_sc_pipe_size":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    "#line_sizing_sc_calculated_system_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#line_sizing_sc_calculated_velocity":{"measurement":"Velocity", "measurement_sub_type":"General"},
+    "#line_sizing_sc_system_equivalent_length":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    "#line_sizing_sc_fluid_momentum":{"measurement":"Fluid Momentum", "measurement_sub_type":"General"},
+    "#line_sizing_dc_source_design_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#line_sizing_dc_source_design_temperature":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    "#line_sizing_dc_source_statice_frictional_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#line_sizing_dc_destination_design_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    ".line_sizing_dc_destination_design_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#line_sizing_dc_destination_design_temperature":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    ".line_sizing_dc_destination_design_temperature":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    "#line_sizing_dc_destination_statice_frictional_dp":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#line_sizing_dc_maximum_operating_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#line_sizing_dc_maximum_operating_temperature":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    "#line_sizing_dc_pressure_allowance":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#line_sizing_dc_temperature_allowance":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    "#line_sizing_dc_design_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#line_sizing_dc_design_temperature":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    "#line_sizing_dc_design_vaccum":{"measurement":"Pressure", "measurement_sub_type":"Absolute"},
+    "#line_sizing_dc_min_design_temperature":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    ".line_sizing_dc_min_design_temperature":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    "#line_sizing_dc_spt_allowable_stress":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#line_sizing_dc_spt_mechanical_thickness_allowance":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    "#line_sizing_dc_spt_erosion_corrosion_allowance":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    "#line_sizing_dc_spt_pressure_design_thickness":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    "#line_sizing_dc_spt_minimum_required_thickness":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    "#line_sizing_dc_pc_flange_pressure_rating":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#line_sizing_dc_pc_flange_temperature_rating":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    "#line_sizing_dc_pc_insulation_thickness":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    ".pipe_sizings_pipe_id":{"measurement":"Length", "measurement_sub_type":"Pipe Tube Diameter"},
+    ".pipe_sizings_length":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".pipe_sizings_elev":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".pipe_sizings_p_outlet":{"measurement":"Pressure", "measurement_sub_type":"Differential"}
+  };
+
+  set_project_unit_decimals(unit_decimals);
+  set_project_unit_labels(unit_decimals);
+
+  $('form.line_sizing_form').dirtyForms();
+
+  $('#down_stream_vaporization_fieldset :input').attr("disabled", true);
+
+  function update_dc_max_op_ot(){
+    var pmop = project_maximum_operating_pressure_allowance;
+    var pressure = $('#line_sizing_pressure').val();
+    $('#line_sizing_dc_maximum_operating_pressure').val(parseFloat(pressure)+parseFloat(pmop));
+    $('#line_sizing_dc_maximum_operating_temperature').val($('#line_sizing_temperature').val());
+  }
+
+  $('#line_sizing_pressure,#line_sizing_temperature').live('blur',function(){update_dc_max_op_ot(); })
+
+  $('#line_sizing_process_basis_id').change(function (e) {
+    if ($(this).val() == "") {
+      return false;
+    }
+    $.get('/admin/heat_and_material_balances/get_stream_nos', {process_basis_id:$(this).val()}, function (data) {
+      $('#line_sizing_stream_no >option').remove();
+      $('#line_sizing_stream_no').append($('<option></option>').val("").html("Please select"));
+      $(data).each(function (k, v) {
+        $('#line_sizing_stream_no').append(
+          $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+          );
+      });
+    }, 'json');
+  });
+
+
+  $('#line_sizing_stream_no').change(function (e) {
+    if ($(this).val() == "") {
+      return false;
+    }
+
+
+    $.get('/admin/line_sizings/get_stream_values',
+      {process_basis_id:$('#line_sizing_process_basis_id').val(), stream_no:$('#line_sizing_stream_no').val()},
+      function (data) {
+        set_project_field_value('#line_sizing_pressure', data["pressure_value"], unit_decimals);
+        set_project_field_value('#line_sizing_temperature', data["temperature_value"], unit_decimals);
+        set_project_field_value('#line_sizing_vapour_fraction', data["vapour_fraction_value"], unit_decimals);
+        //enable and disable for downstream action
+        if ($('#line_sizing_vapour_fraction').val() > 0 && $('#line_sizing_vapour_fraction').val() < 1) {
+          $('#down_stream_vaporization_fieldset :input').attr("disabled", false);
+        } else if ($('#line_sizing_vapour_fraction').val() == 0) {
+          $('#down_stream_vaporization_fieldset :input').attr("disabled", true);
+        } else if ($('#line_sizing_vapour_fraction').val() == 1) {
+          $('#down_stream_vaporization_fieldset :input').attr("disabled", true);
+        }
+        set_project_field_value('#line_sizing_flowrate', data["flowrate_value"], unit_decimals);
+        set_project_field_value('#line_sizing_vapor_density', data["density_value"], unit_decimals);
+        set_project_field_value('#line_sizing_vapor_viscosity', data["viscosity_value"], unit_decimals);
+        set_project_field_value('#line_sizing_vapor_mw', data["mw_value"], unit_decimals);
+        set_project_field_value('#line_sizing_vapor_cp_cv', data["cp_cv_value"], unit_decimals);
+        set_project_field_value('#line_sizing_vapor_z', data["z_value"], unit_decimals);
+        set_project_field_value('#line_sizing_liquid_density', data["liquid_density_value"], unit_decimals);
+        set_project_field_value('#line_sizing_liquid_viscosity', data["liquid_viscosity_value"], unit_decimals);
+        set_project_field_value('#line_sizing_liquid_mw', data["liquid_mw_value"], unit_decimals);
+        set_project_field_value('#line_sizing_liquid_surface_tension', data["liquid_surface_tension_value"], unit_decimals);
+        set_sizing_criteria_category();
+        update_dc_max_op_ot()
+      },
+      'json'
+      );
+});
+
+$('#line_sizing_vapour_fraction').change(function (e) {
+
+    //enable and disable for downstream action
+    if ($(this).val() > 0 && $(this).val() < 1) {
+      $('#down_stream_vaporization_fieldset :input').attr("disabled", false);
+    } else if ($(this).val() == 0) {
+      $('#down_stream_vaporization_fieldset :input').attr("disabled", true);
+    } else if ($(this).val() == 1) {
+      $('#down_stream_vaporization_fieldset :input').attr("disabled", true);
+    }
+    set_sizing_criteria_category();
+  });
+
+$('#line_sizing_target_two_phase_flow_regime').change(function (e) {
+  $('#down_stream_vaporization_fieldset :input').attr("disabled", true);
+});
+
+$('#line_sizing_liquid_mw').change(function (e) {
+  set_sizing_criteria_category();
+});
+
+var sizing_criteria_category_type_values = {};
+  //sizing criteria tabs
+  function enable_two_phase(){
+    var text = $("#line_sizing_sizing_criteria_category_id option:selected").text();
+    if(text != 'Two Phase'){
+      $("#line_sizing_target_two_phase_flow_regime").attr('disabled', 'disabled');
+    }
+    else{
+      $("#line_sizing_target_two_phase_flow_regime").removeAttr('disabled');
+    }
+  }
+
+  $('#line_sizing_sizing_criteria_category_id').change(function (e) {
+   enable_two_phase();
+   $('body').removeData('sizing_criteria');
+   $('#line_sizing_sizing_criteria_category_type_id >option').remove();
+   $('#line_sizing_sizing_criteria_category_type_id').append($('<option></option>').val("").html("Please select"));
+   $('#line_sizing_sizing_criteria_id >option').remove();
+   $('#line_sizing_sizing_criteria_id').append($('<option></option>').val("").html("Please select"));
+   $('.sizing-data-fields').val('');
+   if ($(this).val() == "") {
+    return false;
+  }
+
+  $.each(sizing_criteria_category_types_data[$(this).val()], function (k, v) {
+    $('#line_sizing_sizing_criteria_category_type_id').append(
+      $('<option></option>').val(k).html(v)
+      );
+    sizing_criteria_category_type_values[v] = k;
+  });
+
+});
+
+  $('#line_sizing_sizing_criteria_category_type_id').change(function (e) {
+    $('.sizing-data-fields').val('');
+    if ($(this).val() == "") {
+      $('body').removeData('sizing_criteria');
+      return false;
+    }
+    $.get('/admin/line_sizings/get_sizing_criterias',
+      {sizing_criteria_category_id:$('#line_sizing_sizing_criteria_category_id').val(),
+      sizing_criteria_category_type_id:$('#line_sizing_sizing_criteria_category_type_id').val(),
+      project_id:line_sizing_project_id},
+      function (data) {
+        $('#line_sizing_sizing_criteria_id >option').remove();
+        $('#line_sizing_sizing_criteria_id').append($('<option></option>').val("").html("Please select"));
+
+        var sizing_criteria = {};
+
+        $(data["sizing_criterias"]).each(function (k, v) {
+          $('#line_sizing_sizing_criteria_id').append(
+            $('<option></option>').val(v.id).html(v.name)
+            );
+          sizing_criteria[v.id] = v;
+        });
+        $('body').data('sizing_criteria', sizing_criteria);
+        $('body').data('conversion_factor', data['conversion_factor']);
+      },
+      'json'
+      );
+  });
+
+$('#line_sizing_sizing_criteria_id').change(function (e) {
+  if ($(this).val() == "") {
+    $('.sizing-data-fields').val('');
+    return false;
+  }
+
+  if (system_equivalent_length_unit == 'ft') {
+    $('#line_sizing_system_equivalent_length').val(100);
+  } else {
+   $.get('/admin/projects/'+project.id+'/convert_and_round',
+    {mtype:'Length',subtype:'Large Dimension Length',value:'100',previous_unit:'Feet'},
+    function(data){
+      $('#line_sizing_system_equivalent_length').val(data.converted_value);
+    },'json')
+ }
+
+ var delta_p = "";
+ var id = $(this).val();
+
+ $.each(sizing_criterias,function(i,v){ if(v.id == id){ delta_p = v.delta_per_100ft_sel}});
+
+ $('#line_sizing_system_maximum_deltaP').val(delta_p);
+
+});
+
+$('#line_sizing_pipe_id').change(function (e) {
+  if ($(this).val() == "") {
+    $('#line_sizing_pipe_id').val('');
+    return false
+  }
+  $('#line_sizing_pipe_roughness').val($('body').data('pipes')[$(this).val()].roughness_recommended);
+});
+
+  //pipe sizing
+  $('#pipe_sizing_button').click(function (e) {
+    //$.colorbox({html:$('#pipe_sizing_box').show(), width:'100%', height:'100%'});
+    $.colorbox({href:'#pipe_sizing_box', inline:true, width:'100%', height:'100%'});
+  });
+
+  $('#add_new_pipe_sizing').click(function (e) {
+    var new_pipe_sizing_tr = $('#new_pipe_sizing_tr').html().replace(/#x#/g, ps_count);
+    $('#pipe_sizing_table').append($(new_pipe_sizing_tr));
+    ps_count++;
+    set_project_unit_decimal('.pipe_sizings_pipe_id', unit_decimals);
+    set_project_unit_decimal('.pipe_sizings_length', unit_decimals);
+    set_project_unit_decimal('.pipe_sizings_elev', unit_decimals);
+    set_project_unit_decimal('.pipe_sizings_p_outlet', unit_decimals);
+    return false;
+  });
+
+  $('.pipe_sizing_delete').live('click', function (e) {
+    $(this).parents('tr').find('select:first').val('');
+    deleted_tr($(this).parents('tr'));
+    return false;
+  });
+
+  function validate_pipes(){
+   var valid = true;
+   var blank_fields = false;
+   var fittings = $('#pipe_sizing_table select.pipe_sizings_fitting');
+
+   fittings.each(function(){
+    var pipes1 = ['Contraction','Expansion','Sudden Expansion','Sudden Contraction'];
+    var pipes2 = ['Pipe'];
+    var selected = $(this).children(':selected').text();
+    console.log(selected);
+
+    var id = $(this).attr('id').split("_");
+    id = id[id.length-1];
+
+
+    if(selected == 'Contraction' || selected == 'Expansion' || selected == 'Sudden Expansion' || selected == 'Sudden Contraction'){
+     var cs = $('#pipe_sizings_ds_cv_'+id);
+     if(cs.attr('readonly') != 'readonly'){
+      if(!$.isNumeric(cs.val())){
+       blank_fields = true;
+       valid = false;
+       cs.css({"border":"1px solid red"});
+     }
+   }
+
+ }
+ else if(selected == 'Pipe'){
+   var len = $('#pipe_sizings_length_'+id);
+   var ele = $('#pipe_sizings_elev_'+id);
+
+   if(len.attr('readonly') != 'readonly'){
+    if(!$.isNumeric(len.val())){
+     blank_fields = true;
+     valid = false;
+     len.css({"border":"1px solid red"});
+   }
+ }
+
+ if(ele.attr('readonly') != 'readonly'){
+  if(!$.isNumeric(ele.val())){
+   blank_fields = true;
+   valid = false;
+   ele.css({"border":"1px solid red"});
+ }
+}
+}
+})
+
+
+if (blank_fields) { alert("Please enter required values!") }
+	return valid
+}
+
+
+$('#close_pipe_sizing').click(function (e) {
+	if(validate_pipes()){ $.colorbox.close(); }
+  return false;
+});
+
+//pipe configuration actions
+function pipe_configuration(){
+	var val = $("input[name='line_sizing[dc_calculate_type]']:checked").attr('value');
+	if(val == 'stream_sizing'){
+		$('#pipe_sizing_button').attr('disabled','disabled');
+	}
+	else{
+		$('#pipe_sizing_button').removeAttr('disabled');
+	}
+}
+pipe_configuration();
+
+$("input[name*='calculate']").click(function(){ pipe_configuration(); })
+  //material_designation
+  $('#line_sizing_dc_pc_material_group').change(function (e) {
+    $('#line_sizing_dc_pc_material_designation >option').remove();
+    $('#line_sizing_dc_pc_material_designation').append($('<option></option>').val("").html(""));
+    if (material_designation[$(this).val()] != undefined) {
+      $(material_designation[$(this).val()]).each(function (k, v) {
+        $('#line_sizing_dc_pc_material_designation').append(
+          $('<option></option>').val(v).html(v)
+          );
+      });
+    }
+  });
+
+  //segment piping
+  $('.pipe_sizings_pipe_size').live('change', function (e) {
+    var row_id = $(this).attr('row_id');
+    $('#pipe_sizings_pipe_id_' + row_id).val('');
+    $('#pipe_sizings_pipe_schedule_' + row_id + ' >option').remove();
+    $('#pipe_sizings_pipe_schedule_' + row_id).append($('<option></option>').val("").html(""));
+    $(pipe_size_schedules[$(this).val()]).each(function (k, v) {
+      $('#pipe_sizings_pipe_schedule_' + row_id).append($('<option></option>').val(v).html(v));
+    });
+  });
+
+  $('.pipe_sizings_pipe_schedule').live('change', function (e) {
+    var row_id = $(this).attr('row_id');
+    $('#pipe_sizings_pipe_id_' + row_id).val('');
+    if ($(this).val() == '') {
+      return false;
+    }
+
+    var pipe_od = pipe_size_pipe_ods[$('#pipe_sizings_pipe_size_' + row_id).val()] / pipe_id_conversion_factor;
+    var wall_thickness = pipe_size_wall_thinkness[$('#pipe_sizings_pipe_size_' + row_id).val()][$(this).val()] / pipe_id_conversion_factor;
+
+    var pipe_id = pipe_od - (2 * wall_thickness);
+    $('#pipe_sizings_pipe_id_' + row_id).val(get_project_field_value('.pipe_sizings_pipe_id', pipe_id, unit_decimals));
+  });
+
+  //Get steam phase
+  function get_stream_phase() {
+    var stream_phase;
+    if ($('#line_sizing_vapour_fraction').val() == 1) {
+      stream_phase = "Vapor";
+    } else if ($('#line_sizing_vapour_fraction').val() == 0) {
+      stream_phase = "Liquid";
+    } else if ($('#line_sizing_vapour_fraction').val() > 0 && $('#line_sizing_vapour_fraction').val() < 1) {
+      stream_phase = "Two-Phase";
+    }
+    return stream_phase;
+  }
+
+  var dd_sc_category = {}
+  $.each($('#line_sizing_sizing_criteria_category_id >option'), function (k, v) {
+    if ($(v).text().search(/liquid/i) != -1) {
+      dd_sc_category["liquid"] = $(v).val();
+    }
+    if ($(v).text().search(/vapor/i) != -1) {
+      dd_sc_category["vapor"] = $(v).val();
+    }
+    if ($(v).text().search(/vapor/i) == -1 || $(v).text().search(/liquid/i) == -1) {
+      dd_sc_category["other"] = $(v).val();
+    }
+  });
+
+  //set sizing criteria catergory
+  function set_sizing_criteria_category() {
+
+    //clear values
+    $('#line_sizing_sizing_criteria_category_type_id').val('');
+    $('#line_sizing_sizing_criteria_id').val('');
+    $('#line_sizing_system_equivalent_length').val('');
+    $('#line_sizing_system_maximum_deltaP').val('');
+
+    if (get_stream_phase() == "Liquid" && $('#line_sizing_liquid_mw').val() != 18.02) {
+      $('#line_sizing_sizing_criteria_category_id').val(dd_sc_category["liquid"]);
+      $('#line_sizing_sizing_criteria_category_id').trigger('change');
+      $('#line_sizing_sizing_criteria_category_type_id').val(sizing_criteria_category_type_values["Process Service & Equipment"]);
+    }
+    else if (get_stream_phase() == "Liquid" && $('#line_sizing_liquid_mw').val() == 18.02) {
+      $('#line_sizing_sizing_criteria_category_id').val(dd_sc_category["liquid"]);
+      $('#line_sizing_sizing_criteria_category_id').trigger('change');
+      $('#line_sizing_sizing_criteria_category_type_id').val(sizing_criteria_category_type_values["Water"]);
+    }
+    else if (get_stream_phase() == "Vapor" && $('#line_sizing_vapor_mw').val() != 18.02) {
+      $('#line_sizing_sizing_criteria_category_id').val(dd_sc_category["vapor"]);
+      $('#line_sizing_sizing_criteria_category_id').trigger('change');
+      $('#line_sizing_sizing_criteria_category_type_id').val(sizing_criteria_category_type_values["Process Service & Equipment"]);
+    }
+    else if (get_stream_phase() == "Vapor" && $('#line_sizing_vapor_mw').val() == 18.02) {
+      $('#line_sizing_sizing_criteria_category_id').val(dd_sc_category["vapor"]);
+      $('#line_sizing_sizing_criteria_category_id').trigger('change');
+      $('#line_sizing_sizing_criteria_category_type_id').val(sizing_criteria_category_type_values["Steam"]);
+    }
+    else if (get_stream_phase() == "Two-Phase" && $('#line_sizing_liquid_mw').val() == 18.02) {
+      $('#line_sizing_sizing_criteria_category_id').val(dd_sc_category["other"]);
+      $('#line_sizing_sizing_criteria_category_id').trigger('change');
+      $('#line_sizing_sizing_criteria_category_type_id').val(sizing_criteria_category_type_values["Vapor/Water Service & Equipment"]);
+    }
+    else if (get_stream_phase() == "Two-Phase" && $('#line_sizing_liquid_mw').val() != 18.02) {
+      $('#line_sizing_sizing_criteria_category_id').val(dd_sc_category["other"]);
+      $('#line_sizing_sizing_criteria_category_id').trigger('change');
+      $('#line_sizing_sizing_criteria_category_type_id').val(sizing_criteria_category_type_values["Process Service & Equipment"]);
+    }
+  }
+
+  //sizing criteria calculate
+  $('#sizing_criteria_calculate_btn').click(function(){
+    var f = $('form');
+   $.post(f.attr('action'),f.serialize(),function(){
+      $.post("/admin/line_sizings/segment_sizing_criteria_calculation",
+            {line_sizing_id:line_sizing_id},function(resp){ 
+            window.location.reload(); 
+        })
+    })
+ });
+
+  //Change target_by variable.
+  $('#target_by').change(function () {
+    //alert("kjkljlk")
+    $.get('/admin/line_sizings/get_flow_regime', {
+      line_sizing_id:line_sizing_id
+    }, function (data) {
+      $('#flow_regime_baker_table tbody:last').remove()
+
+      $('#flow_regime_baker_table')
+      .append($('<tbody>')
+        .append($('<tr>').append($('<td>').html('Select the values below to determine an ideal pipe_id').attr({colspan:"7"})))
+        )
+
+      for (i = 32; i >= 0; i--) {
+        if (Math.abs(data['by'][i]) > $('#target_by').val()) {
+          $('#flow_regime_baker_table tbody:last')
+          .append($('<tr>').append($('<td>').append($('<label>').html(data['pipe_id'][i]).attr('id', "frb_pipe_id_" + i)))
+            .append($('<td>').append($('<label>').html(data['by'][i]).attr('id', "frb_by_" + i)))
+            .append($('<td>').append($('<label>').html(data['errosion_index'][i]).attr('id', "frb_errosion_index_" + i)))
+            .append($('<td>').append($('<label>').html(data['vapor_superficial_density'][i])
+              .attr('id', "frb_vapor_superficial_velocity_" + i))
+            )
+            .append($('<td>').append($('<label>').html(data['liquid_superficial_density'][i])
+              .attr('id', "frb_liquid_superficial_velocity_" + i))
+            )
+            .append($('<td>').append($('<select>').attr({id:"desired_flow_regime_" + i}))
+              )
+            .append($('<td>').append($('<select>').attr({id:"current_flow_regime_" + i})))
+            )
+          $(flow_regimes).each(function (k, v) {
+            $('#desired_flow_regime_' + i).append($('<option></option>').val(v).html(v));
+          });
+          $(flow_regimes).each(function (k, v) {
+            $('#current_flow_regime_' + i).append($('<option></option>').val(v).html(v));
+          });
+
+          if (data['bx'] < 125 && data['pipe_id'][i] <= 2.469) {
+            $('#desired_flow_regime_' + i + ' option:eq(6)').attr({selected:"selected"})
+          }
+          else if (data['bx'] < 125 && data['pipe_id'][i] > 2.469) {
+            $('#desired_flow_regime_' + i + ' option:eq(5)').attr({selected:"selected"})
+          }
+          else if (data['bx'] >= 125 && data['pipe_id'][i] > 2.469) {
+            $('#desired_flow_regime_32 option:eq(2)').attr({selected:"selected"})
+          }
+
+        }
+
+      }
+
+      $.colorbox({
+        href:'#flow_regime_baker',
+        inline:true,
+        onClosed:function () {
+          if (pipes_orifice.length != 0) {
+            orifice_coefficient();
+          }
+          else {
+            send_segment_calc_request();
+            //should also reload the page, TO DO
+          }
+        }
+      });
+
+    }, 'json');//end post
+
+  });//end change function
+
+function send_calc_request() {
+  var desired_flow_regime = new Array();
+  var current_flow_regime = new Array();
+  for (i = 0; i < 33; i++) {
+    desired_flow_regime[i] = $('#desired_flow_regime_' + i).val();
+    current_flow_regime[i] = $('#current_flow_regime_' + i).val();
+  }
+    //calculation in server side
+    $.get('/admin/line_sizings/sizing_criteria_calculation',
+      {line_sizing_id:line_sizing_id,
+        target_by:$('#target_by').val(),
+        desired_flow_regime:$('#desired_flow_regime').val(),
+        current_flow_regime:$('current_flow_regime').val()
+      },
+      function (data) {
+      }, 'json'
+      );
+  }
+
+  function send_segment_calc_request() {
+    var desired_flow_regime = new Array();
+    var current_flow_regime = new Array();
+    var flow_c_text = new Array();
+    for (i = 0; i < 33; i++) {
+      desired_flow_regime[i] = $('#desired_flow_regime_' + i).val();
+      current_flow_regime[i] = $('#current_flow_regime_' + i).val();
+      flow_c_text[i] = $('#flow_c_text_' + i).val();
+    }
+    //calculation in server side
+    $.post('/admin/line_sizings/segment_sizing_criteria_calculation',
+      {line_sizing_id:line_sizing_id,
+        target_by:$('#target_by').val(),
+        desired_flow_regime:desired_flow_regime,
+        current_flow_regime:current_flow_regime,
+        flow_c:flow_c_text
+      },
+      function (data) {
+        if (data['retry'] == true) {
+          if (confirm("At the proposed internal pipe diameter of " + data['ppk'] + " inches, the calculated pressure drop exceeds the maximum allowable pressure drop per specified length for this stream.  If the maximum allowable pressure drop is governing, the user should further consider the flow regime target.  Do you want to redo this calculation?  Otherwise, this violation will be noted in the calculations notes and the next size up diameter will be accepted. Excessive Pressure Drop Calculated")) {
+            $('#target_by').trigger('change');
+            //$('#sizing_criteria_calculate_btn').trigger('click');
+          }
+          else {
+            window.location = "http://localhost:3000/admin/line_sizings/" + line_sizing_id + "/edit"
+
+          }
+        }
+        else {
+          window.location = "http://localhost:3000/admin/line_sizings/" + line_sizing_id + "/edit"
+        }
+      },
+      'json'
+      );
+}
+
+function orifice_coefficient() {
+  $.colorbox({
+    href:'#orifice_coefficient',
+    inline:true,
+    onClosed:function () {
+      send_segment_calc_request();
+    }
+  });
+}
+
+function LiquidDiameterCalc(liquid_viscosity, liquid_density, stream_pressure, max_p_drop, sum_length, stream_flow_rate, PI, pipe_roughness) {
+  var f = [], Nre = [], alpha = [], pipe_id = [], kfi = [], elev = [], flow_rate = [];
+
+  var pressure_engergy = (-max_p_drop / liquid_density) * 144;
+
+  var potential_energy = 0;
+
+  var work_done_w = 0;
+
+  var heat_input_q = 0;
+
+  var driving_force = -(pressure_engergy + potential_energy + work_done_w + heat_input_q)
+
+  var volume_rate = stream_flow_rate / liquid_density;
+  Nre[0] = ((1.03892 * 10 ^ 9 * driving_force * liquid_density ^ 5 * volume_rate ^ 3) / (sum_length * liquid_viscosity * 5)) ^ (1 / 5);
+  pipe_id[0] = (6.316 * volume_rate * liquid_density) / (liquid_viscosity * Nre[0])
+
+}
+
+function update_design_p_and_t(){
+  var p = $('#line_sizing_dc_design_pressure').val();
+  var t = $('#line_sizing_dc_design_temperature').val();
+  $('#line_sizing_dc_spt_design_perssure,#line_sizing_dc_pc_design_pressure').val(p);
+  $('#line_sizing_dc_spt_design_temperature,#line_sizing_dc_pc_design_temperature').val(t);
+
+}
+$("#line_sizing_dc_design_pressure,#line_sizing_dc_design_temperature").blur(function(){update_design_p_and_t();})
+
+function validate_design_condition(){
+  var selected = $("input[name='line_sizing[dc_design_basis]']:checked").val();
+  var valid = true;
+  $('input').css({'border':'1px solid #CCCCCC'})
+  $("input[class*='source_destination_required']").each(function(){
+    if(!$.isNumeric($(this).val())){
+        $(this).css({'border': '1px solid red'})
+        valid = false;
+      }
+  });
+
+  if(selected == 'destination'){
+    $("input[class*='destination_required']").each(function(){
+      if(!$.isNumeric($(this).val())){
+          $(this).css({'border': '1px solid red'})
+          valid = false;
+        }
+    });
+  }
+  else if(selected == 'source'){
+    $("input[class*='source_required']").each(function(){
+      if(!$.isNumeric($(this).val())){
+          $(this).css({'border': '1px solid red'})
+          valid = false;
+        }
+    });
+  }
+
+  if(!valid){alert('Please enter required values')}
+  return valid
+}
+
+$("#design_condition_design").click(function(){
+  if(validate_design_condition()){
+    var f = $('form');
+    $.post(f.attr('action'),f.serialize(),function(){
+      $.get("/admin/line_sizings/design_condition_design",{line_sizing_id:line_sizing_id},function(data){
+       $("#line_sizing_dc_design_pressure,#line_sizing_dc_spt_design_perssure,#line_sizing_dc_pc_design_pressure").val(data.design_pressure);
+       $("#line_sizing_dc_design_temperature,#line_sizing_dc_spt_design_temperature,#line_sizing_dc_pc_design_temperature").val(data.design_temperature);
+       //window.location.reload()
+     })
+    })
+  }
+})
+
+function validate_spt_thickness(){
+  var valid = true;
+  $('input').css({'border':'1px solid #CCCCCC'})
+  $('input.spt_required').each(function(){
+  if(!$.isNumeric($(this).val())){
+        $(this).css({'border': '1px solid red'})
+        valid = false;
+      }
+  })
+  if(!valid){alert('Please enter required values!')}
+  return valid
+}
+
+$("#straight_pipe_thickness_design").click(function(){
+  if(validate_spt_thickness()){
+    var f = $('form');
+    $.post(f.attr('action'),f.serialize(),function(){
+      $.get("/admin/line_sizings/straight_pipe_thickness_design",{line_sizing_id:line_sizing_id},function(data){
+        $("#pressure_design_thickness").text(data.pressure_thickness);
+        $("#minimum_required_thickness").text(data.minimum_required_thickness);
+      })
+    })
+  }
+})
+
+$("#target_estimate").click(function(){
+  $.get("/admin/line_sizings/target_two_phase_regime_estimate",
+   {line_sizing_id:line_sizing_id},
+   function(data){
+    var f = $('#line_sizing_target_two_phase_flow_regime');
+    f.empty();
+    f.append("<option>Please select</option>");
+    $.each(data.options,function(i,v){
+     if(data["default"] != null && v[1] == data["default"]){
+      f.append($("<option></option>").val(v[0]).html(v[1]).attr('selected','selected'));
+    }
+    else{
+      f.append($("<option></option>").val(v[0]).html(v[1]));
+    }
+  })
+    console.log(data);
+  });
+})
+
+$('.results_select').change(function(){
+  var val = $(this).children('option:selected').val();
+  var id = $(this).attr('id');
+  if($.isNumeric(val)){
+   $.each(calculated_results,function(k,v){
+     if(v.pipe_size == parseFloat(val)){
+      //attach value to radio button
+      $('input#'+id+"_iteration").val(v.nominal_pipe_size);
+      //and fill the labels
+      $.each(calculated_results[k],function(k,v){
+       $('label#'+id+'_'+k).html(v);
+     })
+    }
+  })
+ }
+})
+$('#outer_diameter_calc').click(function(){
+  var pipe_size = $("input[name='line_sizing[sc_selected_pipe_size]']:checked").val();
+  $.get('/admin/line_sizings/calculate_outer_diameter',
+      {line_sizing_id:line_sizing_id, pipe_size:pipe_size},
+    function(resp){$('#line_sizing_dc_spt_pipe_outer_diameter').val(resp.diameter)})
+})
+
+</script>
+

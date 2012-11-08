@@ -1,0 +1,2156 @@
+<style type="text/css">
+  #discharge_table td {
+    height: 40px;
+  }
+
+  #suction_piping_table input[type="text"] {
+    width: 100px;
+  }
+
+  #discharge_suction_piping_table input[type="text"] {
+    width: 100px;
+  }
+
+  #pump_sizing_discharges input[type="text"] {
+    width: 50px;
+  }
+
+  .discharge_circuit_piping_table input[type="text"] {
+    width: 100px;
+  }
+
+  #centrifugal_pumps input[type="text"] {
+    width: 100px;
+  }
+</style>
+
+<%= form_for pump_sizing, :url => pump_sizing.new_record? ? admin_pump_sizings_path : admin_pump_sizing_path(pump_sizing), :html => {:style => 'width:auto;'} do |f| %>
+  <%= f.error_messages %>
+  <% if pump_sizing.new_record? %>
+      <%= f.hidden_field :company_id %>
+      <%= f.hidden_field :client_id, :value => @user_project_settings.client_id %>
+      <%= f.hidden_field :project_id, :value => @user_project_settings.project_id %>
+      <%= f.hidden_field :process_unit_id, :value => @user_project_settings.process_unit_id %>
+    <% end %>
+
+  <div class="form-element-last">
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :client_id %><br>
+      <%= f.label :client_id,(pump_sizing.client.name rescue @user_project_settings.client.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :project_id %><br>
+      <%= f.label :project_id,(pump_sizing.project.project_num rescue @user_project_settings.project.project_num), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :process_unit_id %><br>
+      <%= f.label :process_unit_id,(pump_sizing.process_unit.name rescue @user_project_settings.process_unit.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :centrifugal_pump_tag %><br>
+      <%= f.text_field :centrifugal_pump_tag %>
+		</span>
+    <% unless pump_sizing.new_record? %>
+      <span style="float:left;margin-right:40px;">
+        <%= label_tag :status %><br>
+        <strong><%= sizing_status(pump_sizing) %></strong>
+      </span>
+      <span style="float:left;margin-right:40px;">
+        <br>
+        <%= sizing_status_request_button(pump_sizing) %>
+      </span>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+  <div class="form-buttons">
+    <%= f.submit pump_sizing.new_record? ? 'Create' : 'Update' %>
+  </div>
+
+  <div>
+    <table id='driver_table'>
+      <tr><td colspan='8'><b>Associated Drivers</b></td></tr>
+      <tr>
+          <td><b>Primary Driver Type</b></td>
+          <td><label>&nbsp;<%= pump_sizing.primary_driver_type %></label></td>
+          <td><b>Primary Driver Tag</b></td>
+          <td><label>&nbsp;<%= pump_sizing.primary_driver_tag %></label></td>
+          <td><b>Secondary Driver Type</b></td>
+          <td><label>&nbsp;<%= pump_sizing.secondary_driver_type %></label></td>
+          <td><b>Secondary Driver Tag</b></td>
+          <td><label>&nbsp;<%= pump_sizing.secondary_driver_tag %></label></td>
+      </tr>
+    </table>
+  </div>
+  <!-- tabs -->
+  <div>
+  <ul class="simple-tabs">
+    <li><a href="#tab1">Suction</a></li>
+    <li><a href="#tab2">Discharge</a></li>
+    <li><a href="#tab3">Centrifugal Design</a></li>
+    <li><a href="#tab4">Reciprocating Design</a></li>
+    <li><a href="#tab5">CV Summary</a></li>
+    <li><a href="#tab6">FE Summary</a></li>
+    <li><a href="#tab7">Pump Curve</a></li>
+    <li><a href="#tab8">Review</a></li>
+  </ul>
+  <div class="tab_container">
+  <div id="tab1" class="tab_content">
+    <!-- Suction -->
+    <table style="width:100%;">
+      <tr>
+        <td><label class="sub_title">Process Basis</label></td>
+        <td><%= f.collection_select :process_basis_id, @project.heat_and_material_balances, :id, :case, :prompt => true %></td>
+        <td colspan="2" rowspan="2"></td>
+      </tr>
+      <tr>
+        <td colspan="2"><label class="sub_title">Upstream Conditions</label></td>
+      </tr>
+      <tr>
+        <td width="25%">Stream No</td>
+        <td width="25%"><%= f.collection_select :su_stream_no, @streams, :stream_no, :display_stream_no, :prompt => true %></td>
+        <td width="25%">Density</td>
+        <td width="25%"><%= f.text_field :su_density, :class => "small-text-100" %>&nbsp;<label id="pump_sizing_su_density_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Pressure</td>
+        <td><%= f.text_field :su_pressure, :class => "small-text-100" %>&nbsp;<label id="pump_sizing_su_pressure_unit"></label>
+        </td>
+        <td>Viscosity</td>
+        <td><%= f.text_field :su_viscosity, :class => "small-text-100" %>&nbsp;<label id="pump_sizing_su_viscosity_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Temperature</td>
+        <td><%= f.text_field :su_temperature, :class => "small-text-100" %>&nbsp;<label id="pump_sizing_su_temperature_unit"></label>
+        </td>
+        <td>Specific Heat Capacity</td>
+        <td><%= f.text_field :su_specific_heat_capacity, :class => "small-text-100" %>&nbsp;<label id="pump_sizing_su_specific_heat_capacity_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Mass Vapor Fraction</td>
+        <td><%= f.text_field :su_mass_vapor_fraction, :class => "small-text-100 mass_vapor_fraction_dimensionless" %>&nbsp;</td>
+        <td>Vapor Pressure</td>
+        <td><%= f.text_field :su_vapor_pressure, :class => "small-text-100" %>&nbsp;
+          <label id="pump_sizing_su_vapor_pressure_unit"></label></td>
+      </tr>
+
+      <tr>
+        <td>Mass Flow Rate</td>
+        <td><%= f.text_field :su_mass_flow_rate, :class => "small-text-100" %>&nbsp;
+          <label id="pump_sizing_su_mass_flow_rate_unit"></label></td>
+        <td>Critical Pressure</td>
+        <td><%= f.text_field :su_critical_pressure, :class => "small-text-100" %>&nbsp;
+          <label id="pump_sizing_su_critical_pressure_unit"></label></td>
+      </tr>
+
+
+      <tr>
+        <td>Pipe Material</td>
+        <td><%= f.select :su_pipe_id, @pipes.collect{|p| ["#{p["material"]} - #{p["conditions"]}", p["id"]]}, :prompt => true %></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+        <td>Pipe Roughness</td>
+        <td><%= f.text_field :su_pipe_roughness, :class => "small-text-100" %>&nbsp;
+        <label id="pump_sizing_su_pipe_roughness_unit"></label></td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+
+
+      <tr>
+        <td colspan="2"><label class="sub_title">Suction Pipe Configuration</label></td>
+        <td colspan="2" rowspan="3"></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <input type="button" value="Enter Circuit Piping" id="enter_circuit_piping"/>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="button" id="circuit_calculate" value="Calculate"/>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2"><b><u>Suction Loss</u></b></td>
+      </tr>
+      <tr>
+        <td>Fitting &Delta;P</td>
+        <td><%= f.text_field :su_fitting_dP, :class => "small-text-100" %>&nbsp;<label id="pump_sizing_su_fitting_dP_unit"></label>
+        </td>
+        <td>Total Suction &Delta;P</td>
+        <td><%= f.text_field :su_total_suction_dP, :class => "small-text-100" %>&nbsp;<label id="pump_sizing_su_total_suction_dP_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Equipment &Delta;P</td>
+        <td><%= f.text_field :su_equipment_dP, :class => "small-text-100" %>&nbsp;<label id="pump_sizing_su_equipment_dP_unit"></label>
+        </td>
+        <td>Pressure @ Suction Nozzle</td>
+        <td><%= f.text_field :su_pressure_at_suction_nozzle, :class => "small-text-100" %>
+          &nbsp;<label id="pump_sizing_su_pressure_at_suction_nozzle_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Control Valve &Delta;P</td>
+        <td><%= f.text_field :su_control_valve_dP, :class => "small-text-100" %>
+          &nbsp;<label id="pump_sizing_su_control_valve_dP_unit"></label>
+        </td>
+        <td>Max Upstream pressure</td>
+        <td><%= f.text_field :su_max_upstream_pressure, :class => "small-text-100" %>
+          &nbsp;<label id="pump_sizing_su_max_upstream_pressure_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Orifice &Delta;P</td>
+        <td><%= f.text_field :su_orifice_dP, :class => "small-text-100" %>
+          &nbsp;<label id="pump_sizing_su_orifice_dP_unit"></label>
+        </td>
+        <td>Max Pressure @ Suction Nozzle</td>
+        <td>
+          <%= f.text_field :su_max_pressure_at_suction_nozzle, :class => "small-text-100" %>&nbsp;
+          <label id="pump_sizing_su_max_pressure_at_suction_nozzle_unit"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <input type="button" id='pump_suction_design' value="Calculate">
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab2" class="tab_content" style="overflow-x:auto;">
+    <!-- Discharge -->
+    <div>
+      <input type="button" value="Clone Circuit Piping" id="show_clone_circuit_piping">
+    </div>
+
+    <div>
+      <table id="pump_sizing_discharges" style="width:100%;">
+        <tr>
+          <th rowspan="2">S.No</th>
+          <th rowspan="2">Design Circuit</th>
+          <th rowspan="2">Process Basis</th>
+          <th rowspan="2">Destination Stream</th>
+          <th rowspan="2">Circuit Piping</th>
+          <th>Destination Pressure</th>
+          <th>Fitting &Delta;P</th>
+          <th>Equipment &Delta;P</th>
+          <th>Control Valve &Delta;P</th>
+          <th>Orifice &Delta;P</th>
+          <th>Total System &Delta;P</th>
+          <th>Press @ Discharge Nozzle</th>
+          <th rowspan="2"></th>
+        </tr>
+        <tr>
+          <th><%= @project.unit("Pressure", "General") %></th>
+          <th><%= @project.unit("Pressure", "Differential") %></th>
+          <th><%= @project.unit("Pressure", "Differential") %></th>
+          <th><%= @project.unit("Pressure", "Differential") %></th>
+          <th><%= @project.unit("Pressure", "Differential") %></th>
+          <th><%= @project.unit("Pressure", "General") %></th>
+          <th><%= @project.unit("Pressure", "General") %></th>
+        </tr>
+        <% pump_sizing.pump_sizing_discharges.each_with_index do |dc, i| %>
+          <tr>
+            <td>
+              <b><%= i+1 %></b>
+              <%= hidden_field_tag "pump_sizing[pump_sizing_discharges][#{i+1}][id]", dc.id, :id => "discharges_id_#{i+1}" %>
+            </td>
+            <td>
+              <%= radio_button_tag "pump_sizing[selected_discharge_design_circuit]", dc.id, checked = dc.id == pump_sizing.selected_discharge_design_circuit, :id => "design_circuit_#{i+1}", :class => 'dc_design_circuit', :disabled => 'disabled' %>
+            </td>
+            <td><%= select_tag "pump_sizing[pump_sizing_discharges][#{i+1}][process_basis_id]", options_for_select(@company.heat_and_material_balances.collect { |p| [p[:case], p[:id]] }.insert(0, ''), dc.process_basis_id), {:id => "discharge_process_basis_id_#{i+1}", :row_id => "#{i+1}"} %></td>
+            <td><%= select_tag "pump_sizing[pump_sizing_discharges][#{i+1}][destination_stream_no]", options_for_select(Stream.get_stream_nos_by_process_basis(dc.process_basis_id).collect { |p| [p.display_stream_no, p.stream_no] }.insert(0, ''), dc.destination_stream_no), :id => "discharge_destination_stream_no_#{i+1}", :style => "width:100px;", :row_id => "#{i+1}" %></td>
+            <td><input type="button" value="Circuit Piping" class="circuit_piping_btn" row_id="<%= i+1 %>"></td>
+            <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{i+1}][destination_pressure]", dc.destination_pressure, :id => "discharge_destination_pressure_#{i+1}" %></td>
+            <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{i+1}][fitting_dp]", dc.fitting_dp, :id => "discharge_fitting_dp_#{i+1}" %></td>
+            <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{i+1}][equipment_dp]", dc.equipment_dp, :id => "discharge_equipment_dp_#{i+1}" %></td>
+            <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{i+1}][control_valve_dp]", dc.control_valve_dp, :id => "discharge_control_valve_dp_#{i+1}" %></td>
+            <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{i+1}][orifice_dp]", dc.orifice_dp, :id => "discharge_orifice_dp_#{i+1}" %></td>
+            <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{i+1}][total_system_dp]", dc.total_system_dp, :id => "discharge_total_system_dp_#{i+1}" %></td>
+            <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{i+1}][pressure_at_discharge_nozzle_dp]", dc.pressure_at_discharge_nozzle_dp, :id => "discharge_pressure_at_discharge_nozzle_dp_#{i+1}" %></td>
+            <td><%= link_to "X", "#", :class => "discharge_table_close_tr", :row_id => i+1 %></td>
+          </tr>
+        <% end %>
+        <% if pump_sizing.pump_sizing_discharges.empty? %>
+          <tr>
+            <td>
+              <b>1</b>
+              <%= hidden_field_tag "pump_sizing[pump_sizing_discharges][1][id]", "", :id => "discharges_id_1" %>
+            </td>
+            <td>
+              <%= radio_button_tag "design_circuit", '1', true, :id => "design_circuit_1" %>
+              <%= hidden_field_tag "pump_sizing[pump_sizing_discharges][1][design_circuit]", 1, :id => "discharge_design_circuit_1" %>
+            </td>
+            <td><%= select_tag "pump_sizing[pump_sizing_discharges][1][process_basis_id]", options_for_select(@company.heat_and_material_balances.collect { |p| [p[:case], p[:id]] }.insert(0, '')), {:id => "discharge_process_basis_id_1", :row_id => 1} %></td>
+            <td><%= select_tag "pump_sizing[pump_sizing_discharges][1][destination_stream_no]", options_for_select(@streams.collect { |p| [p[:stream_no], p[:display_stream_no]] }.insert(0, '')), :id => "discharge_destination_stream_no_1", :style => "width:100px;", :row_id => 1 %></td>
+            <td><input type="button" value="Circuit Piping" class="circuit_piping_btn" row_id="1"></td>
+            <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][1][destination_pressure]", "", :id => "discharge_destination_pressure_1" %></td>
+            <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][1][fitting_dp]", "", :id => "discharge_fitting_dp_1" %></td>
+            <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][1][equipment_dp]", "", :id => "discharge_equipment_dp_1" %></td>
+            <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][1][control_valve_dp]", "", :id => "discharge_control_valve_dp_1" %></td>
+            <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][1][orifice_dp]", "", :id => "discharge_orifice_dp_1" %></td>
+            <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][1][total_system_dp]", "", :id => "discharge_total_system_dp_1" %></td>
+            <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][1][pressure_at_discharge_nozzle_dp]", "", :id => "discharge_pressure_at_discharge_nozzle_dp_dp_1" %></td>
+            <td><%= link_to "X", "#", :class => "discharge_table_close_tr", :pump_sizing_discharges_id => "0" %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+    <%= link_to "Add More", "#", :id => "add_new_discharge_row" %>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <input type='button' value='Calculate' id='discharge_calculate'>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <input type='button' value='Equalize' id='discharge_equalize'>
+
+    <table class="hidden" id="new_row_discharge">
+      <tr>
+        <td>
+          <b>#x#</b>
+          <%= hidden_field_tag "pump_sizing[pump_sizing_discharges][#x#][id]", "", :id => "discharges_id_#x#" %>
+        </td>
+        <td>
+          <%= radio_button_tag "design_circuit", '#x#', false, :id => "design_circuit_#x#" %>
+          <%= hidden_field_tag "pump_sizing[pump_sizing_discharges][#x#][design_circuit]", "", :id => "discharge_design_circuit_#x#" %>
+        </td>
+        <td><%= select_tag "pump_sizing[pump_sizing_discharges][#x#][process_basis_id]", options_for_select(@company.heat_and_material_balances.collect { |p| [p[:case], p[:id]] }.insert(0, '')), {:id => "discharge_process_basis_id_#x#", :row_id => "#x#"} %></td>
+        <td><%= select_tag "pump_sizing[pump_sizing_discharges][#x#][destination_stream_no]", options_for_select(@streams.collect { |p| [p[:stream_no], p[:display_stream_no]] }.insert(0, '')), :id => "discharge_destination_stream_no_#x#", :style => "width:100px;", :row_id => "#x#" %></td>
+        <td><input type="button" value="Circuit Piping" class="circuit_piping_btn" row_id="#x#"></td>
+        <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][destination_pressure]", "", :id => "discharge_destination_pressure_#x#" %></td>
+        <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][fitting_dp]", "", :id => "discharge_fitting_dp_#x#" %></td>
+        <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][equipment_dp]", "", :id => "discharge_equipment_dp_#x#" %></td>
+        <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][control_valve_dp]", "", :id => "discharge_control_valve_dp_#x#" %></td>
+        <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][orifice_dp]", "", :id => "discharge_orifice_dp_#x#" %></td>
+        <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][total_system_dp]", "", :id => "discharge_total_system_dp_#x#" %></td>
+        <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][pressure_at_discharge_nozzle_dp]", "", :id => "discharge_pressure_at_discharge_nozzle_dp_dp_#x#" %></td>
+        <td><%= link_to "X", "#", :class => "discharge_table_close_tr", :pump_sizing_discharges_id => "#x#" %></td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab3" class="tab_content">
+    <!-- Centrifugal Design -->
+    <table>
+      <tr>
+        <td colspan="2"><b><u>Pump Differential</u></b></td>
+        <td colspan="2"><b><u>NPSHA</u></b></td>
+      </tr>
+      <tr>
+        <td>Press @ Suction Nozzle</td>
+        <td><%= f.text_field :cd_press_at_suction_nozzle, :class => 'required' %>
+          &nbsp;<label id="pump_sizing_cd_press_at_suction_nozzle_unit"></label>
+        </td>
+        <td>Press @ Suction Nozzle</td>
+        <td><%= f.text_field :cd_np_press_at_suction_nozzle, :class => 'required' %>
+          &nbsp;<label id="pump_sizing_cd_np_press_at_suction_nozzle_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Press @ Discharge Nozzle</td>
+        <td><%= f.text_field :cd_press_at_discharge_nozzle, :class => 'required' %>
+          &nbsp;<label id="pump_sizing_cd_press_at_discharge_nozzle_unit"></label>
+        </td>
+        <td>Vapor Pressure</td>
+        <td><%= f.text_field :cd_vapor_pressure, :class => 'required' %>
+          &nbsp;<label id="pump_sizing_cd_vapor_pressure_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Differential Pressure</td>
+        <td><%= pump_sizing.cd_differential_pressure.to_s %>&nbsp;<label id="pump_sizing_cd_differential_pressure_unit"></label>
+        </td>
+        <td>NPSHA</td>
+        <td><%= pump_sizing.cd_npsha.to_s %>&nbsp;<label id="pump_sizing_cd_npsha_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Differential Head</td>
+        <td><%= pump_sizing.cd_differential_head.to_s %>&nbsp;<label id="pump_sizing_cd_differential_head_unit"></label>
+        </td>
+        <td colspan="2"><b><u>Compressible Liquid</u></b>&nbsp;&nbsp;&nbsp;<%= f.check_box :cd_compressible_liquid %>
+        </td>
+      </tr>
+      <tr>
+        <td>Safety Factor</td>
+        <td><%= pump_sizing.cd_safety_factor.to_s %>&nbsp;<label id="pump_sizing_cd_safety_factor_unit"></label></td>
+        <td>Temp @ Discharge Nozzle</td>
+        <td><%= pump_sizing.cd_temp_at_discharge_nozzle.to_s %>&nbsp;<label id="pump_sizing_cd_temp_at_discharge_nozzle_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Required Differential Head</td>
+        <td><%= pump_sizing.cd_required_differential_head.to_s %>&nbsp;<label id="pump_sizing_cd_required_differential_head_unit"></label>
+        </td>
+        <td>Density @ Discharge Nozzle</td>
+        <td><%= f.text_field :cd_density_at_discharge_nozzle, :class => "small-text-100" %>&nbsp;
+          <label id="pump_sizing_cd_density_at_discharge_nozzle_unit"></label></td>
+      </tr>
+      <tr>
+        <td colspan="2"><b><u>Estimated Shut-Off</u></b></td>
+        <td>Required Compression Head</td>
+        <td><%= pump_sizing.cd_required_compression_head.to_s %>&nbsp;<label id="pump_sizing_cd_required_compression_head_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Shut Off Factor</td>
+        <td><%= f.text_field :cd_shut_off_factor, :class => "small-text-100 required" %>&nbsp;%</td>
+        <td colspan="2"><b><u>Power Requirment</u></b></td>
+      </tr>
+      <tr>
+        <td>Shut Off Head</td>
+        <td><%= pump_sizing.cd_shut_off_head.to_s %>&nbsp;<label id="pump_sizing_cd_shut_off_head_unit"></label></td>
+        <td>Flow Rate</td>
+        <td><%= pump_sizing.cd_flow_rate.to_s %>&nbsp;<label id="pump_sizing_cd_flow_rate_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Max Suction Pressure</td>
+        <td><%= pump_sizing.cd_max_suction_pressure.to_s %>&nbsp;<label id="pump_sizing_cd_max_suction_pressure_unit"></label>
+        </td>
+        <td>S.G.</td>
+        <td><%= pump_sizing.cd_s_g.to_s %></td>
+      </tr>
+      <tr>
+        <td>Shut Off Pressure</td>
+        <td><%= pump_sizing.cd_shut_off_pressure.to_s %>&nbsp;<label id="pump_sizing_cd_shut_off_pressure_unit"></label>
+        </td>
+        <td>Hydraulic HP</td>
+        <td><%= pump_sizing.cd_hydraulic_hp.to_s %>&nbsp;<label id="pump_sizing_cd_hydraulic_hp_unit"></label></td>
+      </tr>
+      <tr>
+        <td colspan="2" rowspan="3"></td>
+        <td>Efficiency</td>
+        <td><%= f.text_field :cd_efficiency, :class => "small-text-100 required" %>&nbsp;%</td>
+      </tr>
+      <tr>
+        <td>Brake Horsepower</td>
+        <td><%= pump_sizing.cd_brake_horsepower.to_s %>&nbsp;<label id="pump_sizing_cd_brake_horsepower_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align:right;"><input type="button" id="design_pump_cd" value="Design Pump"></td>
+      </tr>
+    </table>
+  </div>
+  <div id="tab4" class="tab_content">
+    <!-- Reciprocation Design -->
+    <table>
+      <tr>
+        <td colspan="2"><b><u>Mechanical Specification</u></b></td>
+        <td colspan="2" width="50%"><b><u>NPSHA</u></b></td>
+      </tr>
+      <tr>
+        <td>Manufacturer</td>
+        <td><%= f.text_field :rd_manufacturer %></td>
+        <td>Press @ Suction Nozzle</td>
+        <td width="25%"><%= f.text_field :rd_press_at_suction_nozzle, :class => 'required' %>&nbsp;<label id="pump_sizing_rd_press_at_suction_nozzle_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Model size</td>
+        <td><%= f.text_field :rd_model_size %></td>
+        <td>Press @ Discharge Nozzle</td>
+        <td><%= f.text_field :rd_press_at_discharge_nozzle, :class => 'required' %>&nbsp;<label id="pump_sizing_rd_press_at_discharge_nozzle_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Pump Type</td>
+        <td><%= select_tag "pump_sizing[rd_pump_type]", options_for_select(PumpSizing.pump_type_list, pump_sizing.rd_pump_type)  %></td>
+         <td>Vapor Pressure</td>
+        <td><%= f.text_field :rd_vapor_pressure, :class => "required" %>
+          &nbsp;<label id="pump_sizing_rd_vapor_pressure_unit"></label></td>
+      </tr>
+      <tr>
+        <td>Stroke Action</td>
+        <td>
+          <% type = [{:id => "Single-Acting", :name => "Single-Acting"}, {:id => "Double-Acting", :name => "Double-Acting"}] %>
+          <% type << {:id => "Double-Acting with Guided Piston", :name => "Double-Acting with Guided Piston"} %>
+          <%= select_tag "pump_sizing[rd_stroke_action]", options_for_select(type.collect { |p| [p[:name], p[:name]] }.insert(0, ''), pump_sizing.rd_stroke_action), :id => "pump_sizing_rd_stroke_action" %>
+        </td>
+        <td>Acceleration Head</td>
+        <td><%= pump_sizing.rd_acceleration_head.to_s %>&nbsp;<label id="pump_sizing_rd_acceleration_head_unit"></label>
+          <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="" style="background-color:red;width:24px;" id="rd_acceleration_head_btn"> -->
+       </tr>
+      <tr>
+        <td>No of Cylinders</td>
+        <td><%= f.text_field :rd_no_of_cylinders, :class => "required" %></td>
+        <td>NPSHA</td>
+        <td><%= pump_sizing.rd_npsha.to_s %>&nbsp;<label id="pump_sizing_rd_npsha_unit"></label></td>
+    </tr>
+      <tr>
+        <td>Acceleration Head Factor for Pump Type, C</td>
+        <td>
+          <%= f.text_field :rd_acc_head_factor_for_pump_type %>
+        </td>
+        <td colspan='2' rowspan='2'>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>Bore</td>
+        <td><%= f.text_field :rd_bore, :class => "required" %>&nbsp;<label id="pump_sizing_rd_bore_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Stroke</td>
+        <td><%= f.text_field :rd_stroke, :class => "small-text-100 required" %>&nbsp;<label id="pump_sizing_rd_stroke_unit"></label>
+        </td>
+        <td colspan="2"><b><u>Power Requirement</u></b></td>
+      </tr>
+      <tr>
+        <td>Rod Diameter</td>
+        <td><%= f.text_field :rd_rod_diameter, :class => "required" %>&nbsp;<label id="pump_sizing_rd_rod_diameter_unit"></label>
+        </td>
+        <td>Differential Pressure</td>
+        <td><%= pump_sizing.rd_differential_pressure.to_s %>&nbsp;<label id="pump_sizing_rd_differential_pressure_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Piston Speed</td>
+        <td><%= f.text_field :rd_piston_speed, :class => "required" %>&nbsp;<label id="pump_sizing_rd_piston_speed_unit"></label>
+        </td>
+        <td>Differential Head</td>
+        <td><%= pump_sizing.rd_differential_head.to_s %>&nbsp;<label id="pump_sizing_rd_differential_head_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Leakage Factor, s</td>
+        <td><%= f.text_field :rd_leakage_factor_s, :class => "required" %></td>
+        <td>Piston Displacement</td>
+        <td><%= pump_sizing.rd_piston_displacement.to_s %>&nbsp;<label id="pump_sizing_rd_piston_displacement_unit"></label>
+        </td>
+      </tr>
+      <tr>
+        <td>Volume Ratio, r</td>
+        <td><%= f.text_field :rd_volume_ratio_r, :class => "required" %></td>
+        <td>Volumetric Efficiency</td>
+        <td><%= pump_sizing.rd_volumetric_efficiency.to_s %>&nbsp;%</td>
+      </tr>
+      <tr>
+        <td colspan="2"><b><u>Compressible Liquid</u></b>&nbsp;&nbsp;&nbsp;<%= f.check_box :rd_compressible_liquid %>
+        </td>
+        <td>Rated Discharge Capacity</td>
+        <td><%= pump_sizing.rd_rated_discharge_capacity.to_s %>&nbsp;<label id="pump_sizing_rd_rated_discharge_capacity_unit"></label>
+        </td>
+      </tr>
+
+      <tr>
+        <td>Fluid Service Type</td>
+        <td><%= select_tag "pump_sizing[rd_fluid_service_type]", options_for_select(PumpSizing.fluid_service_types, pump_sizing.rd_fluid_service_type) %>
+        </td>
+        <td>Hydraulic HP</td>
+        <td><%= pump_sizing.rd_hydraulic_hp.to_s %>&nbsp;<label id="pump_sizing_rd_hydraulic_hp_unit"></label></td>
+      </tr>
+       <tr>
+        <td>Acceleration Head Factor for Fluid Compressibility. k </td>
+        <td><%= f.text_field :rd_acc_head_factor_for_fluid_compressibility %>
+        </td>
+        <td>Mechanical Efficiency</td>
+        <td><%= f.text_field :rd_mechanical_efficiency, :class => "small-text-100" %>&nbsp;%</td>
+      </tr>
+
+      <tr>
+        <td>Temp @ Discharge Nozzle</td>
+        <td><%= pump_sizing.rd_temp_at_discharge_nozzle.to_s %>&nbsp;<label id="pump_sizing_rd_temp_at_discharge_nozzle_unit"></label>
+        </td>
+         <td>Brake Horsepower</td>
+        <td><%= pump_sizing.rd_brake_horsepower.to_s %>&nbsp;<label id="pump_sizing_rd_brake_horsepower_unit"></label>
+        </td>
+      </tr>
+
+      <tr>
+        <td>Density @ Discharge Nozzle</td>
+        <td>
+          <%= f.text_field :rd_density_at_discharge_nozzle %>&nbsp;<label id="pump_sizing_rd_density_at_discharge_nozzle_unit"></label>
+        </td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+
+      <tr>
+        <td>Compression Head</td>
+        <td><%= pump_sizing.rd_compression_head.to_s %>&nbsp;<label id="pump_sizing_rd_compression_head_unit"></label>
+        </td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td colspan="4" style="text-align:right;"><input type="button" id="design_pump_rp" value="Design Pump"/></td>
+      </tr>
+    </table>
+</div>
+<div id="tab5" class="tab_content">
+    <!-- CV Summary -->
+    <table>
+      <tr>
+        <td><b><u>No.</u></b></td>
+        <td><b><u>Circuit</u></b></td>
+        <td><b><u>Control Valve Tag</u></b></td>
+        <td><b><u>Inlet<br/>Pressure</u></b></td>
+        <td><b><u>Outlet<br/>Pressure</u></b></td>
+        <td><b><u>CV Delta P</u></b></td>
+        <td><b><u>Density</u></b></td>
+        <td><b><u>CV</u></b></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><%= @project.unit("Pressure", "General") %></td>
+        <td><%= @project.unit("Pressure", "General") %></td>
+        <td><%= @project.unit("Pressure", "Differential") %></td>
+        <td><%= @project.unit("Density", "General") %></td>
+        <td></td>
+      </tr>
+      <% if !pump_sizing.cv_summary.nil? %>
+        <% pump_sizing.cv_summary.each_with_index do |cv,i| %>
+             <tr>
+              <td><%= i+1 %></td>
+              <td><%= cv[:circuit_number]+1 if !cv[:circuit_number].nil? %></td>
+              <td><%= cv[:control_valve_tag] %></td>
+              <td><%= cv[:inlet_pressure] %></td>
+              <td><%= cv[:outlet_pressure] %></td>
+              <td><%= cv[:cv_delta_p] %></td>
+              <td><%= cv[:density] %></td>
+              <td><%= cv[:cv] %></td>
+            </tr>
+        <% end %>
+      <% end %>
+    </table>
+  </div>
+  <div id="tab6" class="tab_content">
+    <!-- FE Summary -->
+     <% if !pump_sizing.fe_summary.nil? %>
+        <% pump_sizing.fe_summary.each_with_index do |fe,i| %>
+          <% if !fe[:message].nil? && fe[:message].length > 1 %>
+            <p style='color:red;'><%= fe[:message] %></p>
+          <% end %>
+        <% end %>
+    <% end %>
+    <table>
+      <tr>
+        <td><b><u>No.</u></b></td>
+        <td><b><u>Circuit</u></b></td>
+        <td><b><u>Flow Element Tag</u></b></td>
+        <td><b><u>Inlet<br/>Pressure</u></b></td>
+        <td><b><u>Outlet<br/>Pressure</u></b></td>
+        <td><b><u>FE Delta P</u></b></td>
+        <td><b><u>Density</u></b></td>
+        <td><b><u>Diameter</u></b></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><%= @project.unit("Pressure", "General") %></td>
+        <td><%= @project.unit("Pressure", "General") %></td>
+        <td><%= @project.unit("Pressure", "Differential") %></td>
+        <td><%= @project.unit("Density", "General") %></td>
+        <td><%= @project.unit("Length", "Small Dimension Length") %></td>
+      </tr>
+      <% if !pump_sizing.fe_summary.nil? %>
+        <% pump_sizing.fe_summary.each_with_index do |fe,i| %>
+             <tr>
+              <td><%= i+1 %></td>
+              <td><%= fe[:circuit_number]+1 if !fe[:circuit_number].nil? %></td>
+              <td><%= fe[:flow_element_tag] %></td>
+              <td><%= fe[:inlet_pressure] %></td>
+              <td><%= fe[:outlet_pressure] %></td>
+              <td><%= fe[:fe_delta_p] %></td>
+              <td><%= fe[:density] %></td>
+              <td><%= fe[:diameter] %></td>
+            </tr>
+        <% end %>
+      <% end %>
+    </table>
+  </div>
+  <div id="tab7" class="tab_content">
+    <!-- Pump Curve -->
+    <table style="width:auto;">
+      <tr>
+        <td colspan="2">Manufacturer</td>
+        <td colspan="2"><%= f.text_field :pc_manufacturer %></td>
+      </tr>
+      <tr>
+        <td colspan="2">Model/Size</td>
+        <td colspan="2"><%= f.text_field :pc_model %></td>
+      </tr>
+      <tr>
+        <td colspan="2">Curve No</td>
+        <td colspan="2"><%= f.text_field :pc_curve_no %></td>
+      </tr>
+    </table>
+
+    <table id="centrifugal_pumps" style="width:auto;">
+      <tr>
+        <td colspan="3" rowspan="2"></td>
+        <td><u>Impeller 1</u></td>
+        <td><u>Impeller 2</u></td>
+        <td><u>Impeller 3</u></td>
+        <td><u>Impeller 4</u></td>
+        <td rowspan="2"></td>
+      </tr>
+      <tr>
+        <td><%= f.text_field :pc_impeller_1, :class => "small-text-100" %></td>
+        <td><%= f.text_field :pc_impeller_2, :class => "small-text-100" %></td>
+        <td><%= f.text_field :pc_impeller_3, :class => "small-text-100" %></td>
+        <td><%= f.text_field :pc_impeller_4, :class => "small-text-100" %>
+          &nbsp;<%= @project.unit("Length", "Small Dimension Length") %></td>
+      </tr>
+
+      <tr>
+        <th>No</th>
+        <th>Capacity</th>
+        <th>System Loss</th>
+        <th>Head 1</th>
+        <th>Head 2</th>
+        <th>Head 3</th>
+        <th>Head 4</th>
+        <th rowspan="2"></th>
+      </tr>
+      <tr>
+        <th></th>
+        <th><label class='pump_curve_capacity_unit'></label></th>
+        <th><label class='pump_curve_impeller_unit'></label></th>
+        <th><label class='pump_curve_impeller_unit'></label></th>
+        <th><label class='pump_curve_impeller_unit'></label></th>
+        <th><label class='pump_curve_impeller_unit'></label></th>
+        <th><label class='pump_curve_impeller_unit'></label></th>
+      </tr>
+      <% pump_sizing.centrifugal_pumps.each_with_index do |cp, i| %>
+        <tr>
+          <td>
+            <%= i+1 %>
+            <%= hidden_field_tag "pump_sizing[centrifugal_pumps][#{i+1}][id]", cp.id, :id => "centrifugal_pump_id_#{i+1}" %>
+            <%= hidden_field_tag "pump_sizing[centrifugal_pumps][#{i+1}][_destroy]", 'false', :id => "centrifugal_pump_destroy_#{i+1}" %>
+          </td>
+          <td><label><%= cp.capacity %></label></td>
+          <td><label><%= cp.system_loss %></label></td>
+          <td><%= text_field_tag "pump_sizing[centrifugal_pumps][#{i+1}][head_1]", cp.head_1, :id => "centrifugal_pump_head_1_#{i+1}" %></td>
+          <td><%= text_field_tag "pump_sizing[centrifugal_pumps][#{i+1}][head_2]", cp.head_2, :id => "centrifugal_pump_head_2_#{i+1}" %></td>
+          <td><%= text_field_tag "pump_sizing[centrifugal_pumps][#{i+1}][head_3]", cp.head_3, :id => "centrifugal_pump_head_3_#{i+1}" %></td>
+          <td><%= text_field_tag "pump_sizing[centrifugal_pumps][#{i+1}][head_4]", cp.head_4, :id => "centrifugal_pump_head_4_#{i+1}" %></td>
+          <td>&nbsp; <%= link_to "X", "#", :class => "centrifugal_pumps_close_tr", :row_id => "#{i+1}" %> </td>
+        </tr>
+      <% end %>
+      <% if pump_sizing.centrifugal_pumps.empty? %>
+        <tr>
+          <td>
+            1
+            <%= hidden_field_tag "pump_sizing[centrifugal_pumps][1][id]", "", :id => "centrifugal_pump_id_1" %>
+          </td>
+          <td></td>
+          <td></td>
+          <td><%= text_field_tag "pump_sizing[centrifugal_pumps][1][head_1]", "", :id => "centrifugal_pump_head_1_1" %></td>
+          <td><%= text_field_tag "pump_sizing[centrifugal_pumps][1][head_2]", "", :id => "centrifugal_pump_head_2_1" %></td>
+          <td><%= text_field_tag "pump_sizing[centrifugal_pumps][1][head_3]", "", :id => "centrifugal_pump_head_3_1" %></td>
+          <td><%= text_field_tag "pump_sizing[centrifugal_pumps][1][head_4]", "", :id => "centrifugal_pump_head_4_1" %></td>
+          <td><%= link_to "X", "#", :class => "centrifugal_pumps_close_tr", :row_id => "1" %></td>
+        </tr>
+      <% end %>
+    </table>
+    <%= link_to "Add More", "#", :id => "add_new_centrifugal_pumps_row" %>  
+    <input type='button' class='btn' id='system_loss_calculate' value='Calculate System Loss'>
+    &nbsp;&nbsp;<input type="button" value="Plot Curve" id="plot_curve_btn">
+
+    <table class="hidden" id="new_centrifugal_pumps_tr">
+      <tr>
+        <td>
+          #x#
+          <%= hidden_field_tag "pump_sizing[centrifugal_pumps][#x#][id]", "", :id => "centrifugal_pump_id_#x#" %>
+        </td>
+        <td></td>
+        <td></td>
+        <td><%= text_field_tag "pump_sizing[centrifugal_pumps][#x#][head_1]", "", :id => "centrifugal_pump_head_1_#x#" %></td>
+        <td><%= text_field_tag "pump_sizing[centrifugal_pumps][#x#][head_2]", "", :id => "centrifugal_pump_head_2_#x#" %></td>
+        <td><%= text_field_tag "pump_sizing[centrifugal_pumps][#x#][head_3]", "", :id => "centrifugal_pump_head_3_#x#" %></td>
+        <td><%= text_field_tag "pump_sizing[centrifugal_pumps][#x#][head_4]", "", :id => "centrifugal_pump_head_4_#x#" %></td>
+        <td><%= link_to "X", "#", :class => "centrifugal_pumps_close_tr", :row_id => "#x#" %></td>
+      </tr>
+    </table>
+
+    <div id="plot_curve" style="height:500px;width:700px;display:none;margin-top:20px;">
+    </div>
+
+  </div>
+  
+  <div id="tab8" class="tab_content">
+    <!-- Pump Heuristics -->
+    <table>
+      <tr>
+        <td>Power for pumping liquids: kW = (1.67) [Flow (m&sup3;/min)] [DP (bar)]/E[hp = Flow (gpm) DP
+          (psi)/(1.714)(E)] (E = frational efficiency)
+        </td>
+        <td width="150px">
+          <%= f.radio_button :ph_sizing_review_1, "yes" %>&nbsp;Yes&nbsp;
+          <%= f.radio_button :ph_sizing_review_1, "no" %>&nbsp;No&nbsp;
+          <%= f.radio_button :ph_sizing_review_1, "na" %>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Net positive suction head (NPSH) of a pump must be in excess of a certain number, depending
+          upon the kind of pumps and the conditions, if damage is to be avoided. NPSH = (pressure at
+          the eye of the impeller - vapor pressure)/(pg). Common range is 1.2 - 6.1 m (4 - 20 ft) of liquid
+        </td>
+        <td>
+          <%= f.radio_button :ph_sizing_review_2, "yes" %>&nbsp;Yes&nbsp;
+          <%= f.radio_button :ph_sizing_review_2, "no" %>&nbsp;No&nbsp;
+          <%= f.radio_button :ph_sizing_review_2, "na" %>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Specific speed Ns = (rpm/gpm)^0.5/(head in ft)^0.75. Pump may be damaged if certain limits
+          of Ns are exceeded, and efficiency is best in some ranges
+        </td>
+        <td>
+          <%= f.radio_button :ph_sizing_review_3, "yes" %>&nbsp;Yes&nbsp;
+          <%= f.radio_button :ph_sizing_review_3, "no" %>&nbsp;No&nbsp;
+          <%= f.radio_button :ph_sizing_review_3, "na" %>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Centrifugal pumps: Single stage for 0.057 - 18.9 m&sup3;/min (15 - 5000 gpm), 152 m (500 ft)
+          maximum head; multistage for 0.076 - 41.6 m&sup3;/min (20 - 11,000 gpm), 1675 m (5500 ft) maximum
+          head. Efficiency 45 % at 0.378 m&sup3;/min (100 gpm), 70% at 1.89 m&sup3;/min (500 gpm), and 80%
+          at 37.8 m&sup3;/min (10,000 gpm).
+        </td>
+        <td>
+          <%= f.radio_button :ph_sizing_review_4, "yes" %>&nbsp;Yes&nbsp;
+          <%= f.radio_button :ph_sizing_review_4, "no" %>&nbsp;No&nbsp;
+          <%= f.radio_button :ph_sizing_review_4, "na" %>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Axial pumps for 0.076 - 378 m&sup3/min (20 - 100,00 gpm), 12m (40 ft) head, 65 - 85% efficiency.
+        </td>
+        <td>
+          <%= f.radio_button :ph_sizing_review_5, "yes" %>&nbsp;Yes&nbsp;
+          <%= f.radio_button :ph_sizing_review_5, "no" %>&nbsp;No&nbsp;
+          <%= f.radio_button :ph_sizing_review_5, "na" %>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Rotary pumps for 0.00378 - 37.8 m&sup3;/min (10 - 10,000 gpm), 300 km(1,000,000 ft) maximum
+          head, 50% - 80% efficiency.
+        </td>
+        <td>
+          <%= f.radio_button :ph_sizing_review_6, "yes" %>&nbsp;Yes&nbsp;
+          <%= f.radio_button :ph_sizing_review_6, "no" %>&nbsp;No&nbsp;
+          <%= f.radio_button :ph_sizing_review_6, "na" %>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Reciprocating pumps for 0.0378 - 37.8 m&sup3;/min (10 - 10,000 gpm), 300 km (1,000,000 ft)
+          maximum head. Efficiency: 70% at 7.46 kW (10 hp), 85% at 37.3 kW (50 hp), and 90% at 373
+          kW (500 hp).
+        </td>
+        <td>
+          <%= f.radio_button :ph_sizing_review_7, "yes" %>&nbsp;Yes&nbsp;
+          <%= f.radio_button :ph_sizing_review_7, "no" %>&nbsp;No&nbsp;
+          <%= f.radio_button :ph_sizing_review_7, "na" %>&nbsp;N/A&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2"><b><u>NOTES</u></b></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <%= f.text_area :ph_notes, :size => "150x6" %>
+        </td>
+      </tr>
+    </table>
+  </div>
+  </div>
+  <div class="clear"></div>
+  </div>
+
+  <!-- SUCTION PIPING -->
+  <div style="display:none;">
+    <div id="suction_piping_box">
+      <table id="suction_piping_table">
+        <tr>
+          <th rowspan="2">No.</th>
+          <th rowspan="2">Fitting(s)</th>
+          <th rowspan="2">Fitting Tag</th>
+          <th>Pipe Size</th>
+          <th rowspan="2">Pipe Sch.</th>
+          <th>Pipe ID</th>
+          <th rowspan="2">% Flow</th>
+          <th rowspan="2">Ds/Dl<br>or Cv<br>or Dorifice(<label class="suction_pipings_pipe_id_unit"></label>)</th>
+          <th>Length</th>
+          <th>Elev.</th>
+          <th>&Delta;P</th>
+          <th rowspan="2"></th>
+        </tr>
+        <tr>
+          <th><label class="suction_pipings_pipe_size_unit"></label></th>
+          <th><label class="suction_pipings_pipe_id_unit"></label></th>
+          <th><label class="suction_pipings_length_unit"></label></th>
+          <th><label class="suction_pipings_elev_unit"></label></th>
+          <th><label class="suction_pipings_delta_p_unit"></label></th>
+        </tr>
+        <% pump_sizing.suction_pipings.where(:tab => "suction").each_with_index do |sp, i| %>
+          <tr>
+
+            <td>
+              <%= i+1 %>
+              <%= hidden_field_tag "pump_sizing[suction_pipings][#{i+1}][id]", sp.id, :id => "suction_pipings_id_#{i+1}" %>
+              <%= hidden_field_tag "pump_sizing[suction_pipings][#{i+1}][tab]", "suction", :id => "suction_pipings_tab_#{i+1}" %>
+            </td>
+            <td><%= select_tag "pump_sizing[suction_pipings][#{i+1}][fitting]", options_for_select(@fittings.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, ''), sp.fitting), :id => "suction_pipings_fitting_#{i+1}", :style => "width:200px;" %></td>
+
+          <!-- show stream property changer if exists -->
+           <% if !sp.stream_property_changer.nil? %>
+              <%= render :partial => 'new_stream_property_changer', :locals => {:sizing_type => 'pump_sizing', :piping_type => 'suction_pipings', :stream_property_changer => sp.stream_property_changer, :row_id => i+1, :tab => 'suction'} %>
+          <% else %>
+
+          <td><%= text_field_tag "pump_sizing[suction_pipings][#{i+1}][fitting_tag]", sp.fitting_tag, :id => "suction_pipings_fitting_tag_#{i+1}" %></td>
+          <td><%= select_tag "pump_sizing[suction_pipings][#{i+1}][pipe_size]", options_for_select(PipeSizing.pipe_sizes(@fitting_pipe_size_unit).collect { |p| [raw(p[:name]), p[:value]] }.insert(0, ''), sp.pipe_size), :id => "suction_pipings_pipe_size_#{i+1}", :class => "suction_pipings_pipe_size", :row_id => "#{i+1}" %></td>
+          <td><%= select_tag "pump_sizing[suction_pipings][#{i+1}][pipe_schedule]", options_for_select(PipeSizing.pipe_size_schedules[sp.pipe_size.to_s], sp.pipe_schedule), :id => "suction_pipings_pipe_schedule_#{i+1}", :class => "suction_pipings_pipe_schedule", :row_id => "#{i+1}" %></td>
+          <td><%= text_field_tag "pump_sizing[suction_pipings][#{i+1}][pipe_id]", sp.pipe_id, :id => "suction_pipings_pipe_id_#{i+1}", :class => "suction_pipings_pipe_id" %></td>
+          <td><%= text_field_tag "pump_sizing[suction_pipings][#{i+1}][per_flow]", sp.per_flow, :id => "suction_pipings_per_flow_#{i+1}" %></td>
+          <td><%= text_field_tag "pump_sizing[suction_pipings][#{i+1}][ds_cv]", sp.ds_cv, :id => "suction_pipings_ds_cv_#{i+1}" %></td>
+          <td><%= text_field_tag "pump_sizing[suction_pipings][#{i+1}][length]", sp.length, :id => "suction_pipings_length_#{i+1}", :class => "suction_pipings_length" %></td>
+          <td><%= text_field_tag "pump_sizing[suction_pipings][#{i+1}][elev]", sp.elev, :id => "suction_pipings_elev_#{i+1}", :class => "suction_pipings_elev" %></td>
+          <td><%= text_field_tag "pump_sizing[suction_pipings][#{i+1}][delta_p]", sp.delta_p, :id => "suction_pipings_delta_p_#{i+1}", :class => "suction_pipings_delta_p" %></td>
+         <% end %>
+
+        <td><%= link_to "X", "#", :class => "suction_piping_close_tr", :suction_piping_id => "#{i+1}" %></td>
+        </tr>
+        <% end %>
+
+        <% if pump_sizing.suction_pipings.where(:tab => "suction").empty? %>
+          <tr>
+            <td>
+              1
+              <%= hidden_field_tag "pump_sizing[suction_pipings][1][id]", "", :id => "suction_pipings_id_1" %>
+              <%= hidden_field_tag "pump_sizing[suction_pipings][1][tab]", "suction", :id => "suction_pipings_tab_1" %>
+            </td>
+            <td><%= select_tag "pump_sizing[suction_pipings][1][fitting]", options_for_select(@fittings.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, '')), :id => "suction_pipings_fitting_1", :style => "width:200px;" %></td>
+            <td><%= text_field_tag "pump_sizing[suction_pipings][1][fitting_tag]", "", :id => "suction_pipings_fitting_tag_1" %></td>
+            <td><%= select_tag "pump_sizing[suction_pipings][1][pipe_size]", options_for_select(PipeSizing.pipe_sizes(@fitting_pipe_size_unit).collect { |p| [raw(p[:name]), p[:value]] }.insert(0, '')), :id => "suction_pipings_pipe_size_1", :class => "suction_pipings_pipe_size", :row_id => "1" %></td>
+            <td><%= select_tag "pump_sizing[suction_pipings][1][pipe_schedule]", options_for_select([]), :id => "suction_pipings_pipe_schedule_1", :class => "suction_pipings_pipe_schedule", :row_id => "1" %></td>
+            <td><%= text_field_tag "pump_sizing[suction_pipings][1][pipe_id]", "", :id => "suction_pipings_pipe_id_1", :class => "suction_pipings_pipe_id" %></td>
+            <td><%= text_field_tag "pump_sizing[suction_pipings][1][per_flow]", "", :id => "suction_pipings_per_flow_1" %></td>
+            <td><%= text_field_tag "pump_sizing[suction_pipings][1][ds_cv]", "", :id => "suction_pipings_ds_cv_1" %></td>
+            <td><%= text_field_tag "pump_sizing[suction_pipings][1][length]", "", :id => "suction_pipings_length_1", :class => "suction_pipings_length" %></td>
+            <td><%= text_field_tag "pump_sizing[suction_pipings][1][elev]", "", :id => "suction_pipings_elev_1", :class => "suction_pipings_elev" %></td>
+            <td><%= text_field_tag "pump_sizing[suction_pipings][1][delta_p]", "", :id => "suction_pipings_delta_p_1", :class => "suction_pipings_delta_p" %></td>
+            <td><%= link_to "X", "#", :class => "suction_piping_close_tr", :suction_piping_id => 1 %></td>
+          </tr>
+        <% end %>
+      </table>
+      <br>
+      <%= link_to "Add", "#", :id => "add_new_suction_piping" %>&nbsp;|&nbsp;<%= link_to "Close", "#", :id => "close_suction_piping" %>
+      <!-- new suction piping tr-->
+      <table id="new_suction_piping_tr" class="hidden">
+        <tr>
+          <td>
+            #x#
+            <%= hidden_field_tag "pump_sizing[suction_pipings][#x#][id]", "", :id => "suction_pipings_id_#x#" %>
+            <%= hidden_field_tag "pump_sizing[suction_pipings][#x#][tab]", "suction", :id => "suction_pipings_tab_#x#" %>
+          </td>
+          <td><%= select_tag "pump_sizing[suction_pipings][#x#][fitting]", options_for_select(@fittings.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, '')), :id => "suction_pipings_fitting_#x#", :style => "width:200px;" %></td>
+          <td><%= text_field_tag "pump_sizing[suction_pipings][#x#][fitting_tag]", "", :id => "suction_pipings_fitting_tag_#x#" %></td>
+          <td><%= select_tag "pump_sizing[suction_pipings][#x#][pipe_size]", options_for_select(PipeSizing.pipe_sizes(@fitting_pipe_size_unit).collect { |p| [raw(p[:name]), p[:value]] }.insert(0, '')), :id => "suction_pipings_pipe_size_#x#", :class => "suction_pipings_pipe_size", :row_id => "#x#" %></td>
+          <td><%= select_tag "pump_sizing[suction_pipings][#x#][pipe_schedule]", options_for_select([]), :id => "suction_pipings_pipe_schedule_#x#", :class => "suction_pipings_pipe_schedule", :row_id => "#x#" %></td>
+          <td><%= text_field_tag "pump_sizing[suction_pipings][#x#][pipe_id]", "", :id => "suction_pipings_pipe_id_#x#", :class => "suction_pipings_pipe_id" %></td>
+          <td><%= text_field_tag "pump_sizing[suction_pipings][#x#][per_flow]", "", :id => "suction_pipings_per_flow_#x#" %></td>
+          <td><%= text_field_tag "pump_sizing[suction_pipings][#x#][ds_cv]", "", :id => "suction_pipings_ds_cv_#x#" %></td>
+          <td><%= text_field_tag "pump_sizing[suction_pipings][#x#][length]", "", :id => "suction_pipings_length_#x#", :class => "suction_pipings_length" %></td>
+          <td><%= text_field_tag "pump_sizing[suction_pipings][#x#][elev]", "", :id => "suction_pipings_elev_#x#", :class => "suction_pipings_elev" %></td>
+          <td><%= text_field_tag "pump_sizing[suction_pipings][#x#][delta_p]", "", :id => "suction_pipings_delta_p_#x#", :class => "suction_pipings_delta_p" %></td>
+          <td><%= link_to "X", "#", :class => "suction_piping_close_tr", :suction_piping_id => 0 %></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- DISCHARGE CIRCUIT PIPING -->
+  <div style="display:none;" id="discharge_circuit_piping_div">
+    <div id="discharge_circuit_piping_box_#x#">
+      <table class="discharge_circuit_piping_table">
+        <tr>
+          <th rowspan="2">No.</th>
+          <th rowspan="2">Fitting(s)</th>
+          <th rowspan="2">Fitting Tag</th>
+          <th>Pipe Size</th>
+          <th rowspan="2">Pipe Sch.</th>
+          <th>Pipe ID</th>
+          <th rowspan="2">% Flow</th>
+          <th rowspan="2">Ds/Dl<br>or Cv<br>or Dorifice(<label class="discharge_circuit_piping_pipe_id_unit"></label>)</th>
+          <th>Length</th>
+          <th>Elev.</th>
+          <th>&Delta;P</th>
+          <th>Inlet Pressure</th>
+          <th rowspan="2"></th>
+        </tr>
+        <tr>
+          <th><label class="discharge_circuit_piping_pipe_size_unit"></label></th>
+          <th><label class="discharge_circuit_piping_pipe_id_unit"></label></th>
+          <th><label class="discharge_circuit_piping_length_unit"></label></th>
+          <th><label class="discharge_circuit_piping_elev_unit"></label></th>
+          <th><label class="discharge_circuit_piping_delta_p_unit"></label></th>
+          <th><label class="discharge_circuit_piping_inlet_pressure_unit"></label></th>
+        </tr>
+        <tr>
+
+          <td>
+            1
+            <%= hidden_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][1][id]", "", :id => "discharge_circuit_piping_id_1" %>
+          </td>
+          <td><%= select_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][1][fitting]", options_for_select(@fittings.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, '')), :id => "discharge_circuit_piping_fitting_1", :style => "width:200px;" %></td>
+          <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][1][fitting_tag]", "", :id => "discharge_circuit_piping_fitting_tag_1" %></td>
+          <td><%= select_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][1][pipe_size]", options_for_select(PipeSizing.pipe_sizes(@fitting_pipe_size_unit).collect { |p| [raw(p[:name]), p[:value]] }.insert(0, '')), :id => "discharge_circuit_piping_pipe_size_1", :class => "discharge_circuit_piping_pipe_size", :row_id => "1" %></td>
+          <td><%= select_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][1][pipe_schedule]", options_for_select([]), :id => "discharge_circuit_piping_pipe_schedule_1", :class => "discharge_circuit_piping_pipe_schedule", :row_id => "1" %></td>
+          <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][1][pipe_id]", "", :id => "discharge_circuit_piping_pipe_id_1", :class => "discharge_circuit_piping_pipe_id", :row_id => "1" %></td>
+          <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][1][per_flow]", "", :id => "discharge_circuit_piping_per_flow_1" %></td>
+          <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][1][ds_cv]", "", :id => "discharge_circuit_piping_ds_cv_1" %></td>
+          <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][1][length]", "", :id => "discharge_circuit_piping_length_1", :class => "discharge_circuit_piping_length", :row_id => "1" %></td>
+          <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][1][elev]", "", :id => "discharge_circuit_piping_elev_1", :class => "discharge_circuit_piping_elev", :row_id => "1" %></td>
+          <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][1][delta_p]", "", :id => "discharge_circuit_piping_delta_p_1", :class => "discharge_circuit_piping_delta_p", :row_id => "1" %></td>
+          <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][1][inlet_pressure]", "", :id => "discharge_circuit_piping_inlet_pressure_1", :class => "discharge_circuit_piping_inlet_pressure", :row_id => "1" %></td>
+          <td><%= link_to "X", "#", :class => "discharge_circuit_piping_close_tr", :row_id => 1 %></td>
+        </tr>
+      </table>
+
+      <%= link_to "Add More", "#", :class => "discharge_circuit_piping_add_more", :table_id => "#x#" %>&nbsp;|&nbsp;<%= link_to "Close", "#", :class => "discharge_circuit_piping_close" %>
+    </div>
+
+    <table id="discharge_circuit_pipings_tr">
+      <tr>
+        <td>
+          #y#
+          <%= hidden_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][#y#][id]", "", :id => "discharge_circuit_piping_id_#y#" %>
+        </td>
+        <td><%= select_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][#y#][fitting]", options_for_select(@fittings.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, '')), :id => "discharge_circuit_piping_fitting_#y#", :style => "width:200px;" %></td>
+        <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][#y#][fitting_tag]", "", :id => "discharge_circuit_piping_fitting_tag_#y#" %></td>
+        <td><%= select_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][#y#][pipe_size]", options_for_select(PipeSizing.pipe_sizes(@fitting_pipe_size_unit).collect { |p| [raw(p[:name]), p[:value]] }.insert(0, '')), :id => "discharge_circuit_piping_pipe_size_#y#", :class => "discharge_circuit_piping_pipe_size", :row_id => "#y#" %></td>
+        <td><%= select_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][#y#][pipe_schedule]", options_for_select([]), :id => "discharge_circuit_piping_pipe_schedule_#y#", :class => "discharge_circuit_piping_pipe_schedule", :row_id => "#y#" %></td>
+        <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][#y#][pipe_id]", "", :id => "discharge_circuit_piping_pipe_id_#y#", :class => "discharge_circuit_piping_pipe_id", :row_id => "#y#" %></td>
+        <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][#y#][per_flow]", "", :id => "discharge_circuit_piping_per_flow_#y#" %></td>
+        <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][#y#][ds_cv]", "", :id => "discharge_circuit_piping_ds_cv_#y#" %></td>
+        <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][#y#][length]", "", :id => "discharge_circuit_piping_length_#y#", :class => "discharge_circuit_piping_length", :row_id => "#y#" %></td>
+        <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][#y#][elev]", "", :id => "discharge_circuit_piping_elev_#y#", :class => "discharge_circuit_piping_elev", :row_id => "#y#" %></td>
+        <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][#y#][delta_p]", "", :id => "discharge_circuit_piping_delta_p_#y#", :class => "discharge_circuit_piping_delta_p", :row_id => "#y#" %></td>
+        <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#x#][discharge_circuit_pipings][#y#][inlet_pressure]", "", :id => "discharge_circuit_piping_inlet_pressure_#y#", :class => "discharge_circuit_piping_inlet_pressure", :row_id => "#y#" %></td>
+        <td><%= link_to "X", "#", :class => "discharge_circuit_piping_close_tr", :row_id => "#y#" %></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- list of discharge circuit piping -->
+  <div id="list_of_discharge_circuit_piping" style="display:none;">
+    <% pump_sizing.pump_sizing_discharges.each_with_index do |psd, i| %>
+      <% psd_row_id = i+1 %>
+      <% if psd.discharge_circuit_piping.empty? %>
+        <% next %>
+      <% end %>
+      <div id="discharge_circuit_piping_box_<%= psd_row_id %>">
+        <table class="discharge_circuit_piping_table">
+          <tr>
+            <th rowspan="2">No.</th>
+            <th rowspan="2">Fitting(s)</th>
+            <th rowspan="2">Fitting Tag</th>
+            <th>Pipe Size</th>
+            <th rowspan="2">Pipe Sch.</th>
+            <th>Pipe ID</th>
+            <th rowspan="2">% Flow</th>
+            <th rowspan="2">Ds/Dl<br>or Cv<br>or Dorifice(<label class="discharge_circuit_piping_pipe_id_unit"></label>)</th>
+            <th>Length</th>
+            <th>Elev.</th>
+            <th>&Delta;P</th>
+            <th>Inlet Pressure</th>
+            <th rowspan="2"></th>
+          </tr>
+          <tr>
+            <th><label class="discharge_circuit_piping_pipe_size_unit"></label></th>
+            <th><label class="discharge_circuit_piping_pipe_id_unit"></label></th>
+            <th><label class="discharge_circuit_piping_length_unit"></label></th>
+            <th><label class="discharge_circuit_piping_elev_unit"></label></th>
+            <th><label class="discharge_circuit_piping_delta_p_unit"></label></th>
+            <th><label class="discharge_circuit_piping_inlet_pressure_unit"></label></th>
+          </tr>
+          <% psd.discharge_circuit_piping.each_with_index do |dcp, j| %>
+            <tr>
+              <td>
+                <%= j+1 %>
+                <%= hidden_field_tag "pump_sizing[pump_sizing_discharges][#{psd_row_id}][discharge_circuit_pipings][#{j+1}][id]", dcp.id, :id => "discharge_circuit_piping_id_#{j+1}" %>
+              </td>
+              <td><%= select_tag "pump_sizing[pump_sizing_discharges][#{psd_row_id}][discharge_circuit_pipings][#{j+1}][fitting]", options_for_select(@fittings.collect { |p| [raw(p[:value]), p[:id]] }.insert(0, ''), dcp.fitting), :id => "discharge_circuit_piping_fitting_#{j+1}", :style => "width:200px;" %></td>
+
+             <% if !dcp.stream_property_changer.nil? %>
+                  <%= render :partial => 'new_stream_property_changer', :locals => {:sizing_type => 'pump_sizing', :piping_type => 'discharge_circuit_pipings', :stream_property_changer => dcp.stream_property_changer, :row_id => j+1, :tab => 'discharge', :discharge_type => 'pump_sizing_discharges', :discharge_row => psd_row_id} %>
+              <% else %>
+
+              <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{psd_row_id}][discharge_circuit_pipings][#{j+1}][fitting_tag]", dcp.fitting_tag, :id => "discharge_circuit_piping_fitting_tag_#{j+1}" %></td>
+              <td><%= select_tag "pump_sizing[pump_sizing_discharges][#{psd_row_id}][discharge_circuit_pipings][#{j+1}][pipe_size]", options_for_select(PipeSizing.pipe_sizes(@fitting_pipe_size_unit).collect { |p| [raw(p[:name]), p[:value]] }.insert(0, ''), dcp.pipe_size), :id => "discharge_circuit_piping_pipe_size_#{j+1}", :class => "discharge_circuit_piping_pipe_size", :row_id => "#{j+1}" %></td>
+              <td><%= select_tag "pump_sizing[pump_sizing_discharges][#{psd_row_id}][discharge_circuit_pipings][#{j+1}][pipe_schedule]", options_for_select(PipeSizing.pipe_size_schedules[dcp.pipe_size.to_s], dcp.pipe_schedule), :id => "discharge_circuit_piping_pipe_schedule_#{j+1}", :class => "discharge_circuit_piping_pipe_schedule", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{psd_row_id}][discharge_circuit_pipings][#{j+1}][pipe_id]", dcp.pipe_id, :id => "discharge_circuit_piping_pipe_id_#{j+1}", :class => "discharge_circuit_piping_pipe_id", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{psd_row_id}][discharge_circuit_pipings][#{j+1}][per_flow]", dcp.per_flow, :id => "discharge_circuit_piping_per_flow_#{j+1}" %></td>
+              <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{psd_row_id}][discharge_circuit_pipings][#{j+1}][ds_cv]", dcp.ds_cv, :id => "discharge_circuit_piping_ds_cv_#{j+1}" %></td>
+              <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{psd_row_id}][discharge_circuit_pipings][#{j+1}][length]", dcp.length, :id => "discharge_circuit_piping_length_#{j+1}", :class => "discharge_circuit_piping_length", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{psd_row_id}][discharge_circuit_pipings][#{j+1}][elev]", dcp.elev, :id => "discharge_circuit_piping_elev_#{j+1}", :class => "discharge_circuit_piping_elev", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{psd_row_id}][discharge_circuit_pipings][#{j+1}][delta_p]", dcp.delta_p, :id => "discharge_circuit_piping_delta_p_#{j+1}", :class => "discharge_circuit_piping_delta_p", :row_id => "#{j+1}" %></td>
+              <td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{psd_row_id}][discharge_circuit_pipings][#{j+1}][inlet_pressure]", dcp.inlet_pressure, :id => "discharge_circuit_piping_inlet_pressure_#{j+1}", :class => "discharge_circuit_piping_inlet_pressure", :row_id => "#{j+1}" %></td>
+
+             <% end %>
+              <td><%= link_to "X", "#", :class => "discharge_circuit_piping_close_tr", :row_id => "#{j+1}" %></td>
+            </tr>
+
+
+
+          <% end %>
+        </table>
+
+        <%= link_to "Add More", "#", :class => "discharge_circuit_piping_add_more", :table_id => psd_row_id %>&nbsp;|&nbsp;<%= link_to "Close", "#", :class => "discharge_circuit_piping_close" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Acceleration Head Popup -->
+  <div style="display:none;">
+    <div id="rd_acceleration_head_div">
+      <table style="width: auto;">
+        <tr>
+          <td colspan="2"><label class="sub_title">Liquid Acceleration Head</label></td>
+        </tr>
+        <tr>
+          <td>Liquid Capacity</td>
+          <td><%= f.text_field :rd_liquid_capacity, :class => "small-text-100" %>&nbsp;<label id="pump_sizing_rd_liquid_capacity_unit"></label>
+          </td>
+        </tr>
+        <tr>
+          <td>Length of Suction Pipe</td>
+          <td><%= f.text_field :rd_length_of_suction_pipe, :class => "small-text-100" %>&nbsp;<label id="pump_sizing_rd_length_of_suction_pipe_unit"></label>
+          </td>
+        </tr>
+        <tr>
+          <td>Diameter of Suction Pipe</td>
+          <td><select class="small-text-100"></select>&nbsp;<label id="pump_sizing_rd_diameter_of_suction_pipe"></label>
+          </td>
+        </tr>
+        <tr>
+          <td>Speed of Rotation</td>
+          <td>
+            <%= f.text_field :rd_speed_of_rotation, :class => "small-text-100" %>&nbsp;<label id="pump_sizing_rd_speed_of_rotation_unit"></label>
+          </td>
+        </tr>
+        <tr>
+          <td>Pump Type</td>
+          <td><select style="width:200px;"></select></td>
+        </tr>
+        <tr>
+          <td>C</td>
+          <td><%= f.text_field :rd_c, :class => "small-text-100" %></td>
+        </tr>
+        <tr>
+          <td>Fluid Service Type</td>
+          <td><select style="width:200px;"></select></td>
+        </tr>
+        <tr>
+          <td>K</td>
+          <td><%= f.text_field :rd_k, :class => "small-text-100" %></td>
+        </tr>
+        <tr>
+          <td>Velocity</td>
+          <td><%= f.text_field :rd_velocity, :class => "small-text-100" %>
+            <input type="button" value="calculate" style="float:right;">&nbsp;<label id="rd_velocity_unit"></label></td>
+        </tr>
+        <tr>
+          <td>Head</td>
+          <td><%= f.text_field :rd_head, :class => "small-text-100" %>&nbsp;<label id="pump_sizing_rd_head_unit"></label>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- clone_circuit_piping -->
+  <div style="display:none;">
+
+    <div id="clone_circuit_piping_div" style="padding:10px;">
+      <div>
+       <%= radio_button_tag('source', 'pump', true, :class => "sizing_type_for_source") %> 
+       <%= label_tag(:pump_circuit_piping, "Pump circuit piping") %>
+       <%= radio_button_tag('source', 'line', false, :class => "sizing_type_for_source") %>
+       <%= label_tag(:line_segment, "Line segment") %>
+      </div>
+      <div id="pump_source_circuit" style="float:left;height:90px;padding-top: 40px;">        
+        Source Pump Circuit Piping<br>
+        <%= select_tag "cricuit_piping", options_for_select(pump_sizing.pump_sizing_discharges.each_with_index.collect { |p, i| ["Design Path #{i+1}", p[:id]] }), :include_blank => true, :id => "source_pump_circuit", :class => "src_circuit_piping", :style => "width:150px;" %>
+      </div>
+
+      <div id = "line_source_segment" style="float:left;height:90px;padding-top: 40px;display:none">Source Line segment<br>
+        <%= select_tag "line_segment", options_for_select(@line_sizings.collect{|l| [l.line_number, l[:id]] }), :include_blank => true, :id => "source_line_segment", :class => "src_circuit_piping", :style => "width:150px;" %>
+      </div>
+
+      <div style="float:left;margin-left:20px;text-align:center;">
+        <img src="/images/arrow_right.png" alt="right arrow"><br>
+        <input type="button" value="Clone" id="clone_circuit_piping_btn">
+      </div>
+
+      <div style="float:left;margin-left:20px;height:90px;padding-top: 40px;">
+        Target Circuit Piping<br>
+        <%= select_tag "cricuit_piping", options_for_select(pump_sizing.pump_sizing_discharges.each_with_index.collect { |p, i| ["Design Path #{i+1}", p[:id]] }), :include_blank => true, :id => "trg_circuit_piping", :style => "width:150px;" %>
+      </div>
+
+      <div class="clear"></div>
+    </div>
+  </div>
+<% end %>
+
+<% unless pump_sizing.new_record? %>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Attachments</legend>
+    <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+    <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+  </fieldset>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Comments</legend>
+    <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+    <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+  </fieldset>
+<% end %>
+
+<%= javascript_tag do %>
+  var pump_sizing_id = <%= pump_sizing.id %>
+  var sp_suction_count = <%= pump_sizing.suction_pipings.where(:tab => "suction").empty? ? 2 : pump_sizing.suction_pipings.where(:tab => "suction").length+1 %>;
+  var dc_count = <%= pump_sizing.pump_sizing_discharges.empty? ? 2 : pump_sizing.pump_sizing_discharges.length+1 %>;
+  var cp_count = <%= pump_sizing.centrifugal_pumps.empty? ? 2 : pump_sizing.centrifugal_pumps.length+1 %>;
+
+  var pipe_size_schedules = <%= raw PipeSizing.pipe_size_schedules.to_json %>;
+  var pipe_size_pipe_ods = <%= raw PipeSizing.pipe_size_pipe_od.to_json %>;
+  var pipe_size_wall_thinkness = <%= raw PipeSizing.pipe_size_wall_thinkness.to_json %>;
+  var pipe_id_conversion_factor = <%= @project.conversion_factor("Length", "Pipe Tube Diameter") %>;
+
+    var pipes = <%= raw @pipes.to_json %>;
+      var pipes_json = {};
+      $(pipes).each(function(k, v){
+      pipes_json[v.id] = v;
+    });
+    $('body').data('pipes', pipes_json);
+
+  var pump_type_form_values = <%= raw PumpSizing.pump_type_form_values.to_json %>
+  var fluid_service_type_form_values = <%= raw PumpSizing.fluid_service_type_form_values.to_json %>
+
+  var project = <%= raw @project.to_json %>
+
+  <% if pump_sizing.new_record? %>
+    $('#pump_sizing_cd_shut_off_factor').val(<%= @project.centrifugal_pump_shut_off_factor.to_s %>);
+    $('#pump_sizing_cd_efficiency').val(<%= @project.default_centrifugal_pump_efficiency.to_s %>);
+    $('#pump_sizing_rd_mechanical_efficiency').val(<%= @project.positive_displacement_mechanical_efficiency.to_s %>);
+  <% end %>
+
+<% end %>
+
+<script type="text/javascript">
+  set_project_unit_and_decimals()
+  var unit_decimals = {
+    ".suction_pipings_pipe_size":{"measurement":"Length", "measurement_sub_type":"Pipe Tube Diameter"},
+    ".suction_pipings_pipe_id":{"measurement":"Length", "measurement_sub_type":"Pipe Tube Diameter"},
+    ".suction_pipings_length":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".suction_pipings_elev":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".suction_pipings_delta_p":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    ".discharge_circuit_piping_pipe_size":{"measurement":"Length", "measurement_sub_type":"Pipe Tube Diameter"},
+    ".discharge_circuit_piping_pipe_id":{"measurement":"Length", "measurement_sub_type":"Pipe Tube Diameter"},
+    ".discharge_circuit_piping_length":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".discharge_circuit_piping_elev":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".discharge_circuit_piping_delta_p":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    ".discharge_circuit_piping_inlet_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    ".stream_property_changer_pressure":{"measurement":"Pressure","measurement_sub_type":"General"},
+    ".stream_property_changer_temperature":{"measurement":"Temperature","measurement_sub_type":"General"},
+    ".stream_property_changer_vapor_fraction":{"measurement":"Mass Vapor Fraction","measurement_sub_type":"Dimensionless"},
+    ".stream_property_changer_vapor_density":{"measurement":"Density","measurement_sub_type":"General"},
+    ".stream_property_changer_vapor_viscosity":{"measurement":"Viscosity","measurement_sub_type":"Dynamic"},
+    ".stream_property_changer_vapor_mw":{"measurement":"Molecular Weight","measurement_sub_type":"Dimensionless"},
+    ".stream_property_changer_vapor_cp_cv":{"measurement":"Specific Heat Capacity Ratio","measurement_sub_type":"Dimensionless"},
+    ".stream_property_changer_liquid_density":{"measurement":"Density","measurement_sub_type":"General"},
+    ".stream_property_changer_liquid_viscosity":{"measurement":"Viscosity","measurement_sub_type":"Dynamic"},
+    ".stream_property_changer_liquid_surface_tension":{"measurement":"Surface Tension","measurement_sub_type":"General"},
+    "#pump_sizing_su_density":{"measurement":"Density", "measurement_sub_type":"General"},
+    "#pump_sizing_su_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_su_viscosity":{"measurement":"Viscosity", "measurement_sub_type":"Dynamic"},
+    "#pump_sizing_su_temperature":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    "#pump_sizing_su_mass_vapor_fraction":{"measurement":"Mass Vapor Fraction", "measurement_sub_type":"Dimensionless"},
+    "#pump_sizing_su_specific_heat_capacity":{"measurement":"Specific Heat Capacity", "measurement_sub_type":"General"},
+    "#pump_sizing_su_vapor_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_su_mass_flow_rate":{"measurement":"Mass Flow Rate", "measurement_sub_type":"General"},
+    "#pump_sizing_su_critical_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_su_fitting_dP":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#pump_sizing_su_total_suction_dP":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_su_equipment_dP":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#pump_sizing_su_pressure_at_suction_nozzle":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_su_control_valve_dP":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#pump_sizing_su_max_upstream_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_su_orifice_dP":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#pump_sizing_su_max_pressure_at_suction_nozzle":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_su_pipe_roughness":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    "#pump_sizing_cd_press_at_suction_nozzle":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_cd_np_press_at_suction_nozzle":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_cd_press_at_discharge_nozzle":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_cd_npsha":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    "#pump_sizing_cd_vapor_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_cd_differential_pressure":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#pump_sizing_cd_differential_head":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    "#pump_sizing_cd_safety_factor":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    "#pump_sizing_cd_temp_at_discharge_nozzle":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    "#pump_sizing_cd_required_differential_head":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    "#pump_sizing_cd_density_at_discharge_nozzle":{"measurement":"Density", "measurement_sub_type":"General"},
+    "#pump_sizing_cd_required_compression_head":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    "#pump_sizing_cd_shut_off_head":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    "#pump_sizing_cd_flow_rate":{"measurement":"Volumetric Flow Rate", "measurement_sub_type":"Liquid"},
+    "#pump_sizing_cd_max_suction_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_cd_shut_off_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_cd_hydraulic_hp":{"measurement":"Power", "measurement_sub_type":"General"},
+    "#pump_sizing_cd_brake_horsepower":{"measurement":"Power", "measurement_sub_type":"General"},
+    "#pump_sizing_rd_press_at_suction_nozzle":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_rd_press_at_discharge_nozzle":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_rd_vapor_pressure":{"measurement":"Pressure", "measurement_sub_type":"General"},
+    "#pump_sizing_rd_acceleration_head":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    "#pump_sizing_rd_npsha":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    "#pump_sizing_rd_stroke":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    "#pump_sizing_rd_bore":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    "#pump_sizing_rd_rod_diameter":{"measurement":"Length", "measurement_sub_type":"Small Dimension Length"},
+    "#pump_sizing_rd_differential_pressure":{"measurement":"Pressure", "measurement_sub_type":"Differential"},
+    "#pump_sizing_rd_piston_speed":{"measurement":"Revolution Speed", "measurement_sub_type":"General"},
+    "#pump_sizing_rd_differential_head":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    "#pump_sizing_rd_piston_displacement":{"measurement":"Volumetric Flow Rate", "measurement_sub_type":"Liquid"},
+    "#pump_sizing_rd_rated_discharge_capacity":{"measurement":"Volumetric Flow Rate", "measurement_sub_type":"Liquid"},
+    "#pump_sizing_rd_temp_at_discharge_nozzle":{"measurement":"Temperature", "measurement_sub_type":"General"},
+    "#pump_sizing_rd_hydraulic_hp":{"measurement":"Power", "measurement_sub_type":"General"},
+    "#pump_sizing_rd_density_at_discharge_nozzle":{"measurement":"Density", "measurement_sub_type":"General"},
+    "#pump_sizing_rd_compression_head":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    "#pump_sizing_rd_brake_horsepower":{"measurement":"Power", "measurement_sub_type":"General"},
+    "#pump_sizing_rd_liquid_capacity":{"measurement":"Volumetric Flow Rate", "measurement_sub_type":"Liquid"},
+    "#pump_sizing_rd_length_of_suction_pipe":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    "#pump_sizing_rd_diameter_of_suction_pipe":{"measurement":"Length", "measurement_sub_type":"Pipe Tube Diameter" },
+    "#pump_sizing_rd_speed_of_rotation":{"measurement":"Revolution Speed", "measurement_sub_type":"General"},
+    "#pump_sizing_rd_velocity":{"measurement":"Velocity", "measurement_sub_type":"General"},
+    "#pump_sizing_rd_head":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"},
+    ".pump_curve_capacity":{"measurement":"Volumetric Flow Rate", "measurement_sub_type":'Liquid'},
+    ".pump_curve_impeller":{"measurement":"Length", "measurement_sub_type":"Large Dimension Length"}
+  };
+  set_project_unit_decimals(unit_decimals);
+  set_project_unit_labels(unit_decimals);
+
+  $('#pump_sizing_process_basis_id').change(function (e) {
+    $('#pump_sizing_su_stream_no >option').remove();
+    $('#pump_sizing_su_stream_no').append($('<option></option>').val("").html("Please select"));
+    $("#tab1 table input[type=text]").val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+    $.get('/admin/heat_and_material_balances/get_stream_nos', {process_basis_id:$(this).val()}, function (data) {
+      $(data).each(function (k, v) {
+        $('#pump_sizing_su_stream_no').append(
+                $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+        );
+      });
+    }, 'json');
+  });
+
+  $('#pump_sizing_su_stream_no').change(function (e) {
+
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/pump_sizings/get_stream_values',
+            {process_basis_id:$('#pump_sizing_process_basis_id').val(), stream_no:$('#pump_sizing_su_stream_no').val()},
+            function (data) {
+              $('#pump_sizing_su_pressure').val(get_project_field_value("#pump_sizing_su_pressure", data['pressure_value'], unit_decimals));
+              $('#pump_sizing_su_temperature').val(get_project_field_value("#pump_sizing_su_temperature", data['temperature_value'], unit_decimals));
+              $('#pump_sizing_su_mass_vapor_fraction').val(get_project_field_value1("mass_vapor_fraction_dimensionless", data['mass_vapor_fraction']));
+              $('#pump_sizing_su_mass_flow_rate').val(get_project_field_value("#pump_sizing_su_mass_flow_rate", data['mass_flow_rate_value'], unit_decimals));
+              $('#pump_sizing_su_density').val(get_project_field_value("#pump_sizing_su_density", data['density'], unit_decimals));
+              $('#pump_sizing_su_viscosity').val(get_project_field_value("#pump_sizing_su_viscosity", data['viscosity'], unit_decimals));
+              $('#pump_sizing_su_specific_heat_capacity').val(get_project_field_value("#pump_sizing_su_specific_heat_capacity", data['mass_heat_capacity'], unit_decimals));
+            },
+            'json');
+  });
+
+  //new row discharges
+  $('#add_new_discharge_row').click(function (e) {
+    var new_discharge_row = $('#new_row_discharge').html().replace(/#x#/g, dc_count);
+    $('#pump_sizing_discharges').append($(new_discharge_row));
+    dc_count++;
+    return false;
+  });
+
+  $('.discharge_table_close_tr').live('click', function (e) {
+    var row_id = $(this).attr('row_id');
+    $('#discharge_process_basis_id_' + row_id).val('');
+    $(this).parents('tr').hide();
+    return false;
+  });
+
+  $('select[id^="discharge_process_basis_id_"]').live('change', function (e) {
+    var row_id = $(this).attr('row_id');
+    $('#discharge_destination_stream_no_' + row_id + ' >option').remove();
+    $('#discharge_destination_stream_no_' + row_id).append($('<option></option>').val("").html(""));
+    if ($(this).val() == "") {
+      return false;
+    }
+
+    $.get('/admin/heat_and_material_balances/get_stream_nos',
+            {process_basis_id:$(this).val()},
+            function (data) {
+              $(data).each(function (k, v) {
+                $('#discharge_destination_stream_no_' + row_id).append(
+                    $('<option></option>').val(v.stream_no).html(v.display_stream_no)
+                );
+              });
+            },
+      'json'
+    );
+  });
+
+  $('select[id^="discharge_destination_stream_no_"]').live('change', function (e) {
+    var row_id = $(this).attr('row_id');
+    $('#discharge_destination_pressure_' + row_id).val('');
+    if ($(this).val() == "") {
+      return false;
+    }
+    $.get('/admin/pump_sizings/get_discharge_stream_nos',
+            {process_basis_id:$('#discharge_process_basis_id_' + row_id).val(), stream_no:$(this).val()},
+            function (data) {
+              $('#discharge_destination_pressure_' + row_id).val(data['pressure']);
+            },
+            'json'
+    );
+  });
+
+  //suction tab suction piping
+  $('#enter_circuit_piping').click(function (e) {
+    $.colorbox({href:'#suction_piping_box', inline:true, width:'100%', height:'100%'});
+  });
+
+  $('#add_new_suction_piping').click(function (e) {
+    var new_suction_piping_tr = $('#new_suction_piping_tr').html().replace(/#x#/g, sp_suction_count);
+    var prev_row_id = sp_suction_count - 1;
+        // appending new row    
+    var tr_row_id = sp_suction_count;    
+    $('#suction_piping_table').append($(new_suction_piping_tr));
+     sp_suction_count++;
+
+    // asiging values to new row for previous row values
+    $(pipe_size_schedules[$('#suction_pipings_pipe_size_' + prev_row_id).val()]).each(function (k, v) {
+          $('#suction_pipings_pipe_schedule_' + tr_row_id).append($('<option></option>').val(v).html(v));
+        });
+
+    $('#suction_pipings_pipe_size_' + tr_row_id).val($('#suction_pipings_pipe_size_' + prev_row_id).val());
+    $('#suction_pipings_pipe_schedule_' + tr_row_id).val($('#suction_pipings_pipe_schedule_' + prev_row_id).val());
+    $('#suction_pipings_pipe_id_' + tr_row_id).val($('#suction_pipings_pipe_id_' + prev_row_id).val());
+    $('#suction_pipings_per_flow_' + tr_row_id).val($('#suction_pipings_per_flow_' + prev_row_id).val());
+
+
+    set_project_unit_decimal('.suction_pipings_pipe_id', unit_decimals);
+    set_project_unit_decimal('.suction_pipings_length', unit_decimals);
+    set_project_unit_decimal('.suction_pipings_elev', unit_decimals);
+    set_project_unit_decimal('.suction_pipings_delta_p', unit_decimals);
+    return false;
+  });
+
+  function validate_fittings(){
+    var valid = true;
+    //select select tags which name ends with [fitting]
+
+    $("#suction_piping_table :input").css({'border':'1px solid #CCCCCC'})
+    function validate_items(items){
+      $.each(items,function(){
+        if (!$.isNumeric($(this).val())){
+          $(this).css({'border':'1px solid red'})
+          valid = false
+        }
+      })
+    }
+
+    function validate_fitting_tag(tag){
+      if($.trim(tag.val()).length == 0){
+        tag.css({'border':'1px solid red'});
+        valid = false;
+      }
+    }
+
+    $("#suction_piping_table select[name$='[fitting]']:visible").each(function(){
+      var id = $(this).attr('id').split('_');
+      id = id[id.length-1];
+      if($.isNumeric(id)){
+        var selected_fitting = $(this).children('option:selected').text();
+
+        //get values
+        var fitting_tag = $('#suction_pipings_fitting_tag_'+id);
+        var pipe_size   = $('#suction_pipings_pipe_size_'+id);
+        var pipe_id     = $('#suction_pipings_pipe_id_'+id);
+        var per_flow    = $('#suction_pipings_per_flow_'+id);
+        var length      = $('#suction_pipings_length_'+id);
+        var elevation   = $('#suction_pipings_elev_'+id);
+        var ds_cv       = $('#suction_pipings_ds_cv_'+id);
+        var delta_p     = $('#suction_pipings_delta_p_'+id);
+
+       if(selected_fitting == 'Pipe'){
+          validate_items([pipe_id,per_flow,length,elevation])
+        }
+        else if(selected_fitting == 'Sudden Expansion' || selected_fitting == 'Sudden Contraction' ||  selected_fitting == 'Expansion' || selected_fitting == 'Contraction'){
+          var last_fitting = $("#suction_piping_table select[name$='[fitting]']:visible").last().children('option:selected').text();
+          if($(this).attr('id') == $("#suction_piping_table select[name$='[fitting]']:visible").last().attr('id')) {
+          if(last_fitting == 'Sudden Expansion' || last_fitting == 'Sudden Contraction' || last_fitting == 'Expansion' || last_fitting == 'Contraction')
+            validate_items([pipe_id,per_flow,ds_cv])
+           }
+          else
+          validate_items([pipe_id,per_flow])
+        }
+
+        else if(selected_fitting == 'Control Valve'){
+        validate_fitting_tag(fitting_tag)
+        if(!$.isNumeric(delta_p.val())){
+            
+            validate_items([pipe_id,per_flow,ds_cv])
+          }
+          if(!$.isNumeric(pipe_id.val()) || !$.isNumeric(per_flow.val()) || !$.isNumeric(ds_cv.val()))
+          {
+            validate_items([delta_p])
+          }
+        }
+
+        else if(selected_fitting == 'Equipment'){
+            validate_fitting_tag(fitting_tag)
+            validate_items([delta_p])
+        }
+
+        else if(selected_fitting == 'Line Segment'){
+          validate_fitting_tag(fitting_tag)
+          if(!$.isNumeric(delta_p.val())){
+            validate_items([pipe_id,per_flow,length,elevation])
+          }
+          if(!$.isNumeric(pipe_id.val()) || !$.isNumeric(per_flow.val()) || !$.isNumeric(length.val()) || !$.isNumeric(elevation.val())) {
+            validate_items([delta_p])
+          }
+        }
+
+        else if(selected_fitting == 'Equivalent Length'){
+          validate_items([pipe_id, per_flow,length,elevation])
+        }
+
+        else if(selected_fitting.slice(0,4) == 'Flow' || selected_fitting == 'Orifice'){
+          validate_fitting_tag(fitting_tag)
+          validate_items([pipe_size])
+          if(!$.isNumeric(delta_p.val())){            
+            validate_items([pipe_id,per_flow,ds_cv])
+          }
+          if(!$.isNumeric(pipe_id.val()) || !$.isNumeric(per_flow.val()) || !$.isNumeric(ds_cv.val()))
+          {
+            validate_items([delta_p])
+          }
+        }
+
+        else if(selected_fitting == 'Change Properties to Stream'){
+
+        }
+        else if(selected_fitting == 'Rupture Disk'){
+           validate_fitting_tag(fitting_tag)
+           validate_items([pipe_id,per_flow])
+        }
+        else if (selected_fitting == 'User Entered') {
+          validate_items([delta_p])
+        }
+        else if($.trim(selected_fitting).length > 0){
+          validate_items([pipe_id,per_flow])
+        }
+      }
+  })
+
+    if(!valid){alert('Please enter required values!!')}
+    return valid
+  }
+
+  $('#close_suction_piping').click(function (e) {
+    if (validate_fittings()){
+        $.colorbox.close();
+    }
+    return false;
+  });
+
+  $('.suction_piping_close_tr').live('click', function (e) {
+    var id = $(this).attr('suction_piping_id')
+    $('#suction_pipings_fitting_'+ id).val('');
+    $(this).parents('tr').hide();
+    $('#stream_property_changer_'+id).hide();
+    return false;
+  });
+
+ //$('#pump_sizing_discharges input[name=design_circuit]').live('click', function (e) {
+ //     var sel = $(this).attr('id');
+ //     sel = sel.split("_")
+ //     sel = sel[sel.length-1]
+ //   //$("input[id^=discharge_design_circuit_]").val("");
+ //   var d = $('#discharge_design_circuit_'+sel);
+ //   console.log(d);
+ //   $('#discharge_design_circuit_'+sel).attr('value',true);
+ //});
+
+  //discharge_circuit_piping
+  $('.circuit_piping_btn').live('click', function (e) {
+    var row_id = $(this).attr('row_id');
+    var discharge_circuit_piping_box = $('#discharge_circuit_piping_div').html().replace(/#x#/g, row_id);
+    if ($('#discharge_circuit_piping_box_' + row_id).text() == "") {
+      $('#list_of_discharge_circuit_piping').append($(discharge_circuit_piping_box));
+    }
+    $.colorbox({
+      href:'#discharge_circuit_piping_box_' + row_id,
+      inline:true,
+      width:'100%',
+      height:'100%',
+      onComplete:function () {
+        var tr_row_id = parseInt($('#discharge_circuit_piping_box_' + row_id + ' table tr:last td:last a').attr('row_id')) + 1;
+        $('#discharge_circuit_piping_box_' + row_id).data({tr_row_id:tr_row_id, discharge_row_id:row_id});
+        return false;
+      }
+    });
+    set_project_unit_decimal('.discharge_circuit_piping_pipe_id', unit_decimals);
+    set_project_unit_decimal('.discharge_circuit_piping_length', unit_decimals);
+    set_project_unit_decimal('.discharge_circuit_piping_elev', unit_decimals);
+    set_project_unit_decimal('.discharge_circuit_piping_delta_p', unit_decimals);
+    return false;
+  });
+
+  $('.discharge_circuit_piping_add_more').live('click', function (e) {
+    var table_id = $(this).attr('table_id');
+
+    // getting previous row id
+    var prev_row_id = $('#discharge_circuit_piping_box_' + table_id + ' table tr:visible:last').find('a.discharge_circuit_piping_close_tr').attr('row_id');
+
+    // appending new row    
+    var tr_row_id = $('#discharge_circuit_piping_box_' + table_id).data()['tr_row_id'];
+    var new_discharge_circuit_pipings_tr = $('#discharge_circuit_pipings_tr').html().replace(/#x#/g, table_id);
+    new_discharge_circuit_pipings_tr = new_discharge_circuit_pipings_tr.replace(/#y#/g, tr_row_id);
+
+    $('#discharge_circuit_piping_box_' + table_id + ' table:eq(0)').append($(new_discharge_circuit_pipings_tr));
+    $('#discharge_circuit_piping_box_' + table_id).data()['tr_row_id'] = tr_row_id + 1;
+
+    // asiging values to new row for previous row values
+    $(pipe_size_schedules[$('#discharge_circuit_piping_pipe_size_' + prev_row_id).val()]).each(function (k, v) {
+      $('#discharge_circuit_piping_pipe_schedule_' + tr_row_id).append($('<option></option>').val(v).html(v));
+    });
+
+    $('#discharge_circuit_piping_pipe_size_' + tr_row_id).val($('#discharge_circuit_piping_pipe_size_' + prev_row_id).val());
+    $('#discharge_circuit_piping_pipe_schedule_' + tr_row_id).val($('#discharge_circuit_piping_pipe_schedule_' + prev_row_id).val());
+    $('#discharge_circuit_piping_pipe_id_' + tr_row_id).val($('#discharge_circuit_piping_pipe_id_' + prev_row_id).val());
+    $('#discharge_circuit_piping_per_flow_' + tr_row_id).val($('#discharge_circuit_piping_per_flow_' + prev_row_id).val());
+
+    set_project_unit_decimal('.discharge_circuit_piping_pipe_id', unit_decimals);
+    set_project_unit_decimal('.discharge_circuit_piping_length', unit_decimals);
+    set_project_unit_decimal('.discharge_circuit_piping_elev', unit_decimals);
+    set_project_unit_decimal('.discharge_circuit_piping_delta_p', unit_decimals);
+    return false;
+  });
+
+ function validate_fittings_for_pump(){
+   var valid = true;
+    //select select tags which name ends with [fitting]
+  $(".discharge_circuit_piping_table :input").css({'border':'1px solid #CCCCCC'})
+    function validate_items(items){
+      $.each(items,function(){
+        if (!$.isNumeric($(this).val())){
+          $(this).css({'border':'1px solid red'})
+          valid = false
+        }
+      })
+    }
+
+    function validate_fitting_tag(tag){
+      if($.trim(tag.val()).length == 0){
+        tag.css({'border':'1px solid red'});
+        valid = false;
+      }
+    }
+
+    $(".discharge_circuit_piping_table select[name$='[fitting]']:visible").each(function(){
+      var id = $(this).attr('id').split('_');
+      id = id[id.length-1];
+      if($.isNumeric(id)){
+        var selected_fitting = $(this).children('option:selected').text();
+        //get values
+        var fitting_tag = $('#discharge_circuit_piping_fitting_tag_'+id);
+        var pipe_size   = $('#discharge_circuit_piping_pipe_size_'+id);
+        var pipe_id     = $('#discharge_circuit_piping_pipe_id_'+id);
+        var per_flow    = $('#discharge_circuit_piping_per_flow_'+id);
+        var length      = $('#discharge_circuit_piping_length_'+id);
+        var elevation   = $('#discharge_circuit_piping_elev_'+id);
+        var ds_cv       = $('#discharge_circuit_piping_ds_cv_'+id);
+        var delta_p     = $('#discharge_circuit_piping_delta_p_'+id);
+
+        if(selected_fitting == 'Pipe'){
+          validate_items([pipe_id,per_flow,length,elevation])
+        }
+        else if(selected_fitting == 'Sudden Expansion' || selected_fitting == 'Sudden Contraction' ||  selected_fitting == 'Expansion' || selected_fitting == 'Contraction'){
+          var last_fitting = $(".discharge_circuit_piping_table select[name$='[fitting]']:visible").last().children('option:selected').text();
+          if($(this).attr('id') == $(".discharge_circuit_piping_table select[name$='[fitting]']:visible").last().attr('id')) {
+          if(last_fitting == 'Sudden Expansion' || last_fitting == 'Sudden Contraction' || last_fitting == 'Expansion' || last_fitting == 'Contraction')
+            validate_items([pipe_id,per_flow,ds_cv])
+           }
+          else
+          validate_items([pipe_id,per_flow])
+        }
+
+        else if(selected_fitting == 'Control Valve'){
+        validate_fitting_tag(fitting_tag)
+        if(!$.isNumeric(delta_p.val())){
+            
+            validate_items([pipe_id,per_flow,ds_cv])
+          }
+          if(!$.isNumeric(pipe_id.val()) || !$.isNumeric(per_flow.val()) || !$.isNumeric(ds_cv.val()))
+          {
+            validate_items([delta_p])
+          }
+        }
+
+        else if(selected_fitting == 'Equipment'){
+            validate_fitting_tag(fitting_tag)
+            validate_items([delta_p])
+        }
+
+        else if(selected_fitting == 'Line Segment'){
+          validate_fitting_tag(fitting_tag)
+          if(!$.isNumeric(delta_p.val())){
+            validate_items([pipe_id,per_flow,length,elevation])
+          }
+          if(!$.isNumeric(pipe_id.val()) || !$.isNumeric(per_flow.val()) || !$.isNumeric(length.val()) || !$.isNumeric(elevation.val())) {
+            validate_items([delta_p])
+          }
+        }
+
+        else if(selected_fitting == 'Equivalent Length'){
+          validate_items([pipe_id, per_flow,length,elevation])
+        }
+
+        else if(selected_fitting.slice(0,4) == 'Flow' || selected_fitting == 'Orifice'){
+          validate_fitting_tag(fitting_tag)
+          validate_items([pipe_size])
+          if(!$.isNumeric(delta_p.val())){            
+            validate_items([pipe_id,per_flow,ds_cv])
+          }
+          if(!$.isNumeric(pipe_id.val()) || !$.isNumeric(per_flow.val()) || !$.isNumeric(ds_cv.val()))
+          {
+            validate_items([delta_p])
+          }
+        }
+
+        else if(selected_fitting == 'Change Properties to Stream'){
+
+        }
+        else if(selected_fitting == 'Rupture Disk'){
+           validate_fitting_tag(fitting_tag)
+           validate_items([pipe_id,per_flow])
+        }
+        else if (selected_fitting == 'User Entered') {
+          validate_items([delta_p])
+        }
+        else if($.trim(selected_fitting).length > 0){
+          validate_items([pipe_id,per_flow])
+        }
+      }
+  })
+
+    if(!valid){alert('Please enter required values!!')}
+    return valid
+  }
+
+
+$('.discharge_circuit_piping_close').click(function (e) {
+   if (validate_fittings_for_pump()){
+        $.colorbox.close();
+    }
+    return false;
+  });
+
+/*
+  $('.discharge_circuit_piping_close').live('click', function (e) {
+    $.colorbox.close();
+    return false;
+  });
+*/
+  $('.discharge_circuit_piping_close_tr').live('click', function (e) {
+    var id = $(this).attr('row_id')
+    $(this).parents('tr').find('#discharge_circuit_piping_fitting_'+id).val("");
+    $(this).parents('tr').hide();
+
+    $('#stream_property_changer_'+id).hide();
+    return false;
+  });
+
+  //Acceleration Head
+  $('#rd_acceleration_head_btn').click(function (e) {
+    $.colorbox({
+      href:'#rd_acceleration_head_div',
+      inline:true
+    });
+  });
+
+  //add_new_centrifugal_pumps_row
+  $('#add_new_centrifugal_pumps_row').click(function (e) {
+    var new_centrifugal_pumps_tr = $('#new_centrifugal_pumps_tr').html().replace(/#x#/g, cp_count);
+    $('#centrifugal_pumps').append($(new_centrifugal_pumps_tr));
+    cp_count++;
+    return false;
+  });
+
+  $('.centrifugal_pumps_close_tr').live('click', function (e) {
+    $(this).parents('tr').find('#centrifugal_pump_destroy_' + $(this).attr('row_id')).val('true');
+    $(this).parents('tr').hide();
+    return false;
+  });
+
+  //plot_curve
+  $('#plot_curve_btn').click(function (e) {
+    $('#plot_curve').show();
+    var systemloss_vals = [];
+    var headone_vals = [];
+    var headtwo_vals = [];
+    var headthree_vals = [];
+    var headfour_vals = [];
+    $('#centrifugal_pumps tr:gt(3)').each(function(i, tr){
+      var capacity = parseFloat($($(tr).children('td')[1]).text());      
+      var systemloss =  parseFloat($($(tr).children('td')[2]).text());
+      var head1 =  parseFloat($($(tr).children('td')[3]).find('input').val());
+      var head2 =  parseFloat($($(tr).children('td')[4]).find('input').val());
+      var head3 =  parseFloat($($(tr).children('td')[5]).find('input').val());
+      var head4 =  parseFloat($($(tr).children('td')[6]).find('input').val());
+
+      var point_systemloss = [capacity, systemloss];
+      var point_head1 = [capacity, head1];
+      var point_head2 = [capacity, head2];
+      var point_head3 = [capacity, head3];
+      var point_head4 = [capacity, head4];
+
+      systemloss_vals[i]= point_systemloss;
+      headone_vals[i]= point_head1;
+      headtwo_vals[i]= point_head2;
+      headthree_vals[i]= point_head3;
+      headfour_vals[i] = point_head4;
+    });
+    console.log(headone_vals);
+  $.jqplot('plot_curve', [systemloss_vals, headone_vals, headtwo_vals, headthree_vals, headfour_vals], { 
+      series:[{showMarker:false}, {showMarker:false}, {showMarker:false}, {showMarker:false}, {showMarker:false}],
+      axes:{
+        xaxis:{
+          label:'Capacity'
+        },
+        yaxis:{
+          label:'Head'
+        }
+      } 
+  }); 
+ });
+
+  //clone discharge circuit pumping
+  $('#show_clone_circuit_piping').click(function (e) {
+    $.colorbox({
+      href:'#clone_circuit_piping_div',
+      inline:true});
+    return false;
+  });
+
+
+  $('#source_pump').click(function (e) {
+   $('#line_source_segment').css("display", "none")
+   $('#pump_source_circuit').css("display", "")
+   });
+
+  $('#source_line').click(function (e) {
+   $('#pump_source_circuit').css("display", "none")
+   $('#line_source_segment').css("display", "")
+  });
+
+
+
+  $('#clone_circuit_piping_btn').click(function (e) {
+    var sizing_type = $('.sizing_type_for_source:checked').val()
+    if(sizing_type == "pump") {
+      var source_cp = $('#source_pump_circuit').val(); }
+    else if(sizing_type == "line") {
+      var source_cp = $('#source_line_segment').val();
+    }
+    var target_cp = $('#trg_circuit_piping').val();
+    if (source_cp == "" || target_cp == "" || sizing_type == "") {
+      return false;
+    }
+  
+    $('#clone_circuit_piping_btn').attr("disabled", true);
+
+    $.get('/admin/pump_sizings/clone_circuit_piping',
+            {source_cp:source_cp, target_cp:target_cp, sizing_type:sizing_type},
+            function (data) {
+              $('#clone_circuit_piping_btn').attr("disabled", false);
+              alert('Circuit piping cloned successfully.');
+              window.location.reload(true);
+            },
+            'json'
+    );
+
+    return false;
+  });
+
+  // Suction_piping
+  $('.suction_pipings_pipe_size').live('change', function (k) {
+    var row_id = $(this).attr('row_id');
+    $('#suction_pipings_pipe_id_' + row_id).val('');
+    $('#suction_pipings_pipe_schedule_' + row_id + '>option').remove();
+    $('#suction_pipings_pipe_schedule_' + row_id).append($('<option></option>').val("").html(""));
+    $(pipe_size_schedules[$(this).val()]).each(function (k, v) {
+      $('#suction_pipings_pipe_schedule_' + row_id).append($('<option></option>').val(v).html(v));
+    });
+  });
+
+  $('.suction_pipings_pipe_schedule').live('change', function (k) {
+    var row_id = $(this).attr('row_id');
+    $('#suction_pipings_pipe_id_' + row_id).val('');
+    if ($(this).val() == '') {
+      return false;
+    }
+    var pipe_od = pipe_size_pipe_ods[$('#suction_pipings_pipe_size_' + row_id).val()] / pipe_id_conversion_factor;
+    var wall_thickness = pipe_size_wall_thinkness[$('#suction_pipings_pipe_size_' + row_id).val()][$(this).val()] / pipe_id_conversion_factor;
+    var pipe_id = pipe_od - (2 * wall_thickness);
+    $('#suction_pipings_pipe_id_' + row_id).val(get_project_field_value('.suction_pipings_pipe_id', pipe_id, unit_decimals));
+  });
+
+
+  // discharge_circuit_piping
+  $('.discharge_circuit_piping_pipe_size').live('change', function (k) {
+    var row_id = $(this).attr('row_id');
+    $('#discharge_circuit_piping_pipe_id_' + row_id).val('');
+    $('#discharge_circuit_piping_pipe_schedule_' + row_id + '>option').remove();
+    $('#discharge_circuit_piping_pipe_schedule_' + row_id).append($('<option></option>').val("").html(""));
+    $(pipe_size_schedules[$(this).val()]).each(function (k, v) {
+      $('#discharge_circuit_piping_pipe_schedule_' + row_id).append($('<option></option>').val(v).html(v));
+    });
+  });
+
+
+  $('.discharge_circuit_piping_pipe_schedule').live('change', function (k) {
+    var row_id = $(this).attr('row_id');
+    $('#discharge_circuit_piping_pipe_id_' + row_id).val('');
+    if ($(this).val() == '') {
+      return false;
+    }
+    var pipe_od = pipe_size_pipe_ods[$('#discharge_circuit_piping_pipe_size_' + row_id).val()] / pipe_id_conversion_factor;
+    var wall_thickness = pipe_size_wall_thinkness[$('#discharge_circuit_piping_pipe_size_' + row_id).val()][$(this).val()] / pipe_id_conversion_factor;
+    var pipe_id = pipe_od - (2 * wall_thickness);
+    $('#discharge_circuit_piping_pipe_id_' + row_id).val(get_project_field_value('.discharge_circuit_piping_pipe_id', pipe_id, unit_decimals));
+  });
+
+  function ajax_post(url) {
+    $.post($('form').attr("action"), $('form').serialize(), function (data) {
+      $.get(url, {pump_sizing_id:data.pump_sizing_id}, function (data) {
+          if (data.success) {
+            window.location.reload()
+          }
+          else {
+            alert(data.error)
+          }
+      })
+    });
+  }
+
+  $("#circuit_calculate").click(function () {
+    ajax_post("/admin/pump_sizings/suction_side_hydraulics")
+  });
+  $('#discharge_calculate').click(function () {
+    ajax_post("/admin/pump_sizings/discharge_side_hydraulics")
+  });
+  $("input#design_pump_cd").click(function () {
+    $("input[type='text']").css({'border':'1px solid #DDDDDD'});
+    if($('#tab3').validateTab()){
+      var c = $('#pump_sizing_cd_compressible_liquid')
+      var density = $('#pump_sizing_cd_density_at_discharge_nozzle');
+      var d = density.val();
+      if(c.is(':checked') && $.trim(d).length == 0){
+        alert("Please enter required values!")
+        density.css({'border':'1px solid red'})
+      }
+      else{
+        $.post($('form').attr("action"), $('form').serialize(), function (data) {
+          $.get("/admin/pump_sizings/design_pump_centrifugal", {pump_sizing_id:data.pump_sizing_id}, function (data) {
+            if (data.show_info) {
+              alert(data.message)
+              window.location = location.pathname
+            }
+          })
+        });
+      }
+    }
+  });
+  $("input#design_pump_rp").click(function () {
+    if ($("#tab4").validateTab()) {
+      ajax_post("/admin/pump_sizings/design_pump_reciprocation");
+    }
+  });
+
+$('#pump_sizing_su_pipe_id').change(function (e) {
+  if ($(this).val() == "") {
+    $('#pump_sizing_su_pipe_id').val('');
+    return false
+  }
+  $('#pump_sizing_su_pipe_roughness').val($('body').data('pipes')[$(this).val()].roughness_recommended);
+});
+
+$('#pump_sizing_rd_pump_type').change(function() {
+  var v = $(this).val();
+  var sa = pump_type_form_values[v]["stroke_action"];
+  var nc = pump_type_form_values[v]["no_cylinders"];
+  var c = pump_type_form_values[v]["c"];
+  $("#pump_sizing_rd_stroke_action").val(sa);
+  $("#pump_sizing_rd_no_of_cylinders").val(nc);
+  $("#pump_sizing_rd_acc_head_factor_for_pump_type").val(c);
+})
+
+$('#pump_sizing_rd_fluid_service_type').change(function(){
+  var v = $(this).val();
+  var k = fluid_service_type_form_values[v]["k"]
+  $("#pump_sizing_rd_acc_head_factor_for_fluid_compressibility").val(k)
+})
+
+$("#pump_suction_design").click(function(){
+   $.post($('form').attr("action"), $('form').serialize(), function (data) {
+      $.get("/admin/pump_sizings/pump_suction_design",{pump_sizing_id:data.pump_sizing_id}, function (data) {
+        if(data.error == true){
+          alert(data.msg)
+        }
+        else{
+          var p  = data.calculated_values.pressure_at_suction_nozzle
+          $('#pump_sizing_su_pressure_at_suction_nozzle').val(p)
+          $('#pump_sizing_cd_press_at_suction_nozzle').val(p)
+          $('#pump_sizing_cd_np_press_at_suction_nozzle').val(p)
+          $('#pump_sizing_rd_press_at_suction_nozzle').val(p)
+          $('#pump_sizing_su_max_pressure_at_suction_nozzle').val(data.calculated_values.max_pressure_at_suction_nozzle)
+        }
+     })
+  });
+})
+
+$('#pump_sizing_su_vapor_pressure').blur(function(){
+  var val = $(this).val();
+  $('#pump_sizing_cd_vapor_pressure,#pump_sizing_rd_vapor_pressure').val(val);
+})
+
+
+$('.dc_design_circuit').live('click',function(){
+  var sel = $(this).attr('id');
+  sel = sel.split("_")
+  sel = sel[sel.length-1]
+  var dp = $("#discharge_pressure_at_discharge_nozzle_dp_"+sel).val()
+  $('#pump_sizing_cd_press_at_discharge_nozzle').val(dp)
+  $('#pump_sizing_rd_press_at_discharge_nozzle').val(dp)
+})
+
+$('#discharge_equalize').live('click',function() {
+  $.post($('form').attr("action"), $('form').serialize(), function (data) {
+      $.get("/admin/pump_sizings/equalize",{pump_sizing_id:data.pump_sizing_id},function(data) {
+          window.location.reload()
+     })
+  });
+})
+
+$("select[name$='[fitting]']:visible").live('change', function(){
+  var sel = $(this).attr('id');
+  sel = sel.split("_")
+  sel = sel[sel.length-1]
+
+  var selected_fitting = $(this).children('option:selected').text()
+  var tr = $(this).parents('tr');
+  //var spc = $("#stream_property_changer_"+sel);
+  var spc = tr.find("#stream_property_changer_"+sel);
+
+
+  //handle changes required for fitting type 'Change Properties To Stream'
+  if (selected_fitting == 'Change Properties To Stream'){
+    if (spc.length == 0){
+      var table = $(this).parents('table').attr('id');
+      var tab = "";
+      var discharge_row = 0;
+      console.log(table)
+      elements = []
+
+      //determine which table we are dealing with
+      //discharge side we have inlet pressure also, so we need the elements array here
+      //to accomodate the extra input box
+      if(table == 'suction_piping_table'){
+        tab = 'suction'
+        elements = [2,3,4,5,6,7,8,9,10]
+      }
+      else{
+        tab = 'discharge'
+        var div = $(this).parents("div[id^='discharge_circuit_piping_box']").attr('id')
+        div = div.split("_")
+        discharge_row = div[div.length-1]
+        elements = [2,3,4,5,6,7,8,9,10,11]
+      }
+
+      $.ajax({
+        url:'/admin/pump_sizings/new_stream_property_changer',
+        data:{row_id:sel,pump_sizing_id:pump_sizing_id,tab:tab,discharge_row:discharge_row},
+        dataType:'html',
+        success:function(html){
+            //hide children tds which are not necessary based on the index
+            $.each(elements,function(i,e){
+              var d = tr.find('td:eq('+e+')')
+              d.addClass('streamch_'+sel).hide()
+            })
+            tr.children('td:eq(2)').css({'border':'0px solid'}).after(html)
+            set_project_unit_labels(unit_decimals);
+        }
+      })
+    }
+    else{
+      //stream changer is already there
+      //show it now and hide the default input boxes
+      $('td.streamch_'+sel).hide()
+      spc.show()
+    }
+ }
+ else{
+
+    //stream changer is already there
+    //just hide it and show the default input boxes
+    if (spc.length > 0){
+      spc.hide()
+      $('td.streamch_'+sel).show()
+    }
+
+    delta_p = tr.find("input[name*='delta_p']")
+    //do things for other fitting types
+    if(selected_fitting == 'Control Valve'  || selected_fitting == 'Orifice'){
+      //find pressure and drop and fill it with default project value   
+      delta_p.val(project.minimum_control_value_pressure_drop)
+    }
+    //handle flow element
+    else if(selected_fitting.slice(0,4) == 'Flow'){
+      //same as above 
+      delta_p.val(project.default_flow_element_pressure_drop)
+    }
+    else{
+      delta_p.val('')
+    }
+ }
+})
+
+//handle stream change in change properties screen
+$('select.stream_property_stream_no').live('change',function() {
+  var id = $(this).attr('id').split("_")[1]
+  var stream_no = $(this).val()
+  var process_basis_id = $('#stream_property_process_basis_'+id).val()
+  $.get('/admin/pump_sizings/get_change_properties_stream_values',
+       {process_basis_id:process_basis_id, stream_no:stream_no},function(resp){
+        var spc = $('#stream_property_changer_'+id)
+        //find the input based on name and fill with the respective value
+        $.each(resp,function(k,v){
+          element = spc.find("input[name*='"+k+"']")
+          element.val(get_project_field_value('.stream_property_changer_'+k,resp[k],unit_decimals))
+        })
+    })
+})
+
+$('#system_loss_calculate').click(function(){
+  ajax_post("/admin/pump_sizings/system_loss_calculate");
+})
+
+</script>

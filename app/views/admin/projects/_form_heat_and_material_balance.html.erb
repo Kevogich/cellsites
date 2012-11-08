@@ -1,0 +1,99 @@
+<div class="clear"></div>
+
+<% case_count = 1 %>
+
+<div id="project_cases">
+  <% project.heat_and_material_balances.each_with_index do |c,i| %>
+    <li class="string optional">
+      <label><%= "Case #{i+1}" %></label>
+      <%= text_field_tag "project[heat_and_material_balances][#{i+1}][case]", c.case, :id => "project_cases_#{i+1}", :class =>"case_#{c.id}" %>
+      <%= hidden_field_tag "project[heat_and_material_balances][#{i+1}][id]", c.id, :id => "project_case_id_#{i+1}" %>
+      <span>
+        <%= link_to "Delete", "#delete_case_#{i+1}", {:id=>"delete_case_#{i+1}",:class => "delete_case",:case_row => (i+1)} %>
+      </span>
+      <span>
+        <%= link_to "Upload Details", "#", {:id=>"detail_case_#{i+1}",:class => "upload_case",:case_row => (i+1), :case_id => "#{c.id}"} %>
+      </span>
+      <span>
+        <%= link_to "View Details", "#", {:id=>"view_detail_case_#{i+1}",:class => "view_detail_case",:case_row => (i+1), :case_id => "#{c.id}"} %>
+      </span>
+      <% case_count = i+1 %>
+    </li>
+  <% end%>
+  <% if project.heat_and_material_balances.empty? %>
+    <li class="string optional">
+      <label><%= "Case 1" %></label>
+      <%= text_field_tag 'project[heat_and_material_balances][1][case]', "", :id => "project_cases_1" %>
+      <%= hidden_field_tag 'project[heat_and_material_balances][1][id]', "", :id => "project_case_id_1" %>
+      <span>
+        <%= link_to "Delete", "#delete_case_1", {:id=>"delete_case_1",:class => "delete_case",:case_row => 1} %>
+      </span>
+      <span>
+        <%= link_to "Upload Details", "#", {:id=>"detail_case_1",:class => "upload_case",:case_row => 1, :case_id => 0} %>
+      </span>
+      <span>
+        <%= link_to "View Details", "#", {:id=>"view_detail_case_1",:class => "view_detail_case",:case_row => 1, :case_id => 0} %>
+      </span>
+    </li>
+  <% end%>	
+</div>
+
+<%= link_to "Add", '#', :onclick => "add_case(); return false;" %>
+
+<div id="new_case_form" class="hidden">
+  <li class="string optional">
+    <label><%= "Case #x#" %></label>
+    <%= text_field_tag 'project[heat_and_material_balances][#x#][case]', "", :id => "project_cases_#x#" %>
+    <%= hidden_field_tag 'project[heat_and_material_balances][#x#][id]', "", :id => "project_case_id_#x#" %>
+    <span>
+      <%= link_to "Delete", "#", {:id=>"delete_case_#x#",:class => "delete_case",:case_row => "#x#"} %>
+    </span>
+    <span>
+      <%= link_to "Upload Details", "#", {:id=>"detail_case_#x#",:class => "upload_case",:case_row => "#x#", :case_id => 0} %>
+    </span>
+    <span>
+      <%= link_to "View Details", "#", {:id=>"view_detail_case_#x#",:class => "view_detail_case",:case_row => "#x#", :case_id => 0} %>
+    </span>
+  </li>
+</div>
+
+<script type="text/javascript">
+	$(".colorbox_ham").colorbox({inline:true, href:"#ham_details", opacity:0.7});
+	
+	var cases_count = '<%= case_count%>';
+	var project_id = '<%= @project.id%>';
+	function add_case(){
+		cases_count++;
+		var new_case_form = $('#new_case_form').html().replace(/#x#/g, cases_count);
+		$('#project_cases').append( $(new_case_form));
+  	}	   
+	
+	$('.delete_case').live('click', function(e){
+		var id = $(this).attr('case_row');
+		var hidden_id = $('#project_case_id_'+id).val();		
+		if(hidden_id == '') {
+			$(this).parents('li').remove();
+		} else {
+  			$.post('/admin/heat_and_material_balances/'+hidden_id+'/delete_case', {}, null, 'script');
+  		}
+    });
+	
+	$('.upload_case').live('click', function(e){		
+		$.colorbox({href: "/admin/heat_and_material_balances/new?project_id="+project_id+"&row_no="+$(this).attr('case_row')+"&id="+$(this).attr('case_id')});
+	});
+	
+	$('.view_detail_case').live('click', function(e){
+		if($(this).attr('case_id') == 0) {
+			alert("Please Upload document");
+		} else {
+			$.colorbox({href: "/admin/heat_and_material_balances/"+$(this).attr('case_id')+"?project_id="+project_id+"&row_no="+$(this).attr('case_row')});			
+		}
+		
+	});
+</script>
+
+<div class="hidden">
+  <div id="ham_details">
+    <img src='/images/heat_and_material.png'>
+  </div>
+</div>

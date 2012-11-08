@@ -1,0 +1,229 @@
+<div id="stream_summary" class="tab_content">
+  <!-- Stream Summary -->
+  <table>
+    <tr>
+      <td></td>
+      <td><b><u>HOT IN</u></b></td>
+      <td><b><u>HOT OUT</u></b></td>
+      <td><b><u>COLD IN</u></b></td>
+      <td><b><u>COLD OUT</u></b></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Stream No</td>
+      <td>
+        <label id="ss_hi_stream_no"><%= heat_exchanger_sizing.ss_hi_stream_no %></label>
+        <%= f.hidden_field :ss_hi_stream_no %>
+      </td>
+      <td>
+        <label id="ss_ho_stream_no"><%= heat_exchanger_sizing.ss_ho_stream_no %></label>
+        <%= f.hidden_field :ss_ho_stream_no %>
+      </td>
+      <td>
+        <label id="ss_ci_stream_no"><%= heat_exchanger_sizing.ss_ci_stream_no %></label>
+        <%= f.hidden_field :ss_ci_stream_no %>
+      </td>
+      <td>
+        <label id="ss_co_stream_no"><%= heat_exchanger_sizing.ss_co_stream_no %></label>
+        <%= f.hidden_field :ss_co_stream_no %>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Pressure</td>
+      <td>
+        <label id="ss_hi_pressure"><%= heat_exchanger_sizing.ss_hi_pressure %></label>
+        <%= f.hidden_field :ss_hi_pressure %>
+      </td>
+      <td>
+        <label id="ss_ho_pressure"><%= heat_exchanger_sizing.ss_ho_pressure %></label>
+        <%= f.hidden_field :ss_ho_pressure %>
+      </td>
+      <td>
+        <label id="ss_ci_pressure"><%= heat_exchanger_sizing.ss_ci_pressure %></label>
+        <%= f.hidden_field :ss_ci_pressure %>
+      </td>
+      <td>
+        <label id="ss_co_pressure"><%= heat_exchanger_sizing.ss_co_pressure %></label>
+        <%= f.hidden_field :ss_co_pressure %>
+      </td>
+      <td><label class="pressure_general_unit"></label></td>
+    </tr>
+    <tr>
+      <td>Temperature</td>
+      <td>
+        <label id="ss_hi_temperature"><%= heat_exchanger_sizing.ss_hi_temperature %></label>
+        <%= f.hidden_field :ss_hi_temperature %>
+      </td>
+      <td>
+        <label id="ss_ho_temperature"><%= heat_exchanger_sizing.ss_ho_temperature %></label>
+        <%= f.hidden_field :ss_ho_temperature %>
+      </td>
+      <td>
+        <label id="ss_ci_temperature"><%= heat_exchanger_sizing.ss_ci_temperature %></label>
+        <%= f.hidden_field :ss_ci_temperature %>
+      </td>
+      <td>
+        <label id="ss_co_temperature"><%= heat_exchanger_sizing.ss_co_temperature %></label>
+        <%= f.hidden_field :ss_co_temperature %>
+      </td>
+      <td><label class="temperature_general_unit"></label></td>
+    </tr>
+    <tr>
+      <td>Mass Vapor Fraction</td>
+      <td>
+        <label id="ss_hi_mass_vapor_fraction"><%= heat_exchanger_sizing.ss_hi_mass_vapor_fraction %></label>
+        <%= f.hidden_field :ss_hi_mass_vapor_fraction %>
+      </td>
+      <td>
+        <label id="ss_ho_mass_vapor_fraction"><%= heat_exchanger_sizing.ss_ho_mass_vapor_fraction %></label>
+        <%= f.hidden_field :ss_ho_mass_vapor_fraction %>
+      </td>
+      <td>
+        <label id="ss_ci_mass_vapor_fraction"><%= heat_exchanger_sizing.ss_ci_mass_vapor_fraction %></label>
+        <%= f.hidden_field :ss_ci_mass_vapor_fraction %>
+      </td>
+      <td>
+        <label id="ss_co_mass_vapor_fraction"><%= heat_exchanger_sizing.ss_co_mass_vapor_fraction %></label>
+        <%= f.hidden_field :ss_co_mass_vapor_fraction %>
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Liquid Flow Rate</td>
+      <td><%= f.text_field :ss_hi_liquid_flow_rate, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_liquid_flow_rate, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_liquid_flow_rate, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_liquid_flow_rate, :class=>"small-text-100" %></td>
+      <td><label class="flow_rate_general_unt"></label></td>
+    </tr>
+    <tr>
+      <td>Liquid Density</td>
+      <td><%= f.text_field :ss_hi_liquid_density, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_liquid_density, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_liquid_density, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_liquid_density, :class=>"small-text-100" %></td>
+      <td><label class="density_general_unt"></label></td>
+    </tr>
+    <tr>
+      <td>Liquid Viscosity</td>
+      <td><%= f.text_field :ss_hi_liquid_viscosity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_liquid_viscosity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_liquid_viscosity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_liquid_viscosity, :class=>"small-text-100" %></td>
+      <td><label class="viscosity_general_unt"></label></td>
+    </tr>
+    <tr>
+      <td>Liquid Specific Heat Capacity</td>
+      <td><%= f.text_field :ss_hi_liquid_specific_heat_capacity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_liquid_specific_heat_capacity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_liquid_specific_heat_capacity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_liquid_specific_heat_capacity, :class=>"small-text-100" %></td>
+      <td>kJ/kg &deg;K</td>
+    </tr>
+    <tr>
+      <td>Liquid Thermal Conductivity</td>
+      <td><%= f.text_field :ss_hi_liquid_thermal_conductivity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_liquid_thermal_conductivity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_liquid_thermal_conductivity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_liquid_thermal_conductivity, :class=>"small-text-100" %></td>
+      <td>W/m &deg;K</td>
+    </tr>
+    <tr>
+      <td>Liquid Latent Heat</td>
+      <td><%= f.text_field :ss_hi_liquid_latent_heat, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_liquid_latent_heat, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_liquid_latent_heat, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_liquid_latent_heat, :class=>"small-text-100" %></td>
+      <td>kJ/kg</td>
+    </tr>
+    <tr>
+      <td>Liquid Surface Tension</td>
+      <td><%= f.text_field :ss_hi_liquid_surface_tension, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_liquid_surface_tension, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_liquid_surface_tension, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_liquid_surface_tension, :class=>"small-text-100" %></td>
+      <td>dyne/cm</td>
+    </tr>
+    <tr>
+      <td>Liquid Expansion Coefficient</td>
+      <td><%= f.text_field :ss_hi_liquid_expansion_coefficient, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_liquid_expansion_coefficient, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_liquid_expansion_coefficient, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_liquid_expansion_coefficient, :class=>"small-text-100" %></td>
+      <td>1/&deg;C</td>
+    </tr>
+    <tr>
+      <td>Liquid BubblePoint Temperature</td>
+      <td><%= f.text_field :ss_hi_liquid_bubblepoint_temperature, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_liquid_bubblepoint_temperature, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_liquid_bubblepoint_temperature, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_liquid_bubblepoint_temperature, :class=>"small-text-100" %></td>
+      <td>&deg;C</td>
+    </tr>
+    <tr>
+      <td>Vapor Flow Rate</td>
+      <td><%= f.text_field :ss_hi_vapor_flow_rate, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_vapor_flow_rate, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_vapor_flow_rate, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_vapor_flow_rate, :class=>"small-text-100" %></td>
+      <td>kg/hr</td>
+    </tr>
+    <tr>
+      <td>Vapor MW</td>
+      <td><%= f.text_field :ss_hi_vapor_mw, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_vapor_mw, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_vapor_mw, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_vapor_mw, :class=>"small-text-100" %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Vapor Z</td>
+      <td><%= f.text_field :ss_hi_vapor_z, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_vapor_z, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_vapor_z, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_vapor_z, :class=>"small-text-100" %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Vapor K</td>
+      <td><%= f.text_field :ss_hi_vapor_k, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_vapor_k, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_vapor_k, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_vapor_k, :class=>"small-text-100" %></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Vapor Viscosity</td>
+      <td><%= f.text_field :ss_hi_vapor_viscosity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_vapor_viscosity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_vapor_viscosity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_vapor_viscosity, :class=>"small-text-100" %></td>
+      <td>cP</td>
+    </tr>
+    <tr>
+      <td>Vapor Specific Heat Capacity</td>
+      <td><%= f.text_field :ss_hi_vapor_specific_heat_capacity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_vapor_specific_heat_capacity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_vapor_specific_heat_capacity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_vapor_specific_heat_capacity, :class=>"small-text-100" %></td>
+      <td>kJ/kg &deg;K</td>
+    </tr>
+    <tr>
+      <td>Vapor Thermal Conductivity</td>
+      <td><%= f.text_field :ss_hi_vapor_thermal_conductivity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_vapor_thermal_conductivity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_vapor_thermal_conductivity, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_vapor_thermal_conductivity, :class=>"small-text-100" %></td>
+      <td>W/m &deg;K</td>
+    </tr>
+    <tr>
+      <td>Vapor Dewpoint Temperature</td>
+      <td><%= f.text_field :ss_hi_vapor_dewpoint_temperature, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ho_vapor_dewpoint_temperature, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_ci_vapor_dewpoint_temperature, :class=>"small-text-100" %></td>
+      <td><%= f.text_field :ss_co_vapor_dewpoint_temperature, :class=>"small-text-100" %></td>
+      <td>&deg;C</td>
+    </tr>
+  </table>
+</div>

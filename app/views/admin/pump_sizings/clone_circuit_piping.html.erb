@@ -1,0 +1,21 @@
+<% discharge_row_id = @discharge_row_id%>
+<% @discharge_circuit_pipings.each_with_index do |dcp, j|%>
+	<tr>
+		<td>
+			<%= j+1%>						
+			<%= hidden_field_tag "pump_sizing[pump_sizing_discharges][#{discharge_row_id}][discharge_circuit_pipings][#{j+1}][id]", '', :id => "discharge_circuit_piping_id_#{j+1}" %>
+		</td>
+		<td><%= select_tag "pump_sizing[pump_sizing_discharges][#{discharge_row_id}][discharge_circuit_pipings][#{j+1}][fitting]", options_for_select(PipeSizing.fitting.collect {|p| [raw(p[:value]), p[:id]]}.insert(0, ''), dcp.fitting), :id => "discharge_circuit_piping_fitting_#{j+1}", :style=>"width:200px;"%></td>
+		<td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{discharge_row_id}][discharge_circuit_pipings][#{j+1}][fitting_tag]", dcp.fitting_tag, :id => "discharge_circuit_piping_fitting_tag_#{j+1}"%></td>
+		<td><%= select_tag "pump_sizing[pump_sizing_discharges][#{discharge_row_id}][discharge_circuit_pipings][#{j+1}][pipe_size]", options_for_select(PipeSizing.pipe_sizes.collect {|p| [raw(p[:name]), p[:value]]}.insert(0, ''), dcp.pipe_size), :id => "discharge_circuit_piping_pipe_size_#{j+1}"%></td>
+		<td><%= select_tag "pump_sizing[pump_sizing_discharges][#{discharge_row_id}][discharge_circuit_pipings][#{j+1}][pipe_schedule]", options_for_select(PipeSizing.pipe_schedules.collect {|p| [raw(p[:name]), p[:id]]}.insert(0, ''), dcp.pipe_schedule), :id => "discharge_circuit_piping_pipe_schedule_#{j+1}"%></td>
+		<td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{discharge_row_id}][discharge_circuit_pipings][#{j+1}][pipe_id]", dcp.pipe_id, :id => "discharge_circuit_piping_pipe_id_#{j+1}"%></td>
+		<td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{discharge_row_id}][discharge_circuit_pipings][#{j+1}][per_flow]", dcp.per_flow, :id => "discharge_circuit_piping_per_flow_#{j+1}"%></td>
+		<td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{discharge_row_id}][discharge_circuit_pipings][#{j+1}][ds_cv]", dcp.ds_cv, :id => "discharge_circuit_piping_ds_cv_#{j+1}"%></td>
+		<td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{discharge_row_id}][discharge_circuit_pipings][#{j+1}][length]", dcp.length, :id => "discharge_circuit_piping_length_#{j+1}"%></td>
+		<td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{discharge_row_id}][discharge_circuit_pipings][#{j+1}][elev]", dcp.elev, :id => "discharge_circuit_piping_elev_#{j+1}"%></td>
+		<td><%= text_field_tag "pump_sizing[pump_sizing_discharges][#{discharge_row_id}][discharge_circuit_pipings][#{j+1}][delta_p]", dcp.delta_p, :id => "discharge_circuit_piping_delta_p_#{j+1}"%></td>
+		<td><%= label_tag "inlet_pressure", ""%></td>
+		<td><%= link_to "X", "#", :class => "discharge_circuit_piping_close_tr", :row_id => "#{j+1}"%></td>
+	</tr>
+<% end%>

@@ -1,0 +1,11 @@
+<%= form_for sizing_criteria_category_type, :url => sizing_criteria_category_type.new_record? ? admin_sizing_criteria_category_types_path : admin_sizing_criteria_category_type_path(sizing_criteria_category_type), :remote=>true,:html => {:style => 'width:400px;'} do |f| %>
+	<%= f.error_messages %>	
+	<%= f.hidden_field :sizing_criteria_category_id%>	                    
+	<div class="form-element-last">
+		<%= f.label :name%><br>
+		<%= f.text_field :name%>
+	</div>
+	<div class="form-buttons">
+		<%= f.submit sizing_criteria_category_type.new_record? ? 'Create' : 'Update'%>		
+  	</div>
+<% end%>

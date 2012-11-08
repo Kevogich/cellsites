@@ -1,0 +1,2 @@
+module Admin::DriverSizingsHelper
+end

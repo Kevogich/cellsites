@@ -1,0 +1,94 @@
+<% if @latest_status.status != 'approved' && @latest_status.user_id == current_user.id %>
+  <div class="sizing_status_activity">
+    <%= form_for @sizing_status_activity, :url =>  admin_sizing_status_activities_path, :remote => true, :html => {:class => 'form-horizontal', :style=>"width:700px;"} do |f| %>
+      <%= hidden_field_tag :sizing_status_activity_id, @latest_status.id %>
+      <%= f.hidden_field :status %>
+      <%= f.hidden_field :sizing_id, :value => @latest_status.sizing_id %>
+      <%= f.hidden_field :sizing_type, :value => @latest_status.sizing_type %>
+      <% unless %w(pending_review pending_approval).include?(@latest_status.status) %>
+      <div class="control-group">
+        <%= f.label :user_id, :class => "control-label" %>
+        <div class="controls">
+          <%= f.select :user_id, @company_users.collect {|cu| [cu.user.name, cu.user_id]}, {:prompt => true}, :class => 'company_user_select' %>
+        </div>
+      </div>
+      <% end %>
+      <div class="control-group">
+        <div class="controls">
+          <%= @latest_status.status.humanize %>
+        </div>
+      </div>
+      <div class="control-group">
+        <div class="controls">
+          <% if %w(new reject_review).include?(@latest_status.status) %>
+            <%= link_to "Request for Review", "#", :class => "btn btn-primary disabled request_for_review_btn", :data_request_status => 'pending_review' %>
+          <% elsif %w(pending_review).include?(@latest_status.status) %>
+            <%= link_to "Reject Review", "#", :class => "btn btn-danger reject_review_btn", :data_request_status => 'reject_review' %>
+            <%= link_to "Accept Review", "#", :class => "btn btn-primary accept_review_btn", :data_request_status => 'accept_review' %>
+          <% elsif @latest_status.status == 'reviewed' || @latest_status.status == 'reject_approval' %>
+            <%= link_to "Request for Approval", "#", :class => "btn btn-primary disabled request_for_approval_btn", :data_request_status => 'pending_approval' %>
+          <% elsif @latest_status.status == 'pending_approval' %>
+            <%= link_to "Reject Approval", "#", :class => "btn btn-danger reject_approval_btn", :data_request_status => 'reject_approval' %>
+            <%= link_to "Accept Approval", "#", :class => "btn btn-success accept_approval_btn", :data_request_status => 'accept_approval' %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="ruler"></div>
+<% end %>
+
+<div class="sizing_status_activities" style="margin-top: 10px;">
+  <h3>Status History</h3>
+  <table style="width: 100%;">
+    <%= render :partial => 'sizing_status', :collection => @sizing_statues %>
+  </table>
+</div>
+
+<script type="text/javascript">
+  $(function(){
+
+    $('.company_user_select').change(function(){
+      if($(this).val()) {
+        $('.request_for_review_btn, .request_for_approval_btn').removeClass('disabled');
+      } else {
+        $('.request_for_review_btn, .request_for_approval_btn').addClass('disabled');
+      }
+    });
+
+    $('.request_for_review_btn').click(function(){
+      if($('.company_user_select').val()) {
+        $('#sizing_status_activity_status').val('pending_review');
+        $('form#new_sizing_status_activity').submit();
+      }
+    });
+
+    $('.accept_review_btn').click(function(){
+      $('#sizing_status_activity_status').val('reviewed');
+      $('form#new_sizing_status_activity').submit();
+    });
+
+    $('.request_for_approval_btn').click(function(){
+      if($('.company_user_select').val()) {
+        $('#sizing_status_activity_status').val('pending_approval');
+        $('form#new_sizing_status_activity').submit();
+      }
+    });
+
+    $('.accept_approval_btn').click(function(){
+      $('#sizing_status_activity_status').val('approved');
+      $('form#new_sizing_status_activity').submit();
+    });
+
+    $('.reject_review_btn').click(function(){
+      $('#sizing_status_activity_status').val('reject_review');
+      $('form#new_sizing_status_activity').submit();
+    });
+
+    $('.reject_approval_btn').click(function(){
+      $('#sizing_status_activity_status').val('reject_approval');
+      $('form#new_sizing_status_activity').submit();
+    });
+  });
+</script>

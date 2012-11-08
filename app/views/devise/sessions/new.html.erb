@@ -1,0 +1,20 @@
+<% title 'Sign In'%>
+
+<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+	<div class="form-element">
+		<%= f.label :login %><br/>
+	    <%= f.text_field :login %>
+	</div>
+	<div class="form-element">
+    	<%= f.label :password %><br/>
+    	<%= f.password_field :password %>
+  	</div>
+	<% if devise_mapping.rememberable? %>
+    <div class="form-element-last">
+      <%= f.check_box :remember_me %>
+      <%= f.label :remember_me %>
+    </div>
+	<% end%>
+	<div class="form-buttons"><%= f.submit "Sign in" %></div>
+<% end%>
+<%= render :partial => "devise/shared/links" %>

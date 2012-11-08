@@ -1,0 +1,24 @@
+<style type="text/css">
+.pdf_td{ width:300px; }
+</style>
+
+<table>
+<tr>
+	<td rowspan=5 style="width:100px;">
+		<img src=<%= "#{root_url}#{client.logo.url[1..-1]}"%> >
+	</td>
+</tr>
+<tr>
+	<td class='pdf_td'><b>CLIENT:</b>&nbsp;&nbsp;<%= client.name %></td>
+</tr>
+<tr>
+	<td class='pdf_td'><b>LOCATION:</b>&nbsp;&nbsp;<%= client.address %></td>
+</tr>
+<tr>
+	<td class='pdf_td'><b>PROJECT:</b>&nbsp;&nbsp;<%= current_user.user_project_setting.project.project_num %></td>
+</tr>
+<tr>
+	<td class='pdf_td'><b>CLIENT PROJECT NUMBER:</b>&nbsp;&nbsp;<%= current_user.user_project_setting.project.document_num %></td>
+</tr>
+</table>
+

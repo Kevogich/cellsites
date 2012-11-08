@@ -1,0 +1,328 @@
+<div id="nozzle_sizing" class="tab_content">
+  <!-- Nozzle Sizing -->
+  <table style="width: 100%;">
+    <tr>
+      <td colspan="2"><label class="sub_title">Feed Nozzle</label></td>
+      <td colspan="2"><label class="sub_title">Associated Piping</label></td>
+    </tr>
+    <tr>
+      <td style="width: 25%;">No. of Nozzle</td>
+      <td style="width: 25%;"><%= f.select :ns_fn_no_of_nozzle, StaticData.no_of_nozzles, :class => "required" %></td>
+      <td style="width: 25%;">Piping Segment</td>
+      <td style="width: 25%;"><%= f.select :ns_fn_no_of_nozzle, [] %></td>
+    </tr>
+    <tr>
+      <td>Inlet Device</td>
+      <td><%= f.select :ns_fn_inlet_device, options_for_select(StaticData.inlet_device.collect{|p| [raw(p), p]}, vessel_sizing.ns_fn_inlet_device), :include_blank => true %></td>
+      <td>Source</td>
+      <td>
+        <label id="ns_fn_ap_source"></label>
+        <%= f.hidden_field :ns_fn_ap_source %>&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>Fluid Momentum Sizing Criteria</td>
+      <td><%= f.text_field :ns_fn_fluid_momentum_sizing_criteria, :class => "required" %>&nbsp;<label class="fluid_momentum_general_unit"></label>
+      </td>
+      <td>Destination</td>
+      <td>
+        <label id="ns_fn_ap_destination"><%= vessel_sizing.ns_fn_ap_destination %></label>
+        <%= f.hidden_field :ns_fn_ap_destination %>&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>Density</td>
+      <td>
+        <label id="ns_fn_density"><%= vessel_sizing.ns_fn_density %></label>
+        <%= f.hidden_field :ns_fn_density %>&nbsp;
+        <label class="density_general_unit"></label>
+      </td>
+      <td>Pipe Size</td>
+      <td>
+        <label id="ns_fn_ap_pipe_size"><%= vessel_sizing.ns_fn_ap_pipe_size %></label>
+        <%= f.hidden_field :ns_fn_ap_pipe_size %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Velocity</td>
+      <td>
+        <label id="ns_fn_velocity"><%= vessel_sizing.ns_fn_velocity %></label>
+        <%= f.hidden_field :ns_fn_velocity %>&nbsp;
+        <label class="velocity_general_unit"></label>
+      </td>
+      <td>Pipe Schedule</td>
+      <td>
+        <label id="ns_fn_ap_pipe_schedule"><%= vessel_sizing.ns_fn_ap_pipe_schedule %></label>
+        <%= f.hidden_field :ns_fn_ap_pipe_schedule %>&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>Volumetric Rate</td>
+      <td>
+        <label id="ns_fn_volumetric_rate"><%= vessel_sizing.ns_fn_volumetric_rate %></label>
+        <%= f.hidden_field :ns_fn_volumetric_rate %>&nbsp;
+        <label class="volumetric_rate_general_unit"></label>
+      </td>
+      <td>Fluid Momentum</td>
+      <td>
+        <label id="ns_fn_ap_fluid_momentum"><%= vessel_sizing.ns_fn_ap_fluid_momentum %></label>
+        <%= f.hidden_field :ns_fn_ap_fluid_momentum %>&nbsp;
+        <label class="fluid_momentum_general_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Dmin</td>
+      <td>
+        <label id="ns_fn_dmin"><%= vessel_sizing.ns_fn_dmin %></label>
+        <%= f.hidden_field :ns_fn_dmin %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+      <td colspan="2" rowspan="5"></td>
+    </tr>
+    <tr>
+      <td>Nozzle Size</td>
+      <td><%= f.select :ns_fn_nozzle_size, options_for_select(StaticData.nozzle_size.collect{|p| [raw(p[:name]), p[:value]]}, vessel_sizing.ns_fn_nozzle_size), :include_blank => true%>&nbsp;<label class="length_large_dimension_length_unit"></label></td>
+    </tr>
+    <tr>
+      <td>Nozzle schedule</td>
+      <td>
+        <%= f.select :ns_fn_nozzle_schedule, [] %>
+        <input type="button" id="feed_nozzle_calculation" style="float: right;" value="Calculate">
+      </td>
+    </tr>
+    <tr>
+      <td>Nozzle ID</td>
+      <td>
+        <label id="ns_fn_nozzle_id"><%= vessel_sizing.ns_fn_nozzle_id %></label>
+        <%= f.hidden_field :ns_fn_nozzle_id %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Nozzle OD</td>
+      <td>
+        <label id="ns_fn_nozzle_od"><%= vessel_sizing.ns_fn_nozzle_od %></label>
+        <%= f.hidden_field :ns_fn_nozzle_od %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+  </table>
+
+  <table style="width: 100%;">
+    <tr>
+      <td colspan="2"><label class="sub_title">Top Outlet Nozzle</label></td>
+      <td colspan="2"><label class="sub_title">Associated Piping</label></td>
+    </tr>
+    <tr>
+      <td style="width: 25%;">No. of Nozzle</td>
+      <td style="width: 25%;"><%= f.select :ns_ton_no_of_nozzle, StaticData.no_of_nozzles %></td>
+      <td style="width: 25%;">Piping Segment</td>
+      <td style="width: 25%;"><%= f.select :ns_ton_no_of_nozzle, [] %></td>
+    </tr>
+    <tr>
+      <td>Fluid Momentum Sizing Criteria</td>
+      <td><%= f.text_field :ns_ton_fluid_momentum_sizing_criteria, :class => "required" %>&nbsp;<label class="fluid_momentum_general_unit"></label>
+      </td>
+      <td>Source</td>
+      <td>
+        <label id="ns_ton_ap_source"><%= vessel_sizing.ns_ton_ap_source %></label>
+        <%= f.hidden_field :ns_ton_ap_source %>&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>Density</td>
+      <td>
+        <label id="ns_ton_density"><%= vessel_sizing.ns_ton_density %></label>
+        <%= f.hidden_field :ns_ton_density %>&nbsp;
+        <label class="density_general_unit"></label>
+      </td>
+      <td>Destination</td>
+      <td>
+        <label id="ns_ton_ap_destination"><%= vessel_sizing.ns_ton_ap_destination %></label>
+        <%= f.hidden_field :ns_ton_ap_destination %>&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>Velocity</td>
+      <td><%= f.text_field :ns_ton_velocity %>&nbsp;<label class="velocity_general_unit"></label></td>
+      <td>Pipe Size</td>
+      <td>
+        <label id="ns_ton_ap_pipe_size"><%= vessel_sizing.ns_ton_ap_pipe_size %></label>
+        <%= f.hidden_field :ns_ton_ap_pipe_size %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Volumetric Rate</td>
+      <td>
+        <label id="ns_ton_volumetric_rate"><%= vessel_sizing.ns_ton_volumetric_rate %></label>
+        <%= f.hidden_field :ns_ton_volumetric_rate %>&nbsp;
+        <label class="volumetric_rate_general_unit"></label>
+      </td>
+      <td>Pipe Schedule</td>
+      <td>
+        <label id="ns_ton_ap_pipe_schedule"><%= vessel_sizing.ns_ton_ap_pipe_schedule %></label>
+        <%= f.hidden_field :ns_ton_ap_pipe_schedule %>&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>Dmin</td>
+      <td>
+        <label id="ns_ton_dmin"><%= vessel_sizing.ns_ton_dmin %></label>
+        <%= f.hidden_field :ns_ton_dmin %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+      <td>Fluid Momentum</td>
+      <td>
+        <label id="ns_ton_ap_fluid_momentum"><%= vessel_sizing.ns_ton_ap_fluid_momentum %></label>
+        <%= f.hidden_field :ns_ton_ap_fluid_momentum %>&nbsp;
+        <label class="fluid_momentum_general_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Nozzle Diameter</td>
+      <td><%= f.select :ns_ton_nozzle_diameter, options_for_select(StaticData.nozzle_size.collect{|p| [raw(p[:name]), p[:value]]}, vessel_sizing.ns_ton_nozzle_diameter), :include_blank => true%>&nbsp;<label class="length_large_dimension_length_unit"></label></td>
+      <td colspan="2" rowspan="4"></td>
+    </tr>
+    <tr>
+      <td>Nozzle schedule</td>
+      <td>
+        <%= f.select :ns_ton_nozzle_schedule, [] %>
+        <input type="button" id="top_outlet_nozzle_calculation" style="float: right;" value="Calculate">
+      </td>
+    </tr>
+    <tr>
+      <td>Nozzle ID</td>
+      <td>
+        <label id="ns_ton_nozzle_id"><%= vessel_sizing.ns_ton_nozzle_id %></label>
+        <%= f.hidden_field :ns_ton_nozzle_id %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Nozzle OD</td>
+      <td>
+        <label id="ns_ton_nozzle_od"><%= vessel_sizing.ns_ton_nozzle_od %></label>
+        <%= f.hidden_field :ns_ton_nozzle_od %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+  </table>
+
+  <table style="width: 100%;">
+    <tr>
+      <td colspan="2"><label class="sub_title">Bottom Outlet Nozzle</label></td>
+      <td colspan="2"><label class="sub_title">Associated Piping</label></td>
+    </tr>
+    <tr>
+      <td style="width: 25%;">No. of Nozzle</td>
+      <td style="width: 25%;"><%= f.select :ns_bon_no_of_nozzle, StaticData.no_of_nozzles %></td>
+      <td style="width: 25%;">Piping Segment</td>
+      <td style="width: 25%;"><%= f.select :ns_bon_no_of_nozzle, [] %></td>
+    </tr>
+    <tr>
+      <td>Fluid Momentum Sizing Criteria</td>
+      <td><%= f.text_field :ns_bon_fluid_momentum_sizing_criteria, :class => "required" %>&nbsp;<label class="fluid_momentum_general_unit"></label>
+      </td>
+      <td>Source</td>
+      <td>
+        <label id="ns_bon_ap_source"><%= vessel_sizing.ns_bon_ap_source %></label>
+        <%= f.hidden_field :ns_bon_ap_source %>&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>Density</td>
+      <td>
+        <label id="ns_bon_density"><%= vessel_sizing.ns_bon_density %></label>
+        <%= f.hidden_field :ns_bon_density %>&nbsp;
+        <label class="density_general_unit"></label>
+      </td>
+      <td>Destination</td>
+      <td>
+        <label id="ns_bon_ap_destination"><%= vessel_sizing.ns_bon_ap_destination %></label>
+        <%= f.hidden_field :ns_bon_ap_destination %>&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>Velocity</td>
+      <td>
+        <%= f.text_field :ns_bon_velocity%>&nbsp;
+        <label class="velocity_general_unit"></label>
+      </td>
+      <td>Pipe Size</td>
+      <td>
+        <label id="ns_bon_ap_pipe_size"><%= vessel_sizing.ns_bon_ap_pipe_size %></label>
+        <%= f.hidden_field :ns_bon_ap_pipe_size %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Volumetric Rate</td>
+      <td>
+        <label id="ns_bon_volumetric_rate"><%= vessel_sizing.ns_bon_volumetric_rate %></label>
+        <%= f.hidden_field :ns_bon_volumetric_rate %>&nbsp;
+        <label class="volumetric_rate_general_unit"></label>
+      </td>
+      <td>Pipe Schedule</td>
+      <td>
+        <label id="ns_bon_ap_pipe_schedule"><%= vessel_sizing.ns_bon_ap_pipe_schedule %></label>
+        <%= f.hidden_field :ns_bon_ap_pipe_schedule %>&nbsp;
+      </td>
+    </tr>
+    <tr>
+      <td>Dmin</td>
+      <td>
+        <label id="ns_bon_dmin"><%= vessel_sizing.ns_bon_dmin %></label>
+        <%= f.hidden_field :ns_bon_dmin %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+      <td>Fluid Momentum</td>
+      <td>
+        <label id="ns_bon_ap_fluid_momentum"><%= vessel_sizing.ns_bon_ap_fluid_momentum %></label>
+        <%= f.hidden_field :ns_bon_ap_fluid_momentum %>&nbsp;
+        <label class="fluid_momentum_general_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Nozzle Diameter</td>
+      <td><%= f.select :ns_bon_nozzle_diameter, options_for_select(StaticData.nozzle_size.collect{|p| [raw(p[:name]), p[:value]]}, vessel_sizing.ns_bon_nozzle_diameter), :include_blank => true%>&nbsp;<label class="length_large_dimension_length_unit"></label></td>
+      <td colspan="2" rowspan="4"></td>
+    </tr>
+    <tr>
+      <td>Nozzle schedule</td>
+      <td><%= f.select :ns_bon_nozzle_schedule, [] %>
+        <input type="button" id="bottom_outlet_nozzle_calculation" style="float: right;" value="Calculate">
+      </td>
+    </tr>
+    <tr>
+      <td>Nozzle ID</td>
+      <td>
+        <label id="ns_bon_nozzle_id"><%= vessel_sizing.ns_bon_nozzle_id %></label>
+        <%= f.hidden_field :ns_bon_nozzle_id %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Nozzle OD</td>
+      <td>
+        <label id="ns_bon_nozzle_od"><%= vessel_sizing.ns_bon_nozzle_od %></label>
+        <%= f.hidden_field :ns_bon_nozzle_od %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+  </table>
+
+  <table style="width: auto;">
+    <tr>
+      <td>
+        <fieldset style="border: 1px solid #000000;padding:5px;margin-bottom:10px;">
+          <legend style="font-weight:bold;">Vortex Formation</legend>
+          <span style="margin-left: 5px;"><%= f.radio_button :ns_vortex_formation, "install_vortex_breaker" %>&nbsp;Install Vortex Breaker</span>
+          <span style="margin-left: 5px;"><%= f.radio_button :ns_vortex_formation, "adequate_liquid_height_above_nozzle_expected" %>&nbsp;Adequate Liquid Height Above Nozzle Expected</span>
+        </fieldset>
+      </td>
+    </tr>
+  </table>
+
+</div>

@@ -1,0 +1,39 @@
+<div>
+	<div class="flash"></div>
+	<h4>Add Sizing Criterias to Project</h4>	
+	<table>
+		<% for sizing_criteria_category in @sizing_criteria_categories%>
+		<tr>
+			<td><h5><%= sizing_criteria_category.name%></h5></td>
+		</tr>		
+		<% for sizing_criteria in @sizing_criterias[sizing_criteria_category.id.to_s]%>
+		<tr class="odd">
+			<td>
+				<% is_selected = @project_sizing_criteria.where(:sizing_criteria_id => 15).first.nil?%>
+				<%= check_box_tag sizing_criteria.name, sizing_criteria.id, is_selected, :disabled => is_selected, :class => "ch_sizing_criteria", :id => "ch_sizing_criteria_#{sizing_criteria.id}"%>
+				&nbsp;
+				<%= label_tag sizing_criteria.name %>
+			</td>
+		</tr>		
+		<% end%>		
+		<% if @sizing_criterias[sizing_criteria_category.id.to_s].length == 0%>
+		<tr class="odd" style="font-size:12px;color:#8A1F11;">
+			<td>No criterias under this category</td>
+		</tr>	
+		<% end%>
+		<% end%>
+		<% if @sizing_criteria_categories.length == 0%>
+		<tr>
+			<td>No Sizing Criterias is configured!<br>Please Add Sizing Criterias.</td>
+		</tr>
+		<% end%>		
+	</table>
+</div>
+
+<script type="text/javascript">	
+	$('.ch_sizing_criteria').change(function(e){	    
+		if($(this).is (':checked')) {
+			$.post('/admin/sizing_criterias/add_sizing_criterias_to_project', {id:$(this).val(), project_id:project_id}, null, 'script');
+		}
+	});
+</script>

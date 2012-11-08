@@ -1,0 +1,39 @@
+<% title 'Compressor Sizing'%>
+<%= stylesheet("/javascripts/tablecloth/tablecloth.css")%>
+<%= render :partial => '/admin/user_project_settings/project_filter' %>
+
+<br>
+<%= link_to 'Add Compressor sizing', new_admin_compressor_sizing_path%>&nbsp;|&nbsp;
+<%= link_to 'Compressor Sizing Summary', compressor_sizing_summary_admin_compressor_sizings_path%>
+<br>
+
+<table width="auto">
+	<tr>
+		<th>Compressor tag</th>
+    <th>By</th>
+    <th>Reviewer</th>
+    <th>Approver</th>
+    <th>Created at</th>
+    <th>Updated at</th>
+		<th>Edit</th>
+		<th>Delete</th>
+		<th>Clone</th>
+	</tr>
+	<% for compressor_sizing_tag in @compressor_sizing_tags%>
+		<tr>
+			<td><%= compressor_sizing_tag.compressor_sizing_tag%></td>
+			<td><%= compressor_sizing_tag.sizing_status_activities.created_by%></td>
+			<td><%= compressor_sizing_tag.sizing_status_activities.reviewer%></td>
+			<td><%= compressor_sizing_tag.sizing_status_activities.approver%></td>
+			<td><%= compressor_sizing_tag.created_at.strftime("%d-%m-%Y")%></td>
+			<td><%= compressor_sizing_tag.updated_at.strftime("%d-%m-%Y")%></td>
+			<td><%= link_to "Edit", edit_admin_compressor_sizing_path(compressor_sizing_tag)%></td>
+			<td><%= link_to "Delete", admin_compressor_sizing_path(compressor_sizing_tag), :method=>"delete", :confirm => "Are you sure?"%></td>
+			<td><%= link_to "Clone", clone_admin_compressor_sizing_path(compressor_sizing_tag), :class => "clone_sizing" %></td>
+		</tr>
+	<% end%>
+</table>
+
+<script type="text/javascript">
+		
+</script>

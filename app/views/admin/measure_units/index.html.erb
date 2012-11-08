@@ -1,0 +1,35 @@
+<% title 'Measure Units'%>
+<%= stylesheet("/javascripts/tablecloth/tablecloth.css")%>
+
+<br>
+<%= link_to 'Add New Measure Unit', new_admin_measure_unit_path%>
+<br><br>
+
+<table id="measure_units_list">
+	<tr>
+		<th>Measurement</th>
+		<th>Subtype</th>
+		<th>Unit Type</th>
+		<th>Unit Name</th>
+		<th>Unit</th>
+		<th>Conversion Factor</th>
+		<th>Base Unit</th>
+		<th>Decimal Places</th>
+		<th>Edit</th>
+		<th>Delete</th>
+	</tr>	
+	<% for measure_unit in @measure_units%>	
+	<tr class="<%= cycle("odd", "even")%>">		
+		<td><%= measure_unit.measurement.name%></td>
+		<td><%= measure_unit.measurement_sub_type.name%></td>
+		<td><%= measure_unit.unit_type%></td>
+		<td><%= measure_unit.unit_name%></td>
+		<td><%= measure_unit.unit%></td>
+		<td><%= measure_unit.conversion_factor%></td>
+		<td><%= measure_unit.base_unit%></td>
+		<td width="25px;"><%= measure_unit.decimal_places%></td>
+		<td><%= link_to 'Edit', edit_admin_measure_unit_path(measure_unit)%></td>	
+		<td><%= link_to 'Delete', admin_measure_unit_path(measure_unit), :method=>"delete", :confirm => "Are you sure?"%></td>
+	</tr>
+	<% end%>	
+</table>

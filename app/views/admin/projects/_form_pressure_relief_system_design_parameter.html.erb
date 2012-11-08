@@ -1,0 +1,752 @@
+<%= f.fields_for :pressure_relief_system_design_parameter do |pr| %>
+	<%#= debug pr.object %>
+	<table>
+	<tr>
+		<td colspan="3">
+			<h4>Workflow Mode</h4>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<%= label_tag :workflow_mode, :class => "radio", :style => "padding-left: 0;display:block;" do %>
+				<%= pr.radio_button :workflow_mode, "Preliminary Design", :style => "margin-left:0;" %>&nbsp;Preliminary Design
+			<% end %>
+			<%= label_tag :workflow_mode, :class => "radio", :style => "padding-left: 0;display:block;" do %>
+				<%= pr.radio_button :workflow_mode, "Detailed Design", :style => "margin-left:0;" %>&nbsp;Detailed Design
+			<% end %>
+			<%= label_tag :workflow_mode, :class => "radio", :style => "padding-left: 0;display:block;" do %>
+				<%= pr.radio_button :workflow_mode, "Audit", :style => "margin-left:0;" %>&nbsp;Audit
+			<% end %>
+			<%= label_tag :workflow_mode, :class => "radio", :style => "padding-left: 0;display:block;" do %>
+				<%= pr.radio_button :workflow_mode, "Evergreening", :style => "margin-left:0;" %>&nbsp;Evergreening
+			<% end %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<h4>Scenario Analysis</h4>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">Check Valve Failure</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			Is installation of multiple check valves on the reverse flow path considered adequate prevention against
+			overpressure ?
+		</td>
+		<td>
+			<%= pr.select :cvf_1, options_for_select(StaticData.yes_no, pr.object.cvf_1), :prompt => "Select" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">Chemical Reaction</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			Is evaluation of chemical reaction in the scope of this project?
+		</td>
+		<td>
+			<%= pr.select :cr_1, options_for_select(StaticData.yes_no, pr.object.cvf_1), :prompt => "Select" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">Cooling Failure To Condenser</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			Can credit be taken for some residual cooling in aerial coolers due to natural convection effects?
+		</td>
+		<td>
+			<%= pr.select :cfc_1, options_for_select(StaticData.yes_no, pr.object.cvf_1), :prompt => "Select", :class => "" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">External Fire</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">Is a relief device required to protect an exchanger that is procedurally vented and drained when isolated?</td>
+		<td>
+			<%= pr.select :ef_1, options_for_select(StaticData.yes_no, pr.object.ef_1), :prompt => "Select" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">Is fire considered for tube side of a shell and tube exchanger?</td>
+		<td>
+			<%= pr.select :ef_2, options_for_select(StaticData.yes_no, pr.object.ef_2), :prompt => "Select" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">Is fire considered for an aerial cooler?
+		<td>
+			<%= pr.select :ef_3, options_for_select(StaticData.yes_no, pr.object.ef_3), :prompt => "Select" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">Is fire considered for a double pipe exchanger?
+		<td>
+			<%= pr.select :ef_4, options_for_select(StaticData.yes_no, pr.object.ef_4), :prompt => "Select" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">Is the cooling water header assumed to provide adequate capacity for any vaporization from fire?
+		<td>
+			<%= pr.select :ef_5, options_for_select(StaticData.yes_no, pr.object.ef_5), :prompt => "Select" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">Is a relief device required to protect a vapor filled equipment against external fire?</td>
+		<td>
+			<%= pr.select :ef_6, options_for_select(StaticData.yes_no, pr.object.ef_6), :prompt => "Select" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">Failure of Automatic Controls</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			Is the failure open of the control valve considered credible with the bypass valve fully opened?
+		</td>
+		<td>
+			<%= pr.select :fac_1, options_for_select(StaticData.yes_no, pr.object.fac_1), :prompt => "Select" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+			Is the failure open of the control valve considered credible with the bypass valve partially opened?
+		</td>
+		<td>
+			<%= pr.select :fac_2, options_for_select(StaticData.yes_no, pr.object.fac_2), :prompt => "Select" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">Heat Exchanger Tube Rupture</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">Is the high pressure side basis the high pressure side design pressure?</td>
+		<td>
+			<%= pr.select :hetr_1, options_for_select(StaticData.yes_no, pr.object.hetr_1), :prompt => "Select" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">Is the high pressure side basis the high pressure side maximum operating pressure?</td>
+		<td>
+			<%= pr.select :hetr_2, options_for_select(StaticData.yes_no, pr.object.hetr_2), :prompt => "Select" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">Overfilling</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">Is an independent alarm required to take credit for operator response ot prevent overfilling?</td>
+		<td>
+			<%= pr.select :of_1, options_for_select(StaticData.yes_no, pr.object.of_1), :prompt => "Select" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<h4>Relief Rate Calculation Basis</h4>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">Control valve sizing basis</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<%= label_tag :rrc_cvsb, :class => "radio", :style => "padding-left: 0;display:block;" do %>
+				<%= pr.radio_button :rrc_cvsb, "Bypass same as control valve", :style => "margin-left:0;" %>&nbsp;Bypass same as
+				control valve
+			<% end %>
+			<%= label_tag :rrc_cvsb, :class => "radio", :style => "padding-left: 0;display:block;" do %>
+				<%= pr.radio_button :rrc_cvsb, "Bypass at 50% of control valve", :style => "margin-left:0;" %>&nbsp;Bypass same
+				as control valve
+			<% end %>
+			<%= label_tag :rrc_cvsb, :class => "radio", :style => "padding-left: 0;display:block;" do %>
+				<%= pr.radio_button :rrc_cvsb, "Bypass sized independently", :style => "margin-left:0;" %>&nbsp;Bypass sized
+				independently
+			<% end %>
+			<%= label_tag :rrc_cvsb, :class => "radio", :style => "padding-left: 0;display:block;" do %>
+				<%= pr.radio_button :rrc_cvsb, "Ignore Bypass", :style => "margin-left:0;" %>&nbsp;Ignore Bypass
+			<% end %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">Tube rupture sizing basis</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<%= label_tag :rrc_cvsb, :class => "radio", :style => "padding-left: 0;display:block;" do %>
+				<%= pr.radio_button :rrc_trsb, "1 Orifice", :style => "margin-left:0;" %>&nbsp;1 Orifice
+			<% end %>
+			<%= label_tag :rrc_cvsb, :class => "radio", :style => "padding-left: 0;display:block;" do %>
+				<%= pr.radio_button :rrc_trsb, "2 Orifice", :style => "margin-left:0;" %>&nbsp;2 Orifice
+			<% end %>
+			<%= label_tag :rrc_cvsb, :class => "radio", :style => "padding-left: 0;display:block;" do %>
+				<%= pr.radio_button :rrc_trsb, "1 Orifice & 1 Tube", :style => "margin-left:0;" %>&nbsp;1 Orifice & 1 Tube
+			<% end %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">Fill time basis</span>
+		</td>
+		<td width="200px">
+			Vessel
+		</td>
+		<td width="200px">
+			Column
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Must have independent high level alarm
+		</td>
+		<td>
+			<%= pr.select :ftb_vessel_alarm, options_for_select(StaticData.yes_no, pr.object.ftb_vessel_alarm), :prompt => "Select" %>
+		</td>
+		<td>
+			<%= pr.select :ftb_column_alarm, options_for_select(StaticData.yes_no, pr.object.ftb_column_alarm), :prompt => "Select" %>
+		</td>
+	</tr>
+	<tr>
+		<td>Response time</td>
+		<td>
+			<%= pr.text_field :ffb_vessel_response_time, :class => "input-mini time_minute" %>&nbsp;<span class="time_minute_unit" style="color: red;"></span>
+		</td>
+		<td>
+			<%= pr.text_field :ffb_column_response_time, :class => "input-mini time_minute" %>&nbsp;<span class="time_minute_unit" style="color: red;"></span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Level basis
+		</td>
+		<td>
+			<%= pr.select :ftb_vessel_level_basis, options_for_select(StaticData.fill_time_basis, pr.object.ftb_vessel_level_basis), :prompt => "Select" %>
+		</td>
+		<td>
+			<%= pr.select :ftb_column_level_basis, options_for_select(StaticData.fill_time_basis, pr.object.ftb_column_level_basis), :prompt => "Select" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">Fire basis</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p>
+				<%= pr.check_box :fb_chb_1 %> Take credit for fire proof insulation at calculated Environmental Factor (F)
+				with specific data available on the insulation
+			</p>
+
+			<p>
+				<%= pr.check_box :fb_chb_2 %> Take credit for fire proof insulation at default Environmental Factor(F) of
+				<%= pr.text_field :fb_txt_1, :class => "input-mini" %> with on specific data available on the insulation
+			</p>
+
+			<p>
+				Allowable fire proof insulation Environmental Factor(F) range:
+				Min <%= pr.text_field :fb_txt_2, :class => "input-mini" %>
+				Max <%= pr.text_field :fb_txt_2, :class => "input-mini" %>
+			</p>
+
+			<p>
+				Level
+				basis <%= pr.select :fb_lb, options_for_select(StaticData.fire_level_basis, pr.object.fb_lb), :prompt => "select", :class => "input-medium" %>
+			</p>
+
+			<p>
+				If level basis is not available then <%= pr.text_field :fb_txt_4, :class => "input-mini" %> % of equipment
+				height for vessels and exchanger in two phase service
+			</p>
+
+			<p>
+				For exchangers in condensing service, assume the liquid level is the level equivalent
+				to <%= pr.text_field :fb_txt_5, :class => "input-mini" %> % of the exchanger volume
+			</p>
+
+			<p>
+				<%= pr.text_field :fb_txt_6, :class => "input-mini" %> % additional surface area to account for connected pipe
+				<% pipe_size_unit = @project.unit('Length','Small Dimension Length') %>
+				<%= pr.select :fb_connected_pipe, options_for_select(PipeSizing.pipe_sizes(pipe_size_unit).collect { |ps| [raw(ps[:name]), (pipe_size_unit == "in" ? ps[:value]:ps[:name])] }, pr.object.fb_connected_pipe), :prompt => "select", :class => "input-medium" %>
+				<span class="length_small_dimension_length_unit" style="color:red;"></span> or greater in the fire zone
+			</p>
+
+			<p>
+				Vertical vessel bottoms head wetted surface area to be included for vessel on skirts
+				with <%= pr.select :fb_skirts, options_for_select(StaticData.no_of_access_opening, pr.object.fb_skirts), :prompt => "select" %>
+				or more access openings
+			</p>
+
+			<p>
+				<%= pr.text_field :fb_access_openings, :class => "length_small_dimension_length input-mini" %>&nbsp;<span class="length_small_dimension_length_unit" style="color:#ff0000;"></span>
+				per column tray to be added to the liquid level on columns
+			</p>
+
+			<p>
+				<%= pr.text_field :fb_liquid_level_on_columns, :class => "length_small_dimension_length input-mini" %>&nbsp;
+				<span class="length_small_dimension_length_unit" style="color:#ff0000;"></span>
+				per <span class="length_large_dimension_length_unit" style="color:red;"></span> of packed bed to be added to the liquid level on columns
+			</p>
+
+			<p>
+				Wetted liquid area is considered up to <%= pr.text_field :fb_wetted_liquid_area, :class => "length_large_dimension_length input-mini" %>
+				<span class="length_large_dimension_length_unit" style="color:red;"></span> above the source of flame
+			</p>
+
+			<p>
+				Wetted liquid area for spherical tanks/vessels is considered up
+				to <%= pr.text_field :fb_wetted_liquid_area_spherical, :class => "length_large_dimension_length input-mini" %>
+				<span class="length_large_dimension_length_unit" style="color:red;"></span> or up to center line, which ever is greater
+			</p>
+
+			<p>
+				<%= pr.radio_button :fb_liquid_swell_in_wetted_surface_area_calculation, "Consider liquid swell in wetted surface area calculation" %>
+				Consider liquid swell in wetted surface area calculation
+			</p>
+
+			<p>
+				<%= pr.radio_button :fb_liquid_swell_in_wetted_surface_area_calculation, "Ignore liquid swell in wetted surface area calculation" %>
+				Ignore liquid swell in wetted surface area calculation
+			</p>
+
+			<p>
+				Assume adequate fire fighting and
+				drainage <%= pr.select :fb_drainage, options_for_select(StaticData.yes_no, pr.object.fb_drainage), :prompt => "select", :class => "input-mini" %>
+			</p>
+
+			<p>
+				<%= pr.radio_button :fb_consider_relief_device_sizing, "Consider only vapor relief for relief device sizing" %>
+				Consider only vapor relief for relief device sizing
+			</p>
+
+			<p>
+				<%= pr.radio_button :fb_consider_relief_device_sizing, "Consider multiphase relief for relief device sizing" %>
+				Consider multiphase relief for relief device sizing
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<h4>Relief Device Sizing Basis</h4>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">Pressure Relief Valve Discharge Coefficient, Kd</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p style="width: 300px;">Vapor <%= pr.text_field :rdsb_vdc_vapor, :class => "input-mini pull-right" %></p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p style="width: 300px;">Liquid Non Certified <%= pr.text_field :rdsb_vdc_liquid_non_certified, :class => "input-mini pull-right" %></p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p style="width: 300px;">Liquid Certified<%= pr.text_field :rdsb_vdc_liquid_certified, :class => "input-mini pull-right" %></p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p style="width: 300px;">Two Phase <%= pr.text_field :rdsb_vdc_two_phase, :class => "input-mini pull-right" %></p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p style="width: 300px;">Rupture Disk <%= pr.text_field :rdsb_vdc_rupture_disk, :class => "input-mini pull-right" %></p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">Pressure Relief Valve Correction Factor Basis</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p style="width: 450px;">
+				Vapor Back Pressure Correction Factor
+				<%= pr.select :prvcfb_vapor_back_pressure, options_for_select(StaticData.kb_option, pr.object.prvcfb_vapor_back_pressure), {:prompt => "select"}, :class => "input-medium pull-right" %>
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p style="width: 450px;">
+				Liquid Back Pressure Correction Factor
+				<%= pr.select :prvcfb_liquid_back_pressure, options_for_select(StaticData.kw_option, pr.object.prvcfb_liquid_back_pressure), {:prompt => "select"}, :class => "input-medium pull-right" %>
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p style="width: 450px;">
+				Liquid Over Pressure Correction Factor
+				<%= pr.select :prvcfb_liquid_over_pressure, options_for_select(StaticData.kp_option, pr.object.prvcfb_liquid_over_pressure), {:prompt => "select"}, :class => "input-medium pull-right" %>
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p style="width: 450px;">
+				Low Pressure Vent Correction Factor
+				<%= pr.select :prvcfb_low_pressure_vent_pressure, options_for_select(StaticData.kd_option, pr.object.prvcfb_low_pressure_vent_pressure), {:prompt => "select"}, :class => "input-medium pull-right" %>
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">Pressure Relief Valve Liquid Sizing Default Method</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p>
+				<%= pr.radio_button :prvlsd, "Certified liquid sizing" %> Certified liquid sizing
+			</p>
+			<p>
+				<%= pr.radio_button :prvlsd, "Non Certified liquid sizing" %> Non Certified liquid sizing
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Rupture Disk Default Parameter
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Maximum Flow Resistance, Kr
+		</td>
+		<td colspan="2">
+			<%= pr.text_field :rdbp_maximum_flow_resistance, :class => "input-mini" %>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Uncertainty Factor
+		</td>
+		<td colspan="2">
+			<%= pr.text_field :rdbp_uncertainty_factor, :class => "input-mini" %>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<h4>Relief Device Installation Basis</h4>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Hydraulic Pressure Drop Basis
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p>
+				<%= pr.radio_button :rfib_hydraulic_pressure_drop_basis, "Required Relief Rate" %>
+				Required Relief Rate
+			</p>
+			<p>
+				<%= pr.radio_button :rfib_hydraulic_pressure_drop_basis, "Relief Device Capacity" %>
+				Relief Device Capacity
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Compressible Flow Model For Hydraulic Calculation
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p>
+				<%= pr.radio_button :rfib_compressible_flow_model, "Adiabatic" %> Adiabatic
+			</p>
+			<p>
+				<%= pr.radio_button :rfib_compressible_flow_model, "Isothermal" %> Isothermal
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Inlet Pressure Drop Criteria
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			Inlet Pressure Drop Not to Exceed <%= pr.text_field :inlet_pressure_drop_criteria, :class => "input-mini"%> %
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Outlet Pressure Drop Criteria
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p>Conventional</p>
+			<p>
+				<%= pr.radio_button :outlet_pressure_drop_criteria_conventional, "ASME Limits of 10%" %> ASME Limits of 10%
+			</p>
+			<p>
+				<%= pr.radio_button :outlet_pressure_drop_criteria_conventional, "API allowance of allowable overpressure" %> API allowance of allowable overpressure
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p>
+				Balanced Bellows
+			</p>
+			<p>
+				Not to exceed <%= pr.text_field :outlet_pressure_drop_criteria_balanced_bellows, :class => "input-mini" %> %
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p>
+				Pilot Operated
+			</p>
+			<p>
+				Not to exceed <%= pr.text_field :outlet_pressure_drop_criteria_pilot_operated, :class => "input-mini" %> %
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Pressure Relief Valve Count
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td width="30%">
+			<p>
+				<%= pr.radio_button :pressure_relief_valve_count, "Minimize Relief Device Count" %> Minimize Relief Device Count
+			</p>
+			<p>
+				<%= pr.radio_button :pressure_relief_valve_count, "Minimize Possibility of Chattering" %> Minimize Possibility of Chattering
+			</p>
+		</td>
+		<td colspan="2">
+			<p>
+				<%= pr.check_box :pressure_relief_valve_count_stagger_set_pressure %> Stagger Set Pressures
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Valve Body Size Selection Basis
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p>
+				<%= pr.radio_button :valve_body_size_selection_basis, "Always Use Larger Body Size For Given Orifice" %> Always Use Larger Body Size For Given Orifice
+			</p>
+			<p>
+				<%= pr.radio_button :valve_body_size_selection_basis, "Always Use Smaller Body Size For Given Orifice" %> Always Use Smaller Body Size For Given Orifice
+			</p>
+			<p>
+				Largest Orifice Size To Consider <%= pr.select :largest_orifice_size_to_consider, options_for_select(StaticData.orifice_designation.collect{ |od| [raw(od[1]), od[0]]}, pr.object.largest_orifice_size_to_consider), :prompt => 'Select', :class => "input-medium" %>
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Flare Header Pressure
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			Normal Flare Header Pressure <%= pr.text_field :flare_header_pressure, :class => "pressure_general input-mini" %>
+			&nbsp;
+			<span class="pressure_general_unit" style="color:red;"></span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Rupture Disk Selection Basis
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p>
+				Largest RD Size To Consider <%= pr.select :rupture_disk_selection_basis_rd_size, options_for_select(PipeSizing.pipe_sizes(pipe_size_unit).collect { |ps| [raw(ps[:name]), (pipe_size_unit == "in" ? ps[:value]:ps[:name].to_f), "data-value" => ps[:value]] }, pr.object.rupture_disk_selection_basis_rd_size), :prompt => 'select', :class => "input-mini" %>
+				<span class="length_small_dimension_length_unit" style="color:red;"></span>
+				<% selected_val = pr.object.rupture_disk_selection_basis_rd_size %>
+				<% if pipe_size_unit  != "in" %>
+					<% PipeSizing.pipe_sizes(pipe_size_unit).each do |ps|%>
+						<% if pr.object.rupture_disk_selection_basis_rd_size == ps[:name].to_f %>
+							<% selected_val = ps[:value].to_s %>
+						<% end %>
+					<% end %>
+				<% end %>
+				<%= pr.select :rupture_disk_selection_basis_rd_size1, options_for_select(PipeSizing.pipe_size_schedules[selected_val.to_s], pr.object.rupture_disk_selection_basis_rd_size1), :prompt => 'select', :class => "input-mini" %>
+			</p>
+			<p>
+				Estimated Net Flow Area <%= pr.text_field :rd_estimated_net_flow_area, :class => "area_orifice input-medium" %>
+				<span class="area_orifice_unit" style="color:red;">
+				</span>
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Vent Line Selection Basis
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p>
+				Largest Vent Size To Consider <%= pr.select :vent_line_selection_basis_rd_size, options_for_select(PipeSizing.pipe_sizes(pipe_size_unit).collect { |ps| [raw(ps[:name]), (pipe_size_unit == "in" ? ps[:value]:ps[:name].to_f), "data-value" => ps[:value]] }, pr.object.vent_line_selection_basis_rd_size), :prompt => 'select', :class => "input-mini" %>
+				<span class="length_small_dimension_length_unit" style="color:red;">in</span>
+				<% selected_val = pr.object.vent_line_selection_basis_rd_size %>
+				<% if pipe_size_unit  != "in" %>
+					<% PipeSizing.pipe_sizes(pipe_size_unit).each do |ps|%>
+						<% if pr.object.vent_line_selection_basis_rd_size == ps[:name].to_f %>
+							<% selected_val = ps[:value].to_s %>
+						<% end %>
+					<% end %>
+				<% end %>
+				<%= pr.select :vent_line_selection_basis_rd_size1, options_for_select(PipeSizing.pipe_size_schedules[selected_val.to_s], pr.object.vent_line_selection_basis_rd_size1), :prompt => 'select', :class => "input-mini" %>
+			</p>
+			<p>
+				Estimated Net Flow Area <%= pr.text_field :vl_estimated_net_flow_area, :class => "area_orifice input-medium" %>
+				<span class="area_orifice_unit" style="color:red;"></span>
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Frangible Roof Design For Relief Protection
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p>
+				<%= pr.radio_button :frangible_roof_design_for_relief_protection, "Considered acceptable means of emergency relief" %>
+				Considered acceptable means of emergency relief
+			</p>
+			<p>
+				<%= pr.radio_button :frangible_roof_design_for_relief_protection, "Not Considered acceptable means of emergency relief" %>
+				Not Considered acceptable means of emergency relief
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Environmental Emission Standards
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p>
+				<%= pr.radio_button :environmental_emission_standards, "Strict" %>
+				Strict
+			</p>
+			<p>
+				<%= pr.radio_button :environmental_emission_standards, "Regular" %>
+				Regular
+			</p>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<h4>Temperature Consideration</h4>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+				Consider Fire in Temperature Design
+			</span>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3">
+			<p>
+				<%= pr.radio_button :tc_consider_fire_in_temperature_design, "Excessive Temperature Due To Fire Considered" %>
+				Excessive Temperature Due To Fire Considered
+			</p>
+			<p>
+				<%= pr.radio_button :tc_consider_fire_in_temperature_design, "Excessive Temperature Due To Fire Not Considered" %>
+				Excessive Temperature Due To Fire Not Considered
+			</p>
+		</td>
+	</tr>
+	</table>
+<% end %>
+
+<%= javascript_tag do %>
+	var pipe_size_schedules = <%= raw PipeSizing.pipe_size_schedules.to_json %>;
+<% end %>
+<script type="text/javascript">
+	set_project_unit_and_decimals();
+
+	$('#project_pressure_relief_system_design_parameter_attributes_rupture_disk_selection_basis_rd_size').change(function(){
+		var val = $("option:selected", this).attr('data-value');
+		$('#project_pressure_relief_system_design_parameter_attributes_rupture_disk_selection_basis_rd_size1 > option').remove();
+		$('#project_pressure_relief_system_design_parameter_attributes_rupture_disk_selection_basis_rd_size1 > option').append($('<option></option>').val("").html(""));
+		$(pipe_size_schedules[val]).each(function(k, v){
+			$('#project_pressure_relief_system_design_parameter_attributes_rupture_disk_selection_basis_rd_size1').append($('<option></option>').val(v).html(v));
+		});
+		return false;
+	});
+
+	$('#project_pressure_relief_system_design_parameter_attributes_vent_line_selection_basis_rd_size').change(function(){
+		var val = $("option:selected", this).attr('data-value');
+		$('#project_pressure_relief_system_design_parameter_attributes_vent_line_selection_basis_rd_size1 > option').remove();
+		$('#project_pressure_relief_system_design_parameter_attributes_vent_line_selection_basis_rd_size1 > option').append($('<option></option>').val("").html(""));
+		$(pipe_size_schedules[val]).each(function(k, v){
+			$('#project_pressure_relief_system_design_parameter_attributes_vent_line_selection_basis_rd_size1').append($('<option></option>').val(v).html(v));
+		});
+		return false;
+	});
+</script>

@@ -1,0 +1,44 @@
+<style type="text/css">
+  select[name*=unit_of_measurement] {
+    width: 150px;
+  }
+</style>
+
+<div class="uom-form">
+  <h3>Unit of Measurements</h3>
+  <%= form_tag admin_unit_of_measurements_path, :remote => true, :style => 'width:auto;' do%>
+    <%= hidden_field_tag :measurement_type, params[:measurement_type]%>
+    <%= hidden_field_tag :project_id, params[:project_id]%>
+    <table>
+      <tr>
+        <th width="20%">Measurement Sub Type</th>
+        <th width="200px">Unit</th>
+        <th>Decimal Places</th>
+      </tr>
+      <% i = 1 %>
+      <% @measurements.each do |measurement| %>
+        <tr>
+          <td colspan="3"><strong><%= measurement[0].capitalize %></strong></td>
+        </tr>        
+        <% measurement[1].each do |measurement_sub_type| %>
+        <tr>
+          <td>
+            <%= hidden_field_tag "unit_of_measurement[#{i}][measurement_id]", measurement_sub_type.measurement_id%>
+            <%= hidden_field_tag "unit_of_measurement[#{i}][measurement_sub_type_id]", measurement_sub_type.id%>
+            <%= hidden_field_tag "unit_of_measurement[#{i}][measure_type]", params[:unit_type_id]%>
+            <span style="margin-left: 10px;"><%= measurement_sub_type.name.capitalize %></span>
+          </td>
+          <td>
+            <%= select_tag "unit_of_measurement[#{i}][measure_unit_id]", options_for_select((@measure_units[measurement_sub_type.id].collect{|mu| ["#{mu.unit_name} (#{mu.unit})", mu.id]} rescue []), (@unit_of_measurements[measurement_sub_type.id][:measure_unit_id] rescue '')) %>
+          </td>
+          <td>
+            <%= text_field_tag "unit_of_measurement[#{i}][decimal_places]", (@unit_of_measurements[measurement_sub_type.id][:decimal_places] rescue '4') || 4  %>
+          </td>
+        </tr>
+        <% i += 1%>
+        <% end %>
+      <% end %>
+    </table>
+    <%= submit_tag 'Save'%>
+  <% end %>
+</div>

@@ -1,0 +1,79 @@
+<style>
+	.tab-header {
+		font-size: 16px;
+		font-weight: bold;
+		text-align: center;
+	}
+	
+	.column-header {
+		font-weight: bold;
+	}
+</style>
+
+<%= render :partial => "shared/summary_client_header", :locals => {:client => client} %>
+<div style="margin-top:10px;">
+	<table class="vessel_sizing_summary" style="width:auto;">
+		<tr>
+			<td class="column-header">Calc Count</td>
+			<td class="column-header">Control Valve Tag</td>
+			<td class="column-header">Assoicated FE Tag</td>
+			<td class="column-header">Upstream Phase</td>
+			<td class="column-header">Phase Change</td>
+			<td class="column-header">Inlet Pressure</td>
+			<td class="column-header">Outlet Pressure</td>
+			<td class="column-header">&Delta;P</td>
+			<td class="column-header">Flowrate</td>
+			<td class="column-header">Manufacturer</td>
+			<td class="column-header">Model</td>
+			<td class="column-header">Body Size</td>			
+			<td class="column-header">Max Cv</td>
+			<td class="column-header">Design Cv</td>
+			<td class="column-header">Cv Range</td>
+			<td class="column-header">Valve Type</td>
+			<td class="column-header">Valve Size</td>
+			<td class="column-header">Adminstrative Control</td>
+		</tr>
+		<tr class="unit-header">
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>barg</td>
+			<td>barg</td>
+			<td>bar</td>
+			<td>kg/hr</td>			
+			<td></td>
+			<td></td>
+			<td>mm</td>			
+			<td></td>
+			<td></td>
+			<td>%</td>
+			<td></td>
+			<td>mm</td>
+			<td></td>			
+		</tr>	
+		<% control_valve_sizings.each_with_index do |control_valve_sizing, i|%>
+		<tr>
+			<td><%= i+1%></td>
+			<td><%= control_valve_sizing.control_valve_tag%></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>			
+			<td></td>
+			<td></td>
+			<td><%= control_valve_sizing.cvs_manufacturer%></td>
+			<td><%= control_valve_sizing.cvs_model%></td>			
+			<td><%= control_valve_sizing.cvs_cv_body_size%></td>
+			<td></td>
+			<td></td>			
+			<td></td>
+			<td><%= control_valve_sizing.cvb_valve_type%></td>
+			<td></td>
+			<td><%= control_valve_sizing.cvb_administrative_controls%></td>				
+		</tr>
+		<% end%>	
+	</table>
+</div>		

@@ -1,0 +1,13 @@
+<div class="new_attachment">
+  <%= form_for attachment, :html => {:multipart => true, :style => "width:96.5%;", :class => "well form-inline"} do |f| %>
+    <%= f.hidden_field :attachable_id %>
+    <%= f.hidden_field :attachable_type %>
+    <span class="file-wrapper">
+      <%= f.file_field :attachment%>
+      <span class="button">Select File</span>
+    </span>
+    <%= f.text_field :name, :placeholder => "Attachment Name" %>
+    <%= f.text_field :description, :placeholder => "Attachment Description" %>
+    <%= f.submit "Submit Attachment" %>
+  <% end %>
+</div>

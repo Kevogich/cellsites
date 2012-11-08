@@ -1,0 +1,10 @@
+<% if @breadcrumbs.present? %>
+  <ul class="breadcrumb">
+    <% @breadcrumbs.each do |breadcrumb| %>
+      <li>
+        <span class="divider" style="font-weight: bold;color: #888888;"> &#187;  </span>
+        <%= link_to breadcrumb[:name], breadcrumb[:url] %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

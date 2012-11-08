@@ -1,0 +1,45 @@
+<div class="sizing_criteria_categories">
+	<h4 style="margin-bottom:8px;">List of Sizing Criteria Categories</h4>
+  <% if user_access_type == 1 %>
+    <%= link_to 'Add New Sizing Criteria Categories', new_admin_sizing_criteria_category_path, {:id => "new_admin_sizing_criteria_category"} %>
+  <% end %>
+  <br>
+  <table id="sizing_criteria_categories_list">
+    <tr>
+      <th>Name</th>
+      <th>Edit</th>
+      <th>Delete</th>
+    </tr>
+    <% for sizing_criteria_category in sizing_criteria_categoires %>
+      <tr class="odd">
+        <td colspan="3">
+          <%= sizing_criteria_category.name %>
+          <span style="float:right;">				
+					<%= link_to 'Edit', edit_admin_sizing_criteria_category_path(sizing_criteria_category), :class => "edit_admin_sizing_criteria_category" %>&nbsp;|
+            <%= link_to 'Delete', admin_sizing_criteria_category_path(sizing_criteria_category), :method => "delete", :confirm => "Are you sure?" %>&nbsp;|
+            <%= link_to 'Add Types', new_admin_sizing_criteria_category_type_path(:sizing_criteria_category_id => sizing_criteria_category.id), {:class => "new_admin_sizing_criteria_category_type"} %>
+				</span>
+        </td>
+      </tr>
+      <% for sizing_criteria_category_type in sizing_criteria_category.sizing_criteria_category_types %>
+        <tr>
+          <td><%= sizing_criteria_category_type.name %></td>
+          <td><%= link_to 'Edit', edit_admin_sizing_criteria_category_type_path(sizing_criteria_category_type), :class => "edit_admin_sizing_criteria_category_type" %></td>
+          <td><%= link_to 'Delete', admin_sizing_criteria_category_type_path(sizing_criteria_category_type), :method => "delete", :confirm => "Are you sure?" %></td>
+        </tr>
+      <% end %>
+      <% if sizing_criteria_category.sizing_criteria_category_types.length == 0 %>
+        <tr>
+          <td colspan="3" style="color:#990000;text-align:center;">No sizing critera categories types found.</td>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+</div>
+
+<script type="text/javascript">
+  $('#new_admin_sizing_criteria_category').colorbox();
+  $('.edit_admin_sizing_criteria_category').colorbox();
+  $('.new_admin_sizing_criteria_category_type').colorbox();
+  $('.edit_admin_sizing_criteria_category_type').colorbox();
+</script>

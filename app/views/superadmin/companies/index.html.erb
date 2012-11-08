@@ -1,0 +1,23 @@
+<% title 'Companies List'%>
+<% stylesheet("colorbox", "/javascripts/tablecloth/tablecloth.css")%>
+
+<%= link_to 'Add Company', new_superadmin_company_path%>
+<br>
+<table id="companies_list">
+  <tr>
+    <th>Company Name</th>
+    <th>License #</th>
+    <th>No of Users</th>
+    <th>No of Clients</th>
+    <!-- <th></th>-->
+  </tr>
+  <% for company in @companies%>
+  <tr id="company_<%= company.id %>">
+  	<td><%= link_to company.name, superadmin_company_path(company) %></td>
+	<td><%= company.license%></td>
+	<td><%= company.users_limit%></td>
+	<td><%= company.clients_limit%></td>
+	<!-- <td><%#= link_to 'delete', admin_company_path(company), :method => :delete, :confirm => 'Are you sure?'%></td>-->
+  </tr>
+  <% end%>  
+</table>

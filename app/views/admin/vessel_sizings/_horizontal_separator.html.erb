@@ -1,0 +1,142 @@
+<div id="horizontal_separator" class="tab_content">
+  <!-- Horizontal Separator -->
+  <table>
+    <tr>
+      <td>L/D</td>
+      <td><%= f.text_field :hs_ld %>&nbsp;</td>
+      <td colspan="2"><%= f.check_box :hs_consider_water_settling %>&nbsp;Consider Water Settling</td>
+    </tr>
+    <tr>
+      <td>Liquid Surge Time</td>
+      <td><%= f.text_field :hs_liquid_surge_time, :class => "required" %>&nbsp;<label class="time_minutes_unit"></label></td>
+      <td>Water Stream</td>
+      <td><%= f.collection_select :hs_water_stream, @streams, :stream_no, :display_stream_no, :prompt => true %></td>
+    </tr>
+    <tr>
+      <td colspan="2"><label class="sub_title">Horizontal Separator Design</label></td>
+      <td>Water FlowRate</td>
+      <td><%= f.text_field :hs_water_flowRate %>&nbsp;<label class="flow_rate_general_unit"></label></td>
+    </tr>
+    <tr>
+      <td>V-L Separation Factor</td>
+      <td>
+        <label id="hs_vl_separation_factor"><%= vessel_sizing.hs_vl_separation_factor.to_s %></label>
+        <%= f.hidden_field :hs_vl_separation_factor %>
+      </td>
+      <td>Water Density</td>
+      <td><%= f.text_field :hs_water_density %>&nbsp;<label class="density_general_unit"></label></td>
+    </tr>
+    <tr>
+      <td>Vapor Velocity Factor, Kv</td>
+      <td>
+        <label id="hs_vapor_velocity_factor_kv"><%= vessel_sizing.hs_vapor_velocity_factor_kv.to_s %></label>
+        <%= f.hidden_field :hs_vapor_velocity_factor_kv %>&nbsp;
+      </td>
+      <td>Settling Zone Length</td>
+      <td>
+        <label id="settling_zone_length"><%= vessel_sizing.settling_zone_length.to_s %></label>
+        <%= f.hidden_field :settling_zone_length %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Max Design Vapor Velocity, Vmax</td>
+      <td>
+        <label id="hs_max_design_vapor_velocity_vmax"><%= vessel_sizing.hs_max_design_vapor_velocity_vmax.to_s %></label>
+        <%= f.hidden_field :hs_max_design_vapor_velocity_vmax %>&nbsp;
+        <label class="velocity_general_unit"></label>
+      </td>
+      <td><label class="sub_title">Wire Mesh Design</label></td>
+      <td><%= f.check_box :hs_wire_mesh_design_include %>&nbsp;Include</td>
+    </tr>
+    <tr>
+      <td>Vapor Flow Area</td>
+      <td>
+        <label id="hs_vapor_flow_area"><%= vessel_sizing.hs_vapor_flow_area.to_s %></label>
+        <%= f.hidden_field :hs_vapor_flow_area %>&nbsp;
+        <label class="area_general_unit"></label>
+      </td>
+      <td>K Factor</td>
+      <td><%= f.text_field :hs_k_factor, :class => "required" %></td>
+    </tr>
+    <tr>
+      <td>Liquid Flow Area</td>
+      <td>
+        <label id="hs_liquid_flow_area"><%= vessel_sizing.hs_liquid_flow_area.to_s %></label>
+        <%= f.hidden_field :hs_liquid_flow_area %>&nbsp;
+        <label class="area_general_unit"></label>
+      </td>
+      <td>Allow. Vapor Velocity</td>
+      <td>
+        <label id="hs_allow_vapor_velocity"><%= vessel_sizing.hs_allow_vapor_velocity.to_s %></label>
+        <%= f.hidden_field :hs_allow_vapor_velocity %>&nbsp;
+        <label class="velocity_general_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Dmin</td>
+      <td>
+        <label id="hs_dmin"><%= vessel_sizing.hs_dmin.to_s %></label>
+        <%= f.hidden_field :hs_dmin %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+      <td>Design Velocity</td>
+      <td>
+        <label id="hs_design_velocity"><%= vessel_sizing.hs_design_velocity.to_s %></label>
+        <%= f.hidden_field :hs_design_velocity %>&nbsp;
+        <label class="velocity_general_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Vessel Volume</td>
+      <td>
+        <label id="hs_vessel_volume"><%= vessel_sizing.hs_vessel_volume.to_s %></label>
+        <%= f.hidden_field :hs_vessel_volume %>&nbsp;
+        <label class="velocity_general_unit"></label>
+      </td>
+      <td>Mesh Diameter</td>
+      <td>
+        <label id="hs_mesh_diameter"><%= vessel_sizing.hs_mesh_diameter.to_s %></label>
+        <%= f.hidden_field :hs_mesh_diameter %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Calculated Liquid Surge Time</td>
+      <td>
+        <label id="hs_calculated_liquid_surge_time"><%= vessel_sizing.hs_calculated_liquid_surge_time.to_s %></label>
+        <%= f.hidden_field :hs_calculated_liquid_surge_time %>&nbsp;
+        <label class="time_minutes_unit"></label>
+      </td>
+      <td>Est. Press. Drop</td>
+      <td>
+        <label id="hs_est_press_drop"><%= vessel_sizing.hs_est_press_drop.to_s %></label>
+        <%= f.hidden_field :hs_est_press_drop %>&nbsp;
+        <label class="pressure_differential_unit"></label>
+      </td>
+    </tr>
+    <tr>
+      <td>Diameter</td>
+      <td>
+        <label id="hs_horizontal_separator_diameter"><%= vessel_sizing.hs_horizontal_separator_diameter.to_s %></label>
+        <%= f.hidden_field :hs_est_press_drop %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+      <td colspan="2"><label>NOTES</label></td>
+    </tr>
+    <tr>
+      <td>Length</td>
+      <td>
+        <label id="hs_horizontal_separator_length"><%= vessel_sizing.hs_horizontal_separator_length.to_s %></label>
+        <%= f.hidden_field :hs_horizontal_separator_length %>&nbsp;
+        <label class="length_large_dimension_length_unit"></label>
+      </td>
+      <td colspan="2" rowspan="2"><%= f.text_area :hs_notes, :size => '75x4' %></td>
+    </tr>
+    <tr>
+      <td colspan="2" style="text-align:right;">
+        <input type="button" id="horizontal_separator_calculation" value="Calculate">
+      </td>
+    </tr>
+  </table>
+</div>

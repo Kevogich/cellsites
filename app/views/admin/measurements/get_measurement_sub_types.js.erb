@@ -1,0 +1,7 @@
+<% options = "";%>
+<% for measurement_sub_type in @measurement_sub_types%>
+	<% options += "<option value='#{measurement_sub_type.id}'>#{measurement_sub_type.name}</option>"%>
+<% end%>
+var options = "<%= raw options%>";
+$('#measure_unit_measurement_sub_type_id').empty();
+$('#measure_unit_measurement_sub_type_id').html(options);

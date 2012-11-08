@@ -1,0 +1,8 @@
+<div class="comment">
+  <p class="title"><%= comment.title %></p>
+  <blockquote>
+    <p><%= comment.comment %></p>
+    <small><%= comment.user.name %></small>
+    <span class="help-inline created_at">Created at <%= comment.created_at.strftime('%d-%b-%Y %I:%M:%S %p') %></span>
+  </blockquote>
+</div>

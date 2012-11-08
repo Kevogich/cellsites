@@ -1,0 +1,97 @@
+<% title 'Roles', false%>
+
+<script type="text/javascript">
+	$(function(){
+		$(".colorbox_new_group").colorbox({inline:true, href:"#new_group", opacity:0.7});
+      	$(".colorbox_new_title").colorbox({inline:true, href:"#new_title", opacity:0.7});
+      	$(".colorbox_new_unit").colorbox({inline:true, href:"#new_unit", opacity:0.7});
+	});
+</script>
+
+<div class="roles_div">
+	<h2>Groups</h2>
+	<%= link_to 'Add Group', '#', :class => 'colorbox_new_group' %><br>
+	<table id="groups_list" style="width:auto;">
+		<tr>
+			<th>Group Name</th>
+			<th></th>
+		</tr>
+		<% for group in @groups%>
+			<tr id="group_<%= group.id%>">
+				<td><%= group.name%></td>
+				<td><%= link_to 'delete', admin_group_path( group ), :method => :delete, :remote => true, :confirm => 'Are you sure?' %></td>
+			</tr>
+		<% end%>   
+	</table>
+	<div class="hidden">
+		<div id="new_group">
+			<h2>Add Group</h2>
+			<%= render 'admin/groups/form', :locals => {:group => Group.new} %>
+		</div>
+	</div>
+</div>
+
+<div class="roles_div">
+	<h2>Function</h2>
+	<%= link_to 'Add Title', '#', :class => 'colorbox_new_title' %>
+	<table id="titles_list" style="width:auto;">
+		<tr>
+			<th>Title</th>
+			<th></th>
+		</tr>
+		<% for title in @titles%>
+			<tr id="title_<%= title.id%>">
+				<td><%= title.name%></td>
+				<td><%= link_to 'delete', admin_title_path( title ), :method => :delete, :remote => true, :confirm => 'Are you sure?'%></td>
+			</tr>
+		<% end%>    
+	</table>
+	<div class="hidden">
+		<div id="new_title">
+			<h2>Add Title</h2>
+			<%= render 'admin/titles/form', :title => Title.new %>
+		</div>
+	</div>
+</div>
+
+<!--
+<div class="roles_div">
+  <h2>Units</h2>
+  <%= link_to 'Add Unit', '#', :class => 'colorbox_new_unit' %>
+  <table id="units_list" class="list">
+    <tr>
+      <th>Unit</th>
+      <th></th>
+    </tr>
+	<% for unit in @units%>
+	<tr id="unit_<%= unit.id%>">
+		<td><%= unit.name%></td>
+		<td><%= link_to 'delete', admin_unit_path(unit), :method => :delete, :remote => true, :confirm => 'Are you sure?'%></td>
+	</tr>
+	<% end%>    
+  </table>
+  <div class="hidden">
+    <div id="new_unit">
+      <h2>Add Unit</h2>
+      <%= render 'admin/units/form', :unit => Unit.new %>
+    </div>
+  </div>
+</div>
+-->
+
+<div class="roles_div">
+  <h2>Clearance</h2>
+  <p>&nbsp;</p>
+  <table id="roles_list" class="list">
+    <tr>
+      <th>Clearance</th>	       
+    </tr>
+	<% for role in @roles%>
+	<tr>
+		<td><%= role.name%></td>
+	</tr>
+	<% end%>    
+  </table>
+</div>
+
+<div class="clear"></div>
