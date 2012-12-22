@@ -5,7 +5,7 @@ development:
   database: ezfeed_development
   pool: 5
   username: root
-  password: 
+  password:
   socket: /var/run/mysqld/mysqld.sock
 
 test:

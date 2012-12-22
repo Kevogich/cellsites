@@ -1,0 +1,3 @@
+class VendorList < ActiveRecord::Base
+STATUS = ["Active", "Inactive","Preferred"]
+end

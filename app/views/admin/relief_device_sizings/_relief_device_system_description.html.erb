@@ -1,0 +1,58 @@
+<% is_user_specified = false %>
+<% is_user_specified = true if sd.object.equipment_type == 'User Specified' %>
+<% equipment_tag_data = [] %>
+<% equipment_tag_data = @equipment_tags[sd.object.equipment_type] if !sd.object.equipment_type.nil? %>
+
+
+<tr>
+	<td>
+		<span class="sequence_no">
+				<%= sd.object.sequence_no || 1 %>
+		</span>
+		<%= sd.hidden_field :id, :class => "system_description_id" %>
+		<%= sd.hidden_field :sequence_no, :class => "sequence_no" %>
+	</td>
+	<td>
+		<%= sd.select :equipment_type, options_for_select(@equipment_type, sd.object.equipment_type), {:include_blank => true}, :class => "sd_equipment_type", :style => "width:200px;", :onchange => "equipment_type_change(this);" %>
+	</td>
+	<td>
+		<%= sd.select :equipment_tag, options_for_select(equipment_tag_data, sd.object.equipment_tag), {:include_blank => true}, :class => "sd_equipment_tag "+ (is_user_specified ? "hide" : ""), :style => "width:200px;"%>
+		<%= sd.text_field :equipment_tag, :class => "sd_equipment_tag_text "+ (is_user_specified ? "" : "hide"),
+										  :disabled => !is_user_specified	%>
+	</td>
+	<td>
+		<%= sd.select :section, options_for_select(@equipment_section[sd.object.equipment_type.to_s], sd.object.section), {:include_blank => true}, :class => "sd_section " + (is_user_specified ? "hide" : ""), :style => "width:200px;"%>
+		<%= sd.text_field :section, :class => "sd_section_text " + (is_user_specified ? "" : "hide"),
+											:disabled => !is_user_specified %>
+	</td>
+	<td>
+		<%= sd.text_field :description, :class => "description" %>
+	</td>
+	<td>
+		<%= sd.text_field :design_pressure, :class => "design_pressure pressure_general" %>
+	</td>
+	<td>
+		<%= sd.text_field :mawp, :class => "design_pressure pressure_general" %>
+	</td>
+	<td>
+		<%= sd.text_field :inlet_pressure, :class => "inlet_pressure pressure_general" %>
+	</td>
+	<td>
+		<%= sd.text_field :outlet_pressure, :class => "outlet_pressure pressure_general" %>
+	</td>
+	<td>
+		<%= sd.text_field :equipment_dp, :class => "equipment_dp pressure_differential" %>
+	</td>
+	<td style="text-align: center;">
+		<%= sd.radio_button :prv_location, sd.object.prv_location, {:class => "sd_prv_location", :checked => (sd.object.new_record? ? false : sd.object.prv_location)} %>
+	</td>
+	<td>
+		<%= sd.text_field :inlet_pressure_at_relief, :class => "inlet_pressure_at_relief pressure_general" %>
+	</td>
+	<td>
+		<%= link_to "#", :class => "remove_system_description_row" do %>
+			<strong style="font-size: 120%;">&times;</strong>
+		<% end %>
+		<%= sd.hidden_field '_destroy', :class => "sd_destroy" %>
+	</td>
+</tr>

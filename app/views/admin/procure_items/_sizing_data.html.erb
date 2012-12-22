@@ -1,0 +1,35 @@
+<h2>Item Tag </h2>
+<!--<div class="sizing_item_tag">-->
+  <% if params[:sizing_value] == "vessel" %>
+    <%= select_tag 'item_tags[]', options_from_collection_for_select(@sizing_data, "name", "name"), {:multiple => true, :size => 10} %>
+  <% end %>
+  <% if params[:sizing_value] == "line" %>
+    <%= select_tag 'item_tags[]', options_from_collection_for_select(@sizing_data, "line_number", "line_number"), {:multiple => true, :size => 10} %>
+  <% end %>
+  <% if params[:sizing_value] == "pump" %>
+    <%= select_tag 'item_tags[]', options_from_collection_for_select(@sizing_data, "centrifugal_pump_tag", "centrifugal_pump_tag"), {:multiple => true, :size => 10} %>
+  <% end %>
+  <% if params[:sizing_value] == "compressor" %>
+    <%= select_tag 'item_tags[]', options_from_collection_for_select(@sizing_data, "name", "name"), {:multiple => true, :size => 10} %>
+  <% end %>
+  <% if params[:sizing_value] == "control_value" %>
+    <%= select_tag 'item_tags[]', options_from_collection_for_select(@sizing_data, "control_valve_tag", "control_valve_tag"), {:multiple => true, :size => 10} %>
+  <% end %>
+  <% if params[:sizing_value] == "flow_element" %>
+    <%= select_tag 'item_tags[]', options_from_collection_for_select(@sizing_data, "flow_element_tag", "flow_element_tag"), {:multiple => true, :size => 10} %>
+  <% end %>
+  <% if params[:sizing_value] == "storage_tank" %>
+    <%= select_tag 'item_tags[]', options_from_collection_for_select(@sizing_data, "storage_tank_tag", "storage_tank_tag"), {:multiple => true, :size => 10} %>
+  <% end %>
+  <% if params[:sizing_value] == "column" %>
+    <%= select_tag 'item_tags[]', options_from_collection_for_select(@sizing_data, "line_number", "line_number"), {:multiple => true, :size => 10} %>
+  <% end %>
+  <% if params[:sizing_value] == "heat_exchanger" %>
+    <%= select_tag 'item_tags[]', options_from_collection_for_select(@sizing_data, "exchanger_tag", "exchanger_tag"), {:multiple => true, :size => 10} %>
+  <% end %>
+  <% if params[:sizing_value] == "relief_device" %>
+    <%= select_tag 'item_tags[]', options_from_collection_for_select(@sizing_data, "relief_device_type", "relief_device_type"), {:multiple => true, :size => 10} %>
+  <% end %>
+<!--</div>-->
+<br>
+

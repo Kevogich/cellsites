@@ -17,44 +17,12 @@
 		<th><span class="area_orifice_unit"></span></th>
 		<th colspan="2"></th>
 	</tr>
-	<%= f.fields_for :scenario_summaries do |ss| %>
-		<%= render :partial => 'scenario', :locals => {:ss => ss} %>
-	<% end %>
 	<% if @scenario_summaries.size == 0 %>
-		<%= f.fields_for :scenario_summaries_attributes, :index => "0" do |ss|%>
-			<tr>
-				<td>
-					<span class="index_counter"><%= "1" %></span>
-					<%= ss.hidden_field :id, :class => "scenario_summary_id"%>
-					<%= ss.hidden_field :scenario_no, :value => 1, :class => "scenario_no" %>
-				</td>
-				<td style="width: 250px;">
-					<%= ss.select :scenario,
-												options_for_select(StaticData.scenario),
-												{},
-												:class => 'scenario_name'%>
-				</td>
-				<td style="width: 225px;">
-					<%= ss.text_field :identifier, :class => "scenario_identifier" %>
-				</td>
-				<td>
-					<%=  %>
-				</td>
-				<td>
-					<%=  %>
-				</td>
-				<td>
-					<%=  %>
-				</td>
-				<td>
-					<%= link_to "View Details", "#", :class => "scenario_view_details" %>
-				</td>
-				<td>
-					<%= link_to "Delete", "#", :class => "delete_scenario" %>
-					<%= ss.hidden_field '_destroy' %>
-				</td>
-			</tr>
-		<% end %>
+		<% f.object.scenario_summaries.create rescue "" %>
+	<% end %>
+	<% i = 0%>
+	<%= f.fields_for :scenario_summaries do |ss| %>
+		<%= render :partial => 'scenario', :locals => {:ss => ss, :i => i+=1} %>
 	<% end %>
 </table>
 
@@ -100,33 +68,67 @@
 	//Add new row
 	$('.add_scenario').click(function(){
 
+		var relief_device_sizing_id = $('#relief_device_sizing_id').val();
+
+		if(relief_device_sizing_id == "") {
+			alert('Please save relief device sizing before adding new scenario.');
+			return false;
+		}
+
 		var last_scenario_no = $('.scenario_summaries_table .scenario_no:last').val();
 		if(last_scenario_no == undefined) {
 			last_scenario_no = 0;
 		}
 		var scenario_no = parseInt(last_scenario_no)+1;
-		var new_scenario_tr = $('.new_scenario_tr tbody').html().replace(/#x#/g, scenario_no);
 
-		$('.scenario_summaries_table tr:last').after($(new_scenario_tr));
-		//reorder sequence
-		$('.scenario_summaries_table span.index_counter:visible').each(function(index){
-			$(this).text(index+1);
-			$(this).nextAll('.scenario_no').val(index+1);
-		});
+		$.get('new_scenario_summary',
+			{next_scenario_no:scenario_no},
+			function(data){
+
+				var new_scenario_tr = $('.new_scenario_tr tbody').html().replace(/#x#/g, scenario_no);
+				$('.scenario_summaries_table tr:last').after($(new_scenario_tr));
+
+				$('.scenario_summaries_table tr:last').find('.scenario_summary_id').val(data["new_scenario_summary"]["id"]);
+				$('.scenario_summaries_table tr:last').find('.scenario_view_details').attr('href', '/admin/relief_device_sizings/scenario_identification?scenario_summary_id='+data["new_scenario_summary"]["id"]);
+
+				//reorder sequence
+				$('.scenario_summaries_table span.index_counter:visible').each(function(index){
+					$(this).text(index+1);
+					$(this).nextAll('.scenario_no').val(index+1);
+				});
+			}
+		);
+
 		return false;
 	});
 
 	//Delete row
 	$('.delete_scenario').live('click', function(){
 		var tr = $(this).parents('tr');
-		tr.hide();
-		$(this).next().val(true);
+		$.get('delete_scenario_summary',
+			{scenario_summary_id:tr.find('.scenario_summary_id').val()},
+			function(){
+				tr.remove();
+				//reorder sequence
+				$('.scenario_summaries_table span.index_counter:visible').each(function(index){
+					$(this).text(index+1);
+					$(this).nextAll('.scenario_no').val(index+1);
+				});
+			}
+		);
 
-		//reorder sequence
-		$('.scenario_summaries_table span.index_counter:visible').each(function(index){
-			$(this).text(index+1);
-			$(this).nextAll('.scenario_no').val(index+1);
-		});
+
+	/*		$.get('delete_scenario_summary',
+				{scenario_summary_id:tr.find('.scenario_summary_id').val())},
+		function(){
+			tr.remove();
+			//reorder sequence
+			$('.scenario_summaries_table span.index_counter:visible').each(function(index){
+				$(this).text(index+1);
+				$(this).nextAll('.scenario_no').val(index+1);
+			});
+		}
+	);*/
 
 		return false;
 	});
@@ -180,4 +182,5 @@
 		}
 
 	});
+
 </script>

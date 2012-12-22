@@ -1,0 +1,254 @@
+
+<%= form_for procure_item, :url => admin_procure_item_path(procure_item), :html => {:class => "procure_item_form", :style => 'width:auto;'} do |f| %>
+  <%= f.error_messages %>
+  <div class="form-element-last">
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :client_id %><br>
+      <%= f.label :client_id, (procure_item.client.name rescue @user_project_settings.client.name), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :project_id %><br>
+      <%= f.label :project_id,(procure_item.project.project_num rescue @user_project_settings.project.project_num), :style => "font-weight:bold" %>
+		</span>
+		<span style="float:left;margin-right:40px;">
+			<%= f.label :process_unit_id %><br>
+      <%= f.label :process_unit_id,(procure_item.process_unit.name rescue @user_project_settings.process_unit.name), :style => "font-weight:bold" %>
+		</span>
+     <span style="float:left;margin-right:40px;">
+			<%= f.label :item_type %><br>
+       <%= f.label :item_type, procure_item.item_type.item_type, :style => "font-weight:bold" %>
+		</span>
+    <span style="float:left;margin-right:40px;">
+			<%= f.label :item_tag %><br>
+      <%= f.label :item_tag, @procure_item.item_tag, :style => "font-weight:bold" %>
+		</span>
+    <span style="float:left;margin-right:40px;">
+      <%= label_tag :status %><br>
+      <strong><%= sizing_status(procure_item) %></strong>
+    </span>
+    <span style="float:left;margin-right:40px;">
+      <br>
+      <%= sizing_status_request_button(procure_item) %>
+    </span>
+    <span style="float:left;margin-right:40px;">
+      <br>
+      <%= f.submit 'Update' %>
+    </span>
+    <div class="clear"></div>
+  </div>
+
+  <div class="hidden">
+    <%= f.hidden_field :id %>
+  </div>
+
+  <table style="border: 0;width: 50%;">
+    <tr>
+      <td>Selected Vendor</td> <td><%= procure_item.client.name %></td> <td style="background: #ffffff;border: 0;"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="Transmit"></td> <td style="background: #ffffff;border: 0;"> <input type="button" value="Print"></td>
+    </tr>
+  </table>
+
+
+  <table style="border: 0;width: 100%;">
+    <tr>
+      <td style="background: #ffffff;border: 0;">
+        <table style="border: 0;width: 100%;">
+          <tr><td  colspan="2" style="background: #ffffff;border: 0;"><u>Buyer's Information</u></td></tr>
+          <tr><td style="width: 38%;">Name</td><td><%= f.text_field :billing_name %></td></tr>
+          <tr><td>Address</td><td><%= f.text_area :billing_address, :rows => "4",:cols=>"28" %></td></tr>
+        </table>
+      </td>
+      <td style="background: #ffffff;border: 0;width: 100px;"></td>
+      <td style="background: #ffffff;border: 0;">
+        <table style="border: 0;width: 100%;">
+          <tr><td style="background: #ffffff;border: 0;"><u>Ship To Address</u></td><td style="background: #ffffff;border: 0;"><input type="checkbox" name="same_as_billing_address"/>&nbsp;&nbsp;Same as Billing Address</td></tr>
+          <tr><td>Name</td><td><%= f.text_field :shipping_name %></td></tr>
+          <tr><td>Address</td><td><%= f.text_area :shipping_address, :rows => "4",:cols=>"28" %></td></tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <table style="border: 0;width: 100%;">
+    <tr><td  colspan="2" style="background: #ffffff;border: 0;"><u>Purchase Terms</u></td></tr>
+    <tr>
+      <td>Purchase Order No</td><td><%= f.text_field :purchase_order_no %></td>
+      <td>Form of Payment</td><td><%= f.text_field :form_of_payment %></td>
+    </tr>
+    <tr>
+      <td>Purchase Order Issue Date</td><td><%= f.text_field :purchase_order_issue_date %></td>
+      <td>Purchasing Agent</td><td><%= f.text_field :purchasing_agent %></td>
+    </tr>
+    <tr>
+      <td>Shipment Delivery Date</td><td><%= f.text_field :shipment_delivery_date %></td>
+      <td>Number of pieces</td><td><%= f.text_field :number_of_pieces %></td>
+    </tr>
+    <tr>
+      <td>Purchase Order Issue Date</td><td><%= f.text_field :purchase_order_issue_date1 %></td>
+      <td>Gross Shipment Weight</td><td><%= f.text_field :gross_shipment_weight %></td>
+    </tr>
+    <tr>
+      <td>Currency</td><td><%= f.text_field :currency %></td>
+      <td>Modes of Transportation</td><td><%= f.text_field :modes_of_transportation %></td>
+    </tr>
+  </table>
+
+
+
+
+  <br><br>
+
+  <u>Purchase Details</u>
+  <div style="padding-top:10px;">&nbsp;&nbsp;&nbsp;<a href="#" id="add_purchase_items">Add Item</a></div>
+
+  <table width="auto" id="purchase_items_table">
+    <tr>
+      <th>No.</th>
+      <th>Item No.</th>
+      <th>Item Description</th>
+      <th>Taxable</th>
+      <th>Quantity</th>
+      <th>Unit Price</th>
+      <th>Total Price</th>
+      <th></th>
+    </tr>
+
+    <tr>
+      <% if @procure_item.procure_item_purchase_items.empty? %>
+        <% @unique_id = Time.now.to_i %>
+        <% @purchase_item = @procure_item.procure_item_purchase_items.new %>
+        <%= render :partial => 'purchase_items' %>
+      <% else %>
+        <% @procure_item.procure_item_purchase_items.each_with_index do |purchase_item| %>
+          <% @unique_id = Time.now.to_i+purchase_item.id %>
+          <% @purchase_item = purchase_item %>
+          <%= render :partial => 'purchase_items' %>
+        <% end %>
+      <% end %>
+    </tr>
+
+  </table>
+
+  <br>
+  <table style="border: 0;width: 100%;">
+    <tr>
+      <td style="background: #ffffff;border: 0;width: 60%;"></td>
+      <td style="background: #ffffff;" class="no_bgr">
+        <table style="border: 0;width: 100%;">
+          <tr><td>Subtotal</td><td>$ &nbsp;<%= f.object.subtotal %></td><td></td></tr>
+          <tr><td>State Sales Tax</td><td>$ &nbsp;<%= f.text_field :state_sales_tax , :size=>15 %></td><td></td></tr>
+          <tr><td>Federal Sales Tax</td><td>$ &nbsp;<%= f.text_field :federal_sales_tax , :size=>15 %></td><td></td></tr>
+          <tr><td>Shipping & Handling</td><td>$ &nbsp;<%= f.text_field :shipping_handing , :size=>15 %></td><td></td></tr>
+          <tr><td>Insurance</td><td>$ &nbsp;<%= f.text_field :insurance , :size=>15 %></td><td></td></tr>
+          <tr><td>Value Added Tax</td><td>$ &nbsp;<%= f.text_field :value_added_tax , :size=>15 %></td><td></td></tr>
+          <tr><td>Tariff</td><td>$ &nbsp;<%= f.text_field :tariff , :size=>15 %></td><td></td></tr>
+          <tr><td>Clearing Cost</td><td>$ &nbsp;<%= f.text_field :clearing_cost , :size=>15 %></td><td></td></tr>
+          <tr><td colspan="3">     <hr style="margin: 0;border-color:#eeeeee;">  </td></tr>
+          <tr><td>Total</td><td>$ &nbsp;<%= f.object.total %></td><td><input type="button" value="Calculate"/></td></tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width=100%>
+    <tr>
+      <td><b><u>Comments</u></b></td>
+    </tr>
+    <tr>
+      <td><%= f.text_area :comment, :rows => 6, :style => "width:99%;" %></td>
+    </tr>
+  </table>
+
+
+<% end %>
+
+
+<br>
+
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Attachments</legend>
+    <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+    <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+  </fieldset>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Comments</legend>
+    <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+    <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+  </fieldset>
+
+
+<script type='text/javascript'>
+
+  set_project_unit_and_decimals();
+  $('form.procure_item_form').dirtyForms();
+
+  <% if @procure_item.new_record? %>
+  var relief_device_id = 0;
+  <% else %>
+  var relief_device_id = <%= @procure_item.id %>;
+  <% end %>
+
+  function form_saved() {
+    if (relief_device_id == 0) {
+      alert("Please Create Relief Device first!")
+      return false
+    }
+    else {
+      return true
+    }
+  }
+
+  //update sequence when page loads
+  $(document).ready(function(){
+    update_sequence();
+  });
+
+  //update sequence of all purchase_items
+  function update_sequence() {
+    $("td[id^='sequence_purchase_item']").each(function (index, value) {
+      //sequence should not start with zero, but array starts with 0 index
+      index = index + 1;
+      $(this).empty().append(index);
+    });
+  }
+  $("#add_purchase_items").click(function () {
+    $.get("<%= procure_item_purchase_items_admin_procure_items_path(1)%>", function (data) {
+      $("#purchase_items_table").append(data);
+      update_sequence();
+    });
+    return false;
+  });
+  $("a.delete_purchase_item").live('click', function () {
+    var id = $(this).attr('id');
+    if ($("td#sequence_purchase_item_" + id).text() > 0) {
+      $("tr#row_purchase_item_" + id).hide();
+      //remove id "sequence" from hidden rows
+      //otherwise this interfers with sequence updater
+      $("td#sequence_purchase_item_" + id).attr('id', "");
+      $("input#destroy_purchase_item_" + id).attr('value', 1);
+      update_sequence();
+      return false;
+    }
+  });
+
+
+
+  $("input:checkbox[name='same_as_billing_address']").live('click',function() {
+    $('#procure_item_billing_name').val($('#procure_item_shipping_name').val());
+    $('#procure_item_billing_address').val($('#procure_item_shipping_address').val());
+  });
+
+  $(function () {
+    $("#procure_item_purchase_order_issue_date").datepicker();
+    $("#procure_item_shipment_delivery_date").datepicker();
+    $("#procure_item_purchase_order_issue_date1").datepicker();
+  });
+
+</script>
+
+<style type="text/css" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+  .no_bgr td {
+    background: #ffffff;
+    border: 0;
+  }
+</style>

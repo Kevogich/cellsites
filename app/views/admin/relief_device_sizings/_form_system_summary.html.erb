@@ -1,0 +1,384 @@
+
+<% if @relief_device_type =="Pressure Relief Valve" %>
+  <% @relief_devices=@relief_device_sizing.relief_devices %>
+  <% @tag_name ='relief_device.psvtag' %>
+<% elsif @relief_device_type == "Rupture Disk" %>
+  <% @relief_devices=@relief_device_sizing.relief_device_rupture_disks %>
+  <% @tag_name ='relief_device.rdtag' %>
+<% elsif @relief_device_type=="Open Vent" %>
+  <% @relief_devices=@relief_device_sizing.relief_device_open_vent_relief_devices %>
+  <% @tag_name ='relief_device.optag' %>
+<% else %>
+  <% @relief_devices=@relief_device_sizing.relief_device_low_pressure_vent_relief_devices %>
+  <% @tag_name ='relief_device.venttag' %>
+<% end %>
+
+<table style="border:0;margin: 0;"><tr>
+  <td style="background: #ffffff;border: 0;"><div style="padding-top:10px;"><b><u>Scenario Summary</u></b></div></td><td  style="background: #ffffff;border: 0;"></td><td  style="background: #ffffff;border: 0;"></td>
+  <td style="background: #ffffff;border: 0;"><input type="button" id="refresh_btn" value="Refresh" onClick="window.location.reload()"></td><td  style="background: #ffffff;border: 0;"></td>
+  <td style="background: #ffffff;border: 0;"><input type="button" id="perform_hydraulic_calculation_btn" value="Perform Hydraulic Calculation"></td><td  style="background: #ffffff;border: 0;"></td>
+  <% (1..@applicable_scenario_summaries.count-5).each do | i| %><td  style="background: #ffffff;border: 0;"></td><% end %>
+</tr>
+</table>
+
+
+<table id="design_summary_table_scrollable" style="border:0;margin: 0;">
+<thead><tr><th></th><th></th><% @applicable_scenario_summaries.each_with_index do | scenario_summary| %><th></th><% end %></tr></thead>
+<tbody>
+  <tr>
+    <td>Design Basis</td> <td></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>
+      <% if !scenario_summary.required_orifice.nil? && scenario_summary.required_orifice == @scenario_summaries_max_area %>
+        <td><input type="radio" name="scenario_summary_design_basis" checked></td>
+      <% else %>
+        <td><input type="radio" name="scenario_summary_design_basis"></td>
+      <% end %>
+    <% end %>
+  </tr>
+  <tr>
+    <td>Scenario</td><td></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>
+      <td><%= scenario_summary.scenario rescue '' %></td>
+    <% end %>
+  </tr>
+  <tr>
+    <td>Identifier</td><td></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>
+      <td><%= scenario_summary.identifier rescue '' %></td>
+    <% end %>
+  </tr>
+  <tr>
+    <td>Relief Rate</td>
+    <td><span class="mass_flow_rate_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>
+      <td><%= scenario_summary.relief_rate rescue '' %></td>
+    <% end %>
+  </tr>
+  <tr>
+    <td>Required Area</td>
+    <td><span class="area_orifice_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>
+      <td><%= scenario_summary.required_orifice rescue '' %></td>
+    <% end %>
+  </tr>
+  <tr>
+    <td>Total Available Area</td>
+    <td><span class="area_orifice_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>
+      <td><input type="text" value="" ></td>
+    <% end %>
+  </tr>
+  <tr>
+    <td>Total Available Capacity</td>
+    <td><span class="mass_flow_rate_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>
+      <td><input type="text" value=""></td>
+    <% end %>
+  </tr>
+
+
+    <tr class="table_relief_load_distribution">
+      <td style="background: #ffffff;border: 0;"><div style="padding-top:10px;"><b><u>Relief Load Distribution</u></b></div></td><td  style="background: #ffffff;border: 0;"></td>
+      <td style="background: #ffffff;border: 0;"><input type="radio" name="scenario_summary_relief_load_distribution" checked="checked">Required Relief Rate </td><td  style="background: #ffffff;border: 0;"><input type="radio" name="scenario_summary_relief_load_distribution">Relief Device Capacity</td><td  style="background: #ffffff;border: 0;"></td>
+      <% (1..@applicable_scenario_summaries.count-3).each do | i| %><td style="background: #ffffff;border: 0;"></td><% end %>
+    </tr>
+      <% @relief_devices.each_with_index do |relief_device| %>
+          <tr class="table_relief_load_distribution">
+            <td><a href="#"><%= link_to eval(@tag_name), "#", :class => "relief_load_distribution_relief_device" %></td>
+            <td><span class="mass_flow_rate_general_unit"></span></td>
+            <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>
+                <td><input type="text" value=""></td>
+            <% end %>
+          </tr>
+      <% end %>
+
+
+      <tr class="table_inlet_pressure_drop">
+        <td style="background: #ffffff;border: 0;"><div style="padding-top:10px;"><b><u>Inlet Pressure Drop</u></b></div></td><td  style="background: #ffffff;border: 0;"></td>
+        <td style="background: #ffffff;border: 0;"><input type="radio" name="scenario_summary_relief_inlet_pressure" checked="checked">Display Percentage </td><td  style="background: #ffffff;border: 0;"><input type="radio" name="scenario_summary_relief_inlet_pressure">Display Pressure</td><td  style="background: #ffffff;border: 0;"></td>
+        <% (1..@applicable_scenario_summaries.count-3).each do | i| %><td style="background: #ffffff;border: 0;"></td><% end %>
+      </tr>
+      <% @relief_devices.each_with_index do |relief_device| %>
+          <tr class="table_inlet_pressure_drop">
+            <td><a href="#"><%= link_to  eval(@tag_name), "#", :class => "relief_load_distribution_relief_device" %></td>
+            <td><span class="pressure_general_unit"></span></td>
+            <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>
+              <td><input type="text" value=""></td>
+            <% end %>
+          </tr>
+      <% end %>
+
+      <tr class="table_outlet_pressure_drop">
+        <td style="background: #ffffff;border: 0;"><div style="padding-top:10px;"><b><u>Outlet Pressure Drop</u></b></div></td><td  style="background: #ffffff;border: 0;"></td>
+        <td style="background: #ffffff;border: 0;"><input type="radio" name="scenario_summary_relief_outlet_pressure" checked="checked">Display Percentage </td><td  style="background: #ffffff;border: 0;"><input type="radio" name="scenario_summary_relief_outlet_pressure">Display Pressure</td><td  style="background: #ffffff;border: 0;"></td>
+        <% (1..@applicable_scenario_summaries.count-3).each do | i| %><td style="background: #ffffff;border: 0;"></td><% end %>
+      </tr>
+      <% @relief_devices.each_with_index do |relief_device| %>
+          <tr class="table_outlet_pressure_drop">
+            <td><a href="#"><%= link_to  eval(@tag_name), "#", :class => "relief_load_distribution_relief_device" %></td>
+            <td><span class="pressure_general_unit"></span></td>
+            <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>
+              <td><input type="text" value=""></td>
+            <% end %>
+          </tr>
+      <% end %>
+
+      <tr class="table_noise_level">
+        <td style="background: #ffffff;border: 0;"><div style="padding-top:10px;"><b><u>Noise Level</u></b></div></td><td  style="background: #ffffff;border: 0;"></td><td  style="background: #ffffff;border: 0;"></td>
+        <td style="background: #ffffff;border: 0;"></td><td  style="background: #ffffff;border: 0;"></td>
+        <% (1..@applicable_scenario_summaries.count-3).each do | i| %><td style="background: #ffffff;border: 0;"></td><% end %>
+      </tr>
+      <% @relief_devices.each_with_index do |relief_device| %>
+          <tr class="table_noise_level">
+            <td><a href="#"><%= link_to  eval(@tag_name), "#", :class => "relief_load_distribution_relief_device" %></td>
+            <td><span class="noise_general_unit"></span></td>
+            <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>
+              <td><input type="text" value=""></td>
+            <% end %>
+          </tr>
+      <% end %>
+
+
+      <tr class="table_reactive_forces">
+        <td style="background: #ffffff;border: 0;"><div style="padding-top:10px;"><b><u>Reactive Forces</u></b></div></td><td  style="background: #ffffff;border: 0;"></td><td  style="background: #ffffff;border: 0;"></td>
+        <td style="background: #ffffff;border: 0;"></td><td  style="background: #ffffff;border: 0;"></td>
+        <% (1..@applicable_scenario_summaries.count-3).each do | i| %><td style="background: #ffffff;border: 0;"></td><% end %>
+      </tr>
+      <% @relief_devices.each_with_index do |relief_device| %>
+          <tr class="table_reactive_forces">
+            <td><a href="#"><%= link_to  eval(@tag_name), "#", :class => "relief_load_distribution_relief_device" %></td>
+            <td><span class="force_general_unit"></span></td>
+            <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>
+              <td><input type="text" value=""></td>
+            <% end %>
+          </tr>
+      <% end %>
+
+  <tr>
+    <td style="background: #ffffff;border: 0;"><div style="padding-top:10px;"><b><u>Relief Stream Properties</u></b></div></td><td  style="background: #ffffff;border: 0;"></td>
+    <% (1..@applicable_scenario_summaries.count).each do | i| %><td style="background: #ffffff;border: 0;"></td><% end %>
+  </tr>
+
+  <tr>
+    <td>Relief Pressure</td>
+    <td><span class="pressure_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_pressure rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Relief Temperature</td>
+    <td><span class="temperature_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_temperature rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Relief Phase</td>
+    <td></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_pressure rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Vapor Fraction</td>
+    <td></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_mass_vapor_fraction rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Vapor Density</td>
+    <td><span class="density_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_vapor_density rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Vapor Viscosity</td>
+    <td><span class="viscosity_dynamic_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_vapor_viscosity rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Vapor Z</td>
+    <td></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_vapor_z rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Vapor Cp/Cv</td>
+    <td></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_pressure rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Vapor MW</td>
+    <td></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_vapor_mw rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Liquid Density</td>
+    <td><span class="density_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_liquid_density rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Liquid Viscosity</td>
+    <td><span class="viscosity_dynamic_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_liquid_viscosity rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Liquid Vapor Pressure</td>
+    <td><span class="pressure_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_liquid_vapor_pressure rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Liquid Surface Tension</td>
+    <td><span class="surface_tension_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_liquid_surface_tension rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Liquid Latent Heat</td>
+    <td><span class="enthalpy_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_liquid_latent_heat rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Liquid MW</td>
+    <td></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_liquid_mw rescue '' %></td>             <% end %>
+  </tr>
+
+  <tr>
+    <td style="background: #ffffff;border: 0;"><div style="padding-top:10px;"><b><u>Discharge Stream Properties</u></b></div></td><td  style="background: #ffffff;border: 0;"></td>
+    <% (1..@applicable_scenario_summaries.count).each do | i| %><td style="background: #ffffff;border: 0;"></td><% end %>
+  </tr>
+
+  <tr>
+    <td>Constant Back Pressure</td>
+    <td><span class="pressure_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.dc_pressure rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Minimum Temperature</td>
+    <td><span class="temperature_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.dc_temperature rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Discharge Phase</td>
+    <td></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_pressure rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Vapor Fraction</td>
+    <td></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.dc_mass_vapor_fraction rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Vapor Density</td>
+    <td><span class="density_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.dc_vapor_density rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Vapor Viscosity</td>
+    <td><span class="viscosity_dynamic_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.dc_vapor_viscosity rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Vapor Z</td>
+    <td></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.dc_vapor_z rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Vapor Cp/Cv</td>
+    <td></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.rc_pressure rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Vapor MW</td>
+    <td></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.dc_vapor_mw rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Liquid Density</td>
+    <td><span class="density_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.dc_liquid_density rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Liquid Viscosity</td>
+    <td><span class="viscosity_dynamic_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.dc_liquid_viscosity rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Liquid Vapor Pressure</td>
+    <td><span class="pressure_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.dc_liquid_vapor_pressure rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Liquid Surface Tension</td>
+    <td><span class="surface_tension_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.dc_liquid_surface_tension rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Liquid Latent Heat</td>
+    <td><span class="enthalpy_general_unit"></span></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.dc_liquid_latent_heat rescue '' %></td>             <% end %>
+  </tr>
+  <tr>
+    <td>Liquid MW</td>
+    <td></td>
+    <% @applicable_scenario_summaries.each_with_index do | scenario_summary| %>               <td><%= scenario_summary.scenario_identification.dc_liquid_mw rescue '' %></td>             <% end %>
+  </tr>
+</tbody>
+</table>
+
+
+<script type='text/javascript'>
+
+function design_summary_tables() {
+  var checked_value = $("input:radio[name='relief_device_sizing[relief_device_type]']:checked").val();
+    if(checked_value=='Pressure Relief Valve'){
+       $(".table_relief_load_distribution").show();
+       $(".table_inlet_pressure_drop").show();
+       $(".table_outlet_pressure_drop").show();
+       $(".table_noise_level").show();
+       $(".table_reactive_forces").show();
+    }else if(checked_value=='Rupture Disk'){
+        $(".table_relief_load_distribution").show();
+        $(".table_inlet_pressure_drop").show();
+        $(".table_outlet_pressure_drop").show();
+        <% if @rupture_disk_design_method == "Coefficient of Discharge Method" %>
+        $(".table_noise_level").show();
+        $(".table_reactive_forces").show();
+        <% else %>
+        $(".table_noise_level").hide();
+        $(".table_reactive_forces").hide();
+        <% end %>
+    }else if(checked_value=='Open Vent'){
+        $(".table_relief_load_distribution").show();
+        $(".table_inlet_pressure_drop").hide();
+        $(".table_outlet_pressure_drop").hide();
+        $(".table_noise_level").hide();
+        $(".table_reactive_forces").hide();
+    }else if(checked_value=='Low Pressure Vent'){
+        $(".table_relief_load_distribution").show();
+        $(".table_inlet_pressure_drop").hide();
+        $(".table_outlet_pressure_drop").hide();
+        $(".table_noise_level").hide();
+        $(".table_reactive_forces").hide();
+    }else{
+    }
+}
+//});
+
+$('.relief_load_distribution_relief_device').live('click', function(){
+    design_button_click();
+    return false;
+});
+
+function design_summary_scrollable(){
+  var oTable = $('#design_summary_table_scrollable').dataTable( {
+    "sScrollX": "100%",
+    "sScrollXInner": "150%",
+    "bScrollCollapse": true,
+    "bPaginate": false,
+    "bFilter": false,
+    "bInfo": false,
+    "bSort": false,
+    "bProcessing": false,
+    "bRetrieve": true
+  } );
+  new FixedColumns( oTable, {
+    "iLeftColumns": 2,
+    "iLeftWidth": 350
+  } );
+}
+
+</script>
+

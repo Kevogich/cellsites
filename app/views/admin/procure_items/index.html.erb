@@ -1,0 +1,38 @@
+<% title "#{@item_type.item_type} - Procurement" %>
+
+<%= render :partial => '/admin/user_project_settings/project_filter' %>
+<%= link_to "Add Item", new_admin_procure_item_path(:item_type_id => params[:item_type_id]), :id => "add_item", :class => "new_admin_procure_item" %>
+
+<table>
+  <tr>
+    <th>Item Tag</th>
+    <th>PO Number</th>
+    <th>Vendor</th>
+    <th>Total Price</th>
+    <th>By</th>
+    <th>Created on</th>
+    <th>Updated on</th>
+    <th>Transmitted On</th>
+    <th>Edit</th>
+    <th>Delete</th>
+    <th>Clone</th>
+  </tr>
+  <% @procure_items.each do |procure_item| %>
+  <tr>
+    <td><%= procure_item.item_tag %></td>
+    <td></td>
+    <td></td>
+    <td><%= procure_item.total %></td>
+    <td><%= procure_item.sizing_status_activities.created_by%></td>
+    <td><%= procure_item.created_at.strftime("%d-%m-%Y") %></td>
+    <td><%= procure_item.updated_at.strftime("%d-%m-%Y") %></td>
+    <td></td>
+    <td><%= link_to "Edit", edit_admin_procure_item_path(procure_item) %></td>
+    <td><%= link_to "Delete", admin_procure_item_path(procure_item,:item_type_id => params[:item_type_id]), :method=>"delete", :confirm => "Are you sure?"%></td>
+    <td><%= link_to "Clone", "#" %></td>
+  </tr>
+  <% end %>
+</table>
+<script>
+  $(".new_admin_procure_item").colorbox();
+</script>

@@ -1,0 +1,213 @@
+<style type="text/css">
+	.system_description_table input[type="text"] {
+		width: 100px;
+	}
+
+	.error_piping_field {
+		border:1px solid red;
+	}
+</style>
+
+<div style="margin-top: 30px;" class="hide">
+	<h3 class="pull-left">
+		System Description
+	</h3>
+	<%= link_to "Refresh", "#", :class => "btn pull-left", :style => "margin-left:30px;" %>
+	<div class="clear"></div>
+</div>
+
+<%= form_for @relief_device_sizing,
+						 :url => save_system_description_admin_relief_device_sizing_path(@relief_device_sizing),
+						 :remote => true,
+						 :html => {:method => :post, :class => "relief_device_system_description_form", :style => 'width:auto;'} do |f| %>
+	<%= hidden_field_tag :prv_location_id, (@selected_system_description.id rescue "") %>
+	<table class="system_description_table">
+		<tr>
+			<th></th>
+			<th>Equipment Type</th>
+			<th>Equipment Tag</th>
+			<th>Section/Stage</th>
+			<th>Description</th>
+			<th>Design Pressure</th>
+			<th>MAWP</th>
+			<th>Inlet Pressure</th>
+			<th>Outlet Pressure</th>
+			<th>Equipment &Delta;P</th>
+			<th>PRV Location</th>
+			<th>Inlet P at Relief</th>
+			<th></th>
+		</tr>
+		<tr>
+			<th colspan="5"></th>
+			<th><span class="pressure_general_unit"></span></th>
+			<th><span class="pressure_general_unit"></span></th>
+			<th><span class="pressure_general_unit"></span></th>
+			<th><span class="pressure_general_unit"></span></th>
+			<th><span class="pressure_differential_unit"></span></th>
+			<th></th>
+			<th><span class="pressure_general_unit"></span></th>
+			<th></th>
+		</tr>
+		<%= f.fields_for :relief_device_system_descriptions do |sd| %>
+			<%= render 'relief_device_system_description', :sd => sd %>
+		<% end %>
+		<% if @relief_device_system_descriptions.size == 0 %>
+			<%= f.fields_for(:relief_device_system_descriptions, @relief_device_system_description, :child_index => "0") do |sd| %>
+				<%= render 'relief_device_system_description', :sd => sd %>
+			<% end %>
+		<% end %>
+	</table>
+
+	<table class="new_relief_device_system_description_tr hide">
+		<%= f.fields_for(:relief_device_system_descriptions, @relief_device_system_description, :child_index => "new_row") do |sd| %>
+			<%= render 'relief_device_system_description', :sd => sd %>
+		<% end %>
+	</table>
+
+	<%= link_to "Add Equipment", "#", :class => "add_equipment" %>&nbsp;&nbsp;|
+	<%= link_to "Refresh", "#", :class => "refresh_data_link" %>&nbsp;&nbsp;|
+	<%= link_to "Reset", "#", :class => "reset_data_link" %>&nbsp;&nbsp;|
+
+	<div style="margin: 10px 0;">
+		<table style="width: auto;">
+			<tr>
+				<td>Lowest Set Pressure</td>
+				<td>
+					<%= f.text_field :sd_lowest_set_pressure, :class => "pressure_general" %>&nbsp;&nbsp;
+					<span class="pressure_general_unit"></span>
+				</td>
+				<td colspan="3"></td>
+			</tr>
+			<tr>
+				<td>Relief Pressure</td>
+				<td>
+					<%= f.text_field :sd_relief_pressure, :class => "pressure_general" %>&nbsp;&nbsp;
+					<span class="pressure_general_unit"></span>
+				</td>
+				<td colspan="3"></td>
+			</tr>
+			<tr>
+				<td>Recommended Set Pressure</td>
+				<td>
+					<%= f.text_field :sd_recommended_set_pressure, :class => "pressure_general" %>&nbsp;&nbsp;
+					<span class="pressure_general_unit"></span>
+				</td>
+				<td>Limited By</td>
+				<td><%= f.text_field :sd_limited_by %></td>
+				<td><%= link_to "Calculate", "#", :class => "btn" %></td>
+			</tr>
+		</table>
+	</div>
+
+	<%= link_to "Close", "#", :class => "close_equipment" %>
+<% end %>
+
+
+<script type="text/javascript">
+
+	set_project_unit_and_decimals();
+
+	$('.add_equipment').click(function(){
+		var prev_row_tr = $('.system_description_table tr:last');
+
+		var sequence_no = $('.system_description_table .sequence_no:last').val();
+		if (sequence_no == undefined || sequence_no == '') {
+			sequence_no = 0;
+		}
+		sequence_no = parseInt(sequence_no) + 1;
+
+		var new_system_description_tr = $('.new_relief_device_system_description_tr tbody').html().replace(/new_row/g, sequence_no);
+		$('.system_description_table tr:last').after(new_system_description_tr);
+
+		//reorder sequence
+		$('.system_description_table span.sequence_no:visible').each(function (index) {
+			$(this).text(index + 1);
+			$(this).nextAll('.sequence_no').val(index + 1);
+		});
+
+
+		return false;
+	});
+
+	$('.remove_system_description_row').live('click', function(){
+		var tr = $(this).parents('tr');
+		tr.hide();
+		$(this).next().val(true);
+
+		//reorder sequence
+		$('.system_description_table span.sequence_no:visible').each(function (index) {
+			$(this).text(index + 1);
+			$(this).nextAll('.sequence_no').val(index + 1);
+		});
+
+		return false;
+	});
+
+	$('.close_equipment').click(function(){
+		$('form.relief_device_system_description_form').submit();
+		return false;
+	});
+
+	function equipment_type_change(equiment_type){
+		var equipment_type = $(equiment_type);
+		var equipment_tag = $(equipment_type).parents('tr').find('.sd_equipment_tag');
+		var section = $(equipment_type).parents('tr').find('.sd_section');
+		$.get("equipment_section",
+			{"equipment_type":equipment_type.val()},
+			function (data) {
+				$(section).empty();
+				$.each(data.section, function (index, value) {
+					$(section).append($('<option></option>').val(value).html(value));
+				});
+
+				$(equipment_tag).empty();
+				$.each(data.tags, function (index, value) {
+					$(equipment_tag).append($('<option></option>').val(value[0]).html(value[1]));
+				});
+
+				if(equipment_type.val() == "User Specified"){
+					$(equipment_type).parents('tr').find('.sd_equipment_tag_text').show().val("").prop("disabled", false);
+					$(equipment_type).parents('tr').find('.sd_equipment_tag').hide();
+					$(equipment_type).parents('tr').find('.sd_section_text').show().val("").prop("disabled", false);
+					$(equipment_type).parents('tr').find('.sd_section').hide();
+				}else{
+					$(equipment_type).parents('tr').find('.sd_equipment_tag_text').hide().prop("disabled", true);
+					$(equipment_type).parents('tr').find('.sd_equipment_tag').show();
+					$(equipment_type).parents('tr').find('.sd_section_text').hide().prop("disabled", true);
+					$(equipment_type).parents('tr').find('.sd_section').show();
+				}
+			}
+		);
+		return false;
+	}
+
+	$('.system_description_table .sd_prv_location').live('change', function(){
+		$('.system_description_table .sd_prv_location:visible').attr('value', false);
+		$('.system_description_table .sd_prv_location:visible').attr('checked', false);
+		$('#prv_location_id').val($(this).parents('tr').find('.system_description_id').val());
+		$(this).attr('checked', true).val(true);
+	});
+
+	$('.reset_data_link').click(function(){
+		$('.system_description_table .sd_destroy').val(true);
+		$('.system_description_table tr:gt(1):visible').hide();
+		return false;
+	});
+
+	$('.refresh_data_link').click(function(){
+		refresh_system_description();
+		return false;
+	});
+
+	function refresh_system_description() {
+
+		$.get('refresh_system_description',
+			{},
+			function(data){
+
+			}
+		);
+		return false;
+	}
+
+</script>

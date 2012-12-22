@@ -28,7 +28,10 @@ class Company < ActiveRecord::Base
   has_many :column_sizings, :dependent => :destroy
   has_many :heat_exchanger_sizings, :dependent => :destroy
   has_many :relief_device_sizings, :dependent => :destroy
-  
+  has_many :vendor_lists
+  has_many :item_types, :dependent => :destroy
+  has_many :item_types_transmit_and_proposals, :dependent => :destroy
+  has_many :procure_items, :dependent => :destroy
   attr_accessor :admin_username, :admin_password
 
   after_create :create_admin!

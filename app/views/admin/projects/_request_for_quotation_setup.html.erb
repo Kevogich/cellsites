@@ -1,0 +1,18 @@
+<% pr = @project.request_for_quotation_setups %>
+<fieldset class="project" style="margin-top:15px;" xmlns="http://www.w3.org/1999/html">
+<legend>Request For Quotation Set Up
+  &nbsp;<%= link_to (image_tag 'edit.png', :border => 0, :size => '16x16'), edit_steps_admin_project_path(@project, 'request_for_quotation_setup'), :title => "Edit Request For Quotation Set Up" %></legend>
+
+<input id="lnk_request_for_quotation_setup_table" type="button" value="[+] Expand" onclick="toggle_visibility('request_for_quotation_setup_table','lnk_request_for_quotation_setup_table');">
+<table id="request_for_quotation_setup_table" style="width: auto;">
+<tr>
+  <td colspan="3">
+    <h4>Workflow Mode</h4>
+  </td>
+</tr>
+</table>
+</fieldset>
+
+<script type="text/javascript">
+  set_project_unit_and_decimals();
+</script>

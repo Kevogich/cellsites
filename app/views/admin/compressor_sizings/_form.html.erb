@@ -819,7 +819,6 @@
 
   $('.discharge_process_basis').live('change', function (e) {
     var id = $(this).attr('id').split(":")[1];
-    console.log(id);
     $('.discharge_stream_no_' + id + ' >option').remove();
     $('.discharge_stream_no_' + id).append($('<option></option>').val("").html(""));
     if ($(this).val() == "") {
@@ -1190,7 +1189,6 @@
     var pipe_od = pipe_size_pipe_ods[$('.pipe_size_' + id).val()] / pipe_id_conversion_factor;
     var wall_thickness = pipe_size_wall_thinkness[$('.pipe_size_' + id).val()][$(".pipe_schedule_" + id).val()] / pipe_id_conversion_factor;
     var pipe_id = pipe_od - (2 * wall_thickness);
-    console.log(pipe_id)
     $('#suction_piping_pipe_id_' + id).val(get_project_field_value('.suction_pipings_pipe_id', pipe_id, unit_decimals));
   });
 
@@ -1209,7 +1207,6 @@
 
   $('.discharge_circuit_piping_pipe_schedule').live('change', function (k) {
     var id = $(this).attr('id').split(":")[1];
-    console.log(id)
     $('#discharge_circuit_piping_pipe_id_' + id).val('');
     if ($(this).val() == '') {
       return false;

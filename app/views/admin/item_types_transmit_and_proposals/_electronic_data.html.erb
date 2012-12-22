@@ -1,0 +1,405 @@
+<%= form_for electronic_data, :url => electronic_data.new_record? ? { :action => :electronic_data_new } : electronic_data_update_admin_item_types_transmit_and_proposals_path(electronic_data), :html => {:style => "width:400px;"} do |f| %>
+
+  <div id="vtab">
+  <ul>
+    <li class="home selected">Headings </li>
+    <li class="login">General </li>
+    <li class="support">Basis of Selection </li>
+    <li class="home selected">Valve Design </li>
+    <li class="login">Connections </li>
+    <li class="support">Materials </li>
+    <li class="home selected">Accessories </li>
+    <li class="login">Service Conditions </li>
+    <li class="support">Sizing and Selection </li>
+  </ul>
+  <div></div>
+  <div>
+    <table>
+      <tr>
+        <td><%= f.select :item_number, (1..10) ,:class => "text_box_width"%>&nbsp;Item Number </td>
+        <td><%= f.text_field :item_text %></td>
+      </tr>
+      <tr>
+        <td><%= f.select :tag_number, (1..10),:class => "text_box_width" %>&nbsp;Tag Number </td>
+        <td><%= f.text_field :tag_text %></td>
+      </tr>
+      <tr>
+        <td><%= f.select :equipment_number, (1..10),:class => "text_box_width" %>&nbsp;Service Line or Equipment Number </td>
+        <td><%= f.text_field :equipment_text %></td>
+      </tr>
+      <tr>
+        <td><%= f.select :number_required, (1..10),:class => "text_box_width" %>&nbsp;Number Required </td>
+        <td><%= f.text_field :number_required_text %></td>
+      </tr>
+    </table>
+  </div>
+  <div>
+    <table>
+      <tr>
+        <td><%= f.select :code_asme , (1..10),:class => "text_box_width"%>&nbsp;Code: ASME VIII </td>
+        <td><%= f.select :code_asme_select, options_for_select([["Yes",1],["No",2,]]) %></td>
+        <td><%= f.text_field :code_asme_text %></td>
+      </tr>
+      <tr>
+        <td><%= f.select :stamp_required , (1..10),:class => "text_box_width"%>&nbsp;Stamp Required
+        </td>
+        <td><%= f.select :stamp_required_select, options_for_select([["Yes",1],["No",2,]]) %></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.select :comply_with_api , (1..10),:class => "text_box_width"%>&nbsp;Comply with API 526
+        </td>
+        <td><%= f.select :comply_with_api_select, options_for_select([["Yes",1],["No",2,]]) %></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.select :fire , (1..10),:class => "text_box_width"%>&nbsp;Fire
+        </td>
+        <td><%= f.select :fire_select, options_for_select([["Yes",1],["No",2,]]) %></td>
+        <td><%= f.text_field :fire_select_text %></td>
+      </tr>
+      <tr>
+        <td><%= f.select :rupture_disk , (1..10),:class => "text_box_width"%>&nbsp;Rupture Disk
+        </td>
+        <td><%= f.select :rupture_disk_select, options_for_select([["Yes",1],["No",2,]]) %></td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+  <div>
+    <table>
+      <tr>
+        <td><%= f.select :design_type , (1..10),:class => "text_box_width"%>&nbsp;Design Type
+        </td>
+        <td><%= f.select :design_type_select, options_for_select([["Conventional",1]]) %></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.select :nozzle_type , (1..10),:class => "text_box_width"%>&nbsp;Nozzle Type
+        </td>
+        <td><%= f.select :nozzle_type_select, options_for_select([["Full ",1],["No",2,]]) %></td>
+        <td><%= f.text_field :nozzle_type_text %></td>
+      </tr>
+      <tr>
+        <td><%= f.select :bonnet_type , (1..10),:class => "text_box_width"%>&nbsp;Bonnet Type
+        </td>
+        <td><%= f.select :bonnet_type_select, options_for_select([["Open",1],["No",2,]]) %></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.select :seat_type, (1..10) ,:class => "text_box_width"%>&nbsp;Seat Type
+        </td>
+        <td><%= f.select :seat_type_select, options_for_select([["Metal to Metal ",1],["No",2,]]) %></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.select :seat_tightness , (1..10),:class => "text_box_width"%>&nbsp;Seat Tightness
+        </td>
+        <td><%= f.select :seat_tightness_select, options_for_select([["API 527",1],["No",2,]]) %></td>
+        <td><%= f.text_field :seat_tightness_text %></td>
+      </tr>
+    </table>
+  </div>
+  <div>
+    <table>
+      <tr>
+        <td><%= f.select :inlet , (1..10),:class => "text_box_width"%>&nbsp;Inlet
+        <td><%= f.select :inlet_size_select, options_for_select([["3",1],["4",2]]),:class => "text_box_width" %></td>
+        <td><%= f.select :inlet_rating_select, options_for_select([["300",1],["301",2]]),:class => "text_box_width" %></td>
+        <td><%= f.select :inlet_facing_select, options_for_select([["RF",1],["RF",2]]),:class => "text_box_width" %></td>
+      </tr>
+      <tr>
+        <td><%= f.select :outlet , (1..10),:class => "text_box_width"%>&nbsp;outlet
+        <td><%= f.select :outlet_size_select, options_for_select([["3",1],["4",2]]),:class => "text_box_width" %></td>
+        <td><%= f.select :outlet_rating_select, options_for_select([["300",1],["301",2]]),:class => "text_box_width" %></td>
+        <td><%= f.select :outlet_facing_select, options_for_select([["RF",1],["RF",2]]),:class => "text_box_width" %></td>
+      </tr>
+    </table>
+  </div>
+  <div>
+    <table>
+      <tr>
+        <td><%= f.select :body , (1..10),:class => "text_box_width"%>&nbsp;Body
+
+        <td><%= f.text_field :body_text ,:class => "text_box_width"%></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.select :bonnet , (1..10),:class => "text_box_width"%>&nbsp;Bonnet
+
+        <td><%= f.text_field :bonnet_text ,:class => "text_box_width"%></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.select :seal_nozzle , (1..10),:class => "text_box_width"%>&nbsp;Seal (Nozzle)
+
+        <td><%= f.text_field :seal_nozzle_select ,:class => "text_box_width"%></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.select :reailient_seat , (1..10),:class => "text_box_width"%>&nbsp;Resilient Seat
+
+        <td><%= f.text_field :reailient_seat_text ,:class => "text_box_width"%></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.select :guide , (1..10),:class => "text_box_width"%>&nbsp;Guide
+
+        <td><%= f.text_field :guide_text ,:class => "text_box_width"%></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.select :adjusting_ring , (1..10),:class => "text_box_width"%>&nbsp;Adjusting Ring(s)
+
+        <td><%= f.text_field :adjusting_ring_select ,:class => "text_box_width"%></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.select :spring , (1..10),:class => "text_box_width"%>&nbsp;Spring
+
+        <td><%= f.text_field :spring_text ,:class => "text_box_width"%></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.select :bellows , (1..10),:class => "text_box_width"%>&nbsp;Bellows
+
+        <td><%= f.text_field :bellows_text ,:class => "text_box_width"%></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.select :balanced_pistion , (1..10),:class => "text_box_width"%>&nbsp;Balanced Piston
+
+        <td><%= f.text_field :balanced_pistion_text ,:class => "text_box_width"%></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.select :comply_nace_mro , (1..10),:class => "text_box_width"%>&nbsp;Comply with NACE MR0175
+
+        <td><%= f.text_field :comply_nace_mro ,:class => "text_box_width"%></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><%= f.select :internal_gasket_material , (1..10),:class => "text_box_width"%>&nbsp;Internal Gasket Material
+
+        <td><%= f.text_field :internal_gasket_material_text ,:class => "text_box_width"%></td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+  <div>
+    <table>
+      <tr>
+        <td><%= f.select :cap , (1..10),:class => "text_box_width"%>&nbsp;Cap
+        <td><%= f.select :cap_select, options_for_select([["Screwed",1]]),:class => "text_box_width" %></td>
+      </tr>
+      <tr>
+        <td><%= f.select :lifting_lever , (1..10),:class => "text_box_width"%>&nbsp;Lifting Lever
+        <td><%= f.select :lifting_lever_select, options_for_select([["plain",1]]),:class => "text_box_width" %></td>
+      </tr>
+      <tr>
+        <td><%= f.select :test_gag , (1..10),:class => "text_box_width"%>&nbsp;Test Gag
+        <td><%= f.select :test_gag_select, options_for_select([["Yes",1]]),:class => "text_box_width" %></td>
+      </tr>
+      <tr>
+        <td><%= f.select :bug_screen , (1..10),:class => "text_box_width"%>&nbsp;Bug Screen
+        <td><%= f.select :bug_screen_select, options_for_select([["Yes",1]]),:class => "text_box_width" %></td>
+      </tr>
+
+    </table>
+  </div>
+  <div>
+    <table>
+      <tr>
+        <td><%= f.select :fluid_and_state , (1..10),:class => "text_box_width"%>&nbsp;Fluid and State
+        <td><%= f.text_field :fluid_and_state_text ,:class => "text_box_width"%></td>
+      </tr>
+      <tr>
+        <td><%= f.select :required_capacity_per_value , (1..10),:class => "text_box_width"%>&nbsp;Required Capacity per Valve
+        <td><%= f.text_field :required_capacity_per_value_text ,:class => "text_box_width"%>&nbsp;lb/hr       </td>
+      </tr>
+      <tr>
+        <td><%= f.select :mass_flux_and_basis , (1..10),:class => "text_box_width"%>&nbsp;Mass Flux and Basis
+        <td><%= f.text_field :mass_flux_and_basis_text ,:class => "text_box_width"%>&nbsp;lb/hr·in2      </td>
+      </tr>
+      <tr>
+        <td><%= f.select :molecular_weight_specific_gravity , (1..10),:class => "text_box_width"%>&nbsp;Molecular Weight or Specific Gravity
+        <td><%= f.text_field :molecular_weight_specific_gravity_text,:class => "text_box_width"%></td>
+      </tr>
+      <tr>
+        <td><%= f.select :viscosity_at_flowing_temp , (1..10),:class => "text_box_width"%>&nbsp;Viscosity at Flowing Temperature
+        <td><%= f.text_field :viscosity_at_flowing_temp_text ,:class => "text_box_width"%>&nbsp;cP       </td>
+      </tr>
+      <tr>
+        <td><%= f.select :operating_pressure , (1..10),:class => "text_box_width"%>&nbsp;Operating Pressure
+        <td><%= f.text_field :operating_pressure_text ,:class => "text_box_width"%>&nbsp;psig      </td>
+      </tr>
+      <tr>
+        <td><%= f.select :set_pressure, (1..10) ,:class => "text_box_width"%>&nbsp;Set Pressure
+        <td><%= f.text_field :set_pressure_text ,:class => "text_box_width"%>&nbsp;psig </td>
+      </tr>
+      <tr>
+        <td><%= f.select :blow_down , (1..10),:class => "text_box_width"%>&nbsp;Blowdown
+        <td><%= f.text_field :blow_down_text ,:class => "text_box_width"%>&nbsp;%</td>
+      </tr>
+      <tr>
+        <td><%= f.select :latent_heat_of_vaporization , (1..10),:class => "text_box_width"%>&nbsp;Latent Heat of Vaporization
+        <td><%= f.text_field :latent_heat_of_vaporization_text ,:class => "text_box_width"%>&nbsp;Btu/lb      </td>
+      </tr>
+      <tr>
+        <td><%= f.select :operating_temperature , (1..10),:class => "text_box_width"%>&nbsp;Operating Temperature
+        <td><%= f.text_field :operating_temperature_text ,:class => "text_box_width"%>&nbsp;°F  </td>
+      </tr>
+      <tr>
+        <td><%= f.select :relieving_temperature , (1..10),:class => "text_box_width"%>&nbsp;Relieving Temperature
+        <td><%= f.text_field :relieving_temperature_text ,:class => "text_box_width"%>&nbsp;°F</td>
+      </tr>
+      <tr>
+        <td><%= f.select :build_up_back_pressure, (1..10) ,:class => "text_box_width"%>&nbsp;Built Up Back Pressure
+        <td><%= f.text_field :build_up_back_pressure_text ,:class => "text_box_width"%>&nbsp;psi   </td>
+      </tr>
+      <tr>
+        <td><%= f.select :superimposed_back_pressure , (1..10),:class => "text_box_width"%>&nbsp;Superimposed Back Pressure
+        <td><%= f.text_field :superimposed_back_pressure_text ,:class => "text_box_width"%>&nbsp;psi </td>
+      </tr>
+      <tr>
+        <td><%= f.select :cold_differential_back_pressure , (1..10),:class => "text_box_width"%>&nbsp;Cold Differential Back Pressure
+        <td><%= f.text_field :cold_differential_back_pressure_text ,:class => "text_box_width"%>&nbsp;psi </td>
+      </tr>
+      <tr>
+        <td><%= f.select :allowable_over_pressure , (1..10),:class => "text_box_width"%>&nbsp;Allowable Overpressure
+        <td><%= f.text_field :allowable_over_pressure_text ,:class => "text_box_width"%>&nbsp; %</td>
+      </tr>
+      <tr>
+        <td><%= f.select :compressibility_factor , (1..10),:class => "text_box_width"%>&nbsp;Compressibility Factor
+        <td><%= f.text_field :compressibility_factor_text ,:class => "text_box_width"%></td>
+      </tr>
+      <tr>
+        <td><%= f.select :ratio_of_specific_heats , (1..10),:class => "text_box_width"%>&nbsp;Ratio of Specific Heats
+        <td><%= f.text_field :ratio_of_specific_heats_text ,:class => "text_box_width"%></td>
+      </tr>
+
+    </table>
+  </div>
+  <div>
+    <table>
+      <tr>
+        <td><%= f.select :calculated_ori_fi_ce_area , (1..10),:class => "text_box_width"%>&nbsp;Ratio of Specific Heats
+        <td><%= f.text_field :calculated_ori_fi_ce_area_text ,:class => "text_box_width"%>&nbsp; in2</td>
+      </tr>
+      <tr>
+        <td><%= f.select :selected_effective_ori_fi_ce_area, (1..10) ,:class => "text_box_width"%>&nbsp;Ratio of Specific Heats
+        <td><%= f.text_field :selected_effective_ori_fi_ce_area_text ,:class => "text_box_width"%>&nbsp; in2</td>
+      </tr>
+      <tr>
+        <td><%= f.select :ori_fi_ce_designation , (1..10),:class => "text_box_width"%>&nbsp;Ratio of Specific Heats
+        <td><%= f.text_field :ori_fi_ce_designation_text ,:class => "text_box_width"%>&nbsp; in2</td>
+      </tr>
+      <tr>
+        <td><%= f.select :manufacturer , (1..10),:class => "text_box_width"%>&nbsp;Ratio of Specific Heats
+        <td><%= f.text_field :manufacturer_text ,:class => "text_box_width"%>&nbsp; in2</td>
+      </tr>
+      <tr>
+        <td><%= f.select :model_number , (1..10),:class => "text_box_width"%>&nbsp;Ratio of Specific Heats
+        <td><%= f.text_field :model_number_text ,:class => "text_box_width"%>&nbsp; in2</td>
+      </tr>
+      <tr>
+        <td><%= f.select :vendor_calculation_required , (1..10),:class => "text_box_width"%>&nbsp;Ratio of Specific Heats
+        <td><%= f.select :vendor_calculation_required_select, options_for_select([["Yes",1],["No",2,]]) %></td>
+      </tr>
+    </table>
+  </div>
+
+  </div>
+  <%= f.hidden_field :item_type_id,:value => params[:item_type_id] %>
+  <%= f.hidden_field :item_tag_id, :value => params[:item_tag_id] %>
+  <%= f.hidden_field :datasheet_id, :value => params[:datasheet_id] %>
+  <br>     <br>       <br>
+  <%= f.submit "update" %>
+<% end %>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+
+<style type="text/css">
+  .text_box_width{
+    width:50px;
+  }
+  body {
+    background: #fff;
+    font-family: verdana;
+    padding-top: 50px;
+  }
+  #vtab {
+    margin: auto;
+    width: 800px;
+    height: 100%;
+  }
+  #vtab > ul > li {
+    width: 110px;
+    height: auto;
+    background-color: #fff !important;
+    list-style-type: none;
+    display: block;
+    text-align: center;
+    margin: auto;
+    padding-bottom: 10px;
+    border: 1px solid #fff;
+    position: relative;
+    border-right: none;
+    opacity: .3;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
+  }
+
+  #vtab > ul > li.selected {
+    opacity: 1;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+    border: 1px solid #ddd;
+    border-right: none;
+    z-index: 10;
+    background-color: #fafafa !important;
+    position: relative;
+  }
+  #vtab > ul {
+    float: left;
+    width: 110px;
+    text-align: left;
+    display: block;
+    margin: auto 0;
+    padding: 0;
+    position: relative;
+    top: 30px;
+  }
+  #vtab > div {
+    background-color: #fafafa;
+    margin-left: 110px;
+    border: 1px solid #ddd;
+    min-height: 300px;
+    padding: 12px;
+    position: relative;
+    z-index: 9;
+    -moz-border-radius: 20px;
+  }
+  #vtab > div > h4 {
+    color: #800;
+    font-size: 1.2em;
+    border-bottom: 1px dotted #800;
+    padding-top: 5px;
+    margin-top: 0;
+  }
+
+</style>
+
+<script type="text/javascript">
+  $(function() {
+    var $items = $('#vtab>ul>li');
+    $items.mouseover(function() {
+      $items.removeClass('selected');
+      $(this).addClass('selected');
+
+      var index = $items.index($(this));
+      $('#vtab>div').hide().eq(index).show();
+    }).eq(1).mouseover();
+  });
+</script>
+
+

@@ -1,0 +1,68 @@
+<table class="item_type_selection">
+  <td><b>Item Type:</b></td>
+  <td><%= select_tag("item_type", options_for_select(@item_types.collect { |p| [p.item_type, p.id] }, :selected => "#{params[:item_id]}",:prompt => "select"), :id => "item_type") %> </td>
+ </table>
+<div style="padding-top:10px;">&nbsp;&nbsp;&nbsp;<a href="#" id="add_vendor_setup">Add Vendor required Document</a></div>
+
+<div id="form-element-last">
+  <table width=100% id="vendorsetup_table">
+    <tr>
+      <th></th>
+      <th>Vendor Required Document</th>
+      <th>For Quotation/Proposal</th>
+      <th>For Purchase</th>
+      <th>For As Built</th>
+      <th>With Shipment</th>
+
+    </tr>
+
+    <% if @vendor_setup.empty? %>
+      <%#= raise @vendor_schedule_setup.inspect %>
+      <% @unique_id = Time.now.to_i %>
+      <%= render :partial => 'vendor_setups' %>
+    <% else %>
+      <% @vendor_setup.each_with_index do |setup| %>
+        <% @unique_id = Time.now.to_i+setup.id %>
+        <% @vendor_schedule_setup = setup %>
+        <%= render :partial => 'vendor_setups' %>
+      <% end %>
+    <% end %>
+  </table>
+</div>
+
+<script>
+
+  $("#item_type").change(function () {
+    var id = $(this).val();
+    url_path = window.location.href.split("?")[0]
+    window.location = url_path + "?item_id=" + id;
+    return false;
+  });
+
+  $("#add_vendor_setup").click(function () {
+    $.get("/admin/projects/vendor_setups", {
+      project_id:params['id'],
+      item_type_id: <%= @item_type.id %>
+    }, function (data) {
+      $("#vendorsetup_table").append(data);
+    });
+    return false;
+  });
+  $("a.delete_vendor_schedule_setup").live('click', function () {
+    var vendor_schedule_setup_id = $(this).attr('id');
+    url_path = window.location.href.split("?")[0]
+    window.location = url_path + "?item_type_id=" + <%= params[:item_id] %> +"&vendor_setup_id=" + vendor_schedule_setup_id;
+
+    return false;
+  });
+
+  $(".update_vendor_schedule_setup_notes").colorbox();
+  $(".update_purchase_vendor_schedule_setup_notes").colorbox();
+  $(".update_as_built_vendor_schedule_setup_notes").colorbox();
+  $(".update_with_shipment_vendor_schedule_setup_notes").colorbox();
+</script>
+<style>
+  .item_type_selection {
+    width: 40%;
+  }
+</style>

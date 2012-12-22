@@ -1,8 +1,8 @@
 <%= fields_for @open_vent_location do |f| %>
-<tr id=<%= "row_#{@unique_id}"%> >
-	<td id=<%= "sequence_open_vent_location_#{@unique_id}"%>>1</td>
+<tr id=<%= "row_open_vent_location_#{@unique_id}"%> >
+	<td id=<%= "sequence_opv_location_#{@unique_id}"%>>1</td>
 	<%= f.hidden_field :id, :name =>  "open_vent_location_attributes[#{@unique_id}][id]" %>
-	<%= f.hidden_field :_destroy, :name =>  "open_vent_location_attributes[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_#{@unique_id}" %>
+	<%= f.hidden_field :_destroy, :name =>  "open_vent_location_attributes[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_open_vent_location_#{@unique_id}" %>
     <td><%= f.text_field :location, :name =>  "open_vent_location_attributes[#{@unique_id}][location]" , :style => "width:100px;" , :id => "open_vent_location_#{@unique_id}"%></td>
     <td><%= f.text_field :limiting_fitting, :name =>  "open_vent_location_attributes[#{@unique_id}][limiting_fitting]" , :style => "width:100px;" , :id => "limiting_fitting_#{@unique_id}"%></td>
     <td><%= select_tag "open_vent_location_attributes[#{@unique_id}][size]",options_for_select(PipeSizing.pipe_sizes(@fitting_pipe_size_unit).collect { |p| [raw(p[:name]), p[:value]] }.insert(0, ''),@open_vent_location.size),:class => 'designation', :id => "pipe_size_#{@unique_id}"%></td>
@@ -11,7 +11,7 @@
     <td><%= select_tag "open_vent_location_attributes[#{@unique_id}][high_temp_conditions]",options_for_select(StaticData.yes_no,@open_vent_location.high_temp_conditions),:class => 'designation', :id => "high_temp_conditions_#{@unique_id}"%></td>
     <td><%= select_tag "open_vent_location_attributes[#{@unique_id}][h2s_environment]",options_for_select(StaticData.yes_no,@open_vent_location.h2s_environment),:class => 'designation', :id => "h2s_environment_#{@unique_id}"%></td>
     <td><%= select_tag "open_vent_location_attributes[#{@unique_id}][acceptability]",options_for_select(StaticData.yes_no,@open_vent_location.acceptability),:class => 'designation', :id => "acceptability_#{@unique_id}"%></td>
-    <td><%= radio_button "relief_device_sizing", "open_vent_location", @open_vent_location.location , :id => "location_use_#{@unique_id}"%></td>
+    <td><%= radio_button "relief_device_sizing", "open_vent_location", @open_vent_location.location , :id => "open_vent_location_use_#{@unique_id}"%></td>
 	<td><%= link_to "X", "#", :id => "#{@unique_id}", :class => "delete_open_vent_location" %></td>
 </tr>
 <% end %>

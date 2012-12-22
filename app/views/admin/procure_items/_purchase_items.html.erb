@@ -1,0 +1,18 @@
+<%= fields_for @purchase_item do |f| %>
+  <tr id=<%= "row_purchase_item_#{@unique_id}"%> >
+    <td id=<%= "sequence_purchase_item_#{@unique_id}"%>>1</td>
+    <%= f.hidden_field :id, :name =>  "purchase_item_attributes[#{@unique_id}][id]" %>
+    <%= f.hidden_field :_destroy, :name =>  "purchase_item_attributes[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_purchase_item_#{@unique_id}" %>
+
+    <td><%= f.text_field :item_no, :name => "purchase_item_attributes[#{@unique_id}][item_no]", :style => "width:100px;", :id => "purchase_item_no_text_#{@unique_id}" %></td>
+    <td><%= f.text_field :item_desc, :name => "purchase_item_attributes[#{@unique_id}][item_desc]", :style => "width:100px;", :id => "purchase_item_desc_text_#{@unique_id}" %></td>
+    <td><%= select_tag "purchase_item_attributes[#{@unique_id}][taxable]", options_for_select([["Yes", true], ["No", false]], @purchase_item.taxable), :class => "purchase_item_type", :id => "#{@unique_id}" %></td>
+    <td><%= f.text_field :quantity, :name => "purchase_item_attributes[#{@unique_id}][quantity]", :style => "width:100px;", :id => "purchase_quantity_text_#{@unique_id}" %></td>
+    <td><%= f.text_field :unit_price, :name => "purchase_item_attributes[#{@unique_id}][unit_price]", :style => "width:100px;", :id => "purchase_unit_price_text_#{@unique_id}" %></td>
+    <td><%= f.text_field :total_price, :name => "purchase_item_attributes[#{@unique_id}][total_price]", :style => "width:100px;", :id => "purchase_total_price_text_#{@unique_id}" %></td>
+
+
+    <td><%= link_to "X", "#", :id => "#{@unique_id}", :class => "delete_purchase_item" %></td>
+
+  </tr>
+<% end %>

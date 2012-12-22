@@ -1,0 +1,87 @@
+<% javascript('jquery.raty')%>
+
+<%= form_for vendor_list, :url => vendor_list.new_record? ? admin_vendor_lists_path : admin_vendor_list_path(vendor_list), :html => {:style => "width:400px;"} do |f| %>
+  <%= f.error_messages %>
+
+    <div class="form-element">
+      Company<br />
+      <%= f.text_field :vendor_name %>
+    </div>
+    <div class="form-element">
+      Product/Item Type<br />
+      <% @options = ItemType.all %>
+      <%= f.select(:item_type, options_for_select(@options.collect { |p| [p.item_type, p.item_type] }, "Select List")) %>
+    </div>
+    <div class="form-element">
+      Sale Representative<br />
+      <%= f.text_field :representative %>
+    </div>
+
+    <div class="form-element">
+      <%= f.label :address %><br />
+      <%= f.text_field :address %>
+    </div>
+    <div class="form-element">
+      City,State<br />
+      <%= f.text_field :city %>
+    </div>
+    <div class="form-element">
+      <%= f.label :country %><br />
+      <%= f.text_field :country %>
+    </div>
+    <div class="form-element">
+      <%= f.label :office_phone %><br />
+      <%= f.text_field :office_phone %>
+    </div>
+    <div class="form-element">
+      <%= f.label :cell_phone %><br />
+      <%= f.text_field :cell_phone %>
+    </div>
+    <div class="form-element">
+      <%= f.label :fax %><br />
+      <%= f.text_field :fax %>
+    </div>
+    <div class="form-element">
+      <%= f.label :email %><br />
+      <%= f.text_field :email %>
+    </div>
+    <div class="form-element">
+      <%= f.label :status %><br />
+      <%= f.select(:status, VendorList::STATUS)%>
+    </div>
+    <div class="form-element">
+      <%= f.label :rating %><br />
+      <div id="rating" data-rating="4"></div>
+      <%= f.hidden_field :rating %>
+    </div>
+
+  <div class="form-buttons">
+    <%= f.submit vendor_list.new_record? ? 'Create Vendor List' : 'Update' %>
+  </div>
+<% end %>
+<% unless vendor_list.new_record? %>
+    <fieldset class="project" style="margin-top:15px;">
+      <legend>Attachments</legend>
+      <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+      <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+    </fieldset>
+    <fieldset class="project" style="margin-top:15px;">
+      <legend>Comments</legend>
+      <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+      <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+    </fieldset>
+<% end %>
+
+
+
+<script type="text/javascript">
+    $(function() {
+        $('#rating').raty({
+            click: function(score, evt) {
+                document.getElementById("vendor_list_rating").value = score ;
+            },
+            score: document.getElementById("vendor_list_rating").value
+        });
+
+    });
+</script>

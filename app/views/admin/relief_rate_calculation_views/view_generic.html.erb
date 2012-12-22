@@ -4,8 +4,7 @@
 
 <%= form_for @generic, :url => save_generic_admin_relief_rate_calculation_views_path,
 						 :html => {
-							 :method => :post,
-							 :style => "width: 100%;"
+							 :method => :post
 						 } do |f| %>
 
 	<%= f.hidden_field :id %>
@@ -23,6 +22,15 @@
 			<td>
 				<%= f.text_field :relief_rate, :class => "mass_flow_rate_general" %>
 				<span class="mass_flow_rate_general_unit"></span>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Relief Pressure
+			</td>
+			<td>
+				<%= f.text_field :relief_pressure, :class => "pressure_general" %>
+				<span class="pressure_general_unit"></span>
 			</td>
 		</tr>
 		<tr>
@@ -44,12 +52,12 @@
 <% end %>
 
 <% unless @generic.new_record? %>
-	<fieldset class="project" style="margin-top:15px;">
+	<fieldset class="project" style="margin-top:15px;width: 98%;">
 		<legend>Attachments</legend>
 		<%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
 		<%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
 	</fieldset>
-	<fieldset class="project" style="margin-top:15px;">
+	<fieldset class="project" style="margin-top:15px;width: 98%;">
 		<legend>Comments</legend>
 		<%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
 		<%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
@@ -59,4 +67,31 @@
 
 <script type="text/javascript">
 	set_project_unit_and_decimals();
+
+	$('#relief_rate_generic_submit').click(function(){
+		var generic_relief_rate = $('#relief_rate_generic_relief_rate').val();
+		var generic_relief_pressure = $('#relief_rate_generic_relief_pressure').val();
+
+		var relief_conditions_pressure = $('#scenario_identification_rc_pressure').val();
+		var relief_conditions_mass_flow_rate = $('#scenario_identification_rc_mass_flow_rate').val();
+
+		if(generic_relief_rate != relief_conditions_mass_flow_rate) {
+			alert('The relief rate in this form does not match the mass flow rate specified in the relief conditions for the scenario.')
+		}
+
+		if(generic_relief_pressure != relief_conditions_pressure) {
+			alert('The relief pressure in this form does not match the pressure specified in the relief conditions for the scenario.')
+		}
+
+		if(relief_conditions_mass_flow_rate == "") {
+			$('#scenario_identification_rc_mass_flow_rate').val(generic_relief_rate)
+		}
+
+		if(relief_conditions_pressure == "") {
+			$('#scenario_identification_rc_pressure').val(generic_relief_pressure)
+		}
+
+		$('.edit_relief_rate_generic').submit();
+
+	});
 </script>

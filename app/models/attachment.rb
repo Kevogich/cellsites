@@ -1,6 +1,7 @@
 class Attachment < ActiveRecord::Base
   belongs_to :user
   belongs_to :attachable, :polymorphic => true
+  belongs_to :question
 
   Paperclip.interpolates :attached_to do |attachment, style|
     attachment.instance.attachable.class.to_s.downcase

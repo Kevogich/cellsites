@@ -110,7 +110,7 @@ class StaticData < ActiveRecord::Base
 
   #ref list15 Scenario
   def self.scenario
-    ["",
+    [
      "Abnormal Heat Input or Vapor Input",
      "Accumulation of Noncondensables",
      "Atmospheric Pressure Change",

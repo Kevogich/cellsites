@@ -2,7 +2,9 @@
 <fieldset class="project" style="margin-top:15px;" xmlns="http://www.w3.org/1999/html">
 <legend>Pressure Relief System Design
 	Parameter&nbsp;<%= link_to (image_tag 'edit.png', :border => 0, :size => '16x16'), edit_steps_admin_project_path(@project, 'pressure_relief_system_design_parameter'), :title => "Edit Pressure Relief System Design Parameter" %></legend>
-<table style="width:auto;">
+
+<input id="lnk_pressure_relief_system_design_parameter_table" type="button" value="[+] Expand" onclick="toggle_visibility('pressure_relief_system_design_parameter_table','lnk_pressure_relief_system_design_parameter_table');">
+<table id="pressure_relief_system_design_parameter_table" style="width: auto;">
 <tr>
 	<td colspan="3">
 		<h4>Workflow Mode</h4>
@@ -20,7 +22,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Check Valve Failure</span>
+		<span style="font-size: 16px;margin: 0;text-decoration: none;">Check Valve Failure</span>
 	</td>
 </tr>
 <tr>
@@ -28,13 +30,13 @@
 		Is installation of multiple check valves on the reverse flow path considered adequate prevention against
 		overpressure ?
 	</td>
-	<td>
+	<td style="width: 20%;">
 		<%= pr.cvf_1 %>
 	</td>
 </tr>
 <tr>
 	<td colspan="3">
-		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Chemical Reaction</span>
+		<span style="font-size: 16px;margin: 0;text-decoration: none;">Chemical Reaction</span>
 	</td>
 </tr>
 <tr>
@@ -47,7 +49,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Cooling Failure To Condenser</span>
+		<span style="font-size: 16px;margin: 0;text-decoration: none;">Cooling Failure To Condenser</span>
 	</td>
 </tr>
 <tr>
@@ -60,7 +62,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-		<span style="font-size: 16px;margin: 0;text-decoration: underline;">External Fire</span>
+		<span style="font-size: 16px;margin: 0;text-decoration: none;">External Fire</span>
 	</td>
 </tr>
 <tr>
@@ -103,7 +105,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Failure of Automatic Controls</span>
+		<span style="font-size: 16px;margin: 0;text-decoration: none;">Failure of Automatic Controls</span>
 	</td>
 </tr>
 <tr>
@@ -124,7 +126,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Heat Exchanger Tube Rupture</span>
+		<span style="font-size: 16px;margin: 0;text-decoration: none;">Heat Exchanger Tube Rupture</span>
 	</td>
 </tr>
 <tr>
@@ -141,7 +143,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Overfilling</span>
+		<span style="font-size: 16px;margin: 0;text-decoration: none;">Overfilling</span>
 	</td>
 </tr>
 <tr>
@@ -157,7 +159,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Control valve sizing basis</span>
+		<span style="font-size: 16px;margin: 0;text-decoration: none;">Control valve sizing basis</span>
 	</td>
 </tr>
 <tr>
@@ -167,7 +169,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Tube rupture sizing basis</span>
+		<span style="font-size: 16px;margin: 0;text-decoration: none;">Tube rupture sizing basis</span>
 	</td>
 </tr>
 <tr>
@@ -177,12 +179,12 @@
 </tr>
 <tr>
 	<td>
-		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Fill time basis</span>
+		<span style="font-size: 16px;margin: 0;text-decoration: none;">Fill time basis</span>
 	</td>
-	<td width="200px">
+	<td width="200px" style="text-decoration:underline ;">
 		Vessel
 	</td>
-	<td width="200px">
+	<td width="200px" style="text-decoration:underline ;">
 		Column
 	</td>
 </tr>
@@ -200,10 +202,10 @@
 <tr>
 	<td>Response time</td>
 	<td>
-		<%= pr.ffb_vessel_response_time %>&nbsp;<span class="time_minute_unit" style="color: red;"></span>
+		<%= pr.ffb_vessel_response_time %>&nbsp;<span class="time_minute_unit" style="color:black;"></span>
 	</td>
 	<td>
-		<%= pr.ffb_column_response_time %>&nbsp;<span class="time_minute_unit" style="color: red;"></span>
+		<%= pr.ffb_column_response_time %>&nbsp;<span class="time_minute_unit" style="color:black;"></span>
 	</td>
 </tr>
 <tr>
@@ -219,7 +221,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Fire basis</span>
+		<span style="font-size: 16px;margin: 0;text-decoration: none;">Fire basis</span>
 	</td>
 </tr>
 <tr>
@@ -257,7 +259,7 @@
 		<p>
 			<b><%= pr.fb_txt_6 %></b> % additional surface area to account for connected pipe
 			<b><%= pr.fb_connected_pipe %></b>
-			<span class="length_small_dimension_length_unit" style="color:red;"></span> or greater in the fire zone
+			<span class="length_small_dimension_length_unit" style="color:black;"></span> or greater in the fire zone
 		</p>
 
 		<p>
@@ -267,33 +269,34 @@
 		</p>
 
 		<p>
-			<b><%= pr.fb_access_openings %></b>&nbsp;<span class="length_small_dimension_length_unit" style="color:#ff0000;"></span>
+			<b><%= pr.fb_access_openings %></b>&nbsp;<span class="length_small_dimension_length_unit" style="color:black"></span>
 			per column tray to be added to the liquid level on columns
 		</p>
 
 		<p>
-			<b><%= pr.fb_liquid_level_on_columns %>&nbsp;</b>
-			<span class="length_small_dimension_length_unit" style="color:#ff0000;"></span>
-			per <span class="length_large_dimension_length_unit" style="color:red;"></span> of packed bed to be added to the
+			<b><%= pr.fb_liquid_level_on_columns %></b>
+			<span class="length_small_dimension_length_unit" style="color:black"></span>
+			per <span class="length_large_dimension_length_unit" style="color:black;"></span> of packed bed to be added to the
 			liquid level on columns
 		</p>
 
 		<p>
 			Wetted liquid area is considered up to <b><%= pr.fb_wetted_liquid_area %></b>
-			<span class="length_large_dimension_length_unit" style="color:red;"></span> above the source of flame
+			<span class="length_large_dimension_length_unit" style="color:black;"></span> above the source of flame
 		</p>
 
 		<p>
 			Wetted liquid area for spherical tanks/vessels is considered up
 			to <b><%= pr.fb_wetted_liquid_area_spherical %></b>
-			<span class="length_large_dimension_length_unit" style="color:red;"></span> or up to center line, which ever is
+			<span class="length_large_dimension_length_unit" style="color:black;"></span> or up to center line, which ever is
 			greater
 		</p>
 
+    <!--
 		<p>
 			<%= pr.fb_liquid_swell_in_wetted_surface_area_calculation%>
 		</p>
-
+    -->
 		<p>
 			Assume adequate fire fighting and drainage <b><%= pr.fb_drainage%></b>
 		</p>
@@ -310,7 +313,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Pressure Relief Valve Discharge Coefficient, Kd</span>
+		<span style="font-size: 16px;margin: 0;text-decoration: none;">Pressure Relief Valve Discharge Coefficient, Kd</span>
 	</td>
 </tr>
 <tr>
@@ -342,7 +345,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Pressure Relief Valve Correction Factor Basis</span>
+		<span style="font-size: 16px;margin: 0;text-decoration: none;">Pressure Relief Valve Correction Factor Basis</span>
 	</td>
 </tr>
 <tr>
@@ -375,19 +378,31 @@
 </tr>
 <tr>
 	<td colspan="3">
-		<span style="font-size: 16px;margin: 0;text-decoration: underline;">Pressure Relief Valve Liquid Sizing Default Method</span>
+		<span style="font-size: 16px;margin: 0;text-decoration: none;">Pressure Relief Valve Liquid Sizing Default Method</span>
 	</td>
 </tr>
 <tr>
 	<td colspan="3">
 		<p>
-			<%= pr.prvlsd %> Certified liquid sizing
+			<%= pr.prvlsd %>
 		</p>
 	</td>
 </tr>
 <tr>
+  <td colspan="3">
+    <span style="font-size: 16px;margin: 0;text-decoration: none;">Rupture Disk Design Method</span>
+  </td>
+</tr>
+<tr>
+  <td colspan="3">
+    <p>
+      <%= pr.rddm %>
+    </p>
+  </td>
+</tr>
+<tr>
 	<td colspan="3">
-			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+			<span style="font-size: 16px;margin: 0;text-decoration: none;">
 				Rupture Disk Default Parameter
 			</span>
 	</td>
@@ -397,7 +412,7 @@
 		Maximum Flow Resistance, Kr
 	</td>
 	<td colspan="2">
-		<%= pr.rdbp_maximum_flow_resistance %>
+		<b><%= pr.rdbp_maximum_flow_resistance %></b>
 	</td>
 </tr>
 <tr>
@@ -405,7 +420,7 @@
 		Uncertainty Factor
 	</td>
 	<td colspan="2">
-		<%= pr.rdbp_uncertainty_factor %>
+		<b><%= pr.rdbp_uncertainty_factor %></b>
 	</td>
 </tr>
 <tr>
@@ -415,7 +430,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+			<span style="font-size: 16px;margin: 0;text-decoration: none;">
 				Hydraulic Pressure Drop Basis
 			</span>
 	</td>
@@ -429,7 +444,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+			<span style="font-size: 16px;margin: 0;text-decoration: none;">
 				Compressible Flow Model For Hydraulic Calculation
 			</span>
 	</td>
@@ -443,7 +458,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+			<span style="font-size: 16px;margin: 0;text-decoration: none;">
 				Inlet Pressure Drop Criteria
 			</span>
 	</td>
@@ -455,7 +470,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+			<span style="font-size: 16px;margin: 0;text-decoration: none;">
 				Outlet Pressure Drop Criteria
 			</span>
 	</td>
@@ -465,7 +480,7 @@
 		<p>Conventional</p>
 
 		<p>
-			<%= pr.outlet_pressure_drop_criteria_conventional %>
+			<b><%= pr.outlet_pressure_drop_criteria_conventional %></b>
 		</p>
 	</td>
 </tr>
@@ -493,7 +508,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+			<span style="font-size: 16px;margin: 0;text-decoration: none;">
 				Pressure Relief Valve Count
 			</span>
 	</td>
@@ -512,7 +527,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+			<span style="font-size: 16px;margin: 0;text-decoration: none;">
 				Valve Body Size Selection Basis
 			</span>
 	</td>
@@ -530,7 +545,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+			<span style="font-size: 16px;margin: 0;text-decoration: none;">
 				Flare Header Pressure
 			</span>
 	</td>
@@ -539,12 +554,12 @@
 	<td colspan="3">
 		Normal Flare Header Pressure <b><%= pr.flare_header_pressure %></b>
 		&nbsp;
-		<span class="pressure_general_unit" style="color:red;"></span>
+		<span class="pressure_general_unit" style="color:black;"></span>
 	</td>
 </tr>
 <tr>
 	<td colspan="3">
-			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+			<span style="font-size: 16px;margin: 0;text-decoration: none;">
 				Rupture Disk Selection Basis
 			</span>
 	</td>
@@ -554,19 +569,19 @@
 		<p>
 			Largest RD Size To
 			Consider <b><%= pr.rupture_disk_selection_basis_rd_size %></b>
-			<span class="length_small_dimension_length_unit" style="color:red;"></span>
+			<span class="length_small_dimension_length_unit" style="color:black;"></span>
 			<b><%= pr.rupture_disk_selection_basis_rd_size1 %></b>
 		</p>
 
 		<p>
 			Estimated Net Flow Area <b><%= pr.rd_estimated_net_flow_area %></b>
-			<span class="area_orifice_unit" style="color:red;"></span>
+			<span class="area_orifice_unit" style="color:black;"></span>
 		</p>
 	</td>
 </tr>
 <tr>
 	<td colspan="3">
-			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+			<span style="font-size: 16px;margin: 0;text-decoration: none;">
 				Vent Line Selection Basis
 			</span>
 	</td>
@@ -576,19 +591,19 @@
 		<p>
 			Largest Vent Size To
 			Consider <b><%= pr.vent_line_selection_basis_rd_size%></b>
-			<span class="length_small_dimension_length_unit" style="color:red;">in</span>
+			<span class="length_small_dimension_length_unit" style="color:black;">in</span>
 			<b><%= pr.vent_line_selection_basis_rd_size1 %></b>
 		</p>
 
 		<p>
 			Estimated Net Flow Area <b><%= pr.vl_estimated_net_flow_area %></b>
-			<span class="area_orifice_unit" style="color:red;"></span>
+			<span class="area_orifice_unit" style="color:black;"></span>
 		</p>
 	</td>
 </tr>
 <tr>
 	<td colspan="3">
-			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+			<span style="font-size: 16px;margin: 0;text-decoration: none;">
 				Frangible Roof Design For Relief Protection
 			</span>
 	</td>
@@ -602,7 +617,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+			<span style="font-size: 16px;margin: 0;text-decoration: none;">
 				Environmental Emission Standards
 			</span>
 	</td>
@@ -621,7 +636,7 @@
 </tr>
 <tr>
 	<td colspan="3">
-			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
+			<span style="font-size: 16px;margin: 0;text-decoration: none;">
 				Consider Fire in Temperature Design
 			</span>
 	</td>

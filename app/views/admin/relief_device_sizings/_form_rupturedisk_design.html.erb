@@ -9,31 +9,35 @@
       </tr>
       <tr>
         <td>Scenario</td>
-        <td>Closed Outlet On Vessel</td>
+        <td><%= @sizbasis_design_scenario.scenario rescue '' %></td>
         <td>Scenario</td>
-        <td>Closed Outlet On Vessel</td>
+        <td><%= @min_temp_design_scenario.scenario rescue '' %></td>
         <td>Scenario</td>
-        <td>Closed Outlet On Vessel</td>
+        <td><%= @max_temp_design_scenario.scenario rescue '' %></td>
       </tr>
       <tr>
         <td>Identifier</td>
-        <td>3&Prime; Gate Valve</td>
+        <td><%= @sizbasis_design_scenario.identifier rescue '' %>&Prime; Gate Valve</td>
         <td>Identifier</td>
-        <td>3&Prime; Gate Valve</td>
+        <td><%= @min_temp_design_scenario.identifier rescue '' %>&Prime; Gate Valve</td>
         <td>Identifier</td>
-        <td>3&Prime; Gate Valve</td>
+        <td><%= @max_temp_design_scenario.identifier rescue '' %>&Prime; Gate Valve</td>
       </tr>
       <tr>
         <td>Required Area</td>
-        <td>12.34&nbsp;&nbsp;&nbsp;<span class="area_orifice_unit"></span></td>
+        <td><%= @sizbasis_design_scenario.required_orifice rescue '' %>&nbsp;&nbsp;&nbsp;<span class="area_orifice_unit"></span></td>
         <td>Temperature</td>
-        <td>-20&nbsp;&nbsp;&nbsp;<span class="temperature_general_unit"></span></td>
+        <td><%= if @min_temp_design_scenario then @discharge_min_temp rescue ''end  %>&nbsp;&nbsp;&nbsp;<span class="temperature_general_unit"></span></td>
         <td>Temperature</td>
-        <td>450&nbsp;&nbsp;&nbsp;<span class="temperature_general_unit"></span></td>
+        <td><%= if @max_temp_design_scenario then @relief_max_temp rescue '' end %>&nbsp;&nbsp;&nbsp;<span class="temperature_general_unit"></span></td>
       </tr>
       <tr>
         <td>System Design Pressure</td>
-        <td><%= f.text_field :system_design_pressure, :style => "width:50px;", :id => "rupture_design_pressure" %>&nbsp;&nbsp;<span class="pressure_general_unit"></span><a href="#" id="set_pressure">&nbsp;&nbsp;&nbsp;Set Pressure</a></td>
+        <td>
+					<%= f.text_field :rd_system_design_pressure, :style => "width:50px;" %>
+					&nbsp;&nbsp;<span class="pressure_general_unit"></span>&nbsp;&nbsp;&nbsp;
+					<a href="#" class="set_pressure_link">Set Pressure</a>
+				</td>
         <td>System Min Design Temperature</td>
         <td><%= f.text_field :system_min_design_temp, :style => "width:50px;", :id => "rupture_min_design_temp" %>&nbsp;&nbsp;&nbsp;<span class="temperature_general_unit"></span></td>
         <td>System Max Design Temperature</td>
@@ -44,7 +48,8 @@
     <div style="padding-top:10px;padding-bottom:10px;"> <b><u>2) Rupture Disk Selection Basis</u></b></div>
     <div>
       <span style="float:left;margin-right:40px;"> Location Characterization&nbsp;&nbsp;<%= f.select :discharge_location,options_for_select(StaticData.discharge_location),{},:class => 'discharge_location'%></span>
-      <span style="float:left;margin-right:40px;"> Flange Type&nbsp;&nbsp; <%= f.select :flange_type,options_for_select(StaticData.flange_type),{},:class => 'flange_type'%></span>
+      <span style="float:left;margin-right:40px;"> Discharge Pressure&nbsp;&nbsp;<%= f.text_field :discharge_pressure , :style => "width:50px;"%>&nbsp;&nbsp;<span class="pressure_general_unit"></span></span>
+      <span style="float:left;margin-right:40px;"> Flange Type&nbsp;&nbsp; <%= f.select :rupture_disk_flange_type,options_for_select(StaticData.flange_type,@relief_device_sizing.rupture_disk_flange_type) %></span>
       <span style="float:left;margin-right:40px;"><input type="button" id="rupture_disk_design_button" value="Design"></span>
     </div>
     <div><br><br><br><a href="#" id="add_rupture_disk">Add Rupture Disk</a><br></div>
@@ -56,11 +61,18 @@
         <th>ENFA</th>
         <th>Inlet Flange</th>
         <th>Outlet Flange</th>
-        <th>Best Pressure</th>
+        <th>Burst Pressure</th>
         <th>Kr</th>
         <th>Uncertainly F.</th>
         <th>Non F. Design</th>
-        <th>Piping</th>
+        <!-- Project settings for Rupture Disk Design Method -->
+        <% if @rupture_disk_design_method == "Coefficient of Discharge Method" %>
+          <th>Inlet Piping</th>
+          <th>Outlet Piping</th>
+        <% else %>
+          <th>Piping</th>
+        <% end %>
+
         <th></th>
       </tr>
       <tr>
@@ -69,7 +81,12 @@
         <th><span class="area_orifice_unit"></span></th>
         <th colspan="2"></th>
         <th><span class="pressure_general_unit"></span></th>
-        <th colspan="5"></th>
+        <!-- Project settings for Rupture Disk Design Method -->
+        <% if @rupture_disk_design_method == "Coefficient of Discharge Method" %>
+          <th colspan="6"></th>
+        <% else %>
+          <th colspan="5"></th>
+        <% end %>
       </tr>
       <% if @relief_device_sizing.relief_device_rupture_disks.empty? %>
           <% @unique_id = Time.now.to_i %>
@@ -84,16 +101,40 @@
       <% end %>
     </table>
     <label class="rupture_diff_area_orifice">*Need <label id="rupture_need_area_orifice">0</label> <span class="area_orifice_unit"></span> more</label>
+    <!-- Project settings for Rupture Disk Design Method -->
+    <% if @rupture_disk_design_method == "Coefficient of Discharge Method" %>
+          <br>*Valid for the following: &nbsp;&nbsp;<input type="checkbox" id="rupture_valid_form">    <br>
+          1) Discharges directly to atmosphere <br>
+          2) Installed within 8 pipe diameter from the vessel nozzle <br>
+          3) Length of discharge not greater than 5 pipe diameter <br>
+          4) Nominal diameters of the inlet and outlet discharge piping equal to or greater than the nominal pipe size of the device
+    <% end %>
     <table style="width:50%;" id="valve_piping_table">
-      <tr>
-        <th colspan="2">Piping</th>
-      </tr>
-      <tr>
-        <td>Pipe Material</td><td><%= f.select :rupture_pipe_material, @pipes.collect{|p| ["#{p["material"]} - #{p["conditions"]}", p["id"]]}, :prompt => true %></td>
-      </tr>
-      <tr>
-        <td>Pipe Roughness</td><td><%= f.text_field :rupture_pipe_roughness, :class => "small-text-100" %>&nbsp;<%= @fitting_pipe_size_unit %></td>
-      </tr>
+
+      <% if @rupture_disk_design_method == "Coefficient of Discharge Method" %>
+        <tr>
+          <th colspan="2">Inlet Piping</th>
+          <th colspan="2">Outlet Piping</th>
+        </tr>
+        <tr>
+          <td>Pipe Material</td><td><%= f.select :inlet_rupture_pipe_material, @pipes.collect{|p| ["#{p["material"]} - #{p["conditions"]}", p["id"]]}, :prompt => true %></td>
+          <td>Pipe Material</td><td><%= f.select :circuit_rupture_pipe_material, @pipes.collect{|p| ["#{p["material"]} - #{p["conditions"]}", p["id"]]}, :prompt => true %></td>
+        </tr>
+        <tr>
+          <td>Pipe Roughness</td><td><%= f.text_field :inlet_rupture_pipe_roughness, :class => "small-text-100" %>&nbsp;<%= @fitting_pipe_size_unit %></td>
+          <td>Pipe Roughness</td><td><%= f.text_field :circuit_rupture_pipe_roughness, :class => "small-text-100" %>&nbsp;<%= @fitting_pipe_size_unit %></td>
+        </tr>
+      <% else %>
+        <tr>
+          <th colspan="2">Piping</th>
+        </tr>
+        <tr>
+          <td>Pipe Material</td><td><%= f.select :rupture_pipe_material, @pipes.collect{|p| ["#{p["material"]} - #{p["conditions"]}", p["id"]]}, :prompt => true %></td>
+        </tr>
+        <tr>
+          <td>Pipe Roughness</td><td><%= f.text_field :rupture_pipe_roughness, :class => "small-text-100" %>&nbsp;<%= @fitting_pipe_size_unit %></td>
+        </tr>
+      <% end %>
     </table>
     <br>
     <div style="padding-top:10px;padding-bottom:10px;"> <b><u>3) Acceptable Location Check</u></b></div>
@@ -130,10 +171,14 @@
           <% end %>
       <% end %>
     </table>
-    </td> <td style="background: #ffffff;border: 0;"><input type="button" id="validate_btn" value="Validate"></td></tr></table>
+    </td> <td style="background: #ffffff;border: 0;"><input type="button" id="validate_rupture_disk_btn" value="Validate"></td></tr></table>
 
     <br>
     <%= link_to "Add", "#", :id => "add_new_pipe_sizing" %>&nbsp;|&nbsp;<%= link_to "Close", "#", :id => "close_rupture_disk" %>
+    &nbsp;|&nbsp;
+    <%= link_to "Reset",
+                reset_relief_design_admin_relief_device_sizings_path(:relief_device_sizing_id => @relief_device_sizing.id , :relief_device_type => 'rupture_disk'),
+                %>
   </div>
 </div>
 
@@ -152,7 +197,7 @@
 
     //update sequence of all rupture devices
     function update_sequence_rupture() {
-        $("td[id^='sequence_rupture_disk']").each(function (index, value) {
+        $("td[id^='sequence_rupture_disk_']").each(function (index, value) {
             //sequence should not start with zero, but array starts with 0 index
             index = index + 1;
             $(this).empty().append(index);
@@ -162,23 +207,26 @@
         $.get("<%= relief_device_sizing_rupture_disks_path(1)%>", function (data) {
             $("#rupture_disks_table").append(data);
             update_sequence_rupture();
+            update_rupture_disk_flage();
         });
+			return false;
     });
     $("a.delete_rupture_disk").live('click', function () {
         var id = $(this).attr('id');
-        if ($("td#sequence_rupture_disk_" + id).text() > 1) {
-            $("tr#row_" + id).hide();
+        if ($("td#sequence_rupture_disk_" + id).text() > 0) {
+            $("tr#row_rupture_disk_" + id).hide();
             //remove id "sequence" from hidden rows
             //otherwise this interfers with sequence updater
             $("td#sequence_rupture_disk_" + id).attr('id', "");
-            $("input#destroy_" + id).attr('value', 1);
+            $("input#destroy_rupture_disk_" + id).attr('value', 1);
             update_sequence_rupture();
         }
+      return false;
     });
 
     //update sequence of all rupture locations
     function update_sequence_rupture_location() {
-        $("td[id^='sequence_rupture_location']").each(function (index, value) {
+        $("td[id^='sequence_rupd_location_']").each(function (index, value) {
             //sequence should not start with zero, but array starts with 0 index
             index = index + 1;
             $(this).empty().append(index);
@@ -189,17 +237,19 @@
             $("#rupture_location_table").append(data);
             update_sequence_rupture_location();
         });
+      return false;
     });
     $("a.delete_rupture_location").live('click', function () {
         var id = $(this).attr('id');
-        if ($("td#sequence_rupture_location_" + id).text() > 1) {
-            $("tr#row_" + id).hide();
+        if ($("td#sequence_rupd_location_" + id).text() > 0) {
+            $("tr#row_rupture_disk_location_" + id).hide();
             //remove id "sequence" from hidden rows
             //otherwise this interfers with sequence updater
-            $("td#sequence_rupture_location_" + id).attr('id', "");
-            $("input#destroy_" + id).attr('value', 1);
+            $("td#sequence_rupd_location_" + id).attr('id', "");
+            $("input#destroy_rupture_disk_location_" + id).attr('value', 1);
             update_sequence_rupture_location();
         }
+      return false;
     });
 
     $('#relief_device_sizing_rupture_pipe_material').change(function (e) {
@@ -208,6 +258,21 @@
             return false
         }
         $('#relief_device_sizing_rupture_pipe_roughness').val($('body').data('pipes')[$(this).val()].roughness_recommended);
+    });
+
+    $('#relief_device_sizing_inlet_rupture_pipe_material').change(function (e) {
+      if ($(this).val() == "") {
+        $('#relief_device_sizing_inlet_rupture_pipe_material').val('');
+        return false
+      }
+      $('#relief_device_sizing_inlet_rupture_pipe_roughness').val($('body').data('pipes')[$(this).val()].roughness_recommended);
+    });
+    $('#relief_device_sizing_circuit_rupture_pipe_material').change(function (e) {
+      if ($(this).val() == "") {
+        $('#relief_device_sizing_circuit_rupture_pipe_material').val('');
+        return false
+      }
+      $('#relief_device_sizing_circuit_rupture_pipe_roughness').val($('body').data('pipes')[$(this).val()].roughness_recommended);
     });
 
 
@@ -234,7 +299,7 @@
                 }
             }
         });
-        if(($("#rupture_design_pressure").val() < min_pressure) && (min_pressure!=10000) ){
+        if(($("#relief_device_sizing_rd_system_design_pressure").val() < min_pressure) && (min_pressure!=10000) ){
             alert("rupture device pressure exceeded the System Design Pressure value");
             close = false;
             return false
@@ -246,10 +311,10 @@
                 total_orificearea= total_orificearea + parseFloat(this.value);
             }
         });
-        if(total_orificearea < 12.34){
+        if(total_orificearea < parseFloat(<%= @sizbasis_design_scenario.required_orifice rescue 0 %>)){
             alert("The total Orifice Area selected is not greater than the Required Area of the Design Basis");
             close = false;
-            $("#rupture_need_area_orifice").empty().append(12.34-total_orificearea);
+            $("#rupture_need_area_orifice").empty().append(parseFloat(<%= @sizbasis_design_scenario.required_orifice rescue 0 %>)-total_orificearea);
             $(".rupture_diff_area_orifice").attr("style", "color:red");
             return false
         } else {
@@ -275,6 +340,12 @@
             return false
         }
 
+      if(!($("#rupture_valid_form").is(':checked'))){
+        alert("Validations Checkbox has to be select");
+        close = false;
+        return false
+      }
+
         if(close == 'true'){
             $.colorbox.close();
             return false
@@ -282,16 +353,47 @@
     });
 
 
-    // Validate click
-    $("#validate_btn").click(function () {
+    $('#relief_device_sizing_rupture_disk_flange_type').change(function () {
+      $('.rupture_disk_inletflange').val($(this).val());
+      $('.rupture_disk_outletflange').val($(this).val());
+      return false;
     });
 
+    //4. Any new Pressure Relief Valve should show the flange value for the Inlet and Outlet Flange
+    function update_rupture_disk_flage() {
+      var id=0;
+      $("td[id^='sequence_rupture_disk_']").each(function() {
+        id = $(this).attr("id").slice(22);
+      });
+      $('#rupture_disk_inletflange_' + id).val($('#relief_device_sizing_rupture_disk_flange_type').val());
+      $('#rupture_disk_outletflange_' + id).val($('#relief_device_sizing_rupture_disk_flange_type').val());
+    }
 
-    $('#relief_device_sizing_system_design_pressure').live('change', function() {
-        $("#rupture_design_pressure").val($(this).val());
+    $("#rupture_disk_design_button").click(function () {
+      if (form_saved()) {
+        $.ajax({
+          url:"cal_rupture_disk",
+          type:"GET",
+          dataType:"json",
+          data:{},
+          success:function (data) {
+          }
+        });
+      }
     });
-    $('#rupture_design_pressure').live('change', function() {
-        $("#relief_device_sizing_system_design_pressure").val($(this).val());
+
+    $("#validate_rupture_disk_btn").click(function () {
+      if (form_saved()) {
+        $.ajax({
+          url:"validate_rupture_disk",
+          type:"GET",
+          dataType:"json",
+          data:{},
+          success:function (data) {
+          }
+        });
+      }
     });
+
 
 </script>

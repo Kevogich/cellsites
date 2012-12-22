@@ -6,11 +6,16 @@
 		<%= stylesheet_link_tag "simple-tabs", "/javascripts/tablecloth/tablecloth", "colorbox", "jquery.loadmask" %>
 		<%= stylesheet_link_tag "application" %>
 		<%= javascript_include_tag "jquery", "jquery_ujs", "jquery-ui", "bootstrap" %>
-		<%= javascript_include_tag "simple-tabs", "jquery.colorbox-min", "jquery.livequery", "jquery.dirtyforms", "jquery.format.1.05", "jquery.glow", "jquery.loadmask", "jquery.jqplot", "jqplot.canvasAxisLabelRenderer.min.js", "jqplot.canvasTextRenderer.min.js" %>
+		<%= javascript_include_tag "simple-tabs", "jquery.form", "jquery.colorbox-min", "jquery.livequery", "jquery.dirtyforms",
+															 "jquery.format.1.05", "jquery.glow", "jquery.loadmask",
+															 "jquery.jqplot", "jqplot.canvasAxisLabelRenderer.min.js", "jqplot.canvasTextRenderer.min.js" %>
 		<%= javascript_include_tag "application", "admin" %>
 		<%= javascript_include_tag "/admin/sizing_data.js" %>
 		<%= yield(:head) %>
 		<%= csrf_meta_tag %>
+    <%= javascript_tag do %>
+      var params = <%= raw params.to_json %>;
+    <% end %>
 	</head>
 	<body>
 		<%= render :partial => 'shared/header'%>

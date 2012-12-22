@@ -15,8 +15,29 @@ App::Application.routes.draw do
 
   namespace :admin do
 
+    resources :procures do
+      collection do
+        post "procure_rfq_sections"
+        get "procure_rfq_sections_destroy"
+        post "procure_additional_po_costs"
+        get "procure_additional_po_costs_destroy"
+      end
+    end
+
     resources :pipings do
 
+    end
+
+    resources :mechanical_specifications do
+      collection do
+        post "itemtypes"
+        get "itemtypes_destroy"
+        post "vendor_requirement"
+        get "vendor_requirement_destroy"
+        post "datasheet"
+        get "datasheet_destroy"
+        get "datasheet_item_type"
+      end
     end
 
     resources :relief_rate_calculation_views do
@@ -66,7 +87,9 @@ App::Application.routes.draw do
       member do
         get "edit/:step", :to => "projects#edit", :as => :edit_steps
         post "team_assignment"
+        post "vendor_assignment"
         get "assign"
+        get "assign_vendors"
         get "process_units"
         get "convert_and_round"
       end
@@ -74,6 +97,18 @@ App::Application.routes.draw do
         get "project_case_details"
         get "project_details"
         post "update_case_details"
+        get "vendor_setups"
+        get "quotation"
+        get "edit_vendor_schedule_setup"
+        get "edit_purchase_vendor_schedule_setup"
+        get "edit_as_built_vendor_schedule_setup"
+        get "edit_with_shipment_vendor_schedule_setup"
+        post "update_vendor_schedule_setup"
+        post "update_purchase_vendor_schedule_setup"
+        post "update_as_built_vendor_schedule_setup"
+        post "update_with_shipment_vendor_schedule_setup"
+        get "edit_request_for_quotation_setup"
+        post "update_request_for_quotation_setup"
       end
     end
 
@@ -339,7 +374,23 @@ App::Application.routes.draw do
         post "update_scenario_identification"
         get "get_stream_values"
         get "get_discharge_coefficient"
+        get "reset_relief_design"
       end
+      member do
+        get "set_pressure_system_description"
+        post "save_system_description"
+        get "refresh_system_description"
+        get "new_scenario_summary"
+        get "delete_scenario_summary"
+        get "cal_pressure_relief"
+        get "validate_pressure_relief"
+        get "cal_rupture_disk"
+        get "validate_rupture_disk"
+        get "cal_open_vent_disk"
+        get "validate_open_vent"
+        get "select_low_pressure_vent"
+      end
+
       get "equipments"
       get "equipment_section"
       get "design_pressure"
@@ -352,8 +403,26 @@ App::Application.routes.draw do
       get "open_vent_locations"
       get "low_pressure_vent_relief_devices"
       get "relief_valve_orificearea"
+      get "design_summary"
+
+    end
+    resources :item_types_transmit_and_proposals do
+      collection do
+        get "sizing_data"
+        get "engineering_data_form"
+        post "electronic_data_new"
+        put "electronic_data_update"
+        get "bid_evaluation"
+      end
     end
 
+    resources :procure_items do
+      collection do
+        get "procure_item_purchase_items"
+      end
+    end
+
+    resources :vendor_lists
     resources :process_units
     resources :user_project_settings
     resources :sizings

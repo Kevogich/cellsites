@@ -1,5 +1,8 @@
 module ApplicationHelper
+  def item_types
+    ItemType.where(:company_id => current_user.id)
 
+  end
   def display_field( resource, field, opts = {} )
     label = opts[:label] || field.to_s.humanize
     value = opts[:value] || resource.try( field )

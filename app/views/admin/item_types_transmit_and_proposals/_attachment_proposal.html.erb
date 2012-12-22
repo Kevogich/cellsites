@@ -1,0 +1,16 @@
+ <span id="applicable_span1">Proposal</span>
+<span class="file-wrapper">
+      <%= f.file_field :attachment %>
+  <span class="button">Select File</span>
+    </span>
+<%= f.text_field :name, :placeholder => "Attachment Name" %>
+<%= f.text_field :description, :placeholder => "Attachment Description" %>
+<%= f.hidden_field :user_id, :value => current_user.id %>
+
+ <style>
+   #applicable_span1{
+     padding-right: 5%;
+     padding-left: 5%;
+     font-weight: bold;
+   }
+ </style>

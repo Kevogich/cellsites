@@ -1,0 +1,91 @@
+<% title 'New Item'%>
+<h2><%= @item_type.item_type %></h2>
+
+<div class="form_add_item">
+  <%#= render :partial => '_form', :locals => {:transmit_proposal => @proposals}%>
+  <% transmit_proposal = @proposals %>
+  <%= form_for transmit_proposal, :url => transmit_proposal.new_record? ? admin_procure_items_path(:item_type_id => params[:item_type_id]) : admin_procure_item_path(transmit_proposal), :html => {:class => "line_sizing_form", :style => 'width:auto;'}, :onSubmit => 'selected_tags()' do |f| %>
+    <%#= raise params[:item_type_id].inspect %>
+    <%= f.error_messages %>
+    <% if transmit_proposal.new_record? %>
+      <%= f.hidden_field :company_id %>
+      <%= f.hidden_field :client_id, :value => @user_project_settings.client_id %>
+      <%= f.hidden_field :project_id, :value => @user_project_settings.project_id %>
+      <%= f.hidden_field :process_unit_id, :value => @user_project_settings.process_unit_id %>
+    <% end %>
+    <table style="width:500px;">
+      <td>Map to
+      <td><%= select_tag "sizing1", options_for_select([["Line", "line"], ["Vessel", "vessel"], ["Pump", "pump"], ["Compressor", "compressor"], ["Driver", "driver"], ["ControlValue", "control_value"], ["FlowElement", "flow_element"], ["Storage Tank", "storage_tank"], ["Column", "column"], ["Heat Exchanger", "heat_exchanger"], ["Relief Device", "relief_device"]]), :prompt => "select" %></td>
+    </table>
+    <table style="width:500px;">
+      <td>
+        <div id="items">
+
+          <% if params[:sizing_value].nil? %>
+            <%= select_tag 'item_tags[]', options_from_collection_for_select(@sizing_data, "line_number", "line_number"), {:multiple => true, :size => 10} %>
+          <% end %>
+        </div>
+
+        <br/>
+      </td>
+      <td valign=top>
+        <%= f.radio_button :selection_type, 'all_item', :id => "all_item" %> Add All Item
+        <br><%= f.radio_button :selection_type, 'selected_item', :id => "selected_item", :checked => true %> Add Select Item
+        <br><%= f.radio_button :selection_type, 'new_item', :id => "add_new_item" %> Add New Item <br/><br/>
+
+        <div class="new_item_tag">
+          <h2>Add New Item </h2> <br>
+          <%= text_field_tag "new_item" %>
+        </div>   <br>
+        <%= f.submit "Update" %>
+      </td>
+    </table>
+  <% end %>
+
+</div>
+
+  <script>
+    $(".new_item_tag").hide();
+
+    $("#sizing1").change(function () {
+      var sizing_val = $(this).val();
+      $.get("/admin/procure_items/sizing_data", { sizing_value:sizing_val }, function (data) {
+
+      });
+      return false;
+    });
+    $("#add_new_item").click(function () {
+      $(".new_item_tag").show();
+    });
+    $("#all_item").click(function () {
+      $(".new_item_tag").hide();
+      var select = document.getElementById('item_tags_');
+      for (var i = 0, l = select.options.length, o; i < l; i++) {
+        select.options[i].selected = true;
+      }
+    });
+    $("#selected_item").click(function () {
+      $(".new_item_tag").hide();
+    });
+  </script>
+  <style>
+    .sizing_item_tag {
+      border: 2px solid #000000;
+      padding-left: 10px;
+      padding-top: 10px;
+      width: 150px;
+    }
+
+    select[multiple], select[size] {
+      width: 200px;
+    }
+
+  </style>
+
+
+
+<style>
+  .form_add_item{
+   padding:40px;
+  }
+</style>

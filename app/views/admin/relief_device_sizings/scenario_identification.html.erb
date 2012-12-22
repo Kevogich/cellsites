@@ -1,7 +1,13 @@
-<% title @scenario_summary.scenario + " " + @scenario_summary.identifier, false %>
+<% title "Scenario Summary Details" %>
+
+<%= javascript_tag do %>
+	var set_pressure = '<%= @set_pressure%>';
+	var barometric_pressure = '<%= @barometric_pressure%>';
+<% end %>
 
 <%= form_for @scenario_identification, :url => update_scenario_identification_admin_relief_device_sizings_path, :html => {:method => "post", :style => 'width:auto;', :class => "scenario_identification_form"} do |f| %>
 	<%= f.hidden_field :id, :value => f.object.id %>
+	<%= hidden_field_tag :calculate_btn %>
 	<div>
 		<table style="width: auto;" class="pull-left">
 			<tr>
@@ -33,7 +39,7 @@
 	<ul class="simple-tabs">
 		<li><a href="#scenario_identification">Scenario Identification</a></li>
 		<li><a href="#scenario_calculation">Scenario Calculation</a></li>
-		<li><a href="#required_capacity">Required Capacity</a></li>
+		<li><a href="#required_capacity" id="required_capacity_tab">Required Capacity</a></li>
 	</ul>
 	<div class="tab_container">
 	<div id="scenario_identification" class="tab_content">
@@ -73,34 +79,6 @@
 				Relief Rate Calculation Method&nbsp;&nbsp;&nbsp;
 				<%= f.select :relief_rate_calculation_method, options_for_select(StaticData.calculation_method, f.object.relief_rate_calculation_method), :include_blank => true %>&nbsp;&nbsp;&nbsp;
 				<%= link_to "Display", "#", :class => "btn display_relief_rate_calculation" %>
-			</td>
-		</tr>
-		<tr>
-			<td>Set Pressure</td>
-			<td>
-				<%= f.text_field :sc_set_pressure, :class => "pressure_general" %>
-				<span class="pressure_general_unit"></span>
-			</td>
-		</tr>
-		<tr>
-			<td>Over Pressure</td>
-			<td>
-				<%= f.text_field :sc_over_pressure, :class => "pressure_differential" %>
-				<span class="pressure_differential_unit"></span>
-			</td>
-		</tr>
-		<tr>
-			<td>Relief Pressure</td>
-			<td>
-				<%= f.text_field :sc_relief_pressure, :class => "pressure_general" %>
-				<span class="pressure_general_unit"></span>
-			</td>
-		</tr>
-		<tr>
-			<td>Relief Rate</td>
-			<td>
-				<%= f.text_field :sc_relief_rate, :class => "mass_flow_rate_general" %>
-				<span class="mass_flow_rate_general_unit"></span>
 			</td>
 		</tr>
 	</table>
@@ -176,6 +154,18 @@
 		<td>
 			<%= f.text_field :dc_temperature, :class => "temperature_general" %>
 			<span class="temperature_general_unit"></span>
+		</td>
+	</tr>
+	<tr>
+		<td>Mass Flow Rate</td>
+		<td>
+			<%= f.text_field :rc_mass_flow_rate, :class => "mass_flow_rate_general" %>
+			<span class="mass_flow_rate_general_unit"></span>
+		</td>
+		<td>Mass Flow Rate</td>
+		<td>
+			<%= f.text_field :dc_mass_flow_rate, :class => "mass_flow_rate_general" %>
+			<span class="mass_flow_rate_general_unit"></span>
 		</td>
 	</tr>
 	<tr>
@@ -377,19 +367,20 @@
 		<tr>
 			<td colspan="4">
 				Relief Capacity Calculation Method&nbsp;&nbsp;&nbsp;&nbsp;
-				<%= f.select :relief_capacity_calculation_method, options_for_select(ScenarioIdentification.relief_capacity_calculation_method_list(@relief_device_type), f.object.relief_capacity_calculation_method), :include_blank => true %><%#= @relief_device_type %>
+				<%= f.select :relief_capacity_calculation_method, options_for_select(ScenarioIdentification.relief_capacity_calculation_method_list(@relief_capacity_calculation_method_type), f.object.relief_capacity_calculation_method), :include_blank => true %><%#= @relief_capacity_calculation_method_type %>
+				<%= f.hidden_field :line_capacity_relief_condition %>
 			</td>
 		</tr>
 	</table>
 	<table class="required_capacity_table" id="required_capacity_table">
-	<tr class="two_phase_hem line_capacity">
+	<tr class="two_phase_hem line_capacity line_capacity_two_phase">
 		<td colspan="4">
 			<span class="sub_title">HEM 3 Point Model</span>
 		</td>
 	</tr>
-	<tr class="two_phase_hem line_capacity">
+	<tr class="two_phase_hem line_capacity line_capacity_two_phase">
 		<td colspan="4">
-			<table style="margin: 0;width: auto;border: 0;">
+			<table style="margin: 0;width: auto;border: 0;" class="two_phase_hem_table">
 				<tr class="two_phase_hem line_capacity">
 					<td></td>
 					<td style="width: 200px;">Point A</td>
@@ -466,7 +457,7 @@
 		</td>
 		<td colspan="2"></td>
 	</tr>
-	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified two_phase_hem low_pressure_vent generic">
+	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified two_phase_hem low_pressure_vent generic line_capacity">
 		<td style="width: 25%;">
 			Flow Rate (W)
 		</td>
@@ -476,7 +467,7 @@
 		</td>
 		<td colspan="2"></td>
 	</tr>
-	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified two_phase_hem low_pressure_vent">
+	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified two_phase_hem low_pressure_vent line_capacity">
 		<td>
 			Relieving Pressure (P1)
 		</td>
@@ -486,7 +477,7 @@
 		</td>
 		<td colspan="2"></td>
 	</tr>
-	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified two_phase_hem low_pressure_vent">
+	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified two_phase_hem low_pressure_vent line_capacity">
 		<td>
 			Total Back Pressure (P2)
 		</td>
@@ -496,7 +487,7 @@
 		</td>
 		<td colspan="2"></td>
 	</tr>
-	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified two_phase_hem low_pressure_vent">
+	<tr class="vapor_critical vapor_subcritical vapor_steam liquid_certified liquid_non_certified two_phase_hem low_pressure_vent line_capacity">
 		<td>
 			Relieving Temperature (T)
 		</td>
@@ -506,21 +497,22 @@
 		</td>
 		<td colspan="2"></td>
 	</tr>
-	<tr>
+	<tr class="liquid_non_certified liquid_certified">
 		<td>
 			Specific Gravity (G)
 		</td>
 		<td>
-			<%= f.text_field :rc_specific_gravity %>
+			<%= f.text_field :rc_specific_gravity, :class => "specific_gravity_dimensionless" %>
 		</td>
 		<td colspan="2"></td>
 	</tr>
-	<tr>
+	<tr class="liquid_non_certified liquid_certified">
 		<td>
 			Viscosity (V)
 		</td>
 		<td>
-			<%= f.text_field :rc_viscosity %>
+			<%= f.text_field :rc_viscosity, :class => "viscosity_dynamic" %>
+			<span class="viscosity_dynamic_unit"></span>
 		</td>
 		<td colspan="2"></td>
 	</tr>
@@ -529,7 +521,7 @@
 			Reynold's Number (Re)
 		</td>
 		<td>
-			<%= f.text_field :rc_reynolds_number %>
+			<%= f.text_field :rc_reynolds_number, :class => "reynold_s_number_dimensionless" %>
 		</td>
 		<td colspan="2"></td>
 	</tr>
@@ -538,7 +530,7 @@
 			Coefficient (C)
 		</td>
 		<td>
-			<%= f.text_field :rc_coefficient %>
+			<%= f.text_field :rc_coefficient, :class => "coefficient_dimensionless" %>
 		</td>
 		<td colspan="2"></td>
 	</tr>
@@ -547,7 +539,7 @@
 			Coefficient of Subcritical Flow (F2)
 		</td>
 		<td>
-			<%= f.text_field :rc_coefficient_of_subcritical_flow %>
+			<%= f.text_field :rc_coefficient_of_subcritical_flow, :class => "coefficient_of_subcritical_flow_dimensionless" %>
 		</td>
 		<td colspan="2"></td>
 	</tr>
@@ -566,7 +558,7 @@
 			Back Pressure Correction Factor (Kb)
 		</td>
 		<td>
-			<%= f.text_field :rc_back_pressure_correction_factor %>
+			<%= f.text_field :rc_back_pressure_correction_factor, :class => "back_pressure_correction_factor_dimensionless" %>
 		</td>
 		<td colspan="2">
 			<%= f.select :rc_back_pressure_correction_factor_list, options_for_select(StaticData.kb_option, f.object.rc_back_pressure_correction_factor_list), :include_blank => true %>
@@ -586,7 +578,7 @@
 			Discharge Coefficient (Kd)
 		</td>
 		<td>
-			<%= f.text_field :rc_discharge_coefficient %>
+			<%= f.text_field :rc_discharge_coefficient, :class => "coefficient_dimensionless" %>
 		</td>
 		<td colspan="2">
 			<% if @relief_device_type == "Low Pressure Vent" %>
@@ -599,7 +591,7 @@
 			Napier Correction Factor (Kn)
 		</td>
 		<td>
-			<%= f.text_field :rc_napier_correction_factor %>
+			<%= f.text_field :rc_napier_correction_factor, :class => "napier_correction_factor_dimensionless" %>
 		</td>
 		<td colspan="2"></td>
 	</tr>
@@ -608,7 +600,7 @@
 			Superheat Correction Factor (Ksh)
 		</td>
 		<td>
-			<%= f.text_field :rc_superheat_correction_factor %>
+			<%= f.text_field :rc_superheat_correction_factor, :class => "superheat_correction_factor_dimensionless" %>
 		</td>
 		<td colspan="2"></td>
 	</tr>
@@ -617,7 +609,7 @@
 			Overpressure Correction Factor (Kp)
 		</td>
 		<td>
-			<%= f.text_field :rc_overpressure_correction_factor %>
+			<%= f.text_field :rc_overpressure_correction_factor, :class => "overpressure_correction_factor_dimensionless" %>
 		</td>
 		<td colspan="2">
 			<%= f.select :rc_overpressure_correction_factor_list, options_for_select(StaticData.kp_option, f.object.rc_overpressure_correction_factor_list), :include_blank => true %>
@@ -628,7 +620,7 @@
 			Viscosity Correction Factor (Kv)
 		</td>
 		<td>
-			<%= f.text_field :rc_viscosity_correction_factor %>
+			<%= f.text_field :rc_viscosity_correction_factor, :class => "viscosity_correction_factor_dimensionless" %>
 		</td>
 		<td colspan="2"></td>
 	</tr>
@@ -637,7 +629,7 @@
 			Liquid Back Pressure Correction Factor (Kw)
 		</td>
 		<td>
-			<%= f.text_field :rc_liquid_back_pressure_correction_factor %>
+			<%= f.text_field :rc_liquid_back_pressure_correction_factor, :class => "liquid_back_pressure_correction_factor_dimensionless" %>
 		</td>
 		<td colspan="2">
 			<%= f.select :rc_liquid_back_pressure_correction_factor_list, options_for_select(StaticData.kw_option, f.object.rc_liquid_back_pressure_correction_factor_list), :include_blank => true %>
@@ -652,7 +644,7 @@
 			<span class="area_orifice_unit"></span>
 		</td>
 		<td colspan="2">
-			<%= link_to "Calculate", "#", :class => "btn" %>
+			<%= link_to "Calculate", "#", :class => "btn eda_calculate_btn" %>
 		</td>
 	</tr>
 	<tr class="low_pressure_vent">
@@ -737,7 +729,8 @@
 									 options_for_select(
 										 PipeSizing.pipe_sizes(@nominal_pipe_diameter_unit).collect { |ps| [raw(ps[:name]), (@nominal_pipe_diameter_unit == "in" ? ps[:value]:ps[:name].to_f), "data-value" => ps[:value]] },
 										 f.object.rc_nominal_pipe_diameter),
-									 :include_blank => true
+									 {:include_blank => true},
+										:class => "aaa", :style => "color:red;"
 			%>
 			<span class="length_small_dimension_length_unit"></span>
 		</td>
@@ -761,7 +754,7 @@
 			<span class="area_orifice_unit"></span>
 		</td>
 		<td colspan="2">
-			<%= link_to "Calculate", "#", :class => "btn" %>
+			<%= link_to "Calculate", "#", :class => "btn eda_calculate_btn" %>
 		</td>
 	</tr>
 	<tr class="line_capacity">
@@ -894,6 +887,7 @@
 			function (data) {
 				$('#scenario_identification_' + a + '_pressure').val(get_project_field_value1("pressure_general", data['pressure']));
 				$('#scenario_identification_' + a + '_temperature').val(get_project_field_value1("temperature_general", data['temperature']));
+				$('#scenario_identification_' + a + '_mass_flow_rate').val(get_project_field_value1("mass_flow_rate_general", data['mass_flow_rate']));
 				$('#scenario_identification_' + a + '_mass_vapor_fraction').val(data['mass_vapor_fraction']);
 				$('#scenario_identification_' + a + '_vapor_density').val(get_project_field_value1("density_general", data['vapor_density']));
 				$('#scenario_identification_' + a + '_vapor_viscosity').val(get_project_field_value1("viscosity_dynamic", data['vapor_viscosity']));
@@ -910,6 +904,53 @@
 
 	});
 
+	//Update scenario calculation values in required capacity values
+	$('#required_capacity_tab').click(function(){
+
+		$('#scenario_identification_hem_process_basis_a').val($('#scenario_identification_rc_case').val());
+		$('#scenario_identification_hem_stream_a').children('option').remove();
+		$('#scenario_identification_hem_stream_a').html($('#scenario_identification_rc_stream').html());
+		$('#scenario_identification_hem_stream_a').val($('#scenario_identification_rc_stream').val());
+		$('#scenario_identification_hem_mass_vapor_fraction_a').val($('#scenario_identification_rc_mass_vapor_fraction').val());
+		$('#scenario_identification_hem_liquid_density_a').val($('#scenario_identification_rc_liquid_density').val());
+		$('#scenario_identification_hem_vapor_density_a').val($('#scenario_identification_rc_vapor_density').val());
+		$('#scenario_identification_hem_liquid_viscosity_a').val($('#scenario_identification_rc_liquid_viscosity').val());
+		$('#scenario_identification_hem_vapor_viscosity_a').val($('#scenario_identification_rc_vapor_viscosity').val());
+		$('#scenario_identification_hem_vapor_viscosity_a').val($('#scenario_identification_rc_vapor_viscosity').val());
+
+		$('#scenario_identification_hem_process_basis_c').val($('#scenario_identification_dc_case').val());
+		$('#scenario_identification_hem_stream_c').children('option').remove();
+		$('#scenario_identification_hem_stream_c').html($('#scenario_identification_dc_stream').html());
+		$('#scenario_identification_hem_stream_c').val($('#scenario_identification_dc_stream').val());
+		$('#scenario_identification_hem_mass_vapor_fraction_c').val($('#scenario_identification_dc_mass_vapor_fraction').val());
+		$('#scenario_identification_hem_liquid_density_c').val($('#scenario_identification_dc_liquid_density').val());
+		$('#scenario_identification_hem_vapor_density_c').val($('#scenario_identification_dc_vapor_density').val());
+		$('#scenario_identification_hem_liquid_viscosity_c').val($('#scenario_identification_dc_liquid_viscosity').val());
+		$('#scenario_identification_hem_vapor_viscosity_c').val($('#scenario_identification_dc_vapor_viscosity').val());
+		$('#scenario_identification_hem_vapor_viscosity_c').val($('#scenario_identification_dc_vapor_viscosity').val());
+
+		$('#scenario_identification_rc_flow_rate').val($('#scenario_identification_rc_mass_flow_rate').val());
+		$('#scenario_identification_rc_relieving_temperature').val($('#scenario_identification_rc_temperature').val());
+		$('#scenario_identification_rc_viscosity').val($('#scenario_identification_rc_liquid_viscosity').val());
+
+		$('#calculate_btn').val('relief_sizing_method_selection');
+		$('.scenario_identification_form').ajaxSubmit({
+			'success': function(){
+				$('#calculate_btn').val('');
+				$('#scenario_identification_relief_capacity_calculation_method').val(relief_sizing_method);
+				relief_capacity_calculation_method_hide_fields();
+				$('#scenario_identification_hem_pressure_a').val(get_project_field_value1("pressure_general", required_capacity_tab_values['point_a_pressure']));
+				$('#scenario_identification_hem_pressure_c').val(get_project_field_value1("pressure_general", required_capacity_tab_values['point_c_pressure']));
+				$('#scenario_identification_rc_relieving_pressure').val(get_project_field_value1("pressure_absolute", required_capacity_tab_values['relieving_pressure']));
+				$('#scenario_identification_rc_total_back_pressure').val(get_project_field_value1("pressure_absolute", required_capacity_tab_values['total_back_pressure']));
+				$('#scenario_identification_rc_specific_gravity').val(get_project_field_value1("specific_gravity_dimensionless", required_capacity_tab_values['specific_gravity']));
+			}
+		});
+
+		//return false;
+	});
+
+
 	//Relief Rate Calculation Method
 	$('.display_relief_rate_calculation').click(function () {
 		if ($('#scenario_identification_relief_rate_calculation_method').val() == "") {
@@ -919,7 +960,7 @@
 		if ($('#scenario_identification_relief_rate_calculation_method').val() == "Generic") {
 			$.colorbox({
 				href:'/admin/relief_rate_calculation_views/view_generic?id=' + $('#scenario_identification_id').val(),
-				width:'100%'
+				width:'70%'
 			});
 		}
 
@@ -963,6 +1004,18 @@
 			$('.required_capacity_table tbody').children('tr').hide();
 			$('.required_capacity_table tbody').children('tr.' + mapping_obj[val]).show();
 		}
+
+		//display fields when line capacity
+		if (val == "Line Capacity") {
+			var line_capacity_relief_condition = $('#scenario_identification_line_capacity_relief_condition').val();
+			if(line_capacity_relief_condition != "Two Phase") {
+				$('.line_capacity_two_phase').hide();
+			} else if (line_capacity_relief_condition == "Two Phase") {
+				$('.line_capacity_two_phase').show();
+			}
+		}
+
+		$('.error_field').removeClass('error_field');
 	}
 
 	$('#scenario_identification_rc_nominal_pipe_diameter').change(function(){
@@ -1052,6 +1105,578 @@
 			width:'100%',
 			height:'100%'
 		});
+		return false;
+	});
+
+	//Effective Discharge Area Calculation Button
+	$('.eda_calculate_btn').click(function(){
+		var relief_capacity_calculation_method = $('#scenario_identification_relief_capacity_calculation_method').val();
+		var validate = true;
+
+		if(set_pressure == '') {
+			validate = false;
+			alert('Please enter set pressure value');
+			return false;
+		}
+
+		if(barometric_pressure == '') {
+			validate = false;
+			alert('Please enter barometric pressure value');
+			return false;
+		}
+
+		$('.error_field').removeClass('error_field');
+
+		if(relief_capacity_calculation_method == "Liquid - Certified") {
+			if($('#scenario_identification_rc_flow_rate').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_flow_rate').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_relieving_pressure').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_relieving_pressure').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_total_back_pressure').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_total_back_pressure').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_specific_gravity').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_specific_gravity').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_viscosity').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_viscosity').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_combination_correction_factor').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_combination_correction_factor').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_discharge_coefficient').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_discharge_coefficient').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_liquid_back_pressure_correction_factor_list').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_liquid_back_pressure_correction_factor_list').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_liquid_back_pressure_correction_factor_list').val() != 'API 520 Fig. 31' &&
+				 $('#scenario_identification_rc_liquid_back_pressure_correction_factor').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_liquid_back_pressure_correction_factor').addClass('error_field');
+			}
+		} else if(relief_capacity_calculation_method == "Liquid - Non Certified") {
+			if($('#scenario_identification_rc_flow_rate').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_flow_rate').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_relieving_pressure').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_relieving_pressure').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_total_back_pressure').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_total_back_pressure').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_specific_gravity').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_specific_gravity').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_viscosity').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_viscosity').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_combination_correction_factor').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_combination_correction_factor').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_discharge_coefficient').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_discharge_coefficient').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_overpressure_correction_factor_list').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_overpressure_correction_factor_list').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_overpressure_correction_factor_list').val() != 'API 520 Fig. 37' &&
+				$('#scenario_identification_rc_overpressure_correction_factor').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_overpressure_correction_factor').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_liquid_back_pressure_correction_factor_list').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_liquid_back_pressure_correction_factor_list').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_liquid_back_pressure_correction_factor_list').val() != 'API 520 Fig. 31' &&
+				$('#scenario_identification_rc_liquid_back_pressure_correction_factor').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_liquid_back_pressure_correction_factor').addClass('error_field');
+			}
+		} else if(relief_capacity_calculation_method == "Vapor - Critical") {
+			if($('#scenario_identification_rc_flow_rate').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_flow_rate').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_relieving_pressure').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_relieving_pressure').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_total_back_pressure').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_total_back_pressure').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_relieving_temperature').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_relieving_temperature').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_vapor_mw').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_vapor_mw').addClass('error_field');
+				alert('Please enter Relief Conditions Vapor MW');
+				$('.simple-tabs li:eq(1)').trigger('click');
+				return false;
+			}
+
+			if($('#scenario_identification_rc_vapor_z').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_vapor_z').addClass('error_field');
+				alert('Please enter Relief Conditions Vapor Z');
+				$('.simple-tabs li:eq(1)').trigger('click');
+				return false;
+			}
+
+			if($('#scenario_identification_rc_vapor_k').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_vapor_k').addClass('error_field');
+				alert('Please enter Relief Conditions Vapor K');
+				$('.simple-tabs li:eq(1)').trigger('click');
+				return false;
+			}
+
+			if($('#scenario_identification_rc_back_pressure_correction_factor_list').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_back_pressure_correction_factor_list').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_back_pressure_correction_factor_list').val() != 'API 520 Fig. 30' &&
+				$('#scenario_identification_rc_back_pressure_correction_factor').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_back_pressure_correction_factor').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_combination_correction_factor').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_combination_correction_factor').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_discharge_coefficient').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_discharge_coefficient').addClass('error_field');
+			}
+		} else if(relief_capacity_calculation_method == "Vapor - Subcritical") {
+			if($('#scenario_identification_rc_flow_rate').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_flow_rate').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_relieving_pressure').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_relieving_pressure').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_total_back_pressure').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_total_back_pressure').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_relieving_temperature').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_relieving_temperature').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_vapor_mw').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_vapor_mw').addClass('error_field');
+				alert('Please enter Relief Conditions Vapor MW');
+				$('.simple-tabs li:eq(1)').trigger('click');
+				return false;
+			}
+
+			if($('#scenario_identification_rc_vapor_z').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_vapor_z').addClass('error_field');
+				alert('Please enter Relief Conditions Vapor Z');
+				$('.simple-tabs li:eq(1)').trigger('click');
+				return false;
+			}
+
+			if($('#scenario_identification_rc_vapor_k').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_vapor_k').addClass('error_field');
+				alert('Please enter Relief Conditions Vapor K');
+				$('.simple-tabs li:eq(1)').trigger('click');
+				return false;
+			}
+
+			if($('#scenario_identification_rc_combination_correction_factor').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_combination_correction_factor').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_discharge_coefficient').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_discharge_coefficient').addClass('error_field');
+			}
+		} else if(relief_capacity_calculation_method == "Vapor - Steam") {
+			if($('#scenario_identification_rc_flow_rate').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_flow_rate').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_relieving_pressure').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_relieving_pressure').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_total_back_pressure').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_total_back_pressure').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_relieving_temperature').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_relieving_temperature').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_vapor_mw').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_vapor_mw').addClass('error_field');
+				alert('Please enter Relief Conditions Vapor MW');
+				$('.simple-tabs li:eq(1)').trigger('click');
+				return false;
+			}
+
+			if($('#scenario_identification_rc_vapor_z').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_vapor_z').addClass('error_field');
+				alert('Please enter Relief Conditions Vapor Z');
+				$('.simple-tabs li:eq(1)').trigger('click');
+				return false;
+			}
+
+			if($('#scenario_identification_rc_vapor_k').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_vapor_k').addClass('error_field');
+				alert('Please enter Relief Conditions Vapor K');
+				$('.simple-tabs li:eq(1)').trigger('click');
+				return false;
+			}
+
+			if($('#scenario_identification_rc_back_pressure_correction_factor_list').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_back_pressure_correction_factor_list').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_back_pressure_correction_factor_list').val() != 'API 520 Fig. 30' &&
+				$('#scenario_identification_rc_back_pressure_correction_factor').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_back_pressure_correction_factor').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_combination_correction_factor').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_combination_correction_factor').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_discharge_coefficient').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_discharge_coefficient').addClass('error_field');
+			}
+		} else if(relief_capacity_calculation_method == "Low Pressure Vent") {
+			if($('#scenario_identification_rc_flow_rate').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_flow_rate').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_relieving_pressure').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_relieving_pressure').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_total_back_pressure').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_total_back_pressure').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_relieving_temperature').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_relieving_temperature').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_vapor_mw').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_vapor_mw').addClass('error_field');
+				alert('Please enter Relief Conditions Vapor MW');
+				$('.simple-tabs li:eq(1)').trigger('click');
+				return false;
+			}
+
+			if($('#scenario_identification_rc_vapor_z').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_vapor_z').addClass('error_field');
+				alert('Please enter Relief Conditions Vapor Z');
+				$('.simple-tabs li:eq(1)').trigger('click');
+				return false;
+			}
+
+			if($('#scenario_identification_rc_vapor_k').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_vapor_k').addClass('error_field');
+				alert('Please enter Relief Conditions Vapor K');
+				$('.simple-tabs li:eq(1)').trigger('click');
+				return false;
+			}
+
+			if($('#scenario_identification_rc_discharge_coefficient').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_discharge_coefficient').addClass('error_field');
+			}
+
+		} else if(relief_capacity_calculation_method == "Two Phase HEM") {
+
+			if($('.two_phase_hem_table input:text[value=""]').length > 0) {
+				validate = false;
+				$('.two_phase_hem_table input:text[value=""]').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_flow_rate').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_flow_rate').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_relieving_pressure').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_relieving_pressure').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_total_back_pressure').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_total_back_pressure').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_back_pressure_correction_factor_list').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_back_pressure_correction_factor_list').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_back_pressure_correction_factor_list').val() != 'API 520 Fig. 30' &&
+				$('#scenario_identification_rc_back_pressure_correction_factor').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_back_pressure_correction_factor').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_combination_correction_factor').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_combination_correction_factor').addClass('error_field');
+			}
+
+			if($('#scenario_identification_rc_discharge_coefficient').val() == '') {
+				validate = false;
+				$('#scenario_identification_rc_discharge_coefficient').addClass('error_field');
+			}
+		} else if(relief_capacity_calculation_method == "Line Capacity") {
+			var line_capacity_relief_condition = $('#scenario_identification_line_capacity_relief_condition').val();
+			if(line_capacity_relief_condition == "Two Phase") {
+				if($('.two_phase_hem_table input:text[value=""]').length > 0) {
+					validate = false;
+					$('.two_phase_hem_table input:text[value=""]').addClass('error_field');
+				}
+
+				if($('#scenario_identification_rc_flow_rate').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_flow_rate').addClass('error_field');
+				}
+
+				if($('#scenario_identification_rc_relieving_pressure').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_relieving_pressure').addClass('error_field');
+				}
+
+				if($('#scenario_identification_rc_total_back_pressure').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_total_back_pressure').addClass('error_field');
+				}
+
+				if($('#scenario_identification_rc_relieving_temperature').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_relieving_temperature').addClass('error_field');
+				}
+
+				if($('#scenario_identification_rc_liquid_density').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_liquid_density').addClass('error_field');
+					alert('Please enter Relief Conditions Liquid Density');
+					$('.simple-tabs li:eq(1)').trigger('click');
+					return false;
+				}
+
+				if($('#scenario_identification_rc_liquid_viscosity').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_liquid_viscosity').addClass('error_field');
+					alert('Please enter Relief Conditions Liquid Viscosity');
+					$('.simple-tabs li:eq(1)').trigger('click');
+					return false;
+				}
+
+				if($('#scenario_identification_rc_mass_vapor_fraction').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_mass_vapor_fraction').addClass('error_field');
+					alert('Please enter Relief Conditions Mass Vapor Fraction');
+					$('.simple-tabs li:eq(1)').trigger('click');
+					return false;
+				}
+
+				if($('#scenario_identification_rc_pipe_roughness').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_pipe_roughness').addClass('error_field');
+				}
+			} else if (line_capacity_relief_condition == "Liquid") {
+				if($('#scenario_identification_rc_flow_rate').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_flow_rate').addClass('error_field');
+				}
+
+				if($('#scenario_identification_rc_relieving_pressure').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_relieving_pressure').addClass('error_field');
+				}
+
+				if($('#scenario_identification_rc_total_back_pressure').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_total_back_pressure').addClass('error_field');
+				}
+
+				if($('#scenario_identification_rc_liquid_density').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_liquid_density').addClass('error_field');
+					alert('Please enter Relief Conditions Liquid Density');
+					$('.simple-tabs li:eq(1)').trigger('click');
+					return false;
+				}
+
+				if($('#scenario_identification_rc_liquid_viscosity').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_liquid_viscosity').addClass('error_field');
+					alert('Please enter Relief Conditions Liquid Viscosity');
+					$('.simple-tabs li:eq(1)').trigger('click');
+					return false;
+				}
+
+				if($('#scenario_identification_rc_pipe_roughness').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_pipe_roughness').addClass('error_field');
+				}
+			} else if (line_capacity_relief_condition == "Vapour") {
+
+				if($('#scenario_identification_rc_flow_rate').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_flow_rate').addClass('error_field');
+				}
+
+				if($('#scenario_identification_rc_relieving_pressure').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_relieving_pressure').addClass('error_field');
+				}
+
+				if($('#scenario_identification_rc_total_back_pressure').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_total_back_pressure').addClass('error_field');
+				}
+
+				if($('#scenario_identification_rc_relieving_temperature').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_relieving_temperature').addClass('error_field');
+				}
+
+				if($('#scenario_identification_rc_vapor_density').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_vapor_density').addClass('error_field');
+					alert('Please enter Relief Conditions Vapor Density');
+					$('.simple-tabs li:eq(1)').trigger('click');
+					return false;
+				}
+
+				if($('#scenario_identification_rc_vapor_viscosity').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_vapor_viscosity').addClass('error_field');
+					alert('Please enter Relief Conditions Vapor Viscosity');
+					$('.simple-tabs li:eq(1)').trigger('click');
+					return false;
+				}
+
+				if($('#scenario_identification_rc_vapor_mw').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_vapor_mw').addClass('error_field');
+					alert('Please enter Relief Conditions Vapor MW');
+					$('.simple-tabs li:eq(1)').trigger('click');
+					return false;
+				}
+
+				if($('#scenario_identification_rc_vapor_z').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_vapor_z').addClass('error_field');
+					alert('Please enter Relief Conditions Vapor Z');
+					$('.simple-tabs li:eq(1)').trigger('click');
+					return false;
+				}
+
+				if($('#scenario_identification_rc_vapor_k').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_vapor_k').addClass('error_field');
+					alert('Please enter Relief Conditions Vapor K');
+					$('.simple-tabs li:eq(1)').trigger('click');
+					return false;
+				}
+
+				if($('#scenario_identification_rc_pipe_roughness').val() == '') {
+					validate = false;
+					$('#scenario_identification_rc_pipe_roughness').addClass('error_field');
+				}
+
+			}
+		}
+
+		if(validate == false) {
+			alert('Please enter required values.');
+			return false;
+		} else {
+			$('.error_field').removeClass('error_field');
+			$('#calculate_btn').val('effective_discharge_area_calculation');
+			$('.scenario_identification_form').ajaxSubmit();
+		}
+
 		return false;
 	});
 

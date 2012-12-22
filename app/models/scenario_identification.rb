@@ -15,19 +15,19 @@ class ScenarioIdentification < ActiveRecord::Base
   def self.relief_capacity_calculation_method_list(relief_device_type)
     list =
       {"Pressure Relief Valve" =>
-         ["Vapor - Critical",
+         ["Liquid - Certified",
+          "Liquid - Non Certified",
+          "Vapor - Critical",
           "Vapor - Subcritical",
           "Vapor - Steam",
-          "Liquid - Certified",
-          "Liquid - Non Certified",
           "Two Phase HEM",
           "Generic"],
        "Rupture Disk" => [
+         "Liquid - Certified",
+         "Liquid - Non Certified",
          "Vapor - Critical",
          "Vapor - Subcritical",
          "Vapor - Steam",
-         "Liquid - Certified",
-         "Liquid - Non Certified",
          "Two Phase HEM",
          "Generic",
          "Line Capacity"],

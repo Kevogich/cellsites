@@ -25,16 +25,24 @@ class Project < ActiveRecord::Base
   has_many :column_sizings, :dependent => :destroy
   has_many :heat_exchanger_sizings, :dependent => :destroy
   has_many :attachments, :as => :attachable, :dependent => :destroy
-
-  has_many :users, :through => :project_users
   has_many :project_users
-
+  has_many :users, :through => :project_users
+  has_many :item_types_transmit_and_proposals, :dependent => :destroy
+  has_many :procure_items, :dependent => :destroy
+  has_many :project_vendor_lists
+  has_many :vendor_lists, :through => :project_vendor_lists
+  has_many :project_item_types
+  has_many :item_types, :through => :project_item_types , :dependent => :destroy
+  has_many :process_units, :dependent => :destroy
+  has_many :request_for_quotation_setups, :dependent => :destroy
+  has_many :procure_rfq_sections, :through => :request_for_quotation_setups , :dependent => :destroy
   acts_as_commentable
-  
+
   #TODO VALIDATIONS NEED TO ADD IN PROJECT
   validates_presence_of :client_id, :project_num
 
   accepts_nested_attributes_for :pressure_relief_system_design_parameter
+  accepts_nested_attributes_for :request_for_quotation_setups
     
   #serialize :sizing_criterias
 
@@ -147,7 +155,9 @@ class Project < ActiveRecord::Base
       :rotating_equiment_design_parameters => { :no => 9, :name => 'Rotating Equiment Design Parameters', :prev => :piping_and_instrumentation_design_parameters, :next => :mechanical_driver_design_parameters },
       :mechanical_driver_design_parameters => { :no => 10, :name => 'Mechanical Driver Design Parameters', :prev => :rotating_equiment_design_parameters, :next => :fixed_equipment_design_parameters },
       :fixed_equipment_design_parameters => { :no => 11, :name => 'Fixed Equipment Design Parameters', :prev => :mechanical_driver_design_parameters, :next => :pressure_relief_system_design_parameter },
-      :pressure_relief_system_design_parameter => { :no => 12, :name => 'Fixed Equipment Design Parameters', :prev => :fixed_equipment_design_parameters, :next => nil }
+      :pressure_relief_system_design_parameter => { :no => 12, :name => 'Fixed Equipment Design Parameters', :prev => :fixed_equipment_design_parameters, :next => :vendor_schedule_setup },
+      :vendor_schedule_setup => { :no => 13, :name => 'Vendor Schedule Setup', :prev => :pressure_relief_system_design_parameter, :next => :request_for_quotation_setup },
+      :request_for_quotation_setup => { :no => 14, :name => 'Request For Quotation Set up', :prev => :vendor_schedule_setup, :next => nil }
     }
   end
 
@@ -188,7 +198,7 @@ class Project < ActiveRecord::Base
     rs_measure_unit = self.unit_of_measurements.
     joins(:measure_unit, :measurement_sub_type, :measurement).
     where("measurements.name = ? AND measurement_sub_types.name = ? AND measure_units.unit_type_id = ?", measurement, measurement_sub_type, self.units_of_measurement_id.to_i).
-    select("measure_units.*, measurement_sub_types.name as sub_type, measurements.name as measurement_name").
+    select("measure_units.*, measurement_sub_types.name as sub_type, measurements.name as measurement_name, unit_of_measurements.decimal_places as decimals").
     first
     
     measure_unit = {}
@@ -198,7 +208,7 @@ class Project < ActiveRecord::Base
     measure_unit[:unit] = rs_measure_unit.unit rescue ""
     measure_unit[:base_unit] = rs_measure_unit.base_unit rescue ""
     measure_unit[:conversion_factor] = rs_measure_unit.conversion_factor.to_f rescue 1
-    measure_unit[:decimal_places] = rs_measure_unit.decimal_places.to_i rescue 10 
+    measure_unit[:decimal_places] = rs_measure_unit.decimals.to_i rescue 10
     return measure_unit
   end
   
@@ -506,8 +516,8 @@ class Project < ActiveRecord::Base
     sql_results = unit_of_measurements.select("measurements.name AS measurement, measurement_sub_types.name AS measurement_sub_type, measure_units.unit AS measure_unit, unit_of_measurements.decimal_places").joins(:measurement, :measurement_sub_type, :measure_unit)
 
     sql_results.each do |uom|
-      measurement = uom[:measurement].downcase.gsub(' ', '_')      
-      measurement_sub_type = uom[:measurement_sub_type].downcase.gsub(' ', '_')            
+      measurement = uom[:measurement].downcase.gsub(/[" "']/, "_")
+      measurement_sub_type = uom[:measurement_sub_type].downcase.gsub(/[" "']/, "_")
       measurement_type = "#{measurement}_#{measurement_sub_type}"
       decimal_places_hash[measurement_type] = {}
       decimal_places_hash[measurement_type][:unit] = uom[:measure_unit].to_s

@@ -1,0 +1,163 @@
+<link rel="stylesheet" href="http://jqueryui.com/web-base-template/themes/jqueryui.com/style.css">
+<div style="min-width: 700px; min-height: 300px;">
+  <h2><%= params[:item_type] %> </h2>
+<h3><%=@vendor_required_data.vendor_data_requirement %> with Shipment</h3>
+
+
+<%= form_for @vendor_schedule_setup, :url => update_with_shipment_vendor_schedule_setup_admin_projects_path(:page => params[:page]), :html => {:method => :post, :remote => true} do |f| %>
+  <%= f.hidden_field :id %>
+  Notes
+  <div class="form-element">
+    <table>
+      <td><%= f.text_area :with_shipment, :class => "text_area" %></td>
+      <% if params[:page] == "item_tag" %>
+        <td><p>Date: <%= f.text_field :date, :id => "datepicker" %></p></td>
+      <% end %>
+    </table>
+    <br/>
+    <%= f.submit "Update" %>
+  </div>
+
+<% end %>
+  <% if params[:page] == "item_tag" %>
+    <fieldset class="project" style="margin-top:15px;">
+      <legend>Attachments</legend>
+
+      <input id="attachment_tab3" type="button" value="[+] Expand" onclick="toggle_visibility('div_attachment_tab3','attachment_tab3');">
+
+      <div style="width:auto;" id="div_attachment_tab3">
+        <%#= render :partial => "attachments/attachments", :locals => {:attachments => @attachments_tab1} %>
+        <% @attachments_tab3.each do |attachment| %>
+          <div class="attachment">
+            <p class="name">
+              <span class="applicable_span1">proposal</span>&nbsp; for&nbsp; <%= attachment.name %>
+              <%= link_to attachment.attachment_file_name, get_attachment_path(attachment.attachable_type.downcase, attachment.id), :target => '_blank' %>
+            </p>
+            <blockquote>
+              <p><%= attachment.description %></p>
+
+            </blockquote>
+            <div class="attachment_div">
+              <small><%= attachment.user.name %></small>
+              <span class="help-inline created_at">Created at <%= attachment.created_at.strftime('%d-%b-%Y %I:%M:%S %p') %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <br>
+
+      <div class="new_attachment">
+        <%= form_for @attachment, :url => url_for(:controller => '/attachments', :action => 'create'), :html => {:multipart => true, :style => "width:96.5%;", :class => "well form-inline"} do |f| %>
+          <%= f.hidden_field :attachable_id %>
+          <%= f.hidden_field :attachable_type %>
+          <span class="file-wrapper">
+      <%= f.file_field :attachment %>
+            <span class="button">Select File</span>
+    </span>
+          <%= f.text_field :name, :placeholder => "Attachment Name" %>
+          <%= f.text_field :description, :placeholder => "Attachment Description" %>
+          <%= hidden_field_tag "attachment_vendor", "#{params[:item_proposal_id]}_#{params[:item_tag_id]}_with_shipment" %>
+          <%= f.submit "Submit Attachment" %>
+        <% end %>
+      </div>
+
+
+    </fieldset>
+    <fieldset class="project" style="margin-top:15px;">
+      <legend>Comments</legend>
+      <%#= render :partial => "comments/comments", :locals => {:comments => @comments_tab4} %>
+      <%#= render :partial => "comments/form", :locals => {:comment => @comment} %>
+      <input id="comments_tab3" type="button" value="[+] Expand" onclick="toggle_visibility('div_comment_tab3','comments_tab3');">
+
+      <div style="width:auto;" id="div_comment_tab3">
+        <%#= render :partial => "comments/comments", :locals => {:comments => @comments_tab4} %>
+        <% @comments_tab4.each do |comment| %>
+          <div class="comment">
+            <p class="title"><span class="applicable_span1">proposal</span>&nbsp; for <%= comment.title %></p>
+
+            <p class="comment_content"><%= comment.comment %></p>
+
+            <div class="comment_div">
+              <small><%= comment.user.name %> -</small>
+              <span class="created"> <small>Created
+                at <%= comment.created_at.strftime('%d-%b-%Y %I:%M:%S %p') %></small></span>
+            </div>
+          </div>
+
+        <% end %>
+      </div>
+
+      <div class="new_comment">
+        <%= form_for @comment,:url => url_for(:controller => '/comments', :action => 'create'), :html => {:style => "width:100%;"} do |f| %>
+          <%= f.hidden_field :commentable_id %>
+          <%= f.hidden_field :commentable_type %>
+          <div class="control-group">
+            <%= f.label :title, :class => "control-label" %>
+            <div class="controls">
+              <%= f.text_field :title, :style => "width:99%;" %>
+            </div>
+          </div>
+          <div class="control-group">
+            <%= f.label :comment, :class => "control-label" %>
+            <div class="controls">
+              <%= f.text_area :comment, :style => "width:99%;", :rows => 4 %>
+              <%= hidden_field_tag "attachment_vendor", "#{params[:item_proposal_id]}_#{params[:item_tag_id]}_with_shipment" %>
+            </div>
+          </div>
+          <div class="control-group">
+            <%= f.submit "Create" %>
+          </div>
+        <% end %>
+
+      </div>
+    </fieldset>
+    <style>
+
+      .form-element {
+        min-width: 960px !important;
+      }
+
+    </style>
+  <% end %>
+  <style>
+    .text_area {
+      width: 650px;
+      height: 100px;
+      position: relative;
+    }
+
+    .form-element {
+      min-width: 660px;
+    }
+    .attachment_div {
+      bottom: 65px;
+      float: right;
+      padding-right: 10px;
+      position: relative;
+    }
+
+    #div_attachment_tab3,#div_comment_tab3{
+      display: none;
+      width: 100% !important;
+    }
+
+    #attachment_tab3, #comments_tab3 {
+      border: none;
+      background: none;
+    }
+  </style>
+  <script>
+    function toggle_visibility(tbid, lnkid) {
+      if (document.all) {
+        document.getElementById(tbid).style.display = document.getElementById(tbid).style.display == "block" ? "none" : "block";
+      }
+      else {
+        document.getElementById(tbid).style.display = document.getElementById(tbid).style.display == "table" ? "none" : "table";
+      }
+      document.getElementById(lnkid).value = document.getElementById(lnkid).value == "[-] Collapse" ? "[+] Expand" : "[-] Collapse";
+    }
+    $(function() {
+      $( "#datepicker" ).datepicker();
+    });
+  </script>
+</div>

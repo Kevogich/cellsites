@@ -1,5 +1,12 @@
+//console.log('<%= @pipeable_type %>');
 <% if @pipeable_type == "relief_device"%>
 	design_button_click();
+<% elsif @pipeable_type == "relief_device_open_vent_relief_device"%>
+	design_button_click();
+<% elsif @pipeable_type == "relief_device_low_pressure_vent_relief_device"%>
+	design_button_click();
+<% elsif @pipeable_type == "relief_device_rupture_disk"%>
+  design_button_click();
 <% else %>
 	$.colorbox.close();
 <% end%>

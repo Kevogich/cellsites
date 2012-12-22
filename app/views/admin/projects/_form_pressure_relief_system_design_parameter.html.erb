@@ -387,34 +387,30 @@
 	</tr>
 	<tr>
 		<td colspan="3">
-			<p style="width: 450px;">
-				Vapor Back Pressure Correction Factor
-				<%= pr.select :prvcfb_vapor_back_pressure, options_for_select(StaticData.kb_option, pr.object.prvcfb_vapor_back_pressure), {:prompt => "select"}, :class => "input-medium pull-right" %>
-			</p>
+			Vapor Back Pressure Correction Factor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<%= pr.select :prvcfb_vapor_back_pressure, options_for_select(StaticData.kb_option, pr.object.prvcfb_vapor_back_pressure), {:prompt => "select"}, :class => "input-medium" %>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<%= pr.check_box :kb_at_over_pressure_between_api_values %> Conservatively Estimate Back Pressure at Overpressures between API values
 		</td>
 	</tr>
 	<tr>
 		<td colspan="3">
-			<p style="width: 450px;">
-				Liquid Back Pressure Correction Factor
-				<%= pr.select :prvcfb_liquid_back_pressure, options_for_select(StaticData.kw_option, pr.object.prvcfb_liquid_back_pressure), {:prompt => "select"}, :class => "input-medium pull-right" %>
-			</p>
+			Liquid Back Pressure Correction Factor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<%= pr.select :prvcfb_liquid_back_pressure, options_for_select(StaticData.kw_option, pr.object.prvcfb_liquid_back_pressure), {:prompt => "select"}, :class => "input-medium" %>
 		</td>
 	</tr>
 	<tr>
 		<td colspan="3">
-			<p style="width: 450px;">
-				Liquid Over Pressure Correction Factor
-				<%= pr.select :prvcfb_liquid_over_pressure, options_for_select(StaticData.kp_option, pr.object.prvcfb_liquid_over_pressure), {:prompt => "select"}, :class => "input-medium pull-right" %>
-			</p>
+			Liquid Over Pressure Correction Factor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<%= pr.select :prvcfb_liquid_over_pressure, options_for_select(StaticData.kp_option, pr.object.prvcfb_liquid_over_pressure), {:prompt => "select"}, :class => "input-medium" %>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<%= pr.check_box :kp_at_over_pressure_lower_than_10p %> Conservatively Estimate Kp at Overpressure Lower than 10%
 		</td>
 	</tr>
 	<tr>
 		<td colspan="3">
-			<p style="width: 450px;">
-				Low Pressure Vent Correction Factor
-				<%= pr.select :prvcfb_low_pressure_vent_pressure, options_for_select(StaticData.kd_option, pr.object.prvcfb_low_pressure_vent_pressure), {:prompt => "select"}, :class => "input-medium pull-right" %>
-			</p>
+			Low Pressure Vent Correction Factor&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<%= pr.select :prvcfb_low_pressure_vent_pressure, options_for_select(StaticData.kd_option, pr.object.prvcfb_low_pressure_vent_pressure), {:prompt => "select"}, :class => "input-medium" %>
 		</td>
 	</tr>
 	<tr>
@@ -432,6 +428,26 @@
 			</p>
 		</td>
 	</tr>
+  <tr>
+    <td colspan="3">
+      <span style="font-size: 16px;margin: 0;text-decoration: underline;">Rupture Disk Design Method</span>
+    </td>
+  </tr>
+  <tr>
+    <td width="30%">
+      <p>
+        <%= pr.radio_button :rddm, "Coefficient of Discharge Method" %> Coefficient of Discharge Method (Kd)
+      </p>
+      <p>
+        <%= pr.radio_button :rddm, "Flow Resistance Method" %> Flow Resistance Method (Kr)
+      </p>
+    </td>
+    <td colspan="2">
+      <p>
+        <%= pr.check_box :pressure_relief_valve_count_reconcile_body_size_api520 %> Reconcile Body Size with API 520
+      </p>
+    </td>
+  </tr>
 	<tr>
 		<td colspan="3">
 			<span style="font-size: 16px;margin: 0;text-decoration: underline;">
@@ -576,7 +592,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td colspan="3">
+    <td width="30%">
 			<p>
 				<%= pr.radio_button :valve_body_size_selection_basis, "Always Use Larger Body Size For Given Orifice" %> Always Use Larger Body Size For Given Orifice
 			</p>
@@ -587,6 +603,11 @@
 				Largest Orifice Size To Consider <%= pr.select :largest_orifice_size_to_consider, options_for_select(StaticData.orifice_designation.collect{ |od| [raw(od[1]), od[0]]}, pr.object.largest_orifice_size_to_consider), :prompt => 'Select', :class => "input-medium" %>
 			</p>
 		</td>
+    <td colspan="2">
+      <p>
+        <%= pr.check_box :pressure_relief_valve_count_reconcile_body_size_api %> Reconcile Body Size with API 526
+      </p>
+    </td>
 	</tr>
 	<tr>
 		<td colspan="3">
@@ -726,6 +747,10 @@
 
 <%= javascript_tag do %>
 	var pipe_size_schedules = <%= raw PipeSizing.pipe_size_schedules.to_json %>;
+	var pipe_size_pipe_ods = <%= raw PipeSizing.pipe_size_pipe_od.to_json %>;
+	var pipe_size_wall_thinkness = <%= raw PipeSizing.pipe_size_wall_thinkness.to_json %>;
+	var pipe_id_conversion_factor = <%= @project.conversion_factor("Length", "Pipe Tube Diameter") %>;
+	var estimated_net_flow_area_cf = <%= raw @project.base_unit_cf(mtype:  "area", msub_type:  "orifice").to_json%>;
 <% end %>
 <script type="text/javascript">
 	set_project_unit_and_decimals();
@@ -733,7 +758,7 @@
 	$('#project_pressure_relief_system_design_parameter_attributes_rupture_disk_selection_basis_rd_size').change(function(){
 		var val = $("option:selected", this).attr('data-value');
 		$('#project_pressure_relief_system_design_parameter_attributes_rupture_disk_selection_basis_rd_size1 > option').remove();
-		$('#project_pressure_relief_system_design_parameter_attributes_rupture_disk_selection_basis_rd_size1 > option').append($('<option></option>').val("").html(""));
+		$('#project_pressure_relief_system_design_parameter_attributes_rupture_disk_selection_basis_rd_size1').append($('<option></option>').val("").html(""));
 		$(pipe_size_schedules[val]).each(function(k, v){
 			$('#project_pressure_relief_system_design_parameter_attributes_rupture_disk_selection_basis_rd_size1').append($('<option></option>').val(v).html(v));
 		});
@@ -743,10 +768,39 @@
 	$('#project_pressure_relief_system_design_parameter_attributes_vent_line_selection_basis_rd_size').change(function(){
 		var val = $("option:selected", this).attr('data-value');
 		$('#project_pressure_relief_system_design_parameter_attributes_vent_line_selection_basis_rd_size1 > option').remove();
-		$('#project_pressure_relief_system_design_parameter_attributes_vent_line_selection_basis_rd_size1 > option').append($('<option></option>').val("").html(""));
+		$('#project_pressure_relief_system_design_parameter_attributes_vent_line_selection_basis_rd_size1').append($('<option></option>').val("").html(""));
 		$(pipe_size_schedules[val]).each(function(k, v){
 			$('#project_pressure_relief_system_design_parameter_attributes_vent_line_selection_basis_rd_size1').append($('<option></option>').val(v).html(v));
 		});
 		return false;
+	});
+
+
+	$('#project_pressure_relief_system_design_parameter_attributes_rupture_disk_selection_basis_rd_size1').live('change', function (e) {
+		$('#project_pressure_relief_system_design_parameter_attributes_rd_estimated_net_flow_area').val('');
+		if ($(this).val() == '') {
+			return false;
+		}
+		var pipe_size = $('#project_pressure_relief_system_design_parameter_attributes_rupture_disk_selection_basis_rd_size option:selected').attr('data-value');
+		var pipe_od = pipe_size_pipe_ods[pipe_size];
+		var wall_thickness = pipe_size_wall_thinkness[pipe_size][$(this).val()];
+		var pipe_id = pipe_od - (2 * wall_thickness);
+		var estimated_net_flow_area = Math.PI * Math.pow((pipe_id / 2), 2);
+		estimated_net_flow_area = estimated_net_flow_area / estimated_net_flow_area_cf["factor"];
+		$('#project_pressure_relief_system_design_parameter_attributes_rd_estimated_net_flow_area').val(get_project_field_value1('area_orifice', estimated_net_flow_area));
+	});
+
+	$('#project_pressure_relief_system_design_parameter_attributes_vent_line_selection_basis_rd_size1').live('change', function (e) {
+		$('#project_pressure_relief_system_design_parameter_attributes_vl_estimated_net_flow_area').val('');
+		if ($(this).val() == '') {
+			return false;
+		}
+		var pipe_size = $('#project_pressure_relief_system_design_parameter_attributes_vent_line_selection_basis_rd_size option:selected').attr('data-value');
+		var pipe_od = pipe_size_pipe_ods[pipe_size];
+		var wall_thickness = pipe_size_wall_thinkness[pipe_size][$(this).val()];
+		var pipe_id = pipe_od - (2 * wall_thickness);
+		var estimated_net_flow_area = Math.PI * Math.pow((pipe_id / 2), 2);
+		estimated_net_flow_area = estimated_net_flow_area / estimated_net_flow_area_cf["factor"];
+		$('#project_pressure_relief_system_design_parameter_attributes_vl_estimated_net_flow_area').val(get_project_field_value1('area_orifice', estimated_net_flow_area));
 	});
 </script>

@@ -1,0 +1,10 @@
+
+<span class="file-wrapper">
+      <%= f.file_field :attachment %>
+  <span class="button">Select File</span>
+    </span>
+<%= f.text_field :name, :placeholder => "Attachment Name" %>
+<%= f.text_field :description, :placeholder => "Attachment Description" %>
+<%= f.hidden_field :user_id, :value => current_user.id %>
+<%= f.hidden_field :item_tag_tab, :value => "applicable_specification"  %>
+

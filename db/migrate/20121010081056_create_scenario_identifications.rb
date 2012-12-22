@@ -9,10 +9,6 @@ class CreateScenarioIdentifications < ActiveRecord::Migration
 
       #scenario calculation
       t.string :relief_rate_calculation_method, :limit => 50
-      t.float  :sc_set_pressure, :limit => 53
-      t.float  :sc_over_pressure, :limit => 53
-      t.float  :sc_relief_pressure, :limit => 53
-      t.float  :sc_relief_rate, :limit => 53
 
       t.string :rc_case
       t.string :rc_stream
@@ -30,6 +26,7 @@ class CreateScenarioIdentifications < ActiveRecord::Migration
       t.float  :rc_liquid_surface_tension, :limit => 53
       t.float  :rc_liquid_latent_heat, :limit => 53
       t.float  :rc_liquid_mw, :limit => 53
+      t.float  :rc_mass_flow_rate, :limit => 53
 
       t.string :dc_case
       t.string :dc_stream
@@ -47,6 +44,7 @@ class CreateScenarioIdentifications < ActiveRecord::Migration
       t.float  :dc_liquid_surface_tension, :limit => 53
       t.float  :dc_liquid_latent_heat, :limit => 53
       t.float  :dc_liquid_mw, :limit => 53
+      t.float  :dc_mass_flow_rate, :limit => 53
 
       t.text   :sc_comments
 

@@ -1,3 +1,4 @@
+<%#= raise params.inspect %>
 <div class="new_attachment">
   <%= form_for attachment, :html => {:multipart => true, :style => "width:96.5%;", :class => "well form-inline"} do |f| %>
     <%= f.hidden_field :attachable_id %>

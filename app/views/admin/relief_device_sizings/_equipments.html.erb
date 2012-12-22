@@ -1,8 +1,8 @@
 <%= fields_for @equipment do |f| %>
-<tr id=<%= "row_#{@unique_id}"%> >
+<tr id=<%= "row_equipment_#{@unique_id}"%> >
 	<td id=<%= "sequence_equipment_#{@unique_id}"%>>1</td>
 	<%= f.hidden_field :id, :name =>  "equipment_attributes[#{@unique_id}][id]" %>
-	<%= f.hidden_field :_destroy, :name =>  "equipment_attributes[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_#{@unique_id}" %>
+	<%= f.hidden_field :_destroy, :name =>  "equipment_attributes[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_equipment_#{@unique_id}" %>
 	<td><%= select_tag "equipment_attributes[#{@unique_id}][equipment_type]", options_for_select(@equipment_type, @equipment.equipment_type), :class => "equipment_type", :id => "#{@unique_id}" %></td>
 
 	<% if @equipment.equipment_type.nil? %>
@@ -32,7 +32,7 @@
     <% if @equipment.equipment_tag.nil? || @equipment.equipment_type == "User Specified" %>
         <td><%= link_to "View", "#", :id => "equipment_link_#{@unique_id}", :class => "view_equipment", :style => "display: none;" %></td>
     <% else %>
-        <td><%= link_to "View", "/admin/#{@equipment_links[@equipment.equipment_type][0][0]}/#{@equipment.equipment_tag}/edit", :id => "equipment_link_#{@unique_id}", :class => "view_equipment" %></td>
+        <td><%= link_to "View", "/admin/#{@equipment_links[@equipment.equipment_type][0][0]}/#{@equipment.equipment_tag}/edit", :id => "equipment_link_#{@unique_id}", :class => "view_equipment" rescue "" %></td>
     <% end %>
 
 	<td><%= link_to "Delete", "#", :id => "#{@unique_id}", :class => "delete_equipment" %></td>

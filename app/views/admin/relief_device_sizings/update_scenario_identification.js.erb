@@ -1,0 +1,35 @@
+<% if params[:calculate_btn] == "relief_sizing_method_selection"%>
+	var relief_sizing_method = '<%= @scenario_identification.relief_capacity_calculation_method %>';
+	var required_capacity_tab_values = <%= raw @required_capacity_tab_values.to_json%>;
+  var line_capacity_relief_condition = '<%= @line_capacity_relief_condition%>';
+  $('#scenario_identification_line_capacity_relief_condition').val(line_capacity_relief_condition);
+<% elsif params[:calculate_btn] == "effective_discharge_area_calculation"%>
+	$('#calculate_btn').val('');
+	<% if @alert_msg == "" %>
+		$('#scenario_identification_rc_reynolds_number').val('<%= @scenario_identification.rc_reynolds_number%>').glow();
+		$('#scenario_identification_rc_viscosity_correction_factor').val('<%= @scenario_identification.rc_viscosity_correction_factor%>').glow();
+		$('#scenario_identification_rc_overpressure_correction_factor').val('<%= @scenario_identification.rc_overpressure_correction_factor%>').glow();
+		$('#scenario_identification_rc_liquid_back_pressure_correction_factor').val('<%= @scenario_identification.rc_liquid_back_pressure_correction_factor%>').glow();
+		$('#scenario_identification_rc_back_pressure_correction_factor').val('<%= @scenario_identification.rc_back_pressure_correction_factor%>').glow();
+		$('#scenario_identification_rc_napier_correction_factor').val('<%= @scenario_identification.rc_napier_correction_factor%>').glow();
+		$('#scenario_identification_rc_superheat_correction_factor').val('<%= @scenario_identification.rc_superheat_correction_factor%>').glow();
+    $('#scenario_identification_rc_coefficient').val('<%= @scenario_identification.rc_coefficient%>').glow();
+		$('#scenario_identification_rc_coefficient_of_subcritical_flow').val('<%= @scenario_identification.rc_coefficient_of_subcritical_flow%>').glow();
+		$('#scenario_identification_rc_effective_discharge_area').val('<%= @scenario_identification.rc_effective_discharge_area%>').glow();
+		$('#scenario_identification_rc_comments').val('<%= escape_javascript @scenario_identification.rc_comments%>').glow();
+	<% else %>
+		alert('<%= @alert_msg%>');
+	<% end %>
+
+	<% if @change_kb %>
+		$('#scenario_identification_rc_back_pressure_correction_factor_list').val('Estimated');
+		$('#scenario_identification_rc_back_pressure_correction_factor').val('');
+	<% end %>
+
+	<% if @change_kp %>
+		$('#scenario_identification_rc_overpressure_correction_factor_list').val('Estimated');
+		$('#scenario_identification_rc_overpressure_correction_factor').val('');
+	<% end %>
+<% end%>
+
+

@@ -14,7 +14,8 @@
     <th>Project</th>
     <th>Client Project Number</th>
     <th>Options</th>
-    <th></th>
+    <th>Assign Users</th>
+    <th>Assign Vendors</th>
   </tr>
   <% for project in @projects %>
     <tr id="project_<%= project.id %>">
@@ -30,7 +31,12 @@
       </td>
       <td>
         <% if current_user.role != "project_execution" %>
-          <%= link_to 'assign', assign_admin_project_path(project) %>
+          <%= link_to 'Assign', assign_admin_project_path(project) %>
+        <% end %>
+      </td>
+      <td>
+        <% if current_user.role != "project_execution" %>
+            <%= link_to 'Assign', assign_vendors_admin_project_path(project) %>
         <% end %>
       </td>
     </tr>

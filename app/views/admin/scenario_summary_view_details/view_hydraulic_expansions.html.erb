@@ -4,7 +4,6 @@
 	}
 </style>
 
-
 <h3>Hydraulic Expansion</h3>
 
 <%=  form_for @scenario_hydraulic_expansion,
@@ -12,79 +11,72 @@
 							:remote => true,
 							:html => {:class => "view_hydraulic_expansion_form", :style => "width:100%;", :method => :post} do |f| %>
 	<%= f.hidden_field :id %>
+	<%= hidden_field_tag :calculate_btn %>
 	<table>
-		<tr>
-			<td colspan="3">
-				<span style="font-size: 18px;text-decoration: underline;">System Sketch</span>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="3">
-				<div style="border: 1px solid #000000;height: 200px;width: 100%;"></div>
-			</td>
-		</tr>
 		<tr>
 			<td>
 				<span style="font-size: 18px;text-decoration: underline;">Scenario Rationale</span>
+				&nbsp;&nbsp;&nbsp;
+				<%= link_to "System Sketch", "#system_sketch", :class => "system_sketch_link" %>
 			</td>
-			<td>Yes</td>
-			<td>No</td>
+			<td style="width: 50px;text-align: center;">Yes</td>
+			<td style="width: 50px;text-align: center;">No</td>
 		</tr>
 		<tr>
 			<td>
 				1) Is the system liquid full?
 			</td>
-			<td>
-				<%= f.radio_button :sr_1, "yes", :class => "scenario_rationale" %>
+			<td style="text-align: center;">
+				<%= f.radio_button :sr_1, "yes", :class => "scenario_rationale scenario_hydraulic_expansion_sr_1_yes" %>
 			</td>
-			<td>
-				<%= f.radio_button :sr_1, "no", :class => "scenario_rationale" %>
+			<td style="text-align: center;">
+				<%= f.radio_button :sr_1, "no", :class => "scenario_rationale scenario_hydraulic_expansion_sr_1_no" %>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				2) Are there mechanisms (block valves, control valve, check valves etc.,) upstream and downstream
+				2) Are there mechanisms (block valves, control valves, check valves etc.,) upstream and downstream
 				that can isolate the cold side against continued hot side flow?
 			</td>
-			<td>
-				<%= f.radio_button :sr_2, "yes", :class => "scenario_rationale" %>
+			<td style="text-align: center;">
+				<%= f.radio_button :sr_2, "yes", :class => "scenario_rationale scenario_hydraulic_expansion_sr_2_yes" %>
 			</td>
-			<td>
-				<%= f.radio_button :sr_2, "no", :class => "scenario_rationale" %>
+			<td style="text-align: center;">
+				<%= f.radio_button :sr_2, "no", :class => "scenario_rationale scenario_hydraulic_expansion_sr_2_no" %>
 			</td>
 		</tr>
 		<tr>
 			<td>
 				3) Are there administrative controls (carseal open, lock open, instruction signs etc.,) in place
-				to prevent the isolations of the system?
+				to prevent the isolation of the system?
 			</td>
-			<td>
-				<%= f.radio_button :sr_3, "yes", :class => "scenario_rationale" %>
+			<td style="text-align: center;">
+				<%= f.radio_button :sr_3, "yes", :class => "scenario_rationale scenario_hydraulic_expansion_sr_3_yes" %>
 			</td>
-			<td>
-				<%= f.radio_button :sr_3, "no", :class => "scenario_rationale" %>
+			<td style="text-align: center;">
+				<%= f.radio_button :sr_3, "no", :class => "scenario_rationale scenario_hydraulic_expansion_sr_3_no" %>
 			</td>
 		</tr>
 		<tr>
 			<td>
 				4) Is the equipment an exchanger or a system of exchangers?
 			</td>
-			<td>
-				<%= f.radio_button :sr_4, "yes", :class => "scenario_rationale" %>
+			<td style="text-align: center;">
+				<%= f.radio_button :sr_4, "yes", :class => "scenario_rationale scenario_hydraulic_expansion_sr_4_yes" %>
 			</td>
-			<td>
-				<%= f.radio_button :sr_4, "no", :class => "scenario_rationale" %>
+			<td style="text-align: center;">
+				<%= f.radio_button :sr_4, "no", :class => "scenario_rationale scenario_hydraulic_expansion_sr_4_no" %>
 			</td>
 		</tr>
 		<tr>
 			<td>
 				5) Is the equipment the cold side of an exchanger?
 			</td>
-			<td>
-				<%= f.radio_button :sr_5, "yes", :class => "scenario_rationale" %>
+			<td style="text-align: center;">
+				<%= f.radio_button :sr_5, "yes", :class => "scenario_rationale scenario_hydraulic_expansion_sr_5_yes" %>
 			</td>
-			<td>
-				<%= f.radio_button :sr_5, "no", :class => "scenario_rationale" %>
+			<td style="text-align: center;">
+				<%= f.radio_button :sr_5, "no", :class => "scenario_rationale scenario_hydraulic_expansion_sr_5_no" %>
 			</td>
 		</tr>
 		<tr>
@@ -93,11 +85,11 @@
 				side and the cold side, such that the blocking in of the cold side will also result in the loss
 				of hot side flow?
 			</td>
-			<td>
-				<%= f.radio_button :sr_6, "yes", :class => "scenario_rationale" %>
+			<td style="text-align: center;">
+				<%= f.radio_button :sr_6, "yes", :class => "scenario_rationale scenario_hydraulic_expansion_sr_6_yes" %>
 			</td>
-			<td>
-				<%= f.radio_button :sr_6, "no", :class => "scenario_rationale" %>
+			<td style="text-align: center;">
+				<%= f.radio_button :sr_6, "no", :class => "scenario_rationale scenario_hydraulic_expansion_sr_6_no" %>
 			</td>
 		</tr>
 		<tr>
@@ -105,30 +97,33 @@
 				7) Is the equipment piping or vessel that can be heated by heat tracing, heating coil, ambient heat
 				gains of fire?
 			</td>
-			<td>
-				<%= f.radio_button :sr_7, "yes", :class => "scenario_rationale" %>
+			<td style="text-align: center;">
+				<%= f.radio_button :sr_7, "yes", :class => "scenario_rationale scenario_hydraulic_expansion_sr_7_yes" %>
 			</td>
-			<td>
-				<%= f.radio_button :sr_7, "no", :class => "scenario_rationale" %>
+			<td style="text-align: center;">
+				<%= f.radio_button :sr_7, "no", :class => "scenario_rationale scenario_hydraulic_expansion_sr_7_no" %>
 			</td>
 		</tr>
 		<tr>
 			<td colspan="3">
 				<p style="text-align: right;margin: 0;">
-					<%= link_to "Analyze", "#", :class => "btn analyze_btn" %>&nbsp;&nbsp;&nbsp;&nbsp;
-					<%= f.submit "Save" %>
+					<%= f.submit "Analyze", :class => "btn analyze_btn" %>&nbsp;&nbsp;&nbsp;&nbsp;
 				</p>
 			</td>
 		</tr>
 		<tr>
 			<td colspan="3">
-				Applicability <%= f.select :applicability, options_for_select(StaticData.yes_no, f.object.applicability), :prompt => "" %>
+				Applicability <%= f.select :applicability, options_for_select(StaticData.yes_no, f.object.applicability), :include_blank => true %>
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				Determined By <%= f.select :determined_by, options_for_select(StaticData.documentation_by, f.object.determined_by), :prompt => "" %>
+				Determined By <%= f.select :determined_by, options_for_select(StaticData.documentation_by, f.object.determined_by), :include_blank => true %>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				Initial <%= f.text_field :initial %>
 				&nbsp;&nbsp;&nbsp;&nbsp;
-				Date <%= f.text_field :date1, :value => f.object.display_date1, :class => "input-small" %>&nbsp;&nbsp;
+				Date <%= f.text_field :date1, :value => f.object.display_date1, :class => "input-small" %>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<%= f.submit "Save", :class => "btn" %>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<%= link_to "Reset", "#", :class => "reset_scenario_rationale_chbox btn" %>
 			</td>
 		</tr>
 		<tr>
@@ -144,6 +139,15 @@
 	</table>
 <% end %>
 
+<div class="hide">
+	<div id="system_sketch" style="border: 1px solid #000000;height: 200px;width: 500px;"></div>
+</div>
+
+<%= javascript_tag do %>
+	var scenario_hydraulic_expansion = <%= raw @scenario_hydraulic_expansion.to_json %>;
+	var current_user_name = '<%= current_user.name %>';
+<% end %>
+
 <script type="text/javascript">
 	$('#scenario_hydraulic_expansion_date1').datepicker({
 		showOn: "button",
@@ -151,11 +155,217 @@
 		buttonImageOnly: true
 	});
 
-	//validation for question checked
-	$('.analyze_btn').click(function(){
-		if($('.scenario_rationale:checked').length < 7) {
-			alert('Please answer all questions for Scenario Rationale, before you click the analyze.');
-		}
+  $('.system_sketch_link').click(function(){
+		$.colorbox({
+			href: "#system_sketch",
+			inline: true,
+			onClosed: function(){
+				$('.display_scenario_analysis').trigger('click');
+			}
+		});
 		return false;
+	});
+
+	for(i = 1; i <= 7; i++) {
+		var val = scenario_hydraulic_expansion["sr_"+i];
+		if(val == "no" && i == 1) {
+			$('.scenario_hydraulic_expansion_sr_2_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_3_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_4_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_5_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_6_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_7_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_2_no').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_3_no').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_4_no').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_5_no').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_6_no').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_7_no').prop('disabled', true);
+		}
+		if(val == "no" && i == 2) {
+			$('.scenario_hydraulic_expansion_sr_3_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_4_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_5_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_6_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_7_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_3_no').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_4_no').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_5_no').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_6_no').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_7_no').prop('disabled', true);
+		}
+		if(val == "no" && i == 3) {
+			$('.scenario_hydraulic_expansion_sr_4_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_5_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_6_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_7_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_4_no').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_5_no').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_6_no').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_7_no').prop('disabled', true);
+		}
+		if(val == "no" && i == 4) {
+			$('.scenario_hydraulic_expansion_sr_5_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_6_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_7_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_5_no').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_6_no').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_7_no').prop('disabled', true);
+		}
+		if(val == "no" && i == 5) {
+			$('.scenario_hydraulic_expansion_sr_6_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_7_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_6_no').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_7_no').prop('disabled', true);
+		}
+		if(val == "no" && i == 6) {
+			$('.scenario_hydraulic_expansion_sr_7_yes').prop('disabled', true);
+			$('.scenario_hydraulic_expansion_sr_7_no').prop('disabled', true);
+		}
+	}
+
+	$('.analyze_btn').click(function(){
+		$('#calculate_btn').val("scenario_analyze");
+		$('.view_hydraulic_expansion_form').ajaxSubmit();
+		return false;
+	});
+
+	//validation for question checked
+	$('.view_hydraulic_expansion_form').submit(function(){
+
+
+	});
+
+	$('.reset_scenario_rationale_chbox').click(function(){
+		$('input[class*=scenario_hydraulic_expansion_sr]').prop('disabled', false).prop('checked',false);
+		$('#scenario_hydraulic_expansion_applicability,#scenario_hydraulic_expansion_determined_by,#scenario_hydraulic_expansion_initial').val('');
+		$('#scenario_hydraulic_expansion_initial').val(current_user_name);
+		$('#scenario_hydraulic_expansion_date1').datepicker("setDate", new Date());
+		return false;
+	});
+
+	$('.scenario_rationale').change(function(){
+		var sr_rb = $(this);
+
+		if(sr_rb.attr('id') == "scenario_hydraulic_expansion_sr_1_no" || sr_rb.attr('id') == "scenario_hydraulic_expansion_sr_1_yes") {
+			if(sr_rb.val() == "no") {
+				$('#scenario_hydraulic_expansion_sr_2_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_3_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_4_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_5_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_6_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_7_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_2_no').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_3_no').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_4_no').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_5_no').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_6_no').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_7_no').prop('disabled', true).prop('checked', false);
+			} else if (sr_rb.val() == "yes"){
+				$('#scenario_hydraulic_expansion_sr_2_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_3_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_4_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_5_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_6_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_7_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_2_no').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_3_no').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_4_no').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_5_no').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_6_no').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_7_no').prop('disabled', false);
+			}
+		}
+
+		if(sr_rb.attr('id') == "scenario_hydraulic_expansion_sr_2_yes" || sr_rb.attr('id') == "scenario_hydraulic_expansion_sr_2_no") {
+			if(sr_rb.val() == "no") {
+				$('#scenario_hydraulic_expansion_sr_3_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_4_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_5_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_6_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_7_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_3_no').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_4_no').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_5_no').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_6_no').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_7_no').prop('disabled', true).prop('checked', false);
+			} else if (sr_rb.val() == "yes"){
+				$('#scenario_hydraulic_expansion_sr_3_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_4_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_5_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_6_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_7_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_3_no').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_4_no').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_5_no').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_6_no').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_7_no').prop('disabled', false);
+			}
+		}
+
+		if(sr_rb.attr('id') == "scenario_hydraulic_expansion_sr_3_yes" || sr_rb.attr('id') == "scenario_hydraulic_expansion_sr_3_no") {
+			if(sr_rb.val() == "no") {
+				$('#scenario_hydraulic_expansion_sr_4_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_5_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_6_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_7_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_4_no').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_5_no').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_6_no').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_7_no').prop('disabled', true).prop('checked', false);
+			} else if (sr_rb.val() == "yes"){
+				$('#scenario_hydraulic_expansion_sr_4_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_5_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_6_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_7_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_4_no').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_5_no').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_6_no').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_7_no').prop('disabled', false);
+			}
+		}
+
+		if(sr_rb.attr('id') == "scenario_hydraulic_expansion_sr_4_yes" || sr_rb.attr('id') == "scenario_hydraulic_expansion_sr_4_no") {
+			if(sr_rb.val() == "no") {
+				$('#scenario_hydraulic_expansion_sr_5_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_6_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_7_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_5_no').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_6_no').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_7_no').prop('disabled', true).prop('checked', false);
+			} else if (sr_rb.val() == "yes"){
+				$('#scenario_hydraulic_expansion_sr_5_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_6_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_7_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_5_no').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_6_no').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_7_no').prop('disabled', false);
+			}
+		}
+
+		if(sr_rb.attr('id') == "scenario_hydraulic_expansion_sr_5_yes" || sr_rb.attr('id') == "scenario_hydraulic_expansion_sr_5_no") {
+			if(sr_rb.val() == "no") {
+				$('#scenario_hydraulic_expansion_sr_6_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_7_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_6_no').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_7_no').prop('disabled', true).prop('checked', false);
+			} else if (sr_rb.val() == "yes"){
+				$('#scenario_hydraulic_expansion_sr_6_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_7_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_6_no').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_7_no').prop('disabled', false);
+			}
+		}
+
+		if(sr_rb.attr('id') == "scenario_hydraulic_expansion_sr_6_yes" || sr_rb.attr('id') == "scenario_hydraulic_expansion_sr_6_no") {
+			if(sr_rb.val() == "no") {
+				$('#scenario_hydraulic_expansion_sr_7_yes').prop('disabled', true).prop('checked', false);
+				$('#scenario_hydraulic_expansion_sr_7_no').prop('disabled', true).prop('checked', false);
+			} else if (sr_rb.val() == "yes"){
+				$('#scenario_hydraulic_expansion_sr_7_yes').prop('disabled', false);
+				$('#scenario_hydraulic_expansion_sr_7_no').prop('disabled', false);
+			}
+		}
+
 	});
 </script>

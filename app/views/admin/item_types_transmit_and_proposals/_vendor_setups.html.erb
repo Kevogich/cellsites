@@ -1,0 +1,22 @@
+<%= fields_for @vendor_schedule_setup do |f| %>
+ <tr id=<%= "vendor_setup_#{@vendor_schedule_setup.id}" %>>
+     <%#= debug @vendor_schedule_setup %>
+    <td>
+      <% @vendor_required_data= VendorDataRequirement.find @vendor_schedule_setup.vendor_required_data %>
+      <%=  @vendor_required_data.vendor_data_requirement %>
+    <td>
+      <%= link_to "Notes", edit_vendor_schedule_setup_admin_projects_path(:item_proposal_id => params[:id],:setup_id => @vendor_schedule_setup.vendor_schedule_setup_id,:item_tag_id => @vendor_schedule_setup.id,:page => "item_tag", :required_data => "#{@vendor_schedule_setup.vendor_required_data}", :item_type => @item_type.item_type), :id => "quotation_#{@vendor_schedule_setup.id}", :class => "update_vendor_schedule_setup_notes" %>
+    </td>
+    <td>
+      <%= link_to "Notes", edit_purchase_vendor_schedule_setup_admin_projects_path(:item_proposal_id => params[:id],:setup_id => @vendor_schedule_setup.vendor_schedule_setup_id,:item_tag_id => @vendor_schedule_setup.id,:page => "item_tag", :required_data => "#{@vendor_schedule_setup.vendor_required_data}", :item_type => @item_type.item_type), :id => "quotation_#{@vendor_schedule_setup.id}", :class => "update_purchase_vendor_schedule_setup_notes" %>
+    </td>
+    <td>
+      <%= link_to "Notes", edit_as_built_vendor_schedule_setup_admin_projects_path(:item_proposal_id => params[:id],:setup_id => @vendor_schedule_setup.vendor_schedule_setup_id,:item_tag_id => @vendor_schedule_setup.id,:page => "item_tag", :required_data => "#{@vendor_schedule_setup.vendor_required_data}", :item_type => @item_type.item_type), :id => "quotation_#{@vendor_schedule_setup.id}", :class => "update_as_built_vendor_schedule_setup_notes" %>
+    </td>
+    <td>
+      <%= link_to "Notes", edit_with_shipment_vendor_schedule_setup_admin_projects_path(:item_proposal_id => params[:id],:setup_id => @vendor_schedule_setup.vendor_schedule_setup_id,:item_tag_id => @vendor_schedule_setup.id,:page => "item_tag", :required_data => "#{@vendor_schedule_setup.vendor_required_data}", :item_type => @item_type.item_type), :id => "quotation_#{@vendor_schedule_setup.id}", :class => "update_with_shipment_vendor_schedule_setup_notes" %>
+    </td>
+
+  </tr>
+
+<% end %>

@@ -1,0 +1,61 @@
+<% title 'Procure'%>
+<div>
+<table width='100%' style="border: 0;">
+  <tr>
+    <td style="background: #ffffff;border: 0;width: 50%;">
+      <div style="padding-top:10px;"><b><u>List of RFQ Sections</u></b></div>
+      <%= form_tag({:action => 'procure_rfq_sections'}, :class => "form1", :multipart => true) do %>
+        <table>
+          <tr><td>Request For Quote Sections</td><td><%= text_field_tag 'name' %></td><td><%= submit_tag('Create') %></td></tr>
+        </table>
+      <% end %>
+    </td>
+    <td style="background: #ffffff;border: 0;">
+      <div style="padding-top:10px;"><b><u>List of Additional PO Cost</u></b></div>
+      <%= form_tag({:action => 'procure_additional_po_costs'}, :class => "form1", :multipart => true) do %>
+        <table>
+          <tr><td>Additional PO Cost</td><td><%= text_field_tag 'name' %></td><td><%= submit_tag('Create') %></td></tr>
+        </table>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td style="background: #ffffff;border: 0;" valign="top">
+      <div>
+        <div style="padding-top:10px;">RFQ Sections</div>
+        <table style="width: 90%;">
+          <% @procure_rfq_sections.each do |procure_rfq_section| %>
+            <tr>
+              <td> <%= procure_rfq_section.name %></td>
+              <td><%= link_to 'Delete', {:action => "procure_rfq_sections_destroy", :id => procure_rfq_section.id} %></td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </td>
+    <td style="background: #ffffff;border: 0;" valign="top">
+      <div>
+        <div style="padding-top:10px;">Additional PO Cost</div>
+        <table style="width: 90%;">
+          <% @procure_additional_po_costs.each do |procure_additional_po_cost| %>
+            <tr>
+              <td> <%= procure_additional_po_cost.name %></td>
+              <td><%= link_to 'Delete', {:action => "procure_additional_po_costs_destroy", :id => procure_additional_po_cost.id} %></td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </td>
+  </tr>
+</table>
+</div>
+
+<br>
+<br>
+
+
+<style>
+  .form1 {
+    width: 500px;
+  }
+</style>

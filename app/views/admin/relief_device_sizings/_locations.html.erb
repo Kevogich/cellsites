@@ -1,9 +1,9 @@
 <%= fields_for @location do |f| %>
-<tr id=<%= "row_#{@unique_id}"%> >
-	<td id=<%= "sequence_location_#{@unique_id}"%>>1</td>
+<tr id=<%= "row_relief_device_location_#{@unique_id}"%> >
+	<td id=<%= "sequence_rd_location_#{@unique_id}"%>>1</td>
 	<%= f.hidden_field :id, :name =>  "location_attributes[#{@unique_id}][id]" %>
-	<%= f.hidden_field :_destroy, :name =>  "location_attributes[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_#{@unique_id}" %>
-    <td><%= f.text_field :location, :name =>  "location_attributes[#{@unique_id}][location]" , :style => "width:100px;" , :id => "location_#{@unique_id}"%></td>
+	<%= f.hidden_field :_destroy, :name =>  "location_attributes[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_relief_device_location_#{@unique_id}" %>
+    <td><%= f.text_field :location, :name =>  "location_attributes[#{@unique_id}][location]" , :style => "width:100px;" , :id => "relief_device_location_#{@unique_id}"%></td>
     <td><%= f.text_field :limiting_fitting, :name =>  "location_attributes[#{@unique_id}][limiting_fitting]" , :style => "width:100px;" , :id => "limiting_fitting_#{@unique_id}"%></td>
     <td><%= select_tag "location_attributes[#{@unique_id}][size]",options_for_select(PipeSizing.pipe_sizes(@fitting_pipe_size_unit).collect { |p| [raw(p[:name]), p[:value]] }.insert(0, ''),@location.size),:class => 'designation', :id => "pipe_size_#{@unique_id}"%></td>
     <td><%= select_tag "location_attributes[#{@unique_id}][contact_fluid_phase]",options_for_select(StaticData.relief_phase,@location.contact_fluid_phase),:class => 'designation', :id => "contact_fluid_phase_#{@unique_id}"%></td>

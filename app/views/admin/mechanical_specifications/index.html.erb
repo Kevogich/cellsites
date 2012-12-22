@@ -1,0 +1,188 @@
+<% title 'Mechanical Specifications settings', false%>
+<table class="mechspec">
+  <td width=33%>
+    <%= form_tag({:action => 'itemtypes'}, :class => "form", :multipart => true) do %>
+      <div class="table mechspec_table ">
+
+        <span>List of Item Type </span>
+        <hr>
+        <table>
+          <td>Item Type</td>
+          <td> <%= text_field_tag 'item_type' %></td>
+          <td><%= submit_tag('Create', :id => 'submit') %></td>
+        </table>
+      </div>
+    <% end %>
+    <br>
+    <table class="mech_table">
+      <tr>
+        <th> Item Type</th>
+        <th></th>
+      </tr>
+      <% @itemtypes.each do |itemtype| %>
+        <tr>
+          <td> <%= itemtype.item_type %></td>
+          <td><%= link_to 'Delete', {:action => "itemtypes_destroy", :type_id => itemtype.id} %></td>
+        </tr>
+      <% end %>
+    </table>
+
+
+  </td>
+  <td width=33%>
+    <%= form_tag({:action => 'vendor_requirement'}, :class => "form", :multipart => true) do %>
+      <div class="table mechspec_table">
+        <span>List of Vendor Data Requirement</span>
+        <hr>
+        <table>
+     <td> vendor data requirements </td>
+          <td><%= text_field_tag 'vendor_requirement' %></td>
+          <td><%= submit_tag('Create', :id => 'submit') %>  </td>
+        </table>
+      </div>
+
+    <% end %>
+    <br>
+    <table class="mech_table">
+      <tr>
+        <th> Vendor Data Requirements</th>
+        <th></th>
+      </tr>
+      <% @vendor_requirements.each do |req| %>
+        <tr>
+          <td> <%= req.vendor_data_requirement %></td>
+          <td><%= link_to 'Delete', {:action => "vendor_requirement_destroy", :req_id => req.id} %></td>
+        </tr>
+      <% end %>
+    </table>
+  </td>
+  <td width=33%>
+    <%#= form_tag({:action => 'datasheet'}, :class => "form", :multipart => true) do %>
+      <div class="table mechspec_table">
+        <span>List of Datasheets & Forms</span>
+        <hr>
+        <table>
+          <td>Datasheet/ Form</td>
+       <td><%= text_field_tag 'datasheet1' %></td>
+        <td>
+          <%#= submit_tag('Create', :id => 'submit') %>
+          <%= link_to 'Create', "#", :class => "btn datasheet" %>
+        </td>
+          </table>
+      </div>
+
+    <%#= end %>
+    <br>
+    <table class="mech_table">
+      <tr>
+        <th>Datasheet/Form </th>
+        <th></th>
+      </tr>
+
+      <% @datasheets.each do |data| %>
+        <tr>
+          <td> <%= data.datasheet_name %></td>
+          <td><%= link_to 'Delete', {:action => "datasheet_destroy", :datasheet_id => data.id} %></td>
+        </tr>
+      <% end %>
+
+
+    </table>
+    <div id="new_datasheet">
+      <% form_tag({:action => 'datasheet'}, :class => "form", :multipart => true) do %>
+      <div class="table mechspec_table">
+        <span>List of Datasheets & Forms</span>
+        <hr>
+        <table>
+          <td>Datasheet/ Form</td>
+          <td><%= text_field_tag 'datasheet' %></td>
+          <td><%= select_tag('item_type_datasheet', options_from_collection_for_select(@itemtypes, "id","item_type")) %></td>
+          <td>
+            <%= submit_tag('Create', :id => 'submit') %>
+           </td>
+        </table>
+      </div>
+
+      <% end %>
+    </div>
+  </td>
+</table>
+<script>
+  $('#new_datasheet').hide()
+  $("#datasheet1").keyup(function(){
+    $("#datasheet").val($(this).val());
+  });
+  $('.datasheet').click(function(){
+    $('#new_datasheet').show()
+
+
+    $(".datasheet").colorbox({inline:true, href:"#new_datasheet", opacity:0.7});
+
+  });
+
+</script>
+<style>
+
+  .mechspec td {
+    background-color: #FFFFFF;
+    padding-left: 20px;
+    padding-right: 20px;
+    vertical-align: top;
+  }
+
+  .form {
+    width: 100%;
+  }
+
+  hr {
+    width: 20%;
+    top: -12px;
+    position: relative
+  }
+
+  .itemtype {
+    bottom: 25px;
+    position: relative;
+  }
+
+  .mech_input {
+    bottom: 20px;
+    position: relative;
+    left: 5%;
+  }
+
+  .mech_button {
+    bottom: 20px;
+    left: 10%;
+    position: relative;
+  }
+
+  .mech_input1 {
+    bottom: 20px;
+    position: relative;
+    left: 10%;
+  }
+
+  .mech_button1 {
+    left: 15%;
+    position: relative;
+    bottom: 20px;
+  }
+
+  .mech_button1 input {
+    border-radius: 10px;
+  }
+
+  .mech_table {
+    width: 100%;
+    bottom: 30px;
+    position: relative;
+  }
+
+  .mech_button input {
+    border-radius: 10px;
+  }
+  .mechspec table td{
+    background-color:#f5f5f5;
+  }
+</style>

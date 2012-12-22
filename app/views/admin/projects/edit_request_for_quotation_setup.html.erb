@@ -1,0 +1,65 @@
+
+<div class="form_add_item">
+
+<%= form_for @rfq_setup, :url => update_request_for_quotation_setup_admin_projects_path, :html => {:method => "post", :style => 'width:auto;', :class => "edit_request_for_quotation_setup_form"} do |f| %>
+  <%= f.hidden_field :id, :value => f.object.id %>
+  <div>
+    <table style="width: auto;" class="pull-left">
+      <tr>
+        <td>Item</td>
+        <td><%= f.object.item_type.item_type %></td>
+      </tr>
+      <tr>
+        <td>RFQ Section</td>
+        <td><%= f.object.procure_rfq_section.name %></td>
+      </tr>
+    </table>
+
+    <div class="pull-left" style="margin-left: 20px;">
+      <div style="display: table-cell;height: 75px;text-align: center;vertical-align: bottom;">
+        <%= f.submit "Update", :class => "btn" %>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+
+  <table>
+    <tr>
+      <td>Text</td>
+    </tr>
+    <tr>
+      <td>
+        <%= f.text_area :comment, :style => "width:99%;", :rows => "5",:cols=>"40" %>
+      </td>
+    </tr>
+  </table>
+<% end %>
+
+
+<% unless @rfq_setup.new_record? %>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Attachments</legend>
+    <%= render :partial => "attachments/attachments", :locals => {:attachments => @attachments} %>
+    <%= render :partial => "attachments/form", :locals => {:attachment => @new_attachment} %>
+  </fieldset>
+  <fieldset class="project" style="margin-top:15px;">
+    <legend>Comments</legend>
+    <%= render :partial => "comments/comments", :locals => {:comments => @comments} %>
+    <%= render :partial => "comments/form", :locals => {:comment => @new_comment} %>
+  </fieldset>
+<% end %>
+
+
+</div>
+
+<style>
+  .form_add_item{
+    padding-left: 100px;
+    padding-right: 100px;
+  }
+</style>
+
+
+
+
+

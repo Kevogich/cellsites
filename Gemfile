@@ -3,7 +3,7 @@ source :rubygems
 # Core
 #gem 'bundler', '~> 1.0.7'
 gem 'rails', '3.0.4'
-#gem 'rake', '0.9.2'
+gem 'rake', '0.9.2'
 gem 'meta_where'
 gem 'mysql2', '0.2.7'
 gem 'devise', "1.4.8"
@@ -23,6 +23,7 @@ gem 'pdfkit'
 gem 'activerecord-import', '0.2.6'
 gem 'deep_cloneable', '1.2.4'
 gem 'alchemist'
+gem 'minimization'
 
 group :test do
   gem 'cucumber-rails'

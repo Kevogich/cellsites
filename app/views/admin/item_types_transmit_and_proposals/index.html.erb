@@ -1,0 +1,46 @@
+<% title "Mechanical Specifications"%>
+
+<%= render :partial => '/admin/user_project_settings/project_filter' %>
+<%= link_to "Add Item", new_admin_item_types_transmit_and_proposal_path(:item_type_id => params[:item_type_id]), :id => "add_item", :class => "new_admin_item_types_transmit_and_proposal" %>
+
+<table>
+  <tr>
+    <th>Default</th>
+    <th>Item Tag</th>
+    <th>Req#</th>
+    <th>Select Vendor</th>
+    <th>Price</th>
+    <th>By</th>
+    <th>Reviewer</th>
+    <th>Approver</th>
+    <th>Created on</th>
+    <th>Updated on</th>
+    <th>Design</th>
+    <th>RFQ</th>
+    <th>Bid Evaluation</th>
+    <th>Delete</th>
+    <th>Clone</th>
+  </tr>
+  <% @proposals.each do |proposal| %>
+  <tr>
+   <td></td>
+    <td><%= proposal.item_tag %></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td><%= link_to "Edit", edit_admin_item_types_transmit_and_proposal_path(proposal,:item_type_id => params[:item_type_id]) %></td>
+    <td><%= link_to "Edit", "#" %></td>
+    <td><%= link_to "Edit", bid_evaluation_admin_item_types_transmit_and_proposals_path(:id => proposal.id,:item_type_id => params[:item_type_id]) %></td>
+    <td><%= link_to "Delete", "#" %></td>
+    <td><%= link_to "Clone", "#" %></td>
+  </tr>
+  <% end %>
+</table>
+<script>
+  $(".new_admin_item_types_transmit_and_proposal").colorbox();
+</script>

@@ -1,0 +1,49 @@
+
+<fieldset class="project" style="margin-top:15px;">
+  <legend>Vendor Schedule
+    SetUp&nbsp;<%= link_to (image_tag 'edit.png', :border => 0, :size => '16x16'), edit_steps_admin_project_path(@project, 'vendor_schedule_setup'), :title => "Vendor Schedule setup" %></legend>
+  <input id="lnk_vendor_schedule_setup_table" type="button" value="[+] Expand" onclick="toggle_visibility('vendor_schedule_setup_table','lnk_vendor_schedule_setup_table');">
+
+  <div style="width:auto;" id="vendor_schedule_setup_table">
+    <%#= raise @item_types.count.inspect %>
+      <% @item_types.each do |item_type| %>
+       <h2><%= item_type.item_type %></h2>
+      <table class = "setup_expand_table" >
+        <tr>
+
+          <th>Vendor Required Data</th>
+          <th>For Quotation/Proposal</th>
+          <th>For Purchase</th>
+          <th>For As Built</th>
+          <th>With Shipment</th>
+        </tr>
+      <% item_type.vendor_schedule_setups.each do |setup| %>
+          <%#= raise setup.vendor_data_requirement.inspect %>
+          <tr>
+             <% vendor_required_data = VendorDataRequirement.find setup.vendor_required_data unless setup.vendor_required_data.nil? %>
+            <td><%= vendor_required_data.vendor_data_requirement unless vendor_required_data.nil?%>&nbsp;</td>
+
+            <td><%= setup.quotation %>&nbsp;</td>
+
+            <td><%= setup.purchase %>&nbsp;</td>
+
+            <td><%= setup.as_built %>&nbsp;</td>
+
+            <td><%= setup.with_shipment %>&nbsp;</td>
+
+
+          </tr>
+        <% end %>
+      </table>
+      <% end %>
+
+
+  </div>
+
+</fieldset>
+   <style>
+     .setup_expand_table
+     {
+       width: 200% !important;
+     }
+   </style>

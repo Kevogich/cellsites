@@ -1,0 +1,25 @@
+
+
+<%= f.hidden_field :commentable_id %>
+<%= f.hidden_field :commentable_type %>
+<%= f.hidden_field :user_id, :value => current_user.id %>
+<%= f.hidden_field :item_tag_tab, :value => "datasheet"  %>
+<div class="control-group">
+  <%= f.label :title, :class => "control-label" %>
+  <div class="controls">
+    <%= f.text_field :title, :style => "width:99%;" %>
+  </div>
+</div>
+<div class="control-group">
+  <%= f.label :comment, :class => "control-label" %>
+  <div class="controls">
+    <%= f.text_area :comment, :style => "width:99%;", :rows => 4 %>
+  </div>
+</div>
+<style>
+  .applicable_span{
+    padding-right: 5%;
+    padding-left: 5%;
+    font-weight: bold;
+  }
+</style>

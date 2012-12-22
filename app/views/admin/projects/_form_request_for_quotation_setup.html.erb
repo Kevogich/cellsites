@@ -1,0 +1,58 @@
+
+  <%#= debug p.object %>
+
+  <table>
+    <tr><th></th>
+    <% @procure_rfq_sections.each do |procure_rfq_section| %>
+        <th> <%= procure_rfq_section.name %></th>
+    <% end %>
+    </tr>
+    <!-- i counter goes to rfqs*itmes ex. 3*4=12 -->
+    <% i = 0%>
+    <% count=@procure_rfq_sections.count %>
+    <%#= debug :request_for_quotation_setups %>
+    <% @request_for_quotation_setups.each_with_index do |rqs, i| %>
+      <%= f.fields_for :request_for_quotation_setups, rqs, :child_index => i do |p| %>
+        <% if i%count == 0 %>
+          <tr><th><%= @item_types[i/count]["item_type"] %></th>
+        <% end %>
+        <td style="text-align: center;">
+          <%= p.hidden_field :id %>
+          <%= p.hidden_field :procure_rfq_section_id %>
+          <%= p.hidden_field :item_type_id   %>
+          <%= p.check_box :status, :id=>"rfq_edit_status_#{i}", :class=> "rfq_edit_status" %>&nbsp;
+          <% if p.object.status %>
+            <%= link_to "Edit",
+                        edit_request_for_quotation_setup_admin_projects_path(:rfq_section_id => p.object.id),
+                        :id => "rfq_section_edit_#{i}",:class=>"rfq_section_edit" %>
+          <% else %>
+            <%= link_to "Edit",
+                        edit_request_for_quotation_setup_admin_projects_path(:rfq_section_id => p.object.id),
+                        :id => "rfq_section_edit_#{i}",:style => "color: #000000;",:class=>"rfq_section_edit" %>
+          <% end %>
+          <% if false %>(rfq=<%= p.object.procure_rfq_section_id %>,item=<%= p.object.item_type_id %>)<% end %>
+        </td>
+        <% i += 1%>
+        <% if i%count == 0 %></tr><% end %>
+      <% end %>
+    <% end %>
+  </table>
+
+
+
+  <script>
+    $(".rfq_section_edit").colorbox();
+
+      $(".rfq_edit_status").live("change", function () {
+        var id = $(this).attr("id").slice(16);
+        var link = $("#rfq_section_edit_" + id);
+      if(this.checked) {
+        link.attr("style", "color: #0000FF;");
+      } else {
+        link.attr("style", "color: #000000;");
+      }
+    });
+
+  </script>
+
+

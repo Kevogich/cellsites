@@ -26,7 +26,8 @@ class Admin::ReliefRateCalculationViewsController < AdminController
     generic.save
 
     scenario_identification = generic.scenario_identification
-    scenario_identification.sc_relief_rate = generic.relief_rate
+    scenario_identification.rc_pressure = generic.relief_pressure if scenario_identification.rc_pressure.nil?
+    scenario_identification.rc_mass_flow_rate = generic.relief_rate if scenario_identification.rc_mass_flow_rate.nil?
     scenario_identification.save
 
     scenario_summary = scenario_identification.scenario_summary

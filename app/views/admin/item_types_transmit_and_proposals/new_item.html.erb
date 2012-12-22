@@ -1,0 +1,10 @@
+<h2>Add New Item </h2>
+  <%= form_tag({:action => 'save_new_item'} , :multipart => true) do %>
+  <div class="form-element">
+    <%= hidden_field_tag "item_type_id", params[:item_type_id] %>
+<%= text_field_tag 'item_tag' %> &nbsp; &nbsp;
+  <%= submit_tag "update" %>
+  </div>
+<% end %>
+
+

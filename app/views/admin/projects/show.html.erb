@@ -5,8 +5,9 @@
 <br><br>
 
 <fieldset class="project">
-	<legend>Information&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_admin_project_path(@project), :title => "Edit Basic information"%></legend>	
-	<table style="width:auto;">
+	<legend>Information&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_admin_project_path(@project), :title => "Edit Basic information"%></legend>
+  <input id="lnk_information_table" type="button" value="[+] Expand" onclick="toggle_visibility('information_table','lnk_information_table');">
+	<table style="width:auto;" id="information_table">
 		<tr>
 			<td>Client Name</td><td><%= @project.client.name%></td>
 		</tr>
@@ -26,8 +27,9 @@
 </fieldset>
 
 <fieldset class="project">
-	<legend>Selected Units of Measurement&nbsp;<b><%= @project.units_of_measurement%></b>&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'measurement_unit'), :title => "Edit Measure Units"%></legend>
-	<table style="width:auto;">	
+	<legend>Selected Units of Measurements&nbsp;<b><%= @project.units_of_measurement%></b>&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'measurement_unit'), :title => "Edit Measure Units"%></legend>
+  <input id="lnk_selected_measurements_table" type="button" value="[+] Expand" onclick="toggle_visibility('selected_measurements_table','lnk_selected_measurements_table');">
+  <table style="width:auto;" id="selected_measurements_table">
 	<tr>
 		<th>Measurement</th>
 		<th>Measurement Sub Type</th>
@@ -53,7 +55,8 @@
 
 <fieldset class="project" style="margin-top:15px;">
 	<legend>Process Units&nbsp;<%= link_to (image_tag 'edit.png', :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'process_units'), :title => "Edit Process Units"%></legend>
-	<table style="width:auto;">
+  <input id="lnk_project_units_table" type="button" value="[+] Expand" onclick="toggle_visibility('project_units_table','lnk_project_units_table');">
+  <table style="width:auto;" id="project_units_table">
 		<tr>
 			<th>Process Unit</th>
 		</tr>
@@ -67,7 +70,8 @@
 
 <fieldset class="project" style="margin-top:15px;">	
 	<legend>Pipe Roughness&nbsp;<%= link_to (image_tag 'edit.png', :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'pipe_roughness'), :title => "Edit Pipe Roughness"%></legend>
-	<table>
+  <input id="lnk_pipe_roughness_table" type="button" value="[+] Expand" onclick="toggle_visibility('pipe_roughness_table','lnk_pipe_roughness_table');">
+	<table id="pipe_roughness_table">
 		<tr>
 			<th width=260>Material</th>
 	      	<th>Conditions</th>
@@ -95,7 +99,8 @@
 
 <fieldset class="project" style="margin-top:15px;">
   <legend>Heat &amp; Material Balance Setup&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'heat_and_material_balance'), :title => "Edit Heat & Material Balance"%></legend>
-  <table class="list full_width">
+  <input id="lnk_heat_and_material_balance_table" type="button" value="[+] Expand" onclick="toggle_visibility('heat_and_material_balance_table','lnk_heat_and_material_balance_table');">
+  <table class="list full_width" id="heat_and_material_balance_table">
     <tr>
       <th width="260">Case</th>
       <th>Value</th>
@@ -111,7 +116,8 @@
 
 <fieldset class="project" style="margin-top:15px;">
 	<legend>Sizing Criteria&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'sizing_criteria'), :title => "Edit Sizing Criterias"%></legend>
-	<table class="full_width sizing_criteria">
+  <input id="lnk_sizing_criteria_table" type="button" value="[+] Expand" onclick="toggle_visibility('sizing_criteria_table','lnk_sizing_criteria_table');">
+	<table class="full_width sizing_criteria" id="sizing_criteria_table">
 		<tr>
 			<th rowspan="2">Liquid</th>
 	      	<th colspan=3>Velocity</th>
@@ -156,7 +162,8 @@
 
 <fieldset class="project" style="margin-top:15px;">
 	<legend>Flow Model&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'flow_model'), :title => "Edit Flow Model"%></legend>
-	<table style="width:auto;">
+  <input id="lnk_flow_model_table" type="button" value="[+] Expand" onclick="toggle_visibility('flow_model_table','lnk_flow_model_table');">
+	<table style="width:auto;" id="flow_model_table">
 		<tr><td>Vapor flow model</td><td width="50%"><%= @project.vapor_flow_model%></td></tr>
 		<tr><td>Two phase flow model</td><td><%= @project.two_phase_flow_model%></td></tr>
   	</table>  
@@ -164,7 +171,8 @@
 
 <fieldset class="project" style="margin-top:15px;">
 	<legend>Piping and Instrumentation Design Parameters&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'piping_and_instrumentation_design_parameters'), :title => "Edit Piping and Instrumentation Design Parameters"%></legend>
-	<table style="width:auto;">
+  <input id="lnk_piping_and_instrumentation_design_parameters_table" type="button" value="[+] Expand" onclick="toggle_visibility('piping_and_instrumentation_design_parameters_table','lnk_piping_and_instrumentation_design_parameters_table');">
+	<table style="width:auto;" id="piping_and_instrumentation_design_parameters_table">
 		<tr>
 			<td>Barometric pressure</td>
 			<td width="50%"><%= @project.barometric_pressure.to_s + " " + @project.unit("Pressure", "Absolute").to_s %> </td>
@@ -230,7 +238,8 @@
 
 <fieldset class="project" style="margin-top:15px;">
 	<legend>Rotating Equiment Design Parameters&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'rotating_equiment_design_parameters'), :title => "Edit Rotating equiment design parameters"%></legend>
-	<table style="width:auto;">
+  <input id="lnk_rotating_equiment_design_parameters_table" type="button" value="[+] Expand" onclick="toggle_visibility('rotating_equiment_design_parameters_table','lnk_rotating_equiment_design_parameters_table');">
+	<table style="width:auto;" id="rotating_equiment_design_parameters_table">
 		<tr>
 			<td>Centrifugal pump design safety factor</td>
 			<td width="50%"><%= "#{@project.centrifugal_pump_design_safety_factor} %" %></td>
@@ -272,7 +281,8 @@
 
 <fieldset class="project" style="margin-top:15px;">
 	<legend>Mechanical Driver Design Parameters&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'mechanical_driver_design_parameters'), :title => "Edit Mechanical Driver Design Parameters"%></legend>
-	<table style="width:auto;">
+  <input id="lnk_mechanical_driver_design_parameters_table" type="button" value="[+] Expand" onclick="toggle_visibility('mechanical_driver_design_parameters_table','lnk_mechanical_driver_design_parameters_table');">
+	<table style="width:auto;" id="mechanical_driver_design_parameters_table">
 		<tr>
 			<td>Hydraulic power recovery turbine efficiency</td>
 			<td width="50%"><%= "#{@project.hydraulic_power_recovery_turbine_efficiency} %"%></td>
@@ -289,8 +299,10 @@
 </fieldset>
 
 <fieldset class="project" style="margin-top:15px;">
-	<legend>Fixed Equipment Design Parameters&nbsp;<%= link_to (image_tag 'edit.png',  :border=>0, :size => '16x16'), edit_steps_admin_project_path(@project, 'fixed_equipment_design_parameters'), :title => "Edit Fixed Equipment Design Parameters"%></legend>
-	<table style="width:auto;">
+  <legend>Fixed Equipment Design
+    Parameters&nbsp;<%= link_to (image_tag 'edit.png', :border => 0, :size => '16x16'), edit_steps_admin_project_path(@project, 'fixed_equipment_design_parameters'), :title => "Edit Fixed Equipment Design Parameters" %></legend>
+  <input id="lnk_fixed_equipment_design_parameters_table" type="button" value="[+] Expand" onclick="toggle_visibility('fixed_equipment_design_parameters_table','lnk_fixed_equipment_design_parameters_table');">
+	<table style="width:auto;" id="fixed_equipment_design_parameters_table">
 		<tr>
 			<td>Default optimal reflux ratio factor</td>
 			<td width="50%"><%= @project.default_optimal_reflux_ratio_factor%>&nbsp;</td>
@@ -343,7 +355,8 @@
 </fieldset>
 
 <%= render :partial => "pressure_relief_system_design_parameter" %>
-
+<%=  render :partial => "vendor_schedule_setup" %>
+<%= render :partial => "request_for_quotation_setup" %>
 
 <fieldset class="project" style="margin-top:15px;">
   <legend>Attachments</legend>
@@ -358,4 +371,17 @@
 </fieldset>
 
 
+<!--  Table expand and Collapse -->
+<script type="text/javascript">
+  function toggle_visibility(tbid,lnkid)
+  {
+    if(document.all){document.getElementById(tbid).style.display = document.getElementById(tbid).style.display == "block" ? "none" : "block";}
+    else{document.getElementById(tbid).style.display = document.getElementById(tbid).style.display == "table" ? "none" : "table";}
+    document.getElementById(lnkid).value = document.getElementById(lnkid).value == "[-] Collapse" ? "[+] Expand" : "[-] Collapse";
+  }
+</script>
+<style type="text/css">
+  #information_table,#selected_measurements_table,#project_units_table,#pipe_roughness_table,#heat_and_material_balance_table,#sizing_criteria_table,#flow_model_table,#piping_and_instrumentation_design_parameters_table,#rotating_equiment_design_parameters_table,#mechanical_driver_design_parameters_table,#fixed_equipment_design_parameters_table,#pressure_relief_system_design_parameter_table,#vendor_schedule_setup_table,#request_for_quotation_setup_table {display:none;}
+  #lnk_information_table,#lnk_selected_measurements_table,#lnk_project_units_table,#lnk_pipe_roughness_table,#lnk_heat_and_material_balance_table,#lnk_sizing_criteria_table,#lnk_flow_model_table,#lnk_piping_and_instrumentation_design_parameters_table,#lnk_rotating_equiment_design_parameters_table,#lnk_mechanical_driver_design_parameters_table,#lnk_fixed_equipment_design_parameters_table,#lnk_pressure_relief_system_design_parameter_table,#lnk_vendor_schedule_setup_table,#lnk_request_for_quotation_setup_table {border:none;background:none;}
+</style>
 

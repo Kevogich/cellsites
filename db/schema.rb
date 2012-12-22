@@ -10,7 +10,24 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121029064256) do
+ActiveRecord::Schema.define(:version => 20121221083627) do
+
+  create_table "admin_vendor_lists", :force => true do |t|
+    t.string   "vendor_name"
+    t.string   "item_type"
+    t.string   "status"
+    t.string   "rating"
+    t.string   "representative"
+    t.string   "address"
+    t.string   "city"
+    t.string   "country"
+    t.integer  "office_phone"
+    t.integer  "cell_phone"
+    t.integer  "fax"
+    t.string   "email"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "attachments", :force => true do |t|
     t.string   "name",                    :limit => 50
@@ -24,6 +41,7 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.datetime "attachment_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "item_tag_tab"
   end
 
   create_table "centrifugal_pumps", :force => true do |t|
@@ -443,6 +461,7 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "item_tag_tab"
   end
 
   add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
@@ -860,6 +879,13 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.datetime "updated_at"
   end
 
+  create_table "datasheets", :force => true do |t|
+    t.string   "datasheet_name"
+    t.integer  "company_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "discharge_circuit_pipings", :force => true do |t|
     t.integer  "discharge_circuit_pipings_id"
     t.string   "discharge_circuit_pipings_type"
@@ -938,6 +964,131 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.string   "ec_notes"
     t.integer  "created_by"
     t.integer  "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "electronic_datas", :force => true do |t|
+    t.integer  "item_number"
+    t.string   "item_text"
+    t.integer  "tag_number"
+    t.string   "tag_text"
+    t.integer  "equipment_number"
+    t.string   "equipment_text"
+    t.integer  "number_required"
+    t.string   "number_required_text"
+    t.integer  "code_asme"
+    t.integer  "code_asme_select"
+    t.string   "code_asme_text"
+    t.integer  "stamp_required"
+    t.integer  "stamp_required_select"
+    t.integer  "comply_with_api"
+    t.integer  "comply_with_api_select"
+    t.integer  "fire"
+    t.integer  "fire_select"
+    t.string   "fire_select_text"
+    t.integer  "rupture_disk"
+    t.integer  "rupture_disk_select"
+    t.integer  "design_type"
+    t.integer  "design_type_select"
+    t.integer  "nozzle_type"
+    t.integer  "nozzle_type_select"
+    t.string   "nozzle_type_text"
+    t.integer  "bonnet_type"
+    t.integer  "bonnet_type_select"
+    t.integer  "seat_type"
+    t.integer  "seat_type_select"
+    t.integer  "seat_tightness"
+    t.integer  "seat_tightness_select"
+    t.string   "seat_tightness_text"
+    t.integer  "inlet"
+    t.integer  "inlet_size_select"
+    t.integer  "inlet_rating_select"
+    t.integer  "inlet_facing_select"
+    t.integer  "outlet"
+    t.integer  "outlet_size_select"
+    t.integer  "outlet_rating_select"
+    t.integer  "outlet_facing_select"
+    t.integer  "body"
+    t.string   "body_text"
+    t.integer  "bonnet"
+    t.string   "bonnet_text"
+    t.integer  "seal_nozzle"
+    t.integer  "seal_nozzle_select"
+    t.string   "disk_text"
+    t.integer  "reailient_seat"
+    t.string   "reailient_seat_text"
+    t.integer  "guide"
+    t.string   "guide_text"
+    t.integer  "adjusting_ring"
+    t.string   "adjusting_ring_select"
+    t.string   "washer_text"
+    t.integer  "spring"
+    t.string   "spring_text"
+    t.integer  "bellows"
+    t.string   "bellows_text"
+    t.integer  "balanced_pistion"
+    t.string   "balanced_pistion_text"
+    t.integer  "comply_nace_mro"
+    t.integer  "internal_gasket_material"
+    t.string   "internal_gasket_material_text"
+    t.integer  "cap"
+    t.integer  "cap_select"
+    t.integer  "lifting_lever"
+    t.integer  "lifting_lever_select"
+    t.integer  "test_gag"
+    t.integer  "test_gag_select"
+    t.integer  "bug_screen"
+    t.integer  "bug_screen_select"
+    t.integer  "fluid_and_state"
+    t.float    "fluid_and_state_text"
+    t.integer  "required_capacity_per_value"
+    t.float    "required_capacity_per_value_text"
+    t.integer  "mass_flux_and_basis"
+    t.float    "mass_flux_and_basis_text"
+    t.integer  "molecular_weight_specific_gravity"
+    t.float    "molecular_weight_specific_gravity_text"
+    t.integer  "viscosity_at_flowing_temp"
+    t.float    "viscosity_at_flowing_temp_text"
+    t.integer  "operating_pressure"
+    t.float    "operating_pressure_text"
+    t.integer  "set_pressure"
+    t.float    "set_pressure_text"
+    t.integer  "blow_down"
+    t.float    "blow_down_text"
+    t.integer  "latent_heat_of_vaporization"
+    t.float    "latent_heat_of_vaporization_text"
+    t.integer  "operating_temperature"
+    t.float    "operating_temperature_text"
+    t.integer  "relieving_temperature"
+    t.float    "relieving_temperature_text"
+    t.integer  "build_up_back_pressure"
+    t.float    "build_up_back_pressure_text"
+    t.integer  "superimposed_back_pressure"
+    t.float    "superimposed_back_pressure_text"
+    t.integer  "cold_differential_back_pressure"
+    t.float    "cold_differential_back_pressure_text"
+    t.integer  "allowable_over_pressure"
+    t.float    "allowable_over_pressure_text"
+    t.integer  "compressibility_factor"
+    t.float    "compressibility_factor_text"
+    t.integer  "ratio_of_specific_heats"
+    t.float    "ratio_of_specific_heats_text"
+    t.integer  "calculated_ori_fi_ce_area"
+    t.string   "calculated_ori_fi_ce_area_text"
+    t.integer  "selected_effective_ori_fi_ce_area"
+    t.string   "selected_effective_ori_fi_ce_area_text"
+    t.integer  "ori_fi_ce_designation"
+    t.string   "ori_fi_ce_designation_text"
+    t.integer  "manufacturer"
+    t.string   "manufacturer_text"
+    t.integer  "model_number"
+    t.string   "model_number_text"
+    t.integer  "vendor_calculation_required"
+    t.integer  "vendor_calculation_required_select"
+    t.integer  "datasheet_id"
+    t.integer  "item_tag_id"
+    t.integer  "item_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -1717,6 +1868,77 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.datetime "updated_at"
   end
 
+  create_table "item_tag_procures", :force => true do |t|
+    t.integer  "procure_item_id"
+    t.integer  "project_id"
+    t.integer  "sizing_item_tag_id"
+    t.string   "billing_name"
+    t.text     "billing_address"
+    t.string   "shipping_name"
+    t.text     "shipping_address"
+    t.string   "purchase_order_no"
+    t.datetime "purchase_order_issue_date"
+    t.datetime "shipment_delivery_date"
+    t.datetime "purchase_order_issue_date1"
+    t.string   "form_of_payment"
+    t.string   "purchasing_agent"
+    t.string   "number_of_pieces"
+    t.string   "gross_shipment_weight"
+    t.string   "modes_of_transportation"
+    t.integer  "subtotal"
+    t.integer  "state_sales_tax"
+    t.integer  "federal_sales_tax"
+    t.integer  "shipping_handing"
+    t.integer  "insurance"
+    t.integer  "value_added_tax"
+    t.integer  "clearing_cost"
+    t.integer  "total"
+    t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "item_tag_vendor_schedule_setups", :force => true do |t|
+    t.integer  "vendor_required_data"
+    t.string   "quotation"
+    t.string   "purchase"
+    t.string   "as_built"
+    t.string   "with_shipment"
+    t.integer  "item_type_id"
+    t.integer  "project_id"
+    t.integer  "vendor_schedule_setup_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "date"
+  end
+
+  create_table "item_types", :force => true do |t|
+    t.string   "item_type"
+    t.integer  "company_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "item_types_transmit_and_proposals", :force => true do |t|
+    t.string   "item_tag"
+    t.string   "req"
+    t.string   "select_vendor"
+    t.integer  "price"
+    t.string   "by"
+    t.string   "reviewer"
+    t.string   "approver"
+    t.integer  "item_type_id"
+    t.integer  "company_id"
+    t.integer  "client_id"
+    t.integer  "project_id"
+    t.integer  "process_unit_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "applicable_to"
+    t.string   "form_standard"
+    t.string   "selection_type"
+  end
+
   create_table "line_sizings", :force => true do |t|
     t.integer  "company_id"
     t.integer  "client_id"
@@ -1918,35 +2140,35 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
 
   create_table "pressure_relief_system_design_parameters", :force => true do |t|
     t.integer  "project_id"
-    t.string   "workflow_mode",                                      :limit => 50
-    t.string   "cvf_1",                                              :limit => 50
-    t.string   "cr_1",                                               :limit => 50
-    t.string   "cfc_1",                                              :limit => 50
-    t.string   "ef_1",                                               :limit => 50
-    t.string   "ef_2",                                               :limit => 50
-    t.string   "ef_3",                                               :limit => 50
-    t.string   "ef_4",                                               :limit => 50
-    t.string   "ef_5",                                               :limit => 50
-    t.string   "ef_6",                                               :limit => 50
-    t.string   "fac_1",                                              :limit => 50
-    t.string   "fac_2",                                              :limit => 50
-    t.string   "hetr_1",                                             :limit => 50
-    t.string   "hetr_2",                                             :limit => 50
-    t.string   "of_1",                                               :limit => 50
-    t.string   "rrc_cvsb",                                           :limit => 50
-    t.string   "rrc_trsb",                                           :limit => 50
-    t.string   "ftb_vessel_alarm",                                   :limit => 50
-    t.string   "ftb_column_alarm",                                   :limit => 50
+    t.string   "workflow_mode",                                          :limit => 50
+    t.string   "cvf_1",                                                  :limit => 50
+    t.string   "cr_1",                                                   :limit => 50
+    t.string   "cfc_1",                                                  :limit => 50
+    t.string   "ef_1",                                                   :limit => 50
+    t.string   "ef_2",                                                   :limit => 50
+    t.string   "ef_3",                                                   :limit => 50
+    t.string   "ef_4",                                                   :limit => 50
+    t.string   "ef_5",                                                   :limit => 50
+    t.string   "ef_6",                                                   :limit => 50
+    t.string   "fac_1",                                                  :limit => 50
+    t.string   "fac_2",                                                  :limit => 50
+    t.string   "hetr_1",                                                 :limit => 50
+    t.string   "hetr_2",                                                 :limit => 50
+    t.string   "of_1",                                                   :limit => 50
+    t.string   "rrc_cvsb",                                               :limit => 50
+    t.string   "rrc_trsb",                                               :limit => 50
+    t.string   "ftb_vessel_alarm",                                       :limit => 50
+    t.string   "ftb_column_alarm",                                       :limit => 50
     t.integer  "ffb_vessel_response_time"
     t.integer  "ffb_column_response_time"
-    t.string   "ftb_vessel_level_basis",                             :limit => 50
-    t.string   "ftb_column_level_basis",                             :limit => 50
+    t.string   "ftb_vessel_level_basis",                                 :limit => 50
+    t.string   "ftb_column_level_basis",                                 :limit => 50
     t.boolean  "fb_chb_1"
     t.boolean  "fb_chb_2"
-    t.string   "fb_txt_1",                                           :limit => 50
-    t.string   "fb_txt_2",                                           :limit => 50
-    t.string   "fb_txt_3",                                           :limit => 50
-    t.string   "fb_lb",                                              :limit => 50
+    t.string   "fb_txt_1",                                               :limit => 50
+    t.string   "fb_txt_2",                                               :limit => 50
+    t.string   "fb_txt_3",                                               :limit => 50
+    t.string   "fb_lb",                                                  :limit => 50
     t.float    "fb_txt_4"
     t.float    "fb_txt_5"
     t.float    "fb_txt_6"
@@ -1956,36 +2178,36 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.float    "fb_liquid_level_on_columns"
     t.float    "fb_wetted_liquid_area"
     t.float    "fb_wetted_liquid_area_spherical"
-    t.string   "fb_liquid_swell_in_wetted_surface_area_calculation", :limit => 50
-    t.string   "fb_drainage",                                        :limit => 50
-    t.string   "fb_consider_relief_device_sizing",                   :limit => 53
+    t.string   "fb_liquid_swell_in_wetted_surface_area_calculation",     :limit => 50
+    t.string   "fb_drainage",                                            :limit => 50
+    t.string   "fb_consider_relief_device_sizing",                       :limit => 53
     t.float    "rdsb_vdc_vapor"
     t.float    "rdsb_vdc_liquid_non_certified"
     t.float    "rdsb_vdc_liquid_certified"
     t.float    "rdsb_vdc_rupture_disk"
-    t.string   "prvcfb_vapor_back_pressure",                         :limit => 50
-    t.string   "prvcfb_liquid_back_pressure",                        :limit => 50
-    t.string   "prvcfb_liquid_over_pressure",                        :limit => 50
-    t.string   "prvcfb_low_pressure_vent_pressure",                  :limit => 50
-    t.string   "prvlsd",                                             :limit => 50
+    t.string   "prvcfb_vapor_back_pressure",                             :limit => 50
+    t.string   "prvcfb_liquid_back_pressure",                            :limit => 50
+    t.string   "prvcfb_liquid_over_pressure",                            :limit => 50
+    t.string   "prvcfb_low_pressure_vent_pressure",                      :limit => 50
+    t.string   "prvlsd",                                                 :limit => 50
     t.float    "rdbp_maximum_flow_resistance"
     t.float    "rdbp_uncertainty_factor"
-    t.string   "rfib_hydraulic_pressure_drop_basis",                 :limit => 50
-    t.string   "rfib_compressible_flow_model",                       :limit => 50
+    t.string   "rfib_hydraulic_pressure_drop_basis",                     :limit => 50
+    t.string   "rfib_compressible_flow_model",                           :limit => 50
     t.float    "inlet_pressure_drop_criteria"
-    t.string   "outlet_pressure_drop_criteria_conventional",         :limit => 50
+    t.string   "outlet_pressure_drop_criteria_conventional",             :limit => 50
     t.float    "outlet_pressure_drop_criteria_balanced_bellows"
     t.float    "outlet_pressure_drop_criteria_pilot_operated"
-    t.string   "pressure_relief_valve_count",                        :limit => 50
+    t.string   "pressure_relief_valve_count",                            :limit => 50
     t.boolean  "pressure_relief_valve_count_stagger_set_pressure"
     t.string   "valve_body_size_selection_basis"
-    t.string   "largest_orifice_size_to_consider",                   :limit => 50
+    t.string   "largest_orifice_size_to_consider",                       :limit => 50
     t.float    "flare_header_pressure"
     t.float    "rupture_disk_selection_basis_rd_size"
-    t.string   "rupture_disk_selection_basis_rd_size1",              :limit => 50
+    t.string   "rupture_disk_selection_basis_rd_size1",                  :limit => 50
     t.float    "rd_estimated_net_flow_area"
     t.float    "vent_line_selection_basis_rd_size"
-    t.string   "vent_line_selection_basis_rd_size1",                 :limit => 50
+    t.string   "vent_line_selection_basis_rd_size1",                     :limit => 50
     t.float    "vl_estimated_net_flow_area"
     t.string   "frangible_roof_design_for_relief_protection"
     t.string   "environmental_emission_standards"
@@ -1993,6 +2215,11 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "rdsb_vdc_two_phase"
+    t.string   "rddm",                                                   :limit => 50
+    t.boolean  "pressure_relief_valve_count_reconcile_body_size_api"
+    t.boolean  "kb_at_over_pressure_between_api_values"
+    t.boolean  "kp_at_over_pressure_lower_than_10p"
+    t.boolean  "pressure_relief_valve_count_reconcile_body_size_api520"
   end
 
   create_table "process_units", :force => true do |t|
@@ -2000,6 +2227,85 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.string   "name"
     t.integer  "created_by"
     t.integer  "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "procure_additional_po_costs", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "procure_item_purchase_items", :force => true do |t|
+    t.integer  "procure_item_id"
+    t.string   "item_no"
+    t.string   "item_desc"
+    t.boolean  "taxable"
+    t.integer  "quantity"
+    t.integer  "unit_price"
+    t.integer  "total_price"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "procure_items", :force => true do |t|
+    t.integer  "company_id"
+    t.integer  "client_id"
+    t.integer  "project_id"
+    t.integer  "process_unit_id"
+    t.integer  "item_type_id"
+    t.string   "item_tag"
+    t.string   "po_number"
+    t.string   "vendor"
+    t.integer  "total_price"
+    t.string   "created_by"
+    t.datetime "transmitted_on"
+    t.string   "applicable_to"
+    t.string   "form_standard"
+    t.string   "selection_type"
+    t.string   "billing_name"
+    t.text     "billing_address"
+    t.string   "shipping_name"
+    t.text     "shipping_address"
+    t.string   "purchase_order_no"
+    t.datetime "purchase_order_issue_date"
+    t.datetime "shipment_delivery_date"
+    t.datetime "purchase_order_issue_date1"
+    t.string   "currency"
+    t.string   "form_of_payment"
+    t.string   "purchasing_agent"
+    t.string   "number_of_pieces"
+    t.string   "gross_shipment_weight"
+    t.string   "modes_of_transportation"
+    t.integer  "subtotal"
+    t.integer  "state_sales_tax"
+    t.integer  "federal_sales_tax"
+    t.integer  "shipping_handing"
+    t.integer  "insurance"
+    t.integer  "value_added_tax"
+    t.integer  "tariff"
+    t.integer  "clearing_cost"
+    t.integer  "total"
+    t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "procure_rfq_sections", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "procures", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "project_item_types", :force => true do |t|
+    t.integer  "item_type_id"
+    t.integer  "project_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -2034,6 +2340,13 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.integer  "project_id"
     t.integer  "user_id"
     t.string   "access_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "project_vendor_lists", :force => true do |t|
+    t.integer  "vendor_list_id"
+    t.integer  "project_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -2259,7 +2572,7 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.integer  "sequence_no"
     t.string   "location"
     t.string   "limiting_fitting"
-    t.string   "size"
+    t.float    "size"
     t.string   "contact_fluid_phase"
     t.string   "acidic_conditions"
     t.string   "high_temp_conditions"
@@ -2275,12 +2588,12 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.string   "venttag"
     t.string   "protectiontype"
     t.string   "venttype"
-    t.string   "pressuresize"
-    t.string   "vacuumsize"
-    t.string   "setpressure"
-    t.string   "setvacumm"
-    t.string   "pressurecapacity"
-    t.string   "vacuumcapacity"
+    t.float    "pressuresize"
+    t.float    "vacuumsize"
+    t.float    "setpressure"
+    t.float    "setvacumm"
+    t.float    "pressurecapacity"
+    t.float    "vacuumcapacity"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -2290,7 +2603,7 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.integer  "sequence_no"
     t.string   "location"
     t.string   "limiting_fitting"
-    t.string   "size"
+    t.float    "size"
     t.string   "contact_fluid_phase"
     t.string   "acidic_conditions"
     t.string   "high_temp_conditions"
@@ -2304,9 +2617,9 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.integer  "relief_device_sizing_id"
     t.integer  "sequence_no"
     t.string   "optag"
-    t.string   "bodysize"
+    t.float    "bodysize"
     t.string   "pipesch"
-    t.string   "netflowarea"
+    t.float    "netflowarea"
     t.string   "inletflange"
     t.string   "outletflange"
     t.datetime "created_at"
@@ -2317,11 +2630,11 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.integer  "relief_device_sizing_id"
     t.integer  "sequence_no"
     t.string   "rdtag"
-    t.string   "bodysize"
-    t.string   "enfa"
+    t.float    "bodysize"
+    t.float    "enfa"
     t.string   "inletflange"
     t.string   "outletflange"
-    t.string   "burstpressure"
+    t.float    "burstpressure"
     t.string   "kr"
     t.string   "uncertaintyf"
     t.string   "nonfdesign"
@@ -2330,11 +2643,11 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
   end
 
   create_table "relief_device_rupture_locations", :force => true do |t|
-    t.integer  "relief_device_sizing_id"
+    t.integer  "relief_device_sizing_id", :null => false
     t.integer  "sequence_no"
     t.string   "location"
     t.string   "limiting_fitting"
-    t.string   "size"
+    t.float    "size"
     t.string   "contact_fluid_phase"
     t.string   "acidic_conditions"
     t.string   "high_temp_conditions"
@@ -2345,7 +2658,7 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
   end
 
   create_table "relief_device_sizings", :force => true do |t|
-    t.integer  "company_id"
+    t.integer  "company_id",                                                                                       :null => false
     t.integer  "client_id"
     t.integer  "project_id"
     t.integer  "process_unit_id"
@@ -2358,10 +2671,10 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.integer  "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "system_design_temperature",                        :precision => 10, :scale => 0
+    t.float    "system_design_temperature"
     t.string   "limiting_device_temperature"
     t.string   "discharge_location",                 :limit => 50
-    t.string   "flange_type",                        :limit => 20
+    t.string   "pressure_relief_flange_type",        :limit => 20
     t.float    "system_min_design_temp"
     t.float    "system_max_design_temp"
     t.integer  "inlet_pipe_material"
@@ -2376,15 +2689,15 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.float    "low_pressure_vent_pipe_roughness"
     t.string   "low_pressure_tank_tag"
     t.string   "low_pressure_tank_code"
-    t.string   "low_pressure_pressure_rating"
-    t.string   "low_pressure_vacuum_rating"
-    t.string   "low_pressure_set_pressure"
-    t.string   "low_pressure_set_vacuum"
-    t.string   "low_pressure_flashpoint_temp"
-    t.string   "low_pressure_fluid_temp"
+    t.float    "low_pressure_pressure_rating"
+    t.float    "low_pressure_vacuum_rating"
+    t.float    "low_pressure_set_pressure"
+    t.float    "low_pressure_set_vacuum"
+    t.float    "low_pressure_flashpoint_temp"
+    t.float    "low_pressure_fluid_temp"
     t.string   "low_pressure_flashpoint"
     t.string   "low_pressure_heatedtank"
-    t.string   "low_pressure_tankcapacity"
+    t.float    "low_pressure_tankcapacity"
     t.string   "low_pressure_crudeoilstorage"
     t.string   "low_pressure_highviscousfluid"
     t.string   "low_pressure_frangibleroof"
@@ -2401,15 +2714,49 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.string   "pressure_relief_valve_location",     :limit => 50
     t.string   "rupture_disk_location",              :limit => 50
     t.string   "open_vent_location",                 :limit => 50
+    t.integer  "inlet_rupture_pipe_material"
+    t.integer  "circuit_rupture_pipe_material"
+    t.float    "inlet_rupture_pipe_roughness"
+    t.float    "circuit_rupture_pipe_roughness"
+    t.decimal  "discharge_pressure",                               :precision => 10, :scale => 0
+    t.string   "rupture_disk_flange_type",           :limit => 10
+    t.string   "open_vent_flange_type",              :limit => 10
+    t.string   "low_pressure_vent_flange_type",      :limit => 10
+    t.float    "sd_lowest_set_pressure"
+    t.float    "sd_relief_pressure"
+    t.float    "sd_recommended_set_pressure"
+    t.string   "sd_limited_by"
+    t.float    "prv_system_design_pressure"
+    t.float    "rd_system_design_pressure"
+    t.float    "ov_system_design_pressure"
+    t.float    "low_pressure_leak_point",                                                         :default => 0.0
+  end
+
+  create_table "relief_device_system_descriptions", :force => true do |t|
+    t.integer  "relief_device_sizing_id"
+    t.integer  "sequence_no"
+    t.string   "equipment_type"
+    t.string   "equipment_tag"
+    t.string   "section"
+    t.string   "description"
+    t.float    "design_pressure"
+    t.float    "mawp"
+    t.float    "inlet_pressure"
+    t.float    "outlet_pressure"
+    t.float    "equipment_dp"
+    t.boolean  "prv_location"
+    t.float    "inlet_pressure_at_relief"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "relief_devices", :force => true do |t|
     t.integer  "relief_device_sizing_id"
     t.integer  "sequence_no"
     t.string   "psvtag"
-    t.string   "designation"
-    t.string   "orificearea"
-    t.string   "pressure"
+    t.string   "designation",             :limit => 5
+    t.float    "orificearea"
+    t.float    "pressure"
     t.string   "psvtype"
     t.string   "subtype"
     t.string   "bodysize"
@@ -2417,7 +2764,7 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.string   "outletflange"
     t.string   "bodymatl"
     t.string   "springmatl"
-    t.string   "bplimit"
+    t.float    "bplimit"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -2425,7 +2772,18 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
   create_table "relief_rate_generics", :force => true do |t|
     t.integer  "scenario_identification_id"
     t.float    "relief_rate"
+    t.float    "relief_pressure"
     t.text     "comments"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "request_for_quotation_setups", :force => true do |t|
+    t.integer  "project_id"
+    t.integer  "procure_rfq_section_id"
+    t.integer  "item_type_id"
+    t.boolean  "status"
+    t.text     "comment"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -2469,10 +2827,6 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.string   "documentation_by",                               :limit => 50
     t.text     "comments"
     t.string   "relief_rate_calculation_method",                 :limit => 50
-    t.float    "sc_set_pressure"
-    t.float    "sc_over_pressure"
-    t.float    "sc_relief_pressure"
-    t.float    "sc_relief_rate"
     t.string   "rc_case"
     t.string   "rc_stream"
     t.float    "rc_pressure"
@@ -2489,6 +2843,7 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.float    "rc_liquid_surface_tension"
     t.float    "rc_liquid_latent_heat"
     t.float    "rc_liquid_mw"
+    t.float    "rc_mass_flow_rate"
     t.string   "dc_case"
     t.string   "dc_stream"
     t.float    "dc_pressure"
@@ -2505,6 +2860,7 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.float    "dc_liquid_surface_tension"
     t.float    "dc_liquid_latent_heat"
     t.float    "dc_liquid_mw"
+    t.float    "dc_mass_flow_rate"
     t.text     "sc_comments"
     t.string   "relief_capacity_calculation_method",             :limit => 100
     t.string   "hem_process_basis_a",                            :limit => 100
@@ -2568,6 +2924,7 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
     t.text     "rc_comments"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "line_capacity_relief_condition"
   end
 
   create_table "scenario_summaries", :force => true do |t|
@@ -3116,6 +3473,42 @@ ActiveRecord::Schema.define(:version => 20121029064256) do
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
   add_index "users", ["username"], :name => "index_users_on_username", :unique => true
+
+  create_table "vendor_data_requirements", :force => true do |t|
+    t.string   "vendor_data_requirement"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "vendor_lists", :force => true do |t|
+    t.string   "vendor_name"
+    t.string   "item_type"
+    t.string   "status"
+    t.string   "rating"
+    t.string   "representative"
+    t.string   "address"
+    t.string   "city"
+    t.string   "country"
+    t.integer  "office_phone"
+    t.integer  "cell_phone"
+    t.integer  "fax"
+    t.string   "email"
+    t.integer  "company_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "vendor_schedule_setups", :force => true do |t|
+    t.integer  "vendor_required_data"
+    t.string   "quotation"
+    t.string   "purchase"
+    t.string   "as_built"
+    t.string   "with_shipment"
+    t.integer  "item_type_id"
+    t.integer  "project_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "vessel_sizings", :force => true do |t|
     t.integer  "company_id"

@@ -5,6 +5,7 @@
 	</tr>
 	<%= form_tag(team_assignment_admin_project_path(@project)) %>
 	<% for company_user in @company_users%>
+
 		<tr>
 			<td width="30px">
 				<%= check_box_tag "users[]", company_user.user_id, @project_users.include?(company_user.user_id) %>

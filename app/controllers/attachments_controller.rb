@@ -1,8 +1,9 @@
 class AttachmentsController < ApplicationController
 
   def create
-
+     #raise params.inspect
     @attachment = Attachment.new(params[:attachment])
+    @attachment.item_tag_tab = params[:attachment_vendor] if params[:attachment][:attachable_type] == "ItemTypesTransmitAndProposal"
     @attachment.user_id = current_user.id
 
     if @attachment.save

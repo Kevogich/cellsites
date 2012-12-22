@@ -1,0 +1,40 @@
+<% javascript('jquery.raty') %>
+<h2>Project: <%= @project.project_num %> </h2>
+<br/>Select vendors to add to this project
+
+<table>
+  <tr>
+    <th>Assigned</th>
+    <th>Equipment Type</th>
+    <th>Vendor</th>
+    <th>Status</th>
+    <th>Rating</th>
+  </tr>
+  <%= form_tag(vendor_assignment_admin_project_path(@project)) %>
+  <% for company_vendor in @company_vendors%>
+       <tr>
+ <td><%= check_box_tag "vendors[]", company_vendor.id, @project_vendors.include?(company_vendor.id) %>&nbsp;&nbsp;Assign</td>
+ <td><%= company_vendor.item_type %></td>
+         <td><%= link_to company_vendor.vendor_name, edit_admin_vendor_list_path(company_vendor) %></td>
+         <td><%= company_vendor.status %></td>
+         <td> <div id="rating<%= company_vendor.id %>" data-rating=<%= company_vendor.rating %>></div></td>
+      </tr>
+      <script type="text/javascript">
+          $(function() {
+
+
+
+              $('#rating<%= company_vendor.id %>').raty({
+                  readOnly   : true,
+                  score: function() {
+                      return $(this).attr('data-rating');
+                  }
+              });
+
+
+          });
+      </script>
+  <% end %>
+
+</table>
+<input type="submit" value="Assign">

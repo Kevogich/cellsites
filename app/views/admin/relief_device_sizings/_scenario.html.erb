@@ -1,13 +1,13 @@
 <tr>
 	<td>
-		<span class="index_counter"><%= ss.object.scenario_no%></span>
+		<span class="index_counter"><%= i %></span>
 		<%= ss.hidden_field :id, :class => "scenario_summary_id"%>
 		<%= ss.hidden_field :scenario_no, :class => "scenario_no" %>
 	</td>
 	<td style="width: 250px;">
 		<%= ss.select :scenario,
 									options_for_select(StaticData.scenario, ss.object.scenario),
-									{:prompt => "select"},
+									{:include_black => true},
 									:class => "scenario_name"
 		%>
 	</td>

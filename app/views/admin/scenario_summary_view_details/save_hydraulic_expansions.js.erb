@@ -1,1 +1,8 @@
-window.location.reload();
+$('#calculate_btn').val("");
+
+<% if params[:commit] == "Save" %>
+	window.location.reload();
+<% else %>
+	$('.display_scenario_analysis').trigger('click');
+<% end %>
+

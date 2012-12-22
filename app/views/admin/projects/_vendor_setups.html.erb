@@ -1,0 +1,34 @@
+<%= fields_for @vendor_schedule_setup do |f| %>
+  <%#= raise @item_type.item_type.inspect %>
+  <tr id=<%= "vendor_setup_#{@vendor_schedule_setup.id}" %>>
+    <td>
+      <%= link_to "X", "#", :id => "#{@vendor_schedule_setup.id}", :class => "delete_vendor_schedule_setup" %>
+    </td>
+    <td>
+      <%= select_tag "vendor_required_data_#{@vendor_schedule_setup.id}", options_for_select(@vendors.collect { |p| [p.vendor_data_requirement, p.id] }, :selected => "#{@vendor_schedule_setup.vendor_required_data}", :prompt => "select") %>
+    <td>
+      <%= link_to "Notes", edit_vendor_schedule_setup_admin_projects_path(:id => @vendor_schedule_setup.id,:page => "project", :required_data => "#{@vendor_schedule_setup.vendor_required_data}", :item_type => @item_type.item_type), :id => "quotation_#{@vendor_schedule_setup.id}", :class => "update_vendor_schedule_setup_notes" %>
+    </td>
+    <td>
+      <%= link_to "Notes", edit_purchase_vendor_schedule_setup_admin_projects_path(:id => @vendor_schedule_setup.id,:page => "project", :required_data => "#{@vendor_schedule_setup.vendor_required_data}", :item_type => @item_type.item_type), :id => "quotation_#{@vendor_schedule_setup.id}", :class => "update_purchase_vendor_schedule_setup_notes" %>
+    </td>
+    <td>
+      <%= link_to "Notes", edit_as_built_vendor_schedule_setup_admin_projects_path(:id => @vendor_schedule_setup.id,:page => "project", :required_data => "#{@vendor_schedule_setup.vendor_required_data}", :item_type => @item_type.item_type), :id => "quotation_#{@vendor_schedule_setup.id}", :class => "update_as_built_vendor_schedule_setup_notes" %>
+    </td>
+    <td>
+      <%= link_to "Notes", edit_with_shipment_vendor_schedule_setup_admin_projects_path(:id => @vendor_schedule_setup.id,:page => "project", :required_data => "#{@vendor_schedule_setup.vendor_required_data}", :item_type => @item_type.item_type), :id => "quotation_#{@vendor_schedule_setup.id}", :class => "update_with_shipment_vendor_schedule_setup_notes" %>
+    </td>
+
+  </tr>
+  <script>
+    $("#vendor_required_data_<%= @vendor_schedule_setup.id %>").change(function () {
+      var vendor_required_data = $(this).val();
+      url_path1 = window.location.href.split("?")[0]
+      url_path2 = window.location.href.split("?")[1]
+      url_path = url_path1 + "?" + url_path2
+
+      window.location = url_path + "&vendor_required_data=" + vendor_required_data + "&setup_id=" + <%= @vendor_schedule_setup.id %>;
+      return false;
+    } );
+  </script>
+<% end %>

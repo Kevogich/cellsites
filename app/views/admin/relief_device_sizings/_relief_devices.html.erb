@@ -1,8 +1,8 @@
 <%= fields_for @relief_device do |f| %>
-<tr id=<%= "row_#{@unique_id}"%> >
+<tr id=<%= "row_relief_device_#{@unique_id}"%> >
 	<td id=<%= "sequence_relief_device_#{@unique_id}"%>>1</td>
 	<%= f.hidden_field :id, :name =>  "relief_device_attributes[#{@unique_id}][id]" %>
-	<%= f.hidden_field :_destroy, :name =>  "relief_device_attributes[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_#{@unique_id}" %>
+	<%= f.hidden_field :_destroy, :name =>  "relief_device_attributes[#{@unique_id}][_destroy]", :value => 0, :id => "destroy_relief_device_#{@unique_id}" %>
     <td><%= f.text_field :psvtag, :name =>  "relief_device_attributes[#{@unique_id}][psvtag]" , :style => "width:50px;" , :id => "psvtag_#{@unique_id}"%></td>
     <td><%= select_tag "relief_device_attributes[#{@unique_id}][designation]", options_for_select(StaticData.orifice_designation.collect{ |od| [raw(od[1]), od[0]]},@relief_device.designation),:class => 'pressure_valve_designation', :id => "designation_#{@unique_id}" %></td>
     <td><%= f.text_field :orificearea, :name =>  "relief_device_attributes[#{@unique_id}][orificearea]" , :style => "width:50px;" , :id => "orificearea_#{@unique_id}"%></td>
@@ -10,8 +10,8 @@
     <td><%= select_tag "relief_device_attributes[#{@unique_id}][psvtype]",options_for_select(StaticData.psv_type,@relief_device.psvtype),:class => 'psvtype', :id => "psvtype_#{@unique_id}"%></td>
     <td><%= select_tag "relief_device_attributes[#{@unique_id}][subtype]",options_for_select(StaticData.psv_subtype,@relief_device.subtype),:class => 'subtype', :id => "subtype_#{@unique_id}"%></td>
     <td><%= select_tag "relief_device_attributes[#{@unique_id}][bodysize]",options_for_select(StaticData.standard_bodysize,@relief_device.bodysize),:class => 'standard_bodysize', :id => "subtype_#{@unique_id}"%></td>
-    <td><%= select_tag "relief_device_attributes[#{@unique_id}][inletflange]",options_for_select(StaticData.flange_type,@relief_device.inletflange),:class => 'inletflange', :id => "inletflange_#{@unique_id}"%></td>
-    <td><%= select_tag "relief_device_attributes[#{@unique_id}][outletflange]",options_for_select(StaticData.flange_type,@relief_device.outletflange),:class => 'outletflange', :id => "outletflange_#{@unique_id}"%></td>
+    <td><%= select_tag "relief_device_attributes[#{@unique_id}][inletflange]",options_for_select(StaticData.flange_type,@relief_device.inletflange),:class => 'relief_device_inletflange', :id => "relief_device_inletflange_#{@unique_id}"%></td>
+    <td><%= select_tag "relief_device_attributes[#{@unique_id}][outletflange]",options_for_select(StaticData.flange_type,@relief_device.outletflange),:class => 'relief_device_outletflange', :id => "relief_device_outletflange_#{@unique_id}"%></td>
     <td><%= f.text_field :bodymatl, :name =>  "relief_device_attributes[#{@unique_id}][bodymatl]" , :style => "width:50px;" , :id => "bodymatl_#{@unique_id}"%></td>
     <td><%= f.text_field :springmatl, :name =>  "relief_device_attributes[#{@unique_id}][springmatl]" , :style => "width:50px;" , :id => "springmatl_#{@unique_id}"%></td>
     <td><%= f.text_field :bplimit, :name =>  "relief_device_attributes[#{@unique_id}][bplimit]" , :style => "width:50px;" , :id => "bplimit_#{@unique_id}"%></td>
@@ -21,7 +21,12 @@
 									"data_pipeable_type" => f.object.class
 			%>
 		</td>
-    <td><%= link_to "View", "#", :id => "relief_device_link_#{@unique_id}", :class => "view_relief_device"%></td>
+  <td>
+    <%= link_to "View", "#", :id => "relief_device_link_#{@unique_id}", :class => "view_relief_device piping_form_link",
+                "data_pipeable_id" => @relief_device.id,
+                "data_pipeable_type" => f.object.class
+    %>
+  </td>
 	<td><%= link_to "X", "#", :id => "#{@unique_id}", :class => "delete_relief_device" %></td>
 </tr>
 <% end %>

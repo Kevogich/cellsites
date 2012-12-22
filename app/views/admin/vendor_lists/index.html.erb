@@ -1,0 +1,125 @@
+<% javascript('jquery.raty') %>
+
+<h1>Vendor List</h1>  <br/>
+<%= link_to 'Add Vendor', new_admin_vendor_list_path %>
+<table>
+  <tr>
+    <th>Vendor name</th>
+    <th>Item type</th>
+    <th>Status</th>
+    <th>Rating</th>
+    <th>Representative</th>
+    <th>Location</th>
+    <th>Telephone number</th>
+    <th>Email</th>
+    <th class="th_padding">Edit</th>
+    <th class="th_padding">Delete</th>
+  </tr>
+
+  <% @vendor_lists.each do |vendor_list| %>
+
+      <tr>
+        <td><%= vendor_list.vendor_name %></td>
+        <td><%= vendor_list.item_type %></td>
+        <td><%= vendor_list.status %></td>
+        <td>
+          <div id="rating<%= vendor_list.id %>" data-rating=<%= vendor_list.rating %>></div>
+        </td>
+        <td><%= vendor_list.representative %></td>
+        <td><%= vendor_list.city %></td>
+        <td><%= vendor_list.office_phone %></td>
+        <td><%= vendor_list.email %></td>
+        <td><%= link_to 'Edit', edit_admin_vendor_list_path(vendor_list) %></td>
+        <td><%= link_to 'Delete', admin_vendor_list_path(vendor_list), :confirm => 'Are you sure?', :method => :delete %></td>
+      </tr>
+      <script type="text/javascript">
+          $(function() {
+
+
+
+              $('#rating<%= vendor_list.id %>').raty({
+                  readOnly   : true,
+                  score: function() {
+                      return $(this).attr('data-rating');
+                  }
+              });
+
+
+          });
+      </script>
+  <% end %>
+</table>
+
+<br/>
+<style>
+    .th_padding {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    table, td {
+        font: 100% Arial, Helvetica, sans-serif;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1em 0;
+    }
+
+    th, td {
+        text-align: left;
+        padding: .5em;
+        border: 1px solid #D5D3D4;
+    }
+
+    th {
+        background: #328aa4 url(tr_back.gif) repeat-x;
+        color: #fff;
+    }
+
+    td {
+        background: #e5f1f4;
+    }
+
+        /* tablecloth styles */
+
+    tr.even td {
+        background: #e5f1f4;
+    }
+
+    tr.odd td {
+        background: #f8fbfc;
+    }
+
+    th.over, tr.even th.over, tr.odd th.over {
+        background: #4a98af;
+    }
+
+    th.down, tr.even th.down, tr.odd th.down {
+        background: #bce774;
+    }
+
+    th.selected, tr.even th.selected, tr.odd th.selected {
+    }
+
+    td.over, tr.even td.over, tr.odd td.over {
+        background: #ecfbd4;
+    }
+
+    td.down, tr.even td.down, tr.odd td.down {
+        background: #bce774;
+        color: #fff;
+    }
+
+    td.selected, tr.even td.selected, tr.odd td.selected {
+        background: #bce774;
+        color: #555;
+    }
+
+        /* use this if you want to apply different styleing to empty table cells*/
+    td.empty, tr.odd td.empty, tr.even td.empty {
+        background: #fff;
+    }
+</style>
+
