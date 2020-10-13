@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
   #ref link http://www.ehow.com/how_2091651_create-multidimensional-array-ruby.html
   def mda(width,height)
     Array.new(width).map!{ Array.new(height) }
-  end
+  end 
 
 
 end
