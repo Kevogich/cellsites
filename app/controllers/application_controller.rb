@@ -37,3 +37,19 @@ class ApplicationController < ActionController::Base
 
 
 end
+
+  def flash_to_headers
+    return unless request.xhr?
+    response.headers['X-Message'] = flash[:error] unless flash[:error].blank?
+  end
+
+  private
+
+  #creating multidimensional array
+  #ref link http://www.ehow.com/how_2091651_create-multidimensional-array-ruby.html
+  def mda(width,height)
+    Array.new(width).map!{ Array.new(height) }
+  end
+
+
+end
